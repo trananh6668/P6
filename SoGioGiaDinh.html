@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ giỗ gia đình</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fdf8f2;
+            color: #261c17;
+            font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .header-crimson {
+            background-color: #9b2226;
+        }
+        .table-header-bg {
+            background-color: #efe1d8;
+        }
+        .row-divider {
+            border-bottom: 1px solid #e5d8c8;
+        }
+        .modal-backdrop {
+            background-color: rgba(31, 22, 18, 0.55);
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16">
+
+    <!-- THÔNG BÁO TOAST NHỎ GỌN -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- HEADER ĐỎ TRẦM TRUYỀN THỐNG -->
+    <header class="header-crimson text-white shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-5 sm:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2.5">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white/15 text-amber-200 font-bold text-lg">祠</span>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Sổ giỗ gia đình</h1>
+                </div>
+                <p id="todayBanner" class="text-xs sm:text-sm text-red-100/95 font-medium mt-1.5">
+                    <!-- Hiển thị ngày hôm nay Âm & Dương + Can Chi -->
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="#converterSection" class="px-3.5 py-2 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-medium transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Đổi lịch Âm — Dương</span>
+                </a>
+                <button onclick="openAnniversaryModal()" class="px-4 py-2 rounded-lg bg-[#f9e5c8] hover:bg-[#f4d7ab] text-[#7a161a] text-xs sm:text-sm font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span>Thêm lịch giỗ</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-7">
+
+        <!-- 1. KHUNG NHẮC LỊCH SẮP TỚI GẦN NHẤT (2 NGÀY GIỖ KẾ TIẾP) -->
+        <section aria-label="Lịch giỗ sắp tới gần nhất">
+            <div class="flex items-center justify-between mb-3">
+                <div class="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#9b2226] flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#9b2226] animate-pulse"></span>
+                    <span>Sắp tới gần nhất</span>
+                </div>
+                <span class="text-xs text-[#6e6259]">Tự động tính sang năm mới khi qua ngày giỗ</span>
+            </div>
+            <div id="nextUpcomingContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Render tự động 2 ngày giỗ gần nhất -->
+            </div>
+        </section>
+
+        <!-- 2. THANH CÔNG CỤ & BẢNG LỊCH GIỖ GIA ĐÌNH -->
+        <section class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-[#1f1612]">Nhà Trần Đăng Anh</h2>
+                    <p id="subSummaryText" class="text-xs sm:text-sm text-[#6e6259] mt-0.5">
+                        <!-- Cập nhật ngày · số ngày giỗ -->
+                    </p>
+                </div>
+
+                <!-- Chuyển chế độ sắp xếp & Thêm mới -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="inline-flex rounded-lg bg-[#ebe1d4] p-1 border border-[#dfd2c2]">
+                        <button id="btnSortUpcoming" onclick="setSortMode('UPCOMING')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer">
+                            Xếp theo ngày sắp tới
+                        </button>
+                        <button id="btnSortLunar" onclick="setSortMode('LUNAR')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer">
+                            Xếp theo tháng âm
+                        </button>
+                    </div>
+
+                    <button onclick="openAnniversaryModal()" class="px-3.5 py-2 rounded-lg bg-[#9b2226] hover:bg-[#821b1e] text-white text-xs sm:text-sm font-semibold transition flex items-center gap-1 cursor-pointer">
+                        <span>+ Thêm lịch giỗ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BẢNG DANH SÁCH LỊCH GIỖ -->
+            <div class="bg-[#fcf9f4] rounded-xl border border-[#dfd3c6] overflow-hidden shadow-xs">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="table-header-bg text-[#8c3227] text-xs sm:text-sm font-semibold">
+                                <th class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap">Ngày âm</th>
+                                <th class="py-3.5 px-3.5 sm:px-4">Người đã khuất</th>
+                                <th class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap">Lần tới (Dương lịch)</th>
+                                <th class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap">Đếm ngày còn lại</th>
+                                <th class="py-3.5 px-3.5 sm:px-4 min-w-[200px]">Ghi chú sự kiện</th>
+                                <th class="py-3.5 px-3.5 sm:px-4 text-right whitespace-nowrap">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gioTableBody" class="text-sm">
+                            <!-- Render danh sách lịch giỗ -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Chân bảng: Gợi ý & Khôi phục mặc định -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs text-[#7c6f65]">
+                <span>* Mẹo: Bấm trực tiếp vào ô <strong>"Ghi chú sự kiện"</strong> hoặc nút <strong>"Sửa"</strong> trên từng dòng để cập nhật giờ cúng, lễ vật, người chuẩn bị.</span>
+                <button onclick="openResetConfirmModal()" class="text-[#9b2226] hover:underline font-medium self-start sm:self-auto cursor-pointer">
+                    Khôi phục 10 lịch giỗ gốc
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. CÔNG CỤ QUY ĐỔI LỊCH ÂM — DƯƠNG 2 CHIỀU -->
+        <section id="converterSection" class="bg-[#fcf9f4] rounded-xl border border-[#dfd3c6] p-4 sm:p-6 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5d8c8] pb-3.5">
+                <div>
+                    <h3 class="text-base sm:text-lg font-bold text-[#1f1612] flex items-center gap-2">
+                        <span class="text-[#9b2226]">⇄</span>
+                        <span>Quy đổi lịch Âm — Dương 2 chiều</span>
+                    </h3>
+                    <p class="text-xs text-[#6e6259] mt-0.5">
+                        Tra cứu nhanh ngày giỗ các năm sau (2027, 2028, 2030...) hoặc đổi ngày bất kỳ theo chuẩn GMT+7
+                    </p>
+                </div>
+                <button onclick="resetConverterToToday()" class="text-xs font-semibold text-[#9b2226] hover:bg-[#efe1d8] px-3 py-1.5 rounded-lg transition self-start sm:self-auto cursor-pointer">
+                    Đặt về hôm nay
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- CHIỀU 1: ĐỔI DƯƠNG LỊCH -> ÂM LỊCH -->
+                <div class="bg-[#fdfaf6] rounded-xl p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#8c3227] bg-[#efe1d8] px-2.5 py-1 rounded-md">
+                                Dương lịch ➔ Âm lịch
+                            </span>
+                            <span class="text-xs text-[#7c6f65]">Chọn ngày Dương</span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Ngày Dương</label>
+                                <select id="solDayInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Tháng Dương</label>
+                                <select id="solMonthInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Năm Dương</label>
+                                <input id="solYearInput" type="number" min="1900" max="2100" oninput="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
+                            </div>
+                        </div>
+
+                        <!-- Kết quả Âm lịch -->
+                        <div id="solToLunResult" class="bg-[#f6eee4] rounded-lg p-3.5 border border-[#e2d4c3] space-y-1">
+                            <!-- Render bằng JS -->
+                        </div>
+                    </div>
+
+                    <button onclick="createGioFromConverter('SOLAR')" class="w-full py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white text-xs font-semibold transition cursor-pointer">
+                        + Lấy ngày Âm này tạo lịch giỗ mới
+                    </button>
+                </div>
+
+                <!-- CHIỀU 2: ĐỔI ÂM LỊCH -> DƯƠNG LỊCH -->
+                <div class="bg-[#fdfaf6] rounded-xl p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#8c3227] bg-[#efe1d8] px-2.5 py-1 rounded-md">
+                                Âm lịch ➔ Dương lịch
+                            </span>
+                            <span class="text-xs text-[#7c6f65]">Tra ngày giỗ theo năm</span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Ngày Âm</label>
+                                <select id="lunDayInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Tháng Âm</label>
+                                <select id="lunMonthInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-[#6e6259] mb-1">Năm Âm</label>
+                                <input id="lunYearInput" type="number" min="1900" max="2100" oninput="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
+                            </div>
+                        </div>
+
+                        <!-- Kết quả Dương lịch -->
+                        <div id="lunToSolResult" class="bg-[#f6eee4] rounded-lg p-3.5 border border-[#e2d4c3] space-y-1">
+                            <!-- Render bằng JS -->
+                        </div>
+                    </div>
+
+                    <button onclick="createGioFromConverter('LUNAR')" class="w-full py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white text-xs font-semibold transition cursor-pointer">
+                        + Lấy ngày Âm này tạo lịch giỗ mới
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL THÊM / SỬA LỊCH GIỖ & GHI CHÚ SỰ KIỆN -->
+    <div id="anniversaryModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4 modal-backdrop">
+        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-lg w-full overflow-hidden">
+            <div class="header-crimson text-white px-5 py-4 flex items-center justify-between">
+                <h3 id="modalTitle" class="text-base sm:text-lg font-bold">Thêm lịch giỗ mới</h3>
+                <button onclick="closeAnniversaryModal()" class="text-white/80 hover:text-white p-1 rounded-lg cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="anniversaryForm" onsubmit="handleSaveAnniversary(event)" class="p-5 space-y-4">
+                <input type="hidden" id="formGioId" />
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Người đã khuất <span class="text-[#9b2226]">*</span></label>
+                        <input id="formDisplayName" type="text" required placeholder="VD: Cụ Kiểm, Ông Hàm (Ông nội)..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]" />
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Họ tên đầy đủ / Vai vế phả hệ</label>
+                        <input id="formSubName" type="text" placeholder="VD: Cụ Nguyễn Thị Kiểm — Cụ nội" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Ngày Âm lịch <span class="text-[#9b2226]">*</span></label>
+                        <select id="formLunarDay" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Tháng Âm lịch <span class="text-[#9b2226]">*</span></label>
+                        <select id="formLunarMonth" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                    </div>
+                </div>
+
+                <!-- Nhẩm nhanh ngày Dương lịch lần tới ngay trong form -->
+                <div id="modalSolarPreview" class="bg-[#f4ebe0] rounded-lg px-3.5 py-2.5 border border-[#dfd2c2] text-xs text-[#52453c] flex items-center justify-between">
+                    <!-- Tự động hiển thị ngày Dương lịch lần tới -->
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-[#52453c] mb-1">Ghi chú sự kiện (Lễ vật, giờ cúng, địa điểm, người phụ trách...)</label>
+                    <textarea id="formNote" rows="3" placeholder="VD: Cúng trưa 11h00 tại nhà thờ họ, chuẩn bị gà luộc, xôi gấc, hoa tươi..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-[#e5d8c8]">
+                    <button type="button" onclick="closeAnniversaryModal()" class="px-4 py-2 rounded-lg border border-[#d5c6b6] text-[#52453c] hover:bg-[#efe6d8] text-xs sm:text-sm font-semibold transition cursor-pointer">
+                        Hủy
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-[#9b2226] hover:bg-[#821b1e] text-white text-xs sm:text-sm font-semibold shadow-xs transition cursor-pointer">
+                        Lưu lịch giỗ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL XÁC NHẬN XÓA / KHÔI PHỤC (THAY CHO CONFIRM MẶC ĐỊNH) -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-sm w-full p-5 space-y-4">
+            <h4 id="confirmTitle" class="text-base font-bold text-[#1f1612]">Xác nhận</h4>
+            <p id="confirmMessage" class="text-sm text-[#52453c] leading-relaxed"></p>
+            <div class="flex items-center justify-end gap-2.5 pt-2">
+                <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-lg border border-[#d5c6b6] text-[#52453c] hover:bg-[#efe6d8] text-xs sm:text-sm font-semibold transition cursor-pointer">
+                    Hủy
+                </button>
+                <button id="confirmActionBtn" class="px-4 py-2 rounded-lg bg-[#9b2226] hover:bg-[#821b1e] text-white text-xs sm:text-sm font-semibold transition cursor-pointer">
+                    Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**************************************************************************
+         * 1. THUẬT TOÁN ÂM - DƯƠNG LỊCH HỒ NGỌC ĐỨC (CHUẨN GMT+7) & CAN CHI
+         **************************************************************************/
+        const PI = Math.PI;
+        const TIMEZONE = 7.0;
+        const SHORT_DOW = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+        const FULL_DOW = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+        const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
+        const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+
+        function INT(d) {
+            return Math.floor(d);
+        }
+
+        function jdFromDate(dd, mm, yy) {
+            let a = INT((14 - mm) / 12);
+            let y = yy + 4800 - a;
+            let m = mm + 12 * a - 3;
+            let jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
+            if (jd < 2299161) {
+                jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+            }
+            return jd;
+        }
+
+        function jdToDate(jd) {
+            let a, b, c, d, e, m;
+            if (jd > 2299160) {
+                a = jd + 32044;
+                b = INT((4 * a + 3) / 146097);
+                c = a - INT((b * 146097) / 4);
+            } else {
+                b = 0;
+                c = jd + 32082;
+            }
+            d = INT((4 * c + 3) / 1461);
+            e = c - INT((1461 * d) / 4);
+            m = INT((5 * e + 2) / 153);
+            let day = e - INT((153 * m + 2) / 5) + 1;
+            let month = m + 3 - 12 * INT(m / 10);
+            let year = b * 100 + d - 4800 + INT(m / 10);
+            return [day, month, year];
+        }
+
+        function getNewMoonDay(k, timeZone) {
+            let T = k / 1236.85;
+            let T2 = T * T;
+            let T3 = T2 * T;
+            let dr = PI / 180;
+            let Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+            Jd1 = Jd1 + 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+            let M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+            let Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+            let F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+            let C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+            C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+            C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+            C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+            C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+            C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+            C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+            let deltat;
+            if (T < -11) {
+                deltat = 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3;
+            } else {
+                deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
+            }
+            let JdNew = Jd1 + C1 - deltat;
+            return INT(JdNew + 0.5 + timeZone / 24);
+        }
+
+        function getSunLongitude(jdn, timeZone) {
+            let T = (jdn - 2451545.5 - timeZone / 24) / 36525;
+            let T2 = T * T;
+            let dr = PI / 180;
+            let M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+            let L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+            let DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+            DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+            let L = L0 + DL;
+            L = L * dr;
+            L = L - PI * 2 * (INT(L / (PI * 2)));
+            return INT(L / PI * 6);
+        }
+
+        function getLunarMonth11(yy, timeZone) {
+            let off = jdFromDate(31, 12, yy) - 2415021;
+            let k = INT(off / 29.530588853);
+            let nm = getNewMoonDay(k, timeZone);
+            let sunLong = getSunLongitude(nm, timeZone);
+            if (sunLong >= 9) {
+                nm = getNewMoonDay(k - 1, timeZone);
+            }
+            return nm;
+        }
+
+        function getLeapMonthOffset(a11, timeZone) {
+            let k = INT((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+            let last = 0;
+            let i = 1;
+            let arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+            do {
+                last = arc;
+                i++;
+                arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+            } while (arc !== last && i < 14);
+            return i - 1;
+        }
+
+        function convertSolar2Lunar(dd, mm, yy, timeZone = TIMEZONE) {
+            let dayNumber = jdFromDate(dd, mm, yy);
+            let k = INT((dayNumber - 2415021.076998695) / 29.530588853);
+            let monthStart = getNewMoonDay(k + 1, timeZone);
+            if (monthStart > dayNumber) {
+                monthStart = getNewMoonDay(k, timeZone);
+            }
+            let a11 = getLunarMonth11(yy, timeZone);
+            let b11 = a11;
+            let lunarYear;
+            if (a11 >= monthStart) {
+                lunarYear = yy;
+                a11 = getLunarMonth11(yy - 1, timeZone);
+            } else {
+                lunarYear = yy + 1;
+                b11 = getLunarMonth11(yy + 1, timeZone);
+            }
+            let lunarDay = dayNumber - monthStart + 1;
+            let diff = INT((monthStart - a11) / 29);
+            let lunarLeap = 0;
+            let lunarMonth = diff + 11;
+            if (b11 - a11 > 365) {
+                let leapMonthDiff = getLeapMonthOffset(a11, timeZone);
+                if (diff >= leapMonthDiff) {
+                    lunarMonth = diff + 10;
+                    if (diff === leapMonthDiff) {
+                        lunarLeap = 1;
+                    }
+                }
+            }
+            if (lunarMonth > 12) {
+                lunarMonth = lunarMonth - 12;
+            }
+            if (lunarMonth >= 11 && diff < 4) {
+                lunarYear -= 1;
+            }
+            return [lunarDay, lunarMonth, lunarYear, lunarLeap];
+        }
+
+        function convertLunar2Solar(lunarDay, lunarMonth, lunarYear, lunarLeap = 0, timeZone = TIMEZONE) {
+            let a11, b11;
+            if (lunarMonth < 11) {
+                a11 = getLunarMonth11(lunarYear - 1, timeZone);
+                b11 = getLunarMonth11(lunarYear, timeZone);
+            } else {
+                a11 = getLunarMonth11(lunarYear, timeZone);
+                b11 = getLunarMonth11(lunarYear + 1, timeZone);
+            }
+            let k = INT(0.5 + (a11 - 2415021.076998695) / 29.530588853);
+            let off = lunarMonth - 11;
+            if (off < 0) {
+                off += 12;
+            }
+            if (b11 - a11 > 365) {
+                let leapOff = getLeapMonthOffset(a11, timeZone);
+                let leapMonth = leapOff - 2;
+                if (leapMonth < 0) {
+                    leapMonth += 12;
+                }
+                if (lunarLeap !== 0 && lunarMonth !== leapMonth) {
+                    return [0, 0, 0];
+                } else if (lunarLeap !== 0 || off >= leapOff) {
+                    off += 1;
+                }
+            }
+            let monthStart = getNewMoonDay(k + off, timeZone);
+            return jdToDate(monthStart + lunarDay - 1);
+        }
+
+        // Tính Can Chi cho Ngày, Tháng, Năm Âm lịch
+        function getCanChiYear(lunarYear) {
+            return `${CAN[(lunarYear + 6) % 10]} ${CHI[(lunarYear + 8) % 12]}`;
+        }
+
+        function getCanChiMonth(lunarMonth, lunarYear) {
+            const yearCanIndex = (lunarYear + 6) % 10;
+            const monthCanIndex = (yearCanIndex * 2 + lunarMonth + 1) % 10;
+            const monthChiIndex = (lunarMonth + 1) % 12;
+            return `${CAN[monthCanIndex]} ${CHI[monthChiIndex]}`;
+        }
+
+        function getCanChiDay(jd) {
+            return `${CAN[(jd + 9) % 10]} ${CHI[(jd + 1) % 12]}`;
+        }
+
+        // Kiểm tra ngày Âm lịch trong năm Âm lịch có bị rơi vào tháng thiếu (khi ngày giỗ là 30 ÂL)
+        function resolveLunarDateInYear(lunarDay, lunarMonth, lunarYear) {
+            let [sDay, sMonth, sYear] = convertLunar2Solar(lunarDay, lunarMonth, lunarYear, 0, TIMEZONE);
+            let adjustedFrom30To29 = false;
+
+            if (lunarDay === 30) {
+                const [checkLD, checkLM] = convertSolar2Lunar(sDay, sMonth, sYear, TIMEZONE);
+                if (checkLD !== 30 || checkLM !== lunarMonth) {
+                    // Tháng thiếu chỉ có 29 ngày -> Lùi về 29 ÂL
+                    [sDay, sMonth, sYear] = convertLunar2Solar(29, lunarMonth, lunarYear, 0, TIMEZONE);
+                    adjustedFrom30To29 = true;
+                }
+            }
+            return { sDay, sMonth, sYear, adjustedFrom30To29 };
+        }
+
+        // Tính ngày Dương lịch cho kỳ giỗ tiếp theo từ ngày hiện tại
+        function getNextOccurrence(lunarDay, lunarMonth) {
+            const now = new Date();
+            const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+            const [, , currentLunarYear] = convertSolar2Lunar(now.getDate(), now.getMonth() + 1, now.getFullYear(), TIMEZONE);
+
+            for (let y of [currentLunarYear - 1, currentLunarYear, currentLunarYear + 1, currentLunarYear + 2]) {
+                const { sDay, sMonth, sYear, adjustedFrom30To29 } = resolveLunarDateInYear(lunarDay, lunarMonth, y);
+                const solarDate = new Date(sYear, sMonth - 1, sDay, 0, 0, 0, 0);
+                if (solarDate.getTime() >= todayMidnight.getTime()) {
+                    const diffDays = Math.round((solarDate.getTime() - todayMidnight.getTime()) / 86400000);
+                    const dowShort = SHORT_DOW[solarDate.getDay()];
+                    const dowFull = FULL_DOW[solarDate.getDay()];
+                    return {
+                        sDay,
+                        sMonth,
+                        sYear,
+                        lunarYear: y,
+                        diffDays,
+                        dowShort,
+                        dowFull,
+                        adjustedFrom30To29,
+                        formattedNext: `${dowShort} ${sDay}/${sMonth}/${sYear}`
+                    };
+                }
+            }
+        }
+
+        /**************************************************************************
+         * 2. DỮ LIỆU MẶC ĐỊNH 10 NGÀY GIỖ NHÀ TRẦN ĐĂNG ANH & LOCALSTORAGE
+         **************************************************************************/
+        const STORAGE_DATA_KEY = "so_gio_tran_dang_anh_items_v3";
+        const PREV_STORAGE_KEY = "so_gio_tran_dang_anh_items_v2";
+        let sortMode = "UPCOMING"; // 'UPCOMING' hoặc 'LUNAR'
+        let anniversaries = [];
+        let pendingConfirmCallback = null;
+
+        const DEFAULT_ANNIVERSARIES = [
+            {
+                id: "1",
+                lunarDay: 4,
+                lunarMonth: 2,
+                displayName: "Cụ Kiểm",
+                subName: "Cụ Nguyễn Thị Kiểm — Vợ cụ nội Trần Đăng Tý, thân mẫu Bà Tư",
+                note: ""
+            },
+            {
+                id: "2",
+                lunarDay: 15,
+                lunarMonth: 2,
+                displayName: "Cụ Rằng (Cụ ngoại)",
+                subName: "Cụ Bùi Văn Rằng — Thân phụ bà nội Bùi Thị Nhớn",
+                note: ""
+            },
+            {
+                id: "3",
+                lunarDay: 21,
+                lunarMonth: 2,
+                displayName: "Cụ Mọt (Cụ ngoại)",
+                subName: "Cụ Nguyễn Thị Mọt — Thân mẫu bà nội Bùi Thị Nhớn",
+                note: ""
+            },
+            {
+                id: "4",
+                lunarDay: 1,
+                lunarMonth: 3,
+                displayName: "Bà Tư",
+                subName: "Con cụ Trần Đăng Tý & cụ Nguyễn Thị Kiểm",
+                note: ""
+            },
+            {
+                id: "5",
+                lunarDay: 1,
+                lunarMonth: 5,
+                displayName: "Cụ Tý (Cụ nội)",
+                subName: "Cụ Trần Đăng Tý — Thân phụ ông nội Trần Đăng Hàm",
+                note: ""
+            },
+            {
+                id: "6",
+                lunarDay: 10,
+                lunarMonth: 7,
+                displayName: "Bà Nhớn (Bà nội)",
+                subName: "Bà Bùi Thị Nhớn — Vợ ông nội Trần Đăng Hàm",
+                note: ""
+            },
+            {
+                id: "7",
+                lunarDay: 25,
+                lunarMonth: 8,
+                displayName: "Ông Hàm (Ông nội)",
+                subName: "Ông Trần Đăng Hàm — Chồng bà nội Bùi Thị Nhớn",
+                note: ""
+            },
+            {
+                id: "8",
+                lunarDay: 9,
+                lunarMonth: 9,
+                displayName: "Chú Chung",
+                subName: "Chú Bùi Văn Chung — Chồng cô/bác Trần Thị Dung",
+                note: ""
+            },
+            {
+                id: "9",
+                lunarDay: 24,
+                lunarMonth: 11,
+                displayName: "Cụ Ầm (Cụ nội)",
+                subName: "Cụ Nguyễn Thị Ầm — Thân mẫu ông nội Trần Đăng Hàm",
+                note: ""
+            },
+            {
+                id: "10",
+                lunarDay: 25,
+                lunarMonth: 11,
+                displayName: "Cô Lan",
+                subName: "Cô Trần Thị Lan — Cô ruột, con ông nội Trần Đăng Hàm & bà nội Bùi Thị Nhớn",
+                note: ""
+            }
+        ];
+
+        function loadAnniversaries() {
+            try {
+                const raw = localStorage.getItem(STORAGE_DATA_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        anniversaries = parsed;
+                        return;
+                    }
+                }
+                // Kế thừa dữ liệu từ phiên bản v2 nếu người dùng đã lưu ghi chú hoặc thêm mới
+                const prevRaw = localStorage.getItem(PREV_STORAGE_KEY);
+                if (prevRaw) {
+                    const prevParsed = JSON.parse(prevRaw);
+                    if (Array.isArray(prevParsed) && prevParsed.length > 0) {
+                        anniversaries = prevParsed.map(item => ({
+                            id: item.id,
+                            lunarDay: item.lunarDay,
+                            lunarMonth: item.lunarMonth,
+                            displayName: item.displayName,
+                            subName: item.subName || "",
+                            note: item.note || ""
+                        }));
+                        saveAnniversaries();
+                        return;
+                    }
+                }
+
+                anniversaries = DEFAULT_ANNIVERSARIES.map(item => ({ ...item }));
+                saveAnniversaries();
+            } catch (e) {
+                anniversaries = [...DEFAULT_ANNIVERSARIES];
+            }
+        }
+
+        function saveAnniversaries() {
+            try {
+                localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(anniversaries));
+            } catch (e) {}
+        }
+
+        function showToast(message) {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            toast.className = "bg-[#261c17] text-[#fdf8f2] px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-medium border border-[#52453c] transition-all duration-300";
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 300);
+            }, 2400);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function formatDaysLeft(days) {
+            if (days === 0) return "Hôm nay";
+            if (days === 1) return "Ngày mai";
+            return `Còn ${days} ngày`;
+        }
+
+        // Tạo badge Đếm Ngày Còn Lại nổi bật trong bảng
+        function renderTableCountdownBadge(days) {
+            if (days === 0) {
+                return `
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
+                        <span>HÔM NAY</span>
+                    </div>
+                `;
+            }
+            if (days === 1) {
+                return `
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
+                        <span>NGÀY MAI</span>
+                    </div>
+                `;
+            }
+            if (days <= 7) {
+                return `
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-200">
+                        <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+                        <span>Còn ${days} ngày</span>
+                    </div>
+                `;
+            }
+            if (days <= 60) {
+                return `
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#d97706] text-white font-extrabold text-xs sm:text-sm shadow-xs ring-2 ring-amber-200">
+                        <span class="w-2 h-2 rounded-full bg-amber-100 animate-pulse"></span>
+                        <span>Còn ${days} ngày</span>
+                    </div>
+                `;
+            }
+            return `
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#f7e8df] border border-[#d8b29c] text-[#8c2327] font-bold text-xs sm:text-sm">
+                    <span>⏳ Còn ${days} ngày</span>
+                </div>
+            `;
+        }
+
+        // Tạo khối Đếm Ngược to rõ trên 2 thẻ Sắp tới gần nhất
+        function renderHeroCountdownBox(days) {
+            if (days === 0 || days === 1) {
+                return `
+                    <div class="px-3.5 py-2.5 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-4 ring-red-200 shrink-0 min-w-[96px]">
+                        <div class="text-[10px] font-bold uppercase tracking-wider text-amber-200">Sắp diễn ra</div>
+                        <div class="text-base sm:text-lg font-extrabold leading-tight mt-0.5">${days === 0 ? 'HÔM NAY' : 'NGÀY MAI'}</div>
+                    </div>
+                `;
+            }
+            if (days <= 7) {
+                return `
+                    <div class="px-3.5 py-2 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-2 ring-red-200 shrink-0 min-w-[92px]">
+                        <div class="text-[10px] font-semibold uppercase tracking-wider text-red-100">Đếm ngược</div>
+                        <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5 text-amber-200">${days}</div>
+                        <div class="text-[11px] font-bold">ngày nữa</div>
+                    </div>
+                `;
+            }
+            if (days <= 60) {
+                return `
+                    <div class="px-3.5 py-2 rounded-xl bg-[#d97706] text-white text-center shadow-sm ring-2 ring-amber-200 shrink-0 min-w-[92px]">
+                        <div class="text-[10px] font-semibold uppercase tracking-wider text-amber-100">Còn lại</div>
+                        <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
+                        <div class="text-[11px] font-bold">ngày nữa</div>
+                    </div>
+                `;
+            }
+            return `
+                <div class="px-3.5 py-2 rounded-xl bg-[#efe1d8] border border-[#cfa993] text-[#9b2226] text-center shrink-0 min-w-[92px]">
+                    <div class="text-[10px] font-semibold uppercase tracking-wider text-[#7c5343]">Còn lại</div>
+                    <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
+                    <div class="text-[11px] font-bold">ngày nữa</div>
+                </div>
+            `;
+        }
+
+        function setSortMode(mode) {
+            sortMode = mode;
+            const btnUpcoming = document.getElementById("btnSortUpcoming");
+            const btnLunar = document.getElementById("btnSortLunar");
+
+            if (mode === "UPCOMING") {
+                btnUpcoming.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer";
+                btnLunar.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer";
+            } else {
+                btnLunar.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer";
+                btnUpcoming.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer";
+            }
+            renderPage();
+        }
+
+        /**************************************************************************
+         * 3. RENDER TRANG CHÍNH (HEADER, 3 LỊCH SẮP TỚI, BẢNG LỊCH GIỖ)
+         **************************************************************************/
+        function renderPage() {
+            const now = new Date();
+            const d = now.getDate();
+            const m = now.getMonth() + 1;
+            const y = now.getFullYear();
+            const [ld, lm, ly, lLeap] = convertSolar2Lunar(d, m, y, TIMEZONE);
+            const jdToday = jdFromDate(d, m, y);
+            const dowName = FULL_DOW[now.getDay()];
+
+            const canChiYear = getCanChiYear(ly);
+            const canChiMonth = getCanChiMonth(lm, ly);
+            const canChiDay = getCanChiDay(jdToday);
+
+            document.getElementById("todayBanner").textContent =
+                `Hôm nay: ${dowName}, ${d}/${m}/${y} · Âm lịch: ${ld}/${lm}${lLeap ? ' (Nhuận)' : ''}/${ly} (Ngày ${canChiDay}, tháng ${canChiMonth}, năm ${canChiYear})`;
+
+            const sortLabel = sortMode === "UPCOMING" ? "xếp theo ngày sắp tới" : "xếp theo tháng âm";
+            document.getElementById("subSummaryText").textContent =
+                `Cập nhật ngày ${d}/${m}/${y} · ${anniversaries.length} ngày giỗ · ${sortLabel}`;
+
+            // Tính ngày Dương lịch lần tới cho toàn bộ danh sách
+            const enriched = anniversaries.map(item => {
+                const next = getNextOccurrence(Number(item.lunarDay), Number(item.lunarMonth));
+                return {
+                    ...item,
+                    lunarDay: Number(item.lunarDay),
+                    lunarMonth: Number(item.lunarMonth),
+                    next
+                };
+            });
+
+            // Sắp xếp theo ngày gần nhất
+            const sortedBySoonest = [...enriched].sort((a, b) => a.next.diffDays - b.next.diffDays);
+
+            // Sắp xếp theo tháng âm
+            const sortedByLunar = [...enriched].sort((a, b) => {
+                if (a.lunarMonth !== b.lunarMonth) return a.lunarMonth - b.lunarMonth;
+                return a.lunarDay - b.lunarDay;
+            });
+
+            // Render 2 ngày giỗ sắp tới gần nhất
+            const nextTwo = sortedBySoonest.slice(0, 2);
+            const upcomingContainer = document.getElementById("nextUpcomingContainer");
+
+            if (nextTwo.length === 0) {
+                upcomingContainer.innerHTML = `
+                    <div class="col-span-2 bg-[#fcf9f4] rounded-xl p-5 border border-[#dfd3c6] text-center text-sm text-[#6e6259]">
+                        Chưa có lịch giỗ nào. Hãy bấm <strong>"+ Thêm lịch giỗ"</strong> để bắt đầu.
+                    </div>
+                `;
+            } else {
+                upcomingContainer.innerHTML = nextTwo.map((item, idx) => {
+                    const isSoon = item.next.diffDays <= 60 || idx === 0;
+                    return `
+                        <div class="bg-[#fcf9f4] rounded-xl p-4 sm:p-5 border-2 ${isSoon ? 'border-[#9b2226]' : 'border-[#dfd3c6]'} shadow-xs flex flex-col justify-between gap-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="space-y-1">
+                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#efe1d8] text-[#9b2226] text-xs font-extrabold">
+                                        <span>Ngày âm: ${item.lunarDay}/${item.lunarMonth} ÂL</span>
+                                    </div>
+                                    <h3 class="text-lg sm:text-xl font-bold text-[#1f1612] leading-snug">${escapeHtml(item.displayName)}</h3>
+                                    ${item.subName ? `<p class="text-xs text-[#6e6259]">${escapeHtml(item.subName)}</p>` : ''}
+                                    <div class="pt-1 text-xs sm:text-sm text-[#5c5047]">
+                                        Lần tới: <strong class="text-[#1f1612] font-bold">${item.next.formattedNext}</strong>
+                                    </div>
+                                </div>
+                                ${renderHeroCountdownBox(item.next.diffDays)}
+                            </div>
+
+                            ${item.note ? `<div class="text-xs text-[#7a4b2a] bg-[#f5ebe0] rounded-lg px-3 py-2 border border-[#e5d5c3]">📝 ${escapeHtml(item.note)}</div>` : ''}
+
+                            <div class="pt-2 border-t border-[#ece1d4] flex items-center justify-between text-xs">
+                                <span class="text-[#7c6f65]">Năm ÂL kỳ tới: <strong>${getCanChiYear(item.next.lunarYear)} (${item.next.lunarYear})</strong></span>
+                                <button onclick="openAnniversaryModal('${item.id}', 'note')" class="text-[#9b2226] font-semibold hover:underline shrink-0 cursor-pointer">
+                                    + Sửa / Ghi chú sự kiện
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            // Render bảng chính
+            const tableItems = sortMode === "UPCOMING" ? sortedBySoonest : sortedByLunar;
+            const tbody = document.getElementById("gioTableBody");
+
+            if (tableItems.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-8 text-center text-sm text-[#6e6259]">
+                            Danh sách trống. Bấm "Thêm lịch giỗ" hoặc "Khôi phục 10 lịch giỗ gốc".
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = tableItems.map(item => {
+                const days = item.next.diffDays;
+
+                return `
+                    <tr class="row-divider last:border-b-0 hover:bg-[#f6eee4]/70 transition">
+                        <!-- 1. Ngày âm -->
+                        <td class="py-3.5 px-3.5 sm:px-4 font-bold text-[#9b2226] whitespace-nowrap align-middle text-base sm:text-lg">
+                            ${item.lunarDay}/${item.lunarMonth}
+                            ${item.next.adjustedFrom30To29 ? `<span class="block text-[10px] font-normal text-[#8c3227]">(Cúng 29 ÂL)</span>` : ''}
+                        </td>
+
+                        <!-- 2. Người đã khuất -->
+                        <td class="py-3.5 px-3.5 sm:px-4 align-middle">
+                            <div class="font-bold text-[#1f1612] text-sm sm:text-base">${escapeHtml(item.displayName)}</div>
+                            ${item.subName ? `<div class="text-xs text-[#6e6259] mt-0.5">${escapeHtml(item.subName)}</div>` : ''}
+                        </td>
+
+                        <!-- 3. Lần tới (Dương lịch) -->
+                        <td class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
+                            <div class="font-bold text-[#1f1612] text-sm sm:text-base">${item.next.formattedNext}</div>
+                            <div class="text-[11px] text-[#7c6f65]">Năm ${getCanChiYear(item.next.lunarYear)}</div>
+                        </td>
+
+                        <!-- 4. Đếm ngày còn lại (HIGHLIGHT NỔI BẬT) -->
+                        <td class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
+                            ${renderTableCountdownBadge(days)}
+                        </td>
+
+                        <!-- 5. Ghi chú sự kiện -->
+                        <td class="py-3.5 px-3.5 sm:px-4 align-middle text-xs sm:text-sm">
+                            <div onclick="openAnniversaryModal('${item.id}', 'note')" class="cursor-pointer group rounded-lg p-1.5 -m-1.5 hover:bg-[#efe6d8] transition" title="Bấm để thêm/sửa ghi chú sự kiện">
+                                ${
+                                    item.note
+                                        ? `<div class="text-[#3d2f28] whitespace-pre-line leading-relaxed font-medium">${escapeHtml(item.note)}</div>`
+                                        : `<span class="text-xs text-[#8c7e72] group-hover:text-[#9b2226] italic">+ Thêm ghi chú...</span>`
+                                }
+                            </div>
+                        </td>
+
+                        <!-- 6. Thao tác: Sửa / Xóa -->
+                        <td class="py-3.5 px-3.5 sm:px-4 align-middle text-right whitespace-nowrap">
+                            <div class="inline-flex items-center gap-1.5">
+                                <button onclick="openAnniversaryModal('${item.id}')" class="px-2.5 py-1.5 rounded-md bg-[#efe1d8] hover:bg-[#e3cec0] text-[#8c3227] text-xs font-semibold transition cursor-pointer">
+                                    Sửa
+                                </button>
+                                <button onclick="openDeleteConfirmModal('${item.id}')" class="px-2.5 py-1.5 rounded-md bg-[#f5e6e6] hover:bg-[#ebd0d0] text-[#9b2226] text-xs font-semibold transition cursor-pointer">
+                                    Xóa
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        /**************************************************************************
+         * 4. QUẢN LÝ THÊM, SỬA, XÓA LỊCH GIỖ & GHI CHÚ SỰ KIỆN
+         **************************************************************************/
+        function initFormSelects() {
+            const daySelect = document.getElementById("formLunarDay");
+            const monthSelect = document.getElementById("formLunarMonth");
+
+            daySelect.innerHTML = Array.from({ length: 30 }, (_, i) =>
+                `<option value="${i + 1}">Ngày ${i + 1} Âm</option>`
+            ).join("");
+
+            monthSelect.innerHTML = Array.from({ length: 12 }, (_, i) =>
+                `<option value="${i + 1}">Tháng ${i + 1} Âm</option>`
+            ).join("");
+        }
+
+        function updateModalSolarPreview() {
+            const lDay = parseInt(document.getElementById("formLunarDay").value, 10) || 1;
+            const lMonth = parseInt(document.getElementById("formLunarMonth").value, 10) || 1;
+            const next = getNextOccurrence(lDay, lMonth);
+            const previewEl = document.getElementById("modalSolarPreview");
+
+            if (next) {
+                previewEl.innerHTML = `
+                    <span>Ngày giỗ: <strong class="text-[#9b2226]">${lDay}/${lMonth} ÂL</strong></span>
+                    <span>Lần tới: <strong class="text-[#1f1612]">${next.formattedNext}</strong> (${formatDaysLeft(next.diffDays)})</span>
+                `;
+            }
+        }
+
+        function openAnniversaryModal(editId = null, focusField = null) {
+            const modal = document.getElementById("anniversaryModal");
+            const title = document.getElementById("modalTitle");
+            const idInput = document.getElementById("formGioId");
+            const nameInput = document.getElementById("formDisplayName");
+            const subNameInput = document.getElementById("formSubName");
+            const dayInput = document.getElementById("formLunarDay");
+            const monthInput = document.getElementById("formLunarMonth");
+            const noteInput = document.getElementById("formNote");
+
+            if (editId) {
+                const found = anniversaries.find(x => x.id === editId);
+                if (!found) return;
+                title.textContent = `Sửa lịch giỗ — ${found.displayName}`;
+                idInput.value = found.id;
+                nameInput.value = found.displayName || "";
+                subNameInput.value = found.subName || "";
+                dayInput.value = found.lunarDay;
+                monthInput.value = found.lunarMonth;
+                noteInput.value = found.note || "";
+            } else {
+                title.textContent = "Thêm lịch giỗ mới";
+                idInput.value = "";
+                nameInput.value = "";
+                subNameInput.value = "";
+                dayInput.value = 1;
+                monthInput.value = 1;
+                noteInput.value = "";
+            }
+
+            updateModalSolarPreview();
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+
+            setTimeout(() => {
+                if (focusField === "note") {
+                    noteInput.focus();
+                } else {
+                    nameInput.focus();
+                }
+            }, 50);
+        }
+
+        function closeAnniversaryModal() {
+            const modal = document.getElementById("anniversaryModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        function handleSaveAnniversary(e) {
+            e.preventDefault();
+            const id = document.getElementById("formGioId").value.trim();
+            const displayName = document.getElementById("formDisplayName").value.trim();
+            const subName = document.getElementById("formSubName").value.trim();
+            const lunarDay = parseInt(document.getElementById("formLunarDay").value, 10);
+            const lunarMonth = parseInt(document.getElementById("formLunarMonth").value, 10);
+            const note = document.getElementById("formNote").value.trim();
+
+            if (!displayName) return;
+
+            if (id) {
+                const idx = anniversaries.findIndex(x => x.id === id);
+                if (idx !== -1) {
+                    anniversaries[idx] = {
+                        ...anniversaries[idx],
+                        displayName,
+                        subName,
+                        lunarDay,
+                        lunarMonth,
+                        note
+                    };
+                    showToast(`Đã cập nhật lịch giỗ "${displayName}"`);
+                }
+            } else {
+                const newId = String(Date.now());
+                anniversaries.push({
+                    id: newId,
+                    displayName,
+                    subName,
+                    lunarDay,
+                    lunarMonth,
+                    note
+                });
+                showToast(`Đã thêm lịch giỗ "${displayName}" (${lunarDay}/${lunarMonth} ÂL)`);
+            }
+
+            saveAnniversaries();
+            closeAnniversaryModal();
+            renderPage();
+        }
+
+        // Xác nhận xóa lịch giỗ
+        function openDeleteConfirmModal(id) {
+            const item = anniversaries.find(x => x.id === id);
+            if (!item) return;
+
+            document.getElementById("confirmTitle").textContent = "Xóa lịch giỗ";
+            document.getElementById("confirmMessage").textContent =
+                `Bạn có chắc muốn xóa lịch giỗ "${item.displayName}" (${item.lunarDay}/${item.lunarMonth} ÂL) khỏi sổ giỗ gia đình không?`;
+
+            const actionBtn = document.getElementById("confirmActionBtn");
+            actionBtn.textContent = "Xóa lịch giỗ";
+            pendingConfirmCallback = () => {
+                anniversaries = anniversaries.filter(x => x.id !== id);
+                saveAnniversaries();
+                renderPage();
+                showToast(`Đã xóa lịch giỗ "${item.displayName}"`);
+            };
+
+            const modal = document.getElementById("confirmModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        // Xác nhận khôi phục 10 lịch giỗ gốc
+        function openResetConfirmModal() {
+            document.getElementById("confirmTitle").textContent = "Khôi phục 10 lịch giỗ gốc";
+            document.getElementById("confirmMessage").textContent =
+                "Khôi phục lại danh sách 10 ngày giỗ gốc của Nhà Trần Đăng Anh? (Các lịch giỗ bạn tự thêm hoặc xóa sẽ đặt lại về mặc định).";
+
+            const actionBtn = document.getElementById("confirmActionBtn");
+            actionBtn.textContent = "Khôi phục";
+            pendingConfirmCallback = () => {
+                anniversaries = DEFAULT_ANNIVERSARIES.map(item => ({ ...item }));
+                saveAnniversaries();
+                renderPage();
+                showToast("Đã khôi phục 10 lịch giỗ gốc của Nhà Trần Đăng Anh");
+            };
+
+            const modal = document.getElementById("confirmModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById("confirmModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+            pendingConfirmCallback = null;
+        }
+
+        document.getElementById("confirmActionBtn").addEventListener("click", () => {
+            if (typeof pendingConfirmCallback === "function") {
+                pendingConfirmCallback();
+            }
+            closeConfirmModal();
+        });
+
+        /**************************************************************************
+         * 5. CÔNG CỤ QUY ĐỔI LỊCH ÂM — DƯƠNG 2 CHIỀU
+         **************************************************************************/
+        let lastConvertedLunarFromSolar = { day: 1, month: 1 };
+
+        function initConverterInputs() {
+            const solDay = document.getElementById("solDayInput");
+            const solMonth = document.getElementById("solMonthInput");
+            const lunDay = document.getElementById("lunDayInput");
+            const lunMonth = document.getElementById("lunMonthInput");
+
+            solDay.innerHTML = Array.from({ length: 31 }, (_, i) =>
+                `<option value="${i + 1}">${i + 1}</option>`
+            ).join("");
+            solMonth.innerHTML = Array.from({ length: 12 }, (_, i) =>
+                `<option value="${i + 1}">Tháng ${i + 1}</option>`
+            ).join("");
+
+            lunDay.innerHTML = Array.from({ length: 30 }, (_, i) =>
+                `<option value="${i + 1}">Ngày ${i + 1}</option>`
+            ).join("");
+            lunMonth.innerHTML = Array.from({ length: 12 }, (_, i) =>
+                `<option value="${i + 1}">Tháng ${i + 1}</option>`
+            ).join("");
+
+            resetConverterToToday();
+        }
+
+        function resetConverterToToday() {
+            const now = new Date();
+            const d = now.getDate();
+            const m = now.getMonth() + 1;
+            const y = now.getFullYear();
+
+            document.getElementById("solDayInput").value = d;
+            document.getElementById("solMonthInput").value = m;
+            document.getElementById("solYearInput").value = y;
+
+            const [ld, lm, ly] = convertSolar2Lunar(d, m, y, TIMEZONE);
+            document.getElementById("lunDayInput").value = ld;
+            document.getElementById("lunMonthInput").value = lm;
+            document.getElementById("lunYearInput").value = ly;
+
+            handleSolarToLunarChange();
+            handleLunarToSolarChange();
+        }
+
+        function handleSolarToLunarChange() {
+            const sDay = parseInt(document.getElementById("solDayInput").value, 10) || 1;
+            const sMonth = parseInt(document.getElementById("solMonthInput").value, 10) || 1;
+            const sYear = parseInt(document.getElementById("solYearInput").value, 10) || 2026;
+
+            const box = document.getElementById("solToLunResult");
+            const testDate = new Date(sYear, sMonth - 1, sDay);
+            if (
+                sYear < 1900 || sYear > 2100 ||
+                testDate.getFullYear() !== sYear ||
+                testDate.getMonth() + 1 !== sMonth ||
+                testDate.getDate() !== sDay
+            ) {
+                box.innerHTML = `<div class="text-xs text-[#9b2226] font-medium">Ngày Dương lịch không hợp lệ (VD: tháng ${sMonth} không có ngày ${sDay}).</div>`;
+                return;
+            }
+
+            const [lDay, lMonth, lYear, lLeap] = convertSolar2Lunar(sDay, sMonth, sYear, TIMEZONE);
+            lastConvertedLunarFromSolar = { day: lDay, month: lMonth };
+
+            const jd = jdFromDate(sDay, sMonth, sYear);
+            const dow = FULL_DOW[testDate.getDay()];
+            const ccDay = getCanChiDay(jd);
+            const ccMonth = getCanChiMonth(lMonth, lYear);
+            const ccYear = getCanChiYear(lYear);
+
+            box.innerHTML = `
+                <div class="text-xs text-[#6e6259]">Kết quả Âm lịch tương ứng:</div>
+                <div class="text-base sm:text-lg font-bold text-[#9b2226]">
+                    Ngày ${lDay} tháng ${lMonth}${lLeap ? ' (Nhuận)' : ''} năm ${lYear} ÂL
+                </div>
+                <div class="text-xs text-[#261c17] font-medium">
+                    Dương lịch: ${dow}, ${sDay}/${sMonth}/${sYear}
+                </div>
+                <div class="text-[11px] text-[#6e6259] pt-0.5">
+                    Can Chi: Ngày <strong>${ccDay}</strong> · Tháng <strong>${ccMonth}</strong> · Năm <strong>${ccYear}</strong>
+                </div>
+            `;
+        }
+
+        function handleLunarToSolarChange() {
+            const lDay = parseInt(document.getElementById("lunDayInput").value, 10) || 1;
+            const lMonth = parseInt(document.getElementById("lunMonthInput").value, 10) || 1;
+            const lYear = parseInt(document.getElementById("lunYearInput").value, 10) || 2026;
+
+            const box = document.getElementById("lunToSolResult");
+            if (lYear < 1900 || lYear > 2100) {
+                box.innerHTML = `<div class="text-xs text-[#9b2226] font-medium">Vui lòng nhập năm từ 1900 đến 2100.</div>`;
+                return;
+            }
+
+            const { sDay, sMonth, sYear, adjustedFrom30To29 } = resolveLunarDateInYear(lDay, lMonth, lYear);
+            const solarDate = new Date(sYear, sMonth - 1, sDay);
+            const dow = FULL_DOW[solarDate.getDay()];
+            const jd = jdFromDate(sDay, sMonth, sYear);
+            const ccDay = getCanChiDay(jd);
+            const ccMonth = getCanChiMonth(lMonth, lYear);
+            const ccYear = getCanChiYear(lYear);
+
+            box.innerHTML = `
+                <div class="text-xs text-[#6e6259]">Kết quả Dương lịch (năm ${lYear} - ${ccYear}):</div>
+                <div class="text-base sm:text-lg font-bold text-[#1f1612]">
+                    ${dow}, ngày ${sDay}/${sMonth}/${sYear}
+                </div>
+                ${
+                    adjustedFrom30To29
+                        ? `<div class="text-xs text-[#9b2226] font-medium">* Tháng ${lMonth}/${lYear} ÂL là tháng thiếu (29 ngày), tự động tính vào ngày 29/${lMonth} ÂL.</div>`
+                        : `<div class="text-xs text-[#52453c]">Âm lịch: Ngày ${lDay}/${lMonth}/${lYear} (${ccYear})</div>`
+                }
+                <div class="text-[11px] text-[#6e6259] pt-0.5">
+                    Can Chi: Ngày <strong>${ccDay}</strong> · Tháng <strong>${ccMonth}</strong> · Năm <strong>${ccYear}</strong>
+                </div>
+            `;
+        }
+
+        function createGioFromConverter(source) {
+            openAnniversaryModal();
+            if (source === "SOLAR") {
+                document.getElementById("formLunarDay").value = lastConvertedLunarFromSolar.day;
+                document.getElementById("formLunarMonth").value = lastConvertedLunarFromSolar.month;
+            } else {
+                document.getElementById("formLunarDay").value = document.getElementById("lunDayInput").value;
+                document.getElementById("formLunarMonth").value = document.getElementById("lunMonthInput").value;
+            }
+            updateModalSolarPreview();
+        }
+
+        window.onload = function () {
+            loadAnniversaries();
+            initFormSelects();
+            initConverterInputs();
+            renderPage();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,2449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phả Đồ Dòng Họ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif Display / Merriweather cho nét cổ kính & Plus Jakarta Sans cho chi tiết -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crimson: {
+                            DEFAULT: '#8B0000',
+                            dark: '#5C0000',
+                            deep: '#3D0000',
+                            light: '#A52A2A'
+                        },
+                        imperial: {
+                            gold: '#D4AF37',
+                            bronze: '#B8860B',
+                            pale: '#F3E5AB',
+                            cream: '#FDF8E7',
+                            parchment: '#F5E9C8'
+                        },
+                        ink: {
+                            DEFAULT: '#2B1B17',
+                            muted: '#5C4033'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --crimson: #8B0000;
+            --crimson-dark: #5A0000;
+            --gold: #D4AF37;
+            --bronze: #B8860B;
+            --parchment: #FDF8E7;
+        }
+
+        body {
+            background-color: #FDF8E7;
+            color: #2B1B17;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Họa tiết giấy tuyên chỉ cổ truyền kèm hoa văn chìm */
+        .parchment-bg {
+            background-color: #FDF8E7;
+            background-image: 
+                radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.09) 0%, rgba(139, 0, 0, 0.03) 65%, rgba(92, 64, 51, 0.08) 100%),
+                url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23B8860B' stroke-width='0.6' stroke-opacity='0.14'%3E%3Ccircle cx='60' cy='60' r='44'/%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3Cpath d='M60 16v88M16 60h88M29 29l62 62M91 29L29 91'/%3E%3Crect x='46' y='46' width='28' height='28' transform='rotate(45 60 60)'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Khung viền góc cổ truyền (Hồi văn góc) */
+        .traditional-card {
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+        }
+        .traditional-card:hover {
+            transform: translateY(-3px);
+            z-index: 30 !important;
+        }
+
+        .corner-ornament {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .corner-tl { top: 4px; left: 4px; border-top: 2px solid #B8860B; border-left: 2px solid #B8860B; }
+        .corner-tr { top: 4px; right: 4px; border-top: 2px solid #B8860B; border-right: 2px solid #B8860B; }
+        .corner-bl { bottom: 4px; left: 4px; border-bottom: 2px solid #B8860B; border-left: 2px solid #B8860B; }
+        .corner-br { bottom: 4px; right: 4px; border-bottom: 2px solid #B8860B; border-right: 2px solid #B8860B; }
+
+        /* Card Đinh (Nam nối dõi) */
+        .card-male {
+            background: linear-gradient(180deg, #FFFDF7 0%, #FDF4DC 100%);
+            border: 2.5px solid #8B0000;
+            box-shadow: 0 6px 18px rgba(139, 0, 0, 0.16), inset 0 0 0 2px #D4AF37;
+        }
+
+        /* Card Nữ (Con gái trong họ) */
+        .card-female {
+            background: linear-gradient(180deg, #FFFDF9 0%, #FDF3DF 100%);
+            border: 2px solid #D4AF37;
+            box-shadow: 0 6px 18px rgba(184, 134, 11, 0.14), inset 0 0 0 1.5px rgba(184, 134, 11, 0.45);
+        }
+
+        /* Card Highlight khi tìm kiếm */
+        .card-highlight {
+            animation: pulseGold 1.8s infinite;
+            box-shadow: 0 0 0 4px #D4AF37, 0 12px 28px rgba(139, 0, 0, 0.35) !important;
+        }
+
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 0 3px #8B0000, 0 0 18px #D4AF37; }
+            50% { box-shadow: 0 0 0 6px #D4AF37, 0 0 28px #8B0000; }
+        }
+
+        /* Bức trướng / Cuốn thư Header */
+        .scroll-banner {
+            background: linear-gradient(135deg, #6B0000 0%, #8B0000 50%, #5A0000 100%);
+            border: 3px solid #D4AF37;
+            box-shadow: 
+                0 10px 30px rgba(90, 0, 0, 0.35),
+                inset 0 0 0 3px #6B0000,
+                inset 0 0 0 5px rgba(212, 175, 55, 0.65);
+            position: relative;
+        }
+
+        /* Hai trục gỗ cuốn thư 2 bên */
+        .scroll-roller-left,
+        .scroll-roller-right {
+            position: absolute;
+            top: -10px;
+            bottom: -10px;
+            width: 18px;
+            background: linear-gradient(90deg, #5C3A21 0%, #D4AF37 35%, #8B5A2B 70%, #3E2723 100%);
+            border: 2px solid #D4AF37;
+            border-radius: 8px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+        }
+        .scroll-roller-left { left: -14px; }
+        .scroll-roller-right { right: -14px; }
+
+        .scroll-roller-left::before, .scroll-roller-left::after,
+        .scroll-roller-right::before, .scroll-roller-right::after {
+            content: '';
+            position: absolute;
+            left: -3px;
+            right: -3px;
+            height: 10px;
+            background: linear-gradient(90deg, #B8860B, #FFF3B0, #B8860B);
+            border-radius: 4px;
+            border: 1px solid #5C0000;
+        }
+        .scroll-roller-left::before, .scroll-roller-right::before { top: -8px; }
+        .scroll-roller-left::after, .scroll-roller-right::after { bottom: -8px; }
+
+        /* Dải lụa Đời Thứ */
+        .generation-badge {
+            background: linear-gradient(90deg, #7A0000 0%, #990000 50%, #7A0000 100%);
+            color: #FDF8E7;
+            border: 1.5px solid #D4AF37;
+            box-shadow: 0 3px 8px rgba(139, 0, 0, 0.25);
+        }
+
+        /* Thanh cuộn đẹp */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5E9C8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B8860B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B0000;
+        }
+
+        /* Đường nối gia phả SVG */
+        .connector-line {
+            fill: none;
+            stroke: #8B0000;
+            stroke-width: 2.4px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .connector-line-gold {
+            fill: none;
+            stroke: #D4AF37;
+            stroke-width: 1px;
+            stroke-dasharray: 4 3;
+        }
+
+        /* Chế độ In / Trình chiếu */
+        body.presentation-mode .ui-chrome {
+            display: none !important;
+        }
+        body.presentation-mode .exit-presentation-btn {
+            display: flex !important;
+        }
+
+        @media print {
+            .ui-chrome, .exit-presentation-btn, .card-actions {
+                display: none !important;
+            }
+            body, html {
+                overflow: visible !important;
+                background: #FDF8E7 !important;
+            }
+            #viewportContainer {
+                overflow: visible !important;
+                height: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col select-none">
+
+    <!-- ==================== THANH CÔNG CỤ TRÊN CÙNG (TOP NAVBAR) ==================== -->
+    <header class="ui-chrome bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep text-imperial-cream border-b-2 border-imperial-gold shadow-lg z-40 px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
+        <!-- Logo & Tên Ứng Dụng -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-imperial-gold/20 border-2 border-imperial-gold flex items-center justify-center shadow-inner">
+                <span class="font-serif font-black text-imperial-gold text-xl">族</span>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="font-serif font-bold text-base sm:text-lg tracking-wide text-imperial-pale">ĐẠI VIỆT GIA PHẢ</h1>
+                    <span class="hidden md:inline-block text-[11px] uppercase tracking-widest bg-imperial-gold/20 text-imperial-gold border border-imperial-gold/50 px-2 py-0.5 rounded-full">Phả Đồ Cổ Truyền</span>
+                </div>
+                <p class="text-xs text-imperial-cream/80 hidden sm:block">Uống nước nhớ nguồn • Chim có tổ, người có tông</p>
+            </div>
+        </div>
+
+        <!-- Thanh Tìm Kiếm & Lọc Đời -->
+        <div class="flex items-center gap-2 flex-1 max-w-md mx-2">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-imperial-gold/80 text-xs"></i>
+                <input 
+                    id="searchInput" 
+                    type="text" 
+                    placeholder="Tìm họ tên, tên tự, mộ phần..." 
+                    class="w-full pl-8 pr-7 py-1.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream placeholder-imperial-cream/50 focus:outline-none focus:border-imperial-gold"
+                >
+                <button id="clearSearchBtn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-imperial-cream/60 hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <select id="generationFilter" class="py-1.5 px-2.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream focus:outline-none focus:border-imperial-gold cursor-pointer">
+                <option value="all">Tất cả các đời</option>
+            </select>
+        </div>
+
+        <!-- Cụm Nút Chức Năng Chính -->
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <button onclick="openClanInfoModal()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Sửa bức trướng & thông tin dòng họ">
+                <i class="fa-solid fa-scroll text-imperial-gold"></i>
+                <span class="hidden lg:inline">Bức Trướng</span>
+            </button>
+
+            <button onclick="openAnniversaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-imperial-gold text-imperial-pale text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" title="Tra cứu Sổ Giỗ Họ Âm lịch">
+                <i class="fa-solid fa-fire-flame-curved text-amber-300"></i>
+                <span>Sổ Giỗ Họ</span>
+                <span id="anniversaryCountBadge" class="bg-imperial-gold text-crimson-deep font-bold px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+            </button>
+
+            <button onclick="toggleCouplets()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Ẩn/Hiện Câu Đối hai bên">
+                <i class="fa-solid fa-columns text-imperial-gold"></i>
+                <span class="hidden xl:inline">Câu Đối</span>
+            </button>
+
+            <button onclick="togglePresentationMode()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Chế độ Bản In / Trình chiếu">
+                <i class="fa-solid fa-print text-imperial-gold"></i>
+                <span class="hidden md:inline">Bản In</span>
+            </button>
+
+            <!-- Dropdown Xuất / Nhập Dữ Liệu -->
+            <div class="relative">
+                <button onclick="toggleDataMenu()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold text-crimson-deep hover:bg-imperial-pale font-bold text-xs flex items-center gap-1.5 transition shadow">
+                    <i class="fa-solid fa-database"></i>
+                    <span class="hidden sm:inline">Dữ Liệu</span>
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+                <div id="dataDropdownMenu" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-imperial-cream border-2 border-crimson shadow-2xl py-1.5 text-ink z-50">
+                    <button onclick="exportFamilyJSON()" class="w-full px-4 py-2 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5">
+                        <i class="fa-solid fa-file-export text-crimson w-4"></i>
+                        <span>Xuất file Gia Phả (.JSON)</span>
+                    </button>
+                    <label class="w-full px-4 py-2 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5 cursor-pointer">
+                        <i class="fa-solid fa-file-import text-amber-700 w-4"></i>
+                        <span>Nhập file Gia Phả (.JSON)</span>
+                        <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importFamilyJSON(event)">
+                    </label>
+                    <hr class="my-1 border-imperial-gold/40">
+                    <button onclick="confirmResetSampleData()" class="w-full px-4 py-2 text-left text-xs font-medium text-crimson hover:bg-red-50 flex items-center gap-2.5">
+                        <i class="fa-solid fa-rotate-left w-4"></i>
+                        <span>Khôi phục Phả Đồ mẫu (4 đời)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nút Thoát Chế Độ Bản In / Trình Chiếu -->
+    <div class="exit-presentation-btn hidden fixed top-4 right-4 z-50 items-center gap-2">
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-2 hover:bg-crimson-dark">
+            <i class="fa-solid fa-print"></i> In Phả Đồ Ngay
+        </button>
+        <button onclick="togglePresentationMode()" class="px-4 py-2 rounded-xl bg-ink text-white border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-2 hover:bg-black">
+            <i class="fa-solid fa-xmark"></i> Thoát Chế Độ Trình Chiếu
+        </button>
+    </div>
+
+    <!-- ==================== VÙNG VẼ PHẢ ĐỒ (MAIN CANVAS VIEWPORT) ==================== -->
+    <main id="viewportContainer" class="relative flex-1 overflow-hidden parchment-bg cursor-grab active:cursor-grabbing">
+
+        <!-- Câu Đối Trái & Phải (Trang trí truyền thống xếp dọc từng chữ) -->
+        <aside id="leftCouplet" class="pointer-events-none fixed left-3 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center">
+            <div class="scroll-banner px-3.5 py-4 rounded-xl text-center shadow-2xl border-2 border-imperial-gold">
+                <div class="text-imperial-gold text-xs mb-1.5">༺❖༻</div>
+                <div id="coupletLeftText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow">
+                </div>
+                <div class="text-imperial-gold text-xs mt-1.5">༺❖༻</div>
+            </div>
+        </aside>
+
+        <aside id="rightCouplet" class="pointer-events-none fixed right-3 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center">
+            <div class="scroll-banner px-3.5 py-4 rounded-xl text-center shadow-2xl border-2 border-imperial-gold">
+                <div class="text-imperial-gold text-xs mb-1.5">༺❖༻</div>
+                <div id="coupletRightText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow">
+                </div>
+                <div class="text-imperial-gold text-xs mt-1.5">༺❖༻</div>
+            </div>
+        </aside>
+
+        <!-- Bảng Chú Giải & Thống Kê Nhanh (Góc Dưới Trái) -->
+        <div class="ui-chrome fixed bottom-4 left-4 z-30 flex flex-col gap-2 max-w-xs">
+            <div class="bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-3 shadow-xl text-xs">
+                <div class="font-serif font-bold text-crimson border-b border-imperial-gold/50 pb-1.5 mb-2 flex items-center justify-between">
+                    <span><i class="fa-solid fa-chart-pie mr-1.5 text-imperial-bronze"></i>THỐNG KÊ DÒNG TỘC</span>
+                    <span id="statGenerations" class="bg-crimson text-imperial-pale px-2 py-0.5 rounded text-[10px] font-bold">4 Đời</span>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] mb-2.5">
+                    <div class="flex justify-between">
+                        <span class="text-ink-muted">Tổng thành viên:</span>
+                        <strong id="statTotalMembers" class="text-ink">0</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-ink-muted">Đinh (Nam):</span>
+                        <strong id="statMaleCount" class="text-crimson">0</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-ink-muted">Nữ (Con gái):</span>
+                        <strong id="statFemaleCount" class="text-amber-800">0</strong>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-ink-muted">Phối ngẫu:</span>
+                        <strong id="statSpouseCount" class="text-ink">0</strong>
+                    </div>
+                </div>
+                <!-- Chú giải màu sắc -->
+                <div class="pt-2 border-t border-imperial-gold/40 flex flex-wrap items-center gap-3 text-[11px]">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-sm bg-imperial-cream border-2 border-crimson inline-block"></span>
+                        <span class="font-medium">Đinh (Nam)</span>
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-sm bg-imperial-cream border-2 border-imperial-bronze inline-block"></span>
+                        <span class="font-medium">Nữ</span>
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-crimson inline-block"></span>
+                        <span class="font-medium">Có ngày Giỗ ÂL</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bộ Điều Khiển Phóng To / Thu Nhỏ (Góc Dưới Phải) -->
+        <div class="ui-chrome fixed bottom-4 right-4 z-30 flex items-center gap-1.5 bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-1.5 shadow-xl">
+            <button onclick="zoomTree(-0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Thu nhỏ">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">100%</span>
+            <button onclick="zoomTree(0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Phóng to">
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <div class="h-5 w-[1px] bg-imperial-gold/50 mx-0.5"></div>
+            <button onclick="centerAndFitTree()" class="px-2.5 h-8 rounded-lg bg-crimson text-imperial-pale hover:bg-crimson-dark text-xs font-semibold flex items-center gap-1.5 transition" title="Căn giữa toàn bộ Phả Đồ">
+                <i class="fa-solid fa-expand"></i>
+                <span class="hidden sm:inline">Toàn cảnh</span>
+            </button>
+        </div>
+
+        <!-- VÙNG CANVAS CHỨA BỨC TRƯỚNG & CÂY GIA PHẢ (PAN & ZOOM LAYER) -->
+        <div id="panZoomStage" class="origin-top-left transition-transform duration-75 ease-out" style="transform: translate(0px, 0px) scale(1);">
+            
+            <!-- 1. BỨC TRƯỚNG / CUỐN THƯ ĐẦU PHẢ ĐỒ -->
+            <div id="clanScrollHeader" class="pt-10 pb-8 flex flex-col items-center justify-center">
+                <div onclick="openClanInfoModal()" class="scroll-banner rounded-xl px-10 sm:px-16 py-6 max-w-4xl text-center cursor-pointer group transition hover:scale-[1.01]">
+                    <div class="scroll-roller-left"></div>
+                    <div class="scroll-roller-right"></div>
+
+                    <!-- Họa tiết Lưỡng Long Chầu Nguyệt / Hoa văn cổ trên bức trướng -->
+                    <div class="flex items-center justify-center gap-3 text-imperial-gold text-xs tracking-[0.25em] uppercase font-semibold mb-1.5">
+                        <span>༺ ❁ ༻</span>
+                        <span id="bannerSubHeader">VẠN ĐẠI TÔN CHI • TRUYỀN GIA BẢO PHẢ</span>
+                        <span>༺ ❁ ༻</span>
+                    </div>
+
+                    <h2 id="bannerClanTitle" class="font-serif font-black text-2xl sm:text-4xl text-imperial-gold tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                        PHẢ ĐỒ HỌ NGUYỄN ĐÌNH
+                    </h2>
+
+                    <div class="mt-2.5 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs sm:text-sm text-imperial-pale/95 font-medium">
+                        <span><strong class="text-imperial-gold">Chi / Ngành:</strong> <span id="bannerBranch">Đại Tôn - Chi Giữa</span></span>
+                        <span class="text-imperial-gold">•</span>
+                        <span><strong class="text-imperial-gold">Nguyên quán:</strong> <span id="bannerHometown">Làng Cổ Lễ, Huyện Trực Ninh, Tỉnh Nam Định</span></span>
+                        <span class="text-imperial-gold">•</span>
+                        <span><strong class="text-imperial-gold">Năm lập phả:</strong> <span id="bannerYear">Giáp Thìn - Cập nhật Bính Ngọ (2026)</span></span>
+                    </div>
+
+                    <p id="bannerMotto" class="mt-2.5 text-xs italic text-imperial-gold/90 font-serif">
+                        "Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh"
+                    </p>
+
+                    <div class="ui-chrome mt-2 inline-flex items-center gap-1.5 text-[11px] bg-black/25 text-imperial-gold px-3 py-0.5 rounded-full border border-imperial-gold/40 opacity-80 group-hover:opacity-100">
+                        <i class="fa-solid fa-pen-to-square"></i> Nhấn để sửa thông tin Dòng Họ & Bức Trướng
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. VÙNG CHỨA CÂY GIA PHẢ (DẢI ĐỜI + SVG ĐƯỜNG NỐI + CÁC THẺ THÀNH VIÊN) -->
+            <div id="treeCanvasWrapper" class="relative mx-auto">
+                <!-- Dải phân tầng thế hệ (Đời thứ I, II, III...) -->
+                <div id="generationBandsContainer" class="absolute inset-0 pointer-events-none z-0"></div>
+
+                <!-- SVG vẽ đường kẻ vuông góc (Orthogonal Lines) -->
+                <svg id="treeConnectionsSvg" class="absolute inset-0 pointer-events-none z-10 overflow-visible"></svg>
+
+                <!-- Lớp chứa các Thẻ Thành Viên -->
+                <div id="treeNodesContainer" class="relative z-20"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==================== MODAL 1: THÊM / SỬA THÀNH VIÊN ==================== -->
+    <div id="memberModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden my-8">
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-user-pen text-imperial-gold text-lg"></i>
+                    <h3 id="memberModalTitle" class="font-serif font-bold text-lg text-imperial-pale">Cập Nhật Thông Tin Thành Viên</h3>
+                </div>
+                <button onclick="closeMemberModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Form Nội Dung -->
+            <form id="memberForm" onsubmit="saveMemberForm(event)" class="p-5 sm:p-6 max-h-[82vh] overflow-y-auto space-y-5 text-xs sm:text-sm">
+                <input type="hidden" id="formMemberId">
+                <input type="hidden" id="formParentId">
+
+                <!-- Thông báo cha/mẹ khi thêm con -->
+                <div id="parentContextBanner" class="hidden bg-amber-100/90 border border-imperial-bronze rounded-xl px-4 py-2.5 text-ink flex items-center justify-between">
+                    <div>
+                        <span class="text-ink-muted">Đang thêm con nối dõi cho:</span>
+                        <strong id="parentContextName" class="ml-1 text-crimson font-serif"></strong>
+                    </div>
+                    <span id="parentContextGen" class="bg-crimson text-imperial-pale px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+                </div>
+
+                <!-- Nhóm 1: Danh tính & Thế thứ -->
+                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
+                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-imperial-bronze"></i> 1. Danh Tính & Thế Thứ Trong Họ
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold text-ink mb-1">Họ và Tên thường gọi <span class="text-crimson">*</span></label>
+                            <input type="text" id="inputFullName" required placeholder="VD: Nguyễn Đình Phúc" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-semibold">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Giới tính (Đinh / Nữ)</label>
+                            <select id="inputGender" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-medium">
+                                <option value="male">Nam (Đinh - Nối dõi)</option>
+                                <option value="female">Nữ (Con gái trong họ)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Thứ tự anh chị em</label>
+                            <input type="number" id="inputOrderIndex" min="1" max="30" value="1" placeholder="1, 2, 3..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-semibold">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Vai vế (Trưởng / Thứ / Đích tôn)</label>
+                            <input type="text" id="inputRoleTitle" list="roleTitleSuggestions" placeholder="VD: Thủy Tổ, Trưởng Nam, Thứ Nam..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                            <datalist id="roleTitleSuggestions">
+                                <option value="Thủy Tổ Khai Cơ">
+                                <option value="Trưởng Nam (Trưởng Tộc)">
+                                <option value="Trưởng Nam">
+                                <option value="Thứ Nam">
+                                <option value="Đích Tôn">
+                                <option value="Trưởng Nữ">
+                                <option value="Thứ Nữ">
+                                <option value="Út Nam">
+                                <option value="Út Nữ">
+                            </datalist>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Tên Húy / Tên Tự / Hiệu</label>
+                            <input type="text" id="inputCourtesyName" placeholder="VD: Húy Đình Trọng • Tự Minh Đức" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Thụy Hiệu / Chức Tước</label>
+                            <input type="text" id="inputTitleHonor" placeholder="VD: Thụy Đoan Chính, Hương Cống..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nhóm 2: Sinh Thời, Ngày Giỗ Âm Lịch & Mộ Phần -->
+                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
+                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                        <i class="fa-solid fa-fire-flame-curved text-imperial-bronze"></i> 2. Sinh Thời, Ngày Giỗ Âm Lịch & Mộ Phần
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Tình trạng</label>
+                            <select id="inputIsAlive" onchange="toggleDeceasedFields()" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-medium">
+                                <option value="false">Đã khuất (Hiển khảo / Tiên tổ)</option>
+                                <option value="true">Còn sống (Hiện tiền)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-ink mb-1">Năm sinh (Dương/Can Chi)</label>
+                            <input type="text" id="inputBirthYear" placeholder="VD: 1920 (Canh Thân)" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                        </div>
+                        <div id="deathYearFieldWrapper">
+                            <label class="block font-semibold text-ink mb-1">Năm mất</label>
+                            <input type="text" id="inputDeathYear" placeholder="VD: 1998 (Mậu Dần)" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                        </div>
+                    </div>
+
+                    <div id="deceasedDetailsRow" class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div>
+                            <label class="block font-semibold text-crimson mb-1">Ngày Giỗ Âm Lịch (Ngày / Tháng)</label>
+                            <div class="flex gap-1.5">
+                                <input type="number" id="inputDeathLunarDay" min="1" max="30" placeholder="Ngày (1-30)" class="w-1/2 px-2.5 py-2 rounded-lg border border-crimson/50 bg-red-50/40 focus:outline-none focus:border-crimson font-semibold text-crimson">
+                                <select id="inputDeathLunarMonth" class="w-1/2 px-2 py-2 rounded-lg border border-crimson/50 bg-red-50/40 focus:outline-none focus:border-crimson font-semibold text-crimson">
+                                    <option value="">-- Tháng ÂL --</option>
+                                    <option value="1">Tháng Giêng (1)</option>
+                                    <option value="2">Tháng Hai (2)</option>
+                                    <option value="3">Tháng Ba (3)</option>
+                                    <option value="4">Tháng Tư (4)</option>
+                                    <option value="5">Tháng Năm (5)</option>
+                                    <option value="6">Tháng Sáu (6)</option>
+                                    <option value="7">Tháng Bảy (7)</option>
+                                    <option value="8">Tháng Tám (8)</option>
+                                    <option value="9">Tháng Chín (9)</option>
+                                    <option value="10">Tháng Mười (10)</option>
+                                    <option value="11">Tháng Mười Một (11)</option>
+                                    <option value="12">Tháng Chạp (12)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-semibold text-ink mb-1">Nơi an táng / Mộ phần</label>
+                            <input type="text" id="inputBurialPlace" placeholder="VD: Khu lăng mộ Tổ, xứ Đồng Bãi, xã Cổ Lễ, Nam Định" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nhóm 3: Thông tin Phối Ngẫu (Vợ / Chồng: Chính thất, Thứ thất, Hiền nội, Phò mã) -->
+                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3">
+                    <div class="flex items-center justify-between border-b border-imperial-gold/40 pb-1.5">
+                        <h4 class="font-serif font-bold text-crimson text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-ring text-imperial-bronze"></i> 3. Thông Tin Phối Ngẫu (Chính Thất / Thứ Thất / Hiền Nội / Chồng)
+                        </h4>
+                        <button type="button" onclick="addSpouseRow()" class="px-2.5 py-1 rounded-lg bg-crimson text-imperial-pale text-xs font-semibold hover:bg-crimson-dark flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Thêm Phối Ngẫu
+                        </button>
+                    </div>
+                    <div id="spousesFormContainer" class="space-y-3">
+                        <!-- Các dòng phối ngẫu render tự động tại đây -->
+                    </div>
+                </div>
+
+                <!-- Nhóm 4: Tiểu Sử & Công Đức -->
+                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-2">
+                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-imperial-bronze"></i> 4. Tiểu Sử, Hành Trạng & Công Đức Với Dòng Họ
+                    </h4>
+                    <textarea id="inputBio" rows="3" placeholder="Ghi chép công đức khai cơ lập nghiệp, khoa bảng, nghề nghiệp, lời dặn dò con cháu..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson"></textarea>
+                </div>
+
+                <!-- Nút Lưu / Hủy -->
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeMemberModal()" class="px-5 py-2.5 rounded-xl border border-ink/30 text-ink font-semibold hover:bg-black/5">
+                        Hủy bỏ
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Lưu Vào Gia Phả
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: XEM CHI TIẾT PHẢ KÝ CÁ NHÂN ==================== -->
+    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-imperial-gold text-xl">❖</span>
+                    <h3 class="font-serif font-bold text-lg text-imperial-pale">TRANG PHẢ KÝ THÀNH VIÊN</h3>
+                </div>
+                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="detailModalContent" class="p-6 max-h-[80vh] overflow-y-auto space-y-4">
+                <!-- Nội dung render bằng JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM ==================== -->
+    <div id="anniversaryModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-fire-flame-curved text-imperial-gold text-xl"></i>
+                    <div>
+                        <h3 class="font-serif font-bold text-lg text-imperial-pale">SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM</h3>
+                        <p class="text-xs text-imperial-cream/80">Tra cứu ngày húy kỵ các bậc Tiên Tổ từ Tháng Giêng đến Tháng Chạp</p>
+                    </div>
+                </div>
+                <button onclick="closeAnniversaryModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-5 sm:p-6 max-h-[80vh] overflow-y-auto space-y-4">
+                <!-- Bộ lọc tháng Âm lịch -->
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-imperial-parchment/80 p-3 rounded-xl border border-imperial-bronze/50">
+                    <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-crimson">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <span>Lọc theo tháng Âm lịch:</span>
+                    </div>
+                    <select id="lunarMonthFilter" onchange="renderAnniversaryTable()" class="px-3 py-1.5 rounded-lg bg-white border border-crimson text-ink text-xs sm:text-sm font-semibold focus:outline-none">
+                        <option value="all">Tất cả 12 tháng Âm lịch</option>
+                        <option value="1">Tháng Giêng (Tháng 1 ÂL)</option>
+                        <option value="2">Tháng Hai (Tháng 2 ÂL)</option>
+                        <option value="3">Tháng Ba (Tháng 3 ÂL)</option>
+                        <option value="4">Tháng Tư (Tháng 4 ÂL)</option>
+                        <option value="5">Tháng Năm (Tháng 5 ÂL)</option>
+                        <option value="6">Tháng Sáu (Tháng 6 ÂL)</option>
+                        <option value="7">Tháng Bảy (Tháng 7 ÂL)</option>
+                        <option value="8">Tháng Tám (Tháng 8 ÂL)</option>
+                        <option value="9">Tháng Chín (Tháng 9 ÂL)</option>
+                        <option value="10">Tháng Mười (Tháng 10 ÂL)</option>
+                        <option value="11">Tháng Mười Một (Tháng 11 ÂL)</option>
+                        <option value="12">Tháng Chạp (Tháng 12 ÂL)</option>
+                    </select>
+                </div>
+
+                <!-- Danh sách ngày giỗ -->
+                <div id="anniversaryListContainer" class="space-y-2.5"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 4: CHỈNH SỬA BỨC TRƯỚNG & THÔNG TIN DÒNG HỌ ==================== -->
+    <div id="clanInfoModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-scroll text-imperial-gold text-lg"></i>
+                    <h3 class="font-serif font-bold text-lg text-imperial-pale">Thông Tin Bức Trướng & Dòng Họ</h3>
+                </div>
+                <button onclick="closeClanInfoModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="saveClanInfo(event)" class="p-6 space-y-4 text-xs sm:text-sm">
+                <div>
+                    <label class="block font-semibold text-ink mb-1">Tiêu đề chính Bức Trướng <span class="text-crimson">*</span></label>
+                    <input type="text" id="clanTitleInput" required class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white font-serif font-bold text-crimson">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block font-semibold text-ink mb-1">Chi / Ngành / Phái</label>
+                        <input type="text" id="clanBranchInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-ink mb-1">Năm lập phả / Tu bổ</label>
+                        <input type="text" id="clanYearInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-ink mb-1">Nguyên quán / Từ đường chính</label>
+                    <input type="text" id="clanHometownInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
+                </div>
+                <div>
+                    <label class="block font-semibold text-ink mb-1">Hoành phi / Gia huấn dưới Bức Trướng</label>
+                    <input type="text" id="clanMottoInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white italic">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                        <label class="block font-semibold text-ink mb-1">Vế câu đối Trái</label>
+                        <input type="text" id="clanCoupletLeftInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-ink mb-1">Vế câu đối Phải</label>
+                        <input type="text" id="clanCoupletRightInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" onclick="closeClanInfoModal()" class="px-4 py-2 rounded-xl border border-ink/30 text-ink font-semibold">Hủy</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold font-bold shadow">Lưu Thay Đổi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 5: HỘP THOẠI XÁC NHẬN & THÔNG BÁO (KHÔNG DÙNG ALERT/CONFIRM) ==================== -->
+    <div id="confirmDialogModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-md w-full shadow-2xl overflow-hidden p-6 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-crimson/10 border-2 border-crimson text-crimson flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 id="confirmDialogTitle" class="font-serif font-bold text-lg text-crimson">Xác Nhận Thao Tác</h4>
+            <p id="confirmDialogMessage" class="text-sm text-ink-muted leading-relaxed"></p>
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button onclick="closeConfirmDialog()" class="px-5 py-2 rounded-xl border border-ink/30 text-ink font-semibold text-xs sm:text-sm hover:bg-black/5">
+                    Hủy bỏ
+                </button>
+                <button id="confirmDialogActionBtn" class="px-5 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold text-xs sm:text-sm shadow">
+                    Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Thông Báo Nhanh -->
+    <div id="toastMessage" class="fixed top-16 right-5 z-50 hidden items-center gap-2.5 bg-crimson-deep text-imperial-pale border-2 border-imperial-gold px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-semibold">
+        <i class="fa-solid fa-circle-check text-imperial-gold text-base"></i>
+        <span id="toastText">Đã lưu thành công!</span>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        const STORAGE_KEY = 'DAI_VIET_GIA_PHA_DATA_V2';
+
+        // 1. DỮ LIỆU MẪU CHUẨN GIA PHẢ VIỆT NAM (4 ĐỜI DÒNG HỌ NGUYỄN ĐÌNH)
+        function getDefaultFamilyData() {
+            return {
+                clanInfo: {
+                    title: 'PHẢ ĐỒ HỌ NGUYỄN ĐÌNH',
+                    branch: 'Đại Tôn - Chi Giữa',
+                    hometown: 'Làng Cổ Lễ, Huyện Trực Ninh, Tỉnh Nam Định',
+                    year: 'Giáp Thìn - Tu bổ Bính Ngọ (2026)',
+                    motto: '"Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh"',
+                    coupletLeft: 'CÂY CÓ CỘI MỚI NỞ CÀNH XANH NGỌN',
+                    coupletRight: 'NƯỚC CÓ NGUỒN MỚI BỂ RỘNG SÔNG SÂU'
+                },
+                members: [
+                    // ================= ĐỜI THỨ I (THỦY TỔ) =================
+                    {
+                        id: 'mem_1',
+                        parentId: null,
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Đức',
+                        gender: 'male',
+                        roleTitle: 'Thủy Tổ Khai Cơ',
+                        courtesyName: 'Húy: Đình Trọng • Tự: Phúc Đức • Hiệu: Tùng Hiên',
+                        titleHonor: 'Tiền Triều Hương Cống - Thụy Đoan Chính',
+                        isAlive: false,
+                        birthYear: '1892 (Nhâm Thìn)',
+                        deathYear: '1974 (Giáp Dần)',
+                        deathLunarDay: 15,
+                        deathLunarMonth: 3,
+                        burialPlace: 'Khu Lăng Tổ xứ Đồng Bãi, xã Cổ Lễ, Trực Ninh, Nam Định (Tọa Bắc hướng Nam)',
+                        spouses: [
+                            {
+                                relation: 'Chính thất',
+                                fullName: 'Cụ bà Trần Thị Hiền',
+                                courtesyName: 'Hiệu: Từ Tâm',
+                                isAlive: false,
+                                birthYear: '1896',
+                                deathYear: '1980',
+                                deathLunarDay: 12,
+                                deathLunarMonth: 8,
+                                burialPlace: 'An táng song mộ cùng Cụ Ông tại xứ Đồng Bãi'
+                            },
+                            {
+                                relation: 'Thứ thất',
+                                fullName: 'Cụ bà Lê Thị Khuê',
+                                courtesyName: 'Hiệu: Diệu Liên',
+                                isAlive: false,
+                                birthYear: '1902',
+                                deathYear: '1986',
+                                deathLunarDay: 24,
+                                deathLunarMonth: 10,
+                                burialPlace: 'Nghĩa trang Đồng Bãi (Khu B, hàng 1)'
+                            }
+                        ],
+                        bio: 'Cụ Thủy Tổ Nguyễn Đình Đức vốn người hiếu học, đỗ Hương Cống, mở trường dạy chữ Nho và bốc thuốc cứu người trong vùng. Năm 1925 cụ đứng ra quy tập điền sản, dựng Từ Đường 5 gian gỗ lim và lập quy ước khuyến học cho con cháu dòng họ Nguyễn Đình.'
+                    },
+
+                    // ================= ĐỜI THỨ II =================
+                    {
+                        id: 'mem_2',
+                        parentId: 'mem_1',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Chính',
+                        gender: 'male',
+                        roleTitle: 'Trưởng Nam (Trưởng Tộc)',
+                        courtesyName: 'Húy: Đình Trực • Tự: Minh Chính',
+                        titleHonor: 'Thụy Trung Nghĩa',
+                        isAlive: false,
+                        birthYear: '1920 (Canh Thân)',
+                        deathYear: '2001 (Tân Tỵ)',
+                        deathLunarDay: 20,
+                        deathLunarMonth: 11,
+                        burialPlace: 'Khu mộ Gia tộc xứ Đồng Bãi, Nam Định',
+                        spouses: [
+                            {
+                                relation: 'Chính thất',
+                                fullName: 'Cụ bà Phạm Thị Lan',
+                                courtesyName: 'Hiệu: Phúc An',
+                                isAlive: false,
+                                birthYear: '1923',
+                                deathYear: '2008',
+                                deathLunarDay: 6,
+                                deathLunarMonth: 4,
+                                burialPlace: 'Khu mộ Gia tộc xứ Đồng Bãi, Nam Định'
+                            }
+                        ],
+                        bio: 'Trưởng nam gánh vác việc hương khói từ đường, giữ gìn gia phả chữ Hán qua hai cuộc kháng chiến, trùng tu nhà thờ Tổ năm 1990.'
+                    },
+                    {
+                        id: 'mem_3',
+                        parentId: 'mem_1',
+                        orderIndex: 2,
+                        fullName: 'Nguyễn Đình Nghĩa',
+                        gender: 'male',
+                        roleTitle: 'Thứ Nam (Trưởng Chi Hai)',
+                        courtesyName: 'Tự: Trọng Đạo • Hiệu: Nhân Hòa',
+                        titleHonor: 'Lương Y Đạo Đức - Thụy Ôn Hòa',
+                        isAlive: false,
+                        birthYear: '1925 (Ất Sửu)',
+                        deathYear: '2012 (Nhâm Thìn)',
+                        deathLunarDay: 9,
+                        deathLunarMonth: 7,
+                        burialPlace: 'Nghĩa trang Thanh Tước, Mê Linh, Hà Nội',
+                        spouses: [
+                            {
+                                relation: 'Chính thất',
+                                fullName: 'Cụ bà Vũ Thị Ngọc',
+                                courtesyName: 'Hiệu: Thanh Tịnh',
+                                isAlive: false,
+                                birthYear: '1928',
+                                deathYear: '2018',
+                                deathLunarDay: 18,
+                                deathLunarMonth: 1,
+                                burialPlace: 'Nghĩa trang Thanh Tước, Hà Nội'
+                            }
+                        ],
+                        bio: 'Cụ nối nghiệp y thuật của Thủy Tổ, công tác tại Viện Đông Y tại Hà Nội, có công đỡ đầu con cháu trong họ ra kinh đô học tập.'
+                    },
+                    {
+                        id: 'mem_4',
+                        parentId: 'mem_1',
+                        orderIndex: 3,
+                        fullName: 'Nguyễn Thị Tâm',
+                        gender: 'female',
+                        roleTitle: 'Trưởng Nữ (Bà Cô Tổ)',
+                        courtesyName: 'Hiệu: Diệu Hòa',
+                        titleHonor: 'Thụy Trinh Thuận',
+                        isAlive: false,
+                        birthYear: '1930 (Canh Ngọ)',
+                        deathYear: '2016 (Bính Thân)',
+                        deathLunarDay: 2,
+                        deathLunarMonth: 9,
+                        burialPlace: 'An táng bên quê chồng tại Huyện Xuân Trường, Nam Định',
+                        spouses: [
+                            {
+                                relation: 'Phò mã (Chồng)',
+                                fullName: 'Ông Hoàng Văn Bách',
+                                courtesyName: 'Tự: Văn Minh (Giáo học)',
+                                isAlive: false,
+                                birthYear: '1928',
+                                deathYear: '2010',
+                                deathLunarDay: 14,
+                                deathLunarMonth: 5,
+                                burialPlace: 'Xuân Trường, Nam Định'
+                            }
+                        ],
+                        bio: 'Bà luôn hướng về cội nguồn, công đức đôi câu đối sơn son thếp vàng và chuông đồng tại Từ Đường họ Nguyễn Đình.'
+                    },
+
+                    // ================= ĐỜI THỨ III =================
+                    {
+                        id: 'mem_5',
+                        parentId: 'mem_2',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Hùng',
+                        gender: 'male',
+                        roleTitle: 'Đích Tôn (Trưởng Chi 1)',
+                        courtesyName: 'Tự: Quốc Cường',
+                        titleHonor: 'Đại tá Quân đội nghỉ hưu',
+                        isAlive: true,
+                        birthYear: '1948 (Mậu Tý)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Chính thất',
+                                fullName: 'Bà Đỗ Thị Mai',
+                                courtesyName: 'Giáo viên ưu tú',
+                                isAlive: true,
+                                birthYear: '1952',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Hiện là Trưởng Hội đồng Gia tộc dòng họ Nguyễn Đình, chủ trì biên tập và số hóa Phả Đồ dòng họ.'
+                    },
+                    {
+                        id: 'mem_6',
+                        parentId: 'mem_2',
+                        orderIndex: 2,
+                        fullName: 'Nguyễn Đình Dũng',
+                        gender: 'male',
+                        roleTitle: 'Thứ Nam',
+                        courtesyName: 'Tự: Minh Trí',
+                        titleHonor: 'Kỹ sư Cầu đường - Thụy Cương Trực',
+                        isAlive: false,
+                        birthYear: '1953 (Quý Tỵ)',
+                        deathYear: '2021 (Tân Sửu)',
+                        deathLunarDay: 27,
+                        deathLunarMonth: 6,
+                        burialPlace: 'Khu lăng mộ Gia tộc xứ Đồng Bãi, Nam Định',
+                        spouses: [
+                            {
+                                relation: 'Hiền nội',
+                                fullName: 'Bà Bùi Thị Hạnh',
+                                courtesyName: '',
+                                isAlive: true,
+                                birthYear: '1956',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Người có công quy hoạch khuôn viên lăng mộ đá xanh của dòng họ năm 2015.'
+                    },
+                    {
+                        id: 'mem_7',
+                        parentId: 'mem_3',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Khang',
+                        gender: 'male',
+                        roleTitle: 'Trưởng Nam Chi 2',
+                        courtesyName: 'Tự: Gia Bảo',
+                        titleHonor: 'Tiến sĩ Y khoa - Thầy thuốc Ưu tú',
+                        isAlive: true,
+                        birthYear: '1955 (Ất Mùi)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Hiền nội',
+                                fullName: 'Bà Ngô Thị Thanh Vân',
+                                courtesyName: 'Dược sĩ Chuyên khoa',
+                                isAlive: true,
+                                birthYear: '1958',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Kế thừa truyền thống y học gia truyền, sáng lập Quỹ Khuyến Học Nguyễn Đình hàng năm trao thưởng tại Từ Đường.'
+                    },
+
+                    // ================= ĐỜI THỨ IV =================
+                    {
+                        id: 'mem_8',
+                        parentId: 'mem_5',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Minh Quân',
+                        gender: 'male',
+                        roleTitle: 'Đích Tôn Đời IV',
+                        courtesyName: 'Tự: Kiến Quốc',
+                        titleHonor: 'Kiến trúc sư Quy hoạch',
+                        isAlive: true,
+                        birthYear: '1978 (Mậu Ngọ)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Hiền nội',
+                                fullName: 'Chị Lê Phương Thảo',
+                                courtesyName: 'Thạc sĩ Kinh tế',
+                                isAlive: true,
+                                birthYear: '1982',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Thiết kế bản vẽ trùng tu Nhà Thờ Tổ và cổng tam quan dòng họ năm 2024.'
+                    },
+                    {
+                        id: 'mem_9',
+                        parentId: 'mem_5',
+                        orderIndex: 2,
+                        fullName: 'Nguyễn Thị Minh Nguyệt',
+                        gender: 'female',
+                        roleTitle: 'Trưởng Nữ',
+                        courtesyName: '',
+                        titleHonor: 'Tiến sĩ - Giảng viên Đại học',
+                        isAlive: true,
+                        birthYear: '1983 (Quý Hợi)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Phò mã (Chồng)',
+                                fullName: 'Anh Đặng Quốc Huy',
+                                courtesyName: 'Kỹ sư CNTT',
+                                isAlive: true,
+                                birthYear: '1981',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Phụ trách ban liên lạc con cháu họ Nguyễn Đình tại khu vực miền Bắc.'
+                    },
+                    {
+                        id: 'mem_10',
+                        parentId: 'mem_6',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Hoàng Nam',
+                        gender: 'male',
+                        roleTitle: 'Trưởng Nam',
+                        courtesyName: '',
+                        titleHonor: 'Doanh nhân',
+                        isAlive: true,
+                        birthYear: '1984 (Giáp Tý)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Hiền nội',
+                                fullName: 'Chị Phan Thu Trang',
+                                courtesyName: 'Kế toán trưởng',
+                                isAlive: true,
+                                birthYear: '1987',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Hậu duệ đời thứ 4 tích cực phụng sự việc họ và đóng góp xây dựng Quỹ Từ Đường.'
+                    },
+                    {
+                        id: 'mem_11',
+                        parentId: 'mem_7',
+                        orderIndex: 1,
+                        fullName: 'Nguyễn Đình Bảo Long',
+                        gender: 'male',
+                        roleTitle: 'Trưởng Nam Chi 2',
+                        courtesyName: '',
+                        titleHonor: 'Bác sĩ Chuyên khoa II',
+                        isAlive: true,
+                        birthYear: '1986 (Bính Dần)',
+                        deathYear: '',
+                        deathLunarDay: null,
+                        deathLunarMonth: null,
+                        burialPlace: '',
+                        spouses: [
+                            {
+                                relation: 'Hiền nội',
+                                fullName: 'Chị Trịnh Ngọc Bích',
+                                courtesyName: 'Bác sĩ Nhi khoa',
+                                isAlive: true,
+                                birthYear: '1989',
+                                deathYear: '',
+                                deathLunarDay: null,
+                                deathLunarMonth: null,
+                                burialPlace: ''
+                            }
+                        ],
+                        bio: 'Nối truyền nghề y đời thứ 4 của dòng họ Nguyễn Đình.'
+                    }
+                ]
+            };
+        }
+
+        // State ứng dụng
+        let familyData = null;
+        let panState = { x: 0, y: 0, scale: 1, isDragging: false, startX: 0, startY: 0 };
+        let nodePositions = new Map(); // id -> {x, y, width, height, generation}
+        let showCouplets = true;
+
+        // Hằng số kích thước thẻ để tính toán cây
+        const CARD_WIDTH = 290;
+        const CARD_GAP_X = 48;
+        const LEVEL_HEIGHT = 345;
+        const TOP_PADDING = 30;
+
+        // Chuyển đổi số sang số La Mã cho Thế thứ
+        function toRoman(num) {
+            const romans = [
+                ['M', 1000], ['CM', 900], ['D', 500], ['CD', 400],
+                ['C', 100], ['XC', 90], ['L', 50], ['XL', 40],
+                ['X', 10], ['IX', 9], ['V', 5], ['IV', 4], ['I', 1]
+            ];
+            let res = '';
+            for (const [letter, n] of romans) {
+                while (num >= n) {
+                    res += letter;
+                    num -= n;
+                }
+            }
+            return res || 'I';
+        }
+
+        // Tên tháng Âm lịch truyền thống
+        function getLunarMonthName(m) {
+            const num = parseInt(m, 10);
+            if (!num) return '';
+            const names = {
+                1: 'Tháng Giêng', 2: 'Tháng 2', 3: 'Tháng 3', 4: 'Tháng 4',
+                5: 'Tháng 5', 6: 'Tháng 6', 7: 'Tháng 7', 8: 'Tháng 8',
+                9: 'Tháng 9', 10: 'Tháng 10', 11: 'Tháng 11', 12: 'Tháng Chạp'
+            };
+            return names[num] || `Tháng ${num}`;
+        }
+
+        // Tính Hưởng thọ / Hưởng dương / Tuổi hiện tại từ chuỗi năm
+        function calculateLongevityText(isAlive, birthStr, deathStr) {
+            const extractYear = (str) => {
+                if (!str) return null;
+                const match = String(str).match(/\b(1[6-9]\d{2}|20\d{2})\b/);
+                return match ? parseInt(match[1], 10) : null;
+            };
+            const bYear = extractYear(birthStr);
+            const dYear = extractYear(deathStr);
+            const currentYear = 2026;
+
+            if (isAlive) {
+                if (bYear) {
+                    const age = currentYear - bYear;
+                    return `Hiện tiền (${age > 0 ? age + ' tuổi' : 'Còn sống'})`;
+                }
+                return 'Hiện tiền (Còn sống)';
+            } else {
+                if (bYear && dYear && dYear >= bYear) {
+                    const age = dYear - bYear + 1; // Tuổi mụ theo truyền thống Việt Nam
+                    const term = age >= 60 ? 'Hưởng thọ' : 'Hưởng dương';
+                    return `${term} ${age} tuổi`;
+                }
+                return 'Đã khuất';
+            }
+        }
+
+        // Khởi tạo dữ liệu
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    familyData = JSON.parse(raw);
+                } else {
+                    familyData = getDefaultFamilyData();
+                    saveData();
+                }
+            } catch (e) {
+                console.error('Lỗi đọc localStorage:', e);
+                familyData = getDefaultFamilyData();
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(familyData));
+            } catch (e) {
+                console.error('Lỗi lưu localStorage:', e);
+            }
+        }
+
+        // Hiển thị Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toastMessage');
+            document.getElementById('toastText').textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        // Render thông tin Bức Trướng
+        function renderClanBanner() {
+            const info = familyData.clanInfo;
+            document.getElementById('bannerClanTitle').textContent = info.title || 'PHẢ ĐỒ HỌ NGUYỄN ĐÌNH';
+            document.getElementById('bannerBranch').textContent = info.branch || 'Đại Tôn';
+            document.getElementById('bannerHometown').textContent = info.hometown || 'Việt Nam';
+            document.getElementById('bannerYear').textContent = info.year || 'Bính Ngọ (2026)';
+            document.getElementById('bannerMotto').textContent = info.motto || '';
+
+            // Câu đối chữ Quốc ngữ xếp dọc từng từ theo chuẩn truyền thống Việt Nam
+            const leftWords = (info.coupletLeft || 'CÂY CÓ CỘI MỚI NỞ CÀNH XANH NGỌN').trim().split(/\s+/);
+            const rightWords = (info.coupletRight || 'NƯỚC CÓ NGUỒN MỚI BỂ RỘNG SÔNG SÂU').trim().split(/\s+/);
+
+            document.getElementById('coupletLeftText').innerHTML = leftWords
+                .map(w => `<span class="block py-0.5 border-b border-imperial-gold/20 last:border-none">${escapeHtml(w.toUpperCase())}</span>`)
+                .join('');
+            document.getElementById('coupletRightText').innerHTML = rightWords
+                .map(w => `<span class="block py-0.5 border-b border-imperial-gold/20 last:border-none">${escapeHtml(w.toUpperCase())}</span>`)
+                .join('');
+        }
+
+        // ==================== THUẬT TOÁN DÀN TRANG CÂY GIA PHẢ (REINGOLD-TILFORD SUBTREE WIDTH) ====================
+        function buildHierarchyAndLayout() {
+            const members = familyData.members;
+            const byId = new Map();
+            members.forEach(m => byId.set(m.id, { ...m, children: [] }));
+
+            const roots = [];
+            byId.forEach(node => {
+                if (node.parentId && byId.has(node.parentId)) {
+                    byId.get(node.parentId).children.push(node);
+                } else {
+                    roots.push(node);
+                }
+            });
+
+            // Sắp xếp các con theo thứ tự vai vế (orderIndex) từ Trưởng xuống Thứ
+            byId.forEach(node => {
+                if (node.children.length > 1) {
+                    node.children.sort((a, b) => (a.orderIndex || 1) - (b.orderIndex || 1));
+                }
+            });
+            roots.sort((a, b) => (a.orderIndex || 1) - (b.orderIndex || 1));
+
+            // Gán thế hệ (generation: 1, 2, 3...) và tính chiều rộng từng nhánh
+            let maxGeneration = 1;
+            function computeSubtreeWidth(node, gen) {
+                node.generation = gen;
+                if (gen > maxGeneration) maxGeneration = gen;
+
+                if (!node.children || node.children.length === 0) {
+                    node.subtreeWidth = CARD_WIDTH;
+                    return node.subtreeWidth;
+                }
+
+                let totalChildrenWidth = 0;
+                node.children.forEach((child, idx) => {
+                    totalChildrenWidth += computeSubtreeWidth(child, gen + 1);
+                    if (idx > 0) totalChildrenWidth += CARD_GAP_X;
+                });
+
+                node.subtreeWidth = Math.max(CARD_WIDTH, totalChildrenWidth);
+                return node.subtreeWidth;
+            }
+
+            let totalForestWidth = 0;
+            roots.forEach((root, idx) => {
+                totalForestWidth += computeSubtreeWidth(root, 1);
+                if (idx > 0) totalForestWidth += CARD_GAP_X * 1.5;
+            });
+
+            // Gán tọa độ (x, y) cho từng node (x là tâm của thẻ)
+            nodePositions.clear();
+            const LEFT_LABEL_MARGIN = 220; // Chừa lề trái cho nhãn "ĐỜI THỨ I, II..."
+            const RIGHT_MARGIN = 120;
+
+            function assignCoordinates(node, leftX) {
+                const centerX = leftX + node.subtreeWidth / 2;
+                const topY = TOP_PADDING + (node.generation - 1) * LEVEL_HEIGHT;
+
+                nodePositions.set(node.id, {
+                    id: node.id,
+                    x: centerX - CARD_WIDTH / 2,
+                    centerX: centerX,
+                    y: topY,
+                    width: CARD_WIDTH,
+                    generation: node.generation,
+                    nodeData: node
+                });
+
+                if (node.children && node.children.length > 0) {
+                    let childrenTotalW = 0;
+                    node.children.forEach((c, i) => {
+                        childrenTotalW += c.subtreeWidth + (i > 0 ? CARD_GAP_X : 0);
+                    });
+                    let childStartX = centerX - childrenTotalW / 2;
+                    node.children.forEach(child => {
+                        assignCoordinates(child, childStartX);
+                        childStartX += child.subtreeWidth + CARD_GAP_X;
+                    });
+                }
+            }
+
+            let currentRootX = LEFT_LABEL_MARGIN;
+            roots.forEach(root => {
+                assignCoordinates(root, currentRootX);
+                currentRootX += root.subtreeWidth + CARD_GAP_X * 1.5;
+            });
+
+            const canvasWidth = Math.max(1200, totalForestWidth + LEFT_LABEL_MARGIN + RIGHT_MARGIN);
+            const canvasHeight = maxGeneration * LEVEL_HEIGHT + 120;
+
+            return { roots, maxGeneration, canvasWidth, canvasHeight };
+        }
+
+        // ==================== RENDER TOÀN BỘ PHẢ ĐỒ ====================
+        function renderFamilyTree() {
+            renderClanBanner();
+            const { maxGeneration, canvasWidth, canvasHeight } = buildHierarchyAndLayout();
+
+            const wrapper = document.getElementById('treeCanvasWrapper');
+            const bandsContainer = document.getElementById('generationBandsContainer');
+            const svgEl = document.getElementById('treeConnectionsSvg');
+            const nodesContainer = document.getElementById('treeNodesContainer');
+
+            wrapper.style.width = `${canvasWidth}px`;
+            wrapper.style.height = `${canvasHeight}px`;
+            svgEl.setAttribute('width', canvasWidth);
+            svgEl.setAttribute('height', canvasHeight);
+
+            // 1. Render các dải phân cấp ĐỜI THỨ I, II, III...
+            bandsContainer.innerHTML = '';
+            for (let gen = 1; gen <= maxGeneration; gen++) {
+                const bandTop = TOP_PADDING + (gen - 1) * LEVEL_HEIGHT - 12;
+                const bandHeight = LEVEL_HEIGHT - 18;
+                const genTitle = gen === 1 ? 'ĐỜI THỨ I (THỦY TỔ)' : `ĐỜI THỨ ${toRoman(gen)}`;
+                const subDesc = gen === 1 ? 'Khởi nguyên dòng tộc' : `Thế hệ thứ ${gen}`;
+
+                const bandDiv = document.createElement('div');
+                bandDiv.className = 'absolute left-4 right-6 rounded-2xl border border-dashed border-imperial-bronze/35 flex items-start';
+                bandDiv.style.top = `${bandTop}px`;
+                bandDiv.style.height = `${bandHeight}px`;
+                bandDiv.style.background = gen % 2 === 1
+                    ? 'linear-gradient(90deg, rgba(139,0,0,0.045) 0%, rgba(212,175,55,0.03) 100%)'
+                    : 'linear-gradient(90deg, rgba(212,175,55,0.05) 0%, rgba(139,0,0,0.02) 100%)';
+
+                bandDiv.innerHTML = `
+                    <div class="mt-4 ml-3 generation-badge px-3.5 py-2 rounded-xl text-left min-w-[165px] shadow-md">
+                        <div class="text-[10px] text-imperial-gold uppercase tracking-widest font-semibold flex items-center gap-1">
+                            <span>❖</span> <span>Thế Thứ Phả Hệ</span>
+                        </div>
+                        <div class="font-serif font-black text-xs sm:text-sm text-imperial-pale tracking-wide mt-0.5">${genTitle}</div>
+                        <div class="text-[11px] text-imperial-cream/80 italic">${subDesc}</div>
+                    </div>
+                `;
+                bandsContainer.appendChild(bandDiv);
+            }
+
+            // 2. Render các Thẻ Thành Viên (HTML Cards)
+            nodesContainer.innerHTML = '';
+            const searchQuery = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+            const selectedGen = document.getElementById('generationFilter')?.value || 'all';
+
+            nodePositions.forEach((pos) => {
+                const m = pos.nodeData;
+                const isMale = m.gender !== 'female';
+                const longevity = calculateLongevityText(m.isAlive, m.birthYear, m.deathYear);
+
+                // Kiểm tra khớp tìm kiếm / lọc đời
+                const matchesSearch = searchQuery !== '' && (
+                    (m.fullName && m.fullName.toLowerCase().includes(searchQuery)) ||
+                    (m.courtesyName && m.courtesyName.toLowerCase().includes(searchQuery)) ||
+                    (m.burialPlace && m.burialPlace.toLowerCase().includes(searchQuery)) ||
+                    (m.roleTitle && m.roleTitle.toLowerCase().includes(searchQuery)) ||
+                    (m.spouses && m.spouses.some(s => s.fullName && s.fullName.toLowerCase().includes(searchQuery)))
+                );
+                const matchesGen = selectedGen === 'all' || String(pos.generation) === String(selectedGen);
+
+                // Badge Ngày Giỗ Âm Lịch
+                let deathAnniversaryHtml = '';
+                if (!m.isAlive && m.deathLunarDay && m.deathLunarMonth) {
+                    const dayStr = String(m.deathLunarDay).padStart(2, '0');
+                    const monthStr = String(m.deathLunarMonth).padStart(2, '0');
+                    deathAnniversaryHtml = `
+                        <div class="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-crimson text-imperial-pale border border-imperial-gold text-[11px] font-bold shadow-sm">
+                            <i class="fa-solid fa-fire-flame-curved text-imperial-gold"></i>
+                            <span>Giỗ: ${dayStr}/${monthStr} ÂL (${getLunarMonthName(m.deathLunarMonth)})</span>
+                        </div>
+                    `;
+                }
+
+                // Danh sách Phối ngẫu hiển thị gọn và trang trọng ngay trên thẻ
+                let spousesHtml = '';
+                if (m.spouses && m.spouses.length > 0) {
+                    const spouseItems = m.spouses.map(sp => {
+                        const spGio = (!sp.isAlive && sp.deathLunarDay && sp.deathLunarMonth)
+                            ? `<span class="text-crimson font-semibold ml-1">• Giỗ: ${String(sp.deathLunarDay).padStart(2, '0')}/${String(sp.deathLunarMonth).padStart(2, '0')} ÂL</span>`
+                            : '';
+                        const spYears = sp.birthYear
+                            ? `(${sp.birthYear}${!sp.isAlive && sp.deathYear ? ' - ' + sp.deathYear : (sp.isAlive ? ' - Nay' : '')})`
+                            : '';
+                        return `
+                            <div class="text-[11px] bg-imperial-parchment/75 border border-imperial-bronze/40 rounded-lg px-2 py-1 text-left">
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="font-bold text-crimson-dark">${escapeHtml(sp.relation || 'Phối ngẫu')}:</span>
+                                    <span class="text-[10px] text-ink-muted">${escapeHtml(spYears)}</span>
+                                </div>
+                                <div class="font-serif font-bold text-ink truncate">${escapeHtml(sp.fullName || '')}</div>
+                                ${spGio ? `<div class="text-[10px] mt-0.5">${spGio}</div>` : ''}
+                            </div>
+                        `;
+                    }).join('');
+
+                    spousesHtml = `
+                        <div class="mt-2 pt-2 border-t border-dashed border-imperial-bronze/50 space-y-1">
+                            ${spouseItems}
+                        </div>
+                    `;
+                }
+
+                const cardEl = document.createElement('div');
+                cardEl.id = `node_card_${m.id}`;
+                cardEl.className = `traditional-card absolute rounded-xl p-3 text-center select-none group ${isMale ? 'card-male' : 'card-female'} ${matchesSearch ? 'card-highlight' : ''} ${!matchesGen ? 'opacity-30' : ''}`;
+                cardEl.style.width = `${CARD_WIDTH}px`;
+                cardEl.style.left = `${pos.x}px`;
+                cardEl.style.top = `${pos.y}px`;
+
+                cardEl.innerHTML = `
+                    <!-- 4 góc hoa văn hồi văn cổ truyền -->
+                    <span class="corner-ornament corner-tl"></span>
+                    <span class="corner-ornament corner-tr"></span>
+                    <span class="corner-ornament corner-bl"></span>
+                    <span class="corner-ornament corner-br"></span>
+
+                    <!-- Thanh tiêu đề Thế thứ & Vai vế -->
+                    <div class="flex items-center justify-between gap-1 px-2 py-0.5 rounded-md ${isMale ? 'bg-crimson text-imperial-pale' : 'bg-imperial-bronze text-white'} text-[10px] font-bold tracking-wide uppercase mb-1.5 border border-imperial-gold/60">
+                        <span>ĐỜI ${toRoman(pos.generation)} • ${isMale ? 'ĐINH' : 'NỮ'}</span>
+                        <span class="truncate max-w-[155px] text-imperial-pale">${escapeHtml(m.roleTitle || (pos.generation === 1 ? 'Thủy Tổ' : 'Thành viên'))}</span>
+                    </div>
+
+                    <!-- Họ và Tên chính -->
+                    <div onclick="openDetailModal('${m.id}')" class="cursor-pointer">
+                        <h3 class="font-serif font-black text-base text-crimson-deep tracking-wide uppercase leading-snug hover:text-crimson transition">
+                            ${escapeHtml(m.fullName)}
+                        </h3>
+                        ${m.courtesyName ? `<p class="text-[11px] italic text-ink-muted font-serif mt-0.5">${escapeHtml(m.courtesyName)}</p>` : ''}
+                        ${m.titleHonor ? `<p class="text-[11px] font-semibold text-amber-900 mt-0.5">${escapeHtml(m.titleHonor)}</p>` : ''}
+                    </div>
+
+                    <!-- Năm sinh - Năm mất & Hưởng thọ -->
+                    <div class="mt-1.5 text-[11px] text-ink bg-white/80 rounded-lg py-1 px-2 border border-imperial-gold/50">
+                        <div class="font-semibold">
+                            <span>${escapeHtml(m.birthYear || '?')}</span>
+                            <span> — </span>
+                            <span>${m.isAlive ? '<span class="text-emerald-700 font-bold">Nay</span>' : escapeHtml(m.deathYear || '?')}</span>
+                        </div>
+                        <div class="text-[10px] font-bold ${m.isAlive ? 'text-emerald-700' : 'text-amber-900'}">
+                            ${longevity}
+                        </div>
+                    </div>
+
+                    <!-- Ngày Giỗ Âm Lịch -->
+                    ${deathAnniversaryHtml}
+
+                    <!-- Nơi Mộ Táng (nếu đã khuất) -->
+                    ${(!m.isAlive && m.burialPlace) ? `
+                        <div class="mt-1.5 text-[10.5px] text-ink-muted flex items-start gap-1 text-left bg-amber-50/70 px-2 py-1 rounded border border-imperial-gold/40">
+                            <i class="fa-solid fa-mountain-sun text-imperial-bronze mt-0.5 shrink-0"></i>
+                            <span class="line-clamp-1" title="${escapeHtml(m.burialPlace)}"><strong>Mộ táng:</strong> ${escapeHtml(m.burialPlace)}</span>
+                        </div>
+                    ` : ''}
+
+                    <!-- Thông tin Phối ngẫu -->
+                    ${spousesHtml}
+
+                    <!-- Thanh nút thao tác nhanh khi rê chuột -->
+                    <div class="card-actions mt-2.5 pt-2 border-t border-imperial-gold/50 flex items-center justify-between gap-1 opacity-95 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="openAddChildModal('${m.id}')" class="flex-1 py-1 px-1.5 rounded bg-crimson text-imperial-pale hover:bg-crimson-dark text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm con nối dõi">
+                            <i class="fa-solid fa-user-plus"></i> <span>+Con</span>
+                        </button>
+                        <button onclick="openAddSpouseQuickModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-700 text-white hover:bg-amber-800 text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm Vợ / Chồng (Phối ngẫu)">
+                            <i class="fa-solid fa-ring"></i> <span>+Vợ/Chồng</span>
+                        </button>
+                        <button onclick="openDetailModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-900 border border-imperial-bronze/40 text-[10px] font-bold" title="Xem Phả Ký & Tiểu sử">
+                            <i class="fa-solid fa-book-open"></i>
+                        </button>
+                        <button onclick="openEditMemberModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-crimson border border-imperial-bronze/40 text-[10px] font-bold" title="Sửa thông tin">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="confirmDeleteMember('${m.id}')" class="py-1 px-1.5 rounded bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 text-[10px] font-bold" title="Xóa thành viên">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+
+                nodesContainer.appendChild(cardEl);
+            });
+
+            // 3. Vẽ đường nối vuông góc (Orthogonal Connectors) sau khi DOM cập nhật chiều cao thật của các Card
+            requestAnimationFrame(() => {
+                drawOrthogonalConnections();
+            });
+
+            // 4. Cập nhật Thống kê, Dropdown lọc Đời & Huy hiệu Sổ Giỗ Họ
+            updateFamilyStatsAndFilters(maxGeneration);
+        }
+
+        // Vẽ đường nối vuông góc chuẩn Phả Đồ truyền thống
+        function drawOrthogonalConnections() {
+            const svgEl = document.getElementById('treeConnectionsSvg');
+            svgEl.innerHTML = '';
+
+            nodePositions.forEach((parentPos) => {
+                const parentNode = parentPos.nodeData;
+                if (!parentNode.children || parentNode.children.length === 0) return;
+
+                const parentCardEl = document.getElementById(`node_card_${parentNode.id}`);
+                const actualParentHeight = parentCardEl ? parentCardEl.offsetHeight : 230;
+
+                const startX = parentPos.centerX;
+                const startY = parentPos.y + actualParentHeight;
+
+                // Tọa độ Y thanh ngang chia nhánh nằm giữa đáy thẻ cha và đỉnh thẻ con
+                const firstChildPos = nodePositions.get(parentNode.children[0].id);
+                if (!firstChildPos) return;
+                const childTopY = firstChildPos.y;
+                const midY = Math.max(startY + 14, childTopY - 24);
+
+                // Nút tròn trang trí ở điểm xuất phát dưới thẻ cha
+                const startDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                startDot.setAttribute('cx', startX);
+                startDot.setAttribute('cy', startY);
+                startDot.setAttribute('r', '4');
+                startDot.setAttribute('fill', '#D4AF37');
+                startDot.setAttribute('stroke', '#8B0000');
+                startDot.setAttribute('stroke-width', '2');
+                svgEl.appendChild(startDot);
+
+                parentNode.children.forEach(child => {
+                    const childPos = nodePositions.get(child.id);
+                    if (!childPos) return;
+
+                    const endX = childPos.centerX;
+                    const endY = childPos.y;
+
+                    const d = `M ${startX} ${startY} L ${startX} ${midY} L ${endX} ${midY} L ${endX} ${endY}`;
+
+                    // Đường chính màu đỏ đô
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', d);
+                    path.setAttribute('class', 'connector-line');
+                    svgEl.appendChild(path);
+
+                    // Điểm tròn vàng đồng nối vào đầu thẻ con
+                    const endDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    endDot.setAttribute('cx', endX);
+                    endDot.setAttribute('cy', endY);
+                    endDot.setAttribute('r', '4');
+                    endDot.setAttribute('fill', '#8B0000');
+                    endDot.setAttribute('stroke', '#D4AF37');
+                    endDot.setAttribute('stroke-width', '1.8');
+                    svgEl.appendChild(endDot);
+                });
+            });
+        }
+
+        // Cập nhật thống kê dòng tộc & bộ lọc Đời
+        function updateFamilyStatsAndFilters(maxGen) {
+            const members = familyData.members;
+            const total = members.length;
+            const males = members.filter(m => m.gender !== 'female').length;
+            const females = members.filter(m => m.gender === 'female').length;
+            let spousesCount = 0;
+            let anniversaryCount = 0;
+
+            members.forEach(m => {
+                if (!m.isAlive && m.deathLunarDay && m.deathLunarMonth) anniversaryCount++;
+                if (m.spouses && m.spouses.length > 0) {
+                    spousesCount += m.spouses.length;
+                    m.spouses.forEach(sp => {
+                        if (!sp.isAlive && sp.deathLunarDay && sp.deathLunarMonth) anniversaryCount++;
+                    });
+                }
+            });
+
+            document.getElementById('statGenerations').textContent = `${maxGen} Đời`;
+            document.getElementById('statTotalMembers').textContent = total;
+            document.getElementById('statMaleCount').textContent = males;
+            document.getElementById('statFemaleCount').textContent = females;
+            document.getElementById('statSpouseCount').textContent = spousesCount;
+            document.getElementById('anniversaryCountBadge').textContent = anniversaryCount;
+
+            // Cập nhật select lọc Đời
+            const genSelect = document.getElementById('generationFilter');
+            const currentVal = genSelect.value;
+            let optionsHtml = `<option value="all">Tất cả các đời (${maxGen} đời)</option>`;
+            for (let g = 1; g <= maxGen; g++) {
+                optionsHtml += `<option value="${g}">Đời thứ ${toRoman(g)}${g === 1 ? ' (Thủy Tổ)' : ''}</option>`;
+            }
+            genSelect.innerHTML = optionsHtml;
+            if (currentVal === 'all' || parseInt(currentVal, 10) <= maxGen) {
+                genSelect.value = currentVal;
+            }
+        }
+
+        // ==================== PAN & ZOOM TƯƠNG TÁC MƯỢT MÀ ====================
+        function applyPanZoomTransform() {
+            const stage = document.getElementById('panZoomStage');
+            stage.style.transform = `translate(${panState.x}px, ${panState.y}px) scale(${panState.scale})`;
+            document.getElementById('zoomLevelText').textContent = `${Math.round(panState.scale * 100)}%`;
+        }
+
+        function zoomTree(delta, centerClientX, centerClientY) {
+            const viewport = document.getElementById('viewportContainer');
+            const rect = viewport.getBoundingClientRect();
+            const cx = centerClientX !== undefined ? centerClientX - rect.left : rect.width / 2;
+            const cy = centerClientY !== undefined ? centerClientY - rect.top : rect.height / 2;
+
+            const oldScale = panState.scale;
+            const newScale = Math.min(1.8, Math.max(0.32, +(oldScale + delta).toFixed(2)));
+            if (newScale === oldScale) return;
+
+            panState.x = cx - ((cx - panState.x) * newScale) / oldScale;
+            panState.y = cy - ((cy - panState.y) * newScale) / oldScale;
+            panState.scale = newScale;
+            applyPanZoomTransform();
+        }
+
+        function centerAndFitTree() {
+            const viewport = document.getElementById('viewportContainer');
+            const wrapper = document.getElementById('treeCanvasWrapper');
+            const vWidth = viewport.clientWidth;
+            const vHeight = viewport.clientHeight;
+            const contentWidth = wrapper.offsetWidth || 1200;
+            const contentHeight = (wrapper.offsetHeight || 900) + 230;
+
+            const scaleX = (vWidth - 60) / contentWidth;
+            const scaleY = (vHeight - 60) / contentHeight;
+            const bestScale = Math.min(1, Math.max(0.42, Math.min(scaleX, scaleY)));
+
+            panState.scale = +bestScale.toFixed(2);
+            panState.x = Math.round((vWidth - contentWidth * panState.scale) / 2);
+            panState.y = 12;
+            applyPanZoomTransform();
+        }
+
+        function focusOnMemberCard(memberId) {
+            const pos = nodePositions.get(memberId);
+            if (!pos) return;
+            const viewport = document.getElementById('viewportContainer');
+            const headerHeight = document.getElementById('clanScrollHeader')?.offsetHeight || 200;
+
+            panState.scale = 1;
+            const targetCenterX = pos.centerX;
+            const targetCenterY = headerHeight + pos.y + 110;
+
+            panState.x = Math.round(viewport.clientWidth / 2 - targetCenterX * panState.scale);
+            panState.y = Math.round(viewport.clientHeight / 2 - targetCenterY * panState.scale);
+            applyPanZoomTransform();
+
+            // Hiệu ứng sáng thẻ
+            const cardEl = document.getElementById(`node_card_${memberId}`);
+            if (cardEl) {
+                cardEl.classList.add('card-highlight');
+                setTimeout(() => cardEl.classList.remove('card-highlight'), 3500);
+            }
+        }
+
+        function setupViewportInteractions() {
+            const viewport = document.getElementById('viewportContainer');
+
+            // Kéo chuột (Mouse Drag)
+            viewport.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button, a, input, select, textarea, .traditional-card')) return;
+                panState.isDragging = true;
+                panState.startX = e.clientX - panState.x;
+                panState.startY = e.clientY - panState.y;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!panState.isDragging) return;
+                panState.x = e.clientX - panState.startX;
+                panState.y = e.clientY - panState.startY;
+                applyPanZoomTransform();
+            });
+
+            window.addEventListener('mouseup', () => {
+                panState.isDragging = false;
+            });
+
+            // Cuộn chuột Zoom
+            viewport.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 0.08 : -0.08;
+                zoomTree(delta, e.clientX, e.clientY);
+            }, { passive: false });
+
+            // Cảm ứng (Touch Pan)
+            let touchStartDist = null;
+            viewport.addEventListener('touchstart', (e) => {
+                if (e.target.closest('button, a, input, select, textarea')) return;
+                if (e.touches.length === 1) {
+                    panState.isDragging = true;
+                    panState.startX = e.touches[0].clientX - panState.x;
+                    panState.startY = e.touches[0].clientY - panState.y;
+                } else if (e.touches.length === 2) {
+                    panState.isDragging = false;
+                    touchStartDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            }, { passive: true });
+
+            viewport.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && panState.isDragging) {
+                    panState.x = e.touches[0].clientX - panState.startX;
+                    panState.y = e.touches[0].clientY - panState.startY;
+                    applyPanZoomTransform();
+                } else if (e.touches.length === 2 && touchStartDist) {
+                    const newDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const diff = newDist - touchStartDist;
+                    if (Math.abs(diff) > 12) {
+                        zoomTree(diff > 0 ? 0.05 : -0.05);
+                        touchStartDist = newDist;
+                    }
+                }
+            }, { passive: true });
+
+            viewport.addEventListener('touchend', () => {
+                panState.isDragging = false;
+                touchStartDist = null;
+            });
+        }
+
+        // ==================== QUẢN LÝ THÊM / SỬA / XÓA THÀNH VIÊN ====================
+        function toggleDeceasedFields() {
+            const isAlive = document.getElementById('inputIsAlive').value === 'true';
+            document.getElementById('deathYearFieldWrapper').style.opacity = isAlive ? '0.4' : '1';
+            document.getElementById('deceasedDetailsRow').style.display = isAlive ? 'none' : 'grid';
+        }
+
+        function addSpouseRow(spouseData = null) {
+            const container = document.getElementById('spousesFormContainer');
+            const sp = spouseData || {
+                relation: 'Chính thất',
+                fullName: '',
+                courtesyName: '',
+                isAlive: false,
+                birthYear: '',
+                deathYear: '',
+                deathLunarDay: '',
+                deathLunarMonth: '',
+                burialPlace: ''
+            };
+
+            const row = document.createElement('div');
+            row.className = 'spouse-form-item bg-imperial-cream/70 p-3 rounded-xl border border-imperial-bronze/50 space-y-2.5 relative';
+            row.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2.5 right-2.5 text-red-700 hover:text-red-900 text-xs font-bold flex items-center gap-1">
+                    <i class="fa-solid fa-trash-can"></i> Xóa
+                </button>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pr-12">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Danh vị Phối ngẫu</label>
+                        <select class="sp-relation w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs font-semibold">
+                            <option value="Chính thất" ${sp.relation === 'Chính thất' ? 'selected' : ''}>Chính thất (Vợ cả)</option>
+                            <option value="Hiền nội" ${sp.relation === 'Hiền nội' ? 'selected' : ''}>Hiền nội (Vợ)</option>
+                            <option value="Kế thất" ${sp.relation === 'Kế thất' ? 'selected' : ''}>Kế thất</option>
+                            <option value="Thứ thất" ${sp.relation === 'Thứ thất' ? 'selected' : ''}>Thứ thất (Vợ thứ)</option>
+                            <option value="Phò mã (Chồng)" ${sp.relation === 'Phò mã (Chồng)' ? 'selected' : ''}>Phò mã / Chồng (Con rể)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Họ và Tên Phối ngẫu</label>
+                        <input type="text" value="${escapeHtml(sp.fullName || '')}" placeholder="VD: Cụ bà Trần Thị Hiền" class="sp-name w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Tên Hiệu / Chức danh</label>
+                        <input type="text" value="${escapeHtml(sp.courtesyName || '')}" placeholder="VD: Hiệu Từ Tâm" class="sp-courtesy w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Tình trạng</label>
+                        <select class="sp-alive w-full px-2 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs">
+                            <option value="false" ${!sp.isAlive ? 'selected' : ''}>Đã khuất</option>
+                            <option value="true" ${sp.isAlive ? 'selected' : ''}>Còn sống</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Năm sinh</label>
+                        <input type="text" value="${escapeHtml(sp.birthYear || '')}" placeholder="VD: 1923" class="sp-birth w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-ink">Năm mất</label>
+                        <input type="text" value="${escapeHtml(sp.deathYear || '')}" placeholder="VD: 2008" class="sp-death w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-crimson">Ngày Giỗ ÂL (Ngày/Tháng)</label>
+                        <div class="flex gap-1">
+                            <input type="number" min="1" max="30" value="${sp.deathLunarDay || ''}" placeholder="Ngày" class="sp-lunar-day w-1/2 px-2 py-1.5 rounded border border-crimson/50 bg-white text-xs">
+                            <input type="number" min="1" max="12" value="${sp.deathLunarMonth || ''}" placeholder="Tháng" class="sp-lunar-month w-1/2 px-2 py-1.5 rounded border border-crimson/50 bg-white text-xs">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-ink">Nơi mộ táng Phối ngẫu</label>
+                    <input type="text" value="${escapeHtml(sp.burialPlace || '')}" placeholder="VD: An táng cùng khu lăng mộ Tổ xứ Đồng Bãi" class="sp-burial w-full px-2.5 py-1.5 rounded border border-imperial-bronze/60 bg-white text-xs">
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function openAddChildModal(parentId) {
+            const parent = familyData.members.find(m => m.id === parentId);
+            const parentPos = nodePositions.get(parentId);
+            const childGen = parentPos ? parentPos.generation + 1 : 2;
+            const existingChildrenCount = familyData.members.filter(m => m.parentId === parentId).length;
+
+            document.getElementById('memberModalTitle').textContent = `Thêm Con Nối Dõi (Đời Thứ ${toRoman(childGen)})`;
+            document.getElementById('formMemberId').value = '';
+            document.getElementById('formParentId').value = parentId;
+
+            if (parent) {
+                document.getElementById('parentContextBanner').classList.remove('hidden');
+                document.getElementById('parentContextName').textContent = parent.fullName;
+                document.getElementById('parentContextGen').textContent = `Con sẽ thuộc Đời thứ ${toRoman(childGen)}`;
+            }
+
+            // Reset các trường
+            document.getElementById('inputFullName').value = '';
+            document.getElementById('inputGender').value = 'male';
+            document.getElementById('inputOrderIndex').value = existingChildrenCount + 1;
+            document.getElementById('inputRoleTitle').value = existingChildrenCount === 0 ? 'Trưởng Nam' : 'Thứ Nam';
+            document.getElementById('inputCourtesyName').value = '';
+            document.getElementById('inputTitleHonor').value = '';
+            document.getElementById('inputIsAlive').value = 'true';
+            document.getElementById('inputBirthYear').value = '';
+            document.getElementById('inputDeathYear').value = '';
+            document.getElementById('inputDeathLunarDay').value = '';
+            document.getElementById('inputDeathLunarMonth').value = '';
+            document.getElementById('inputBurialPlace').value = '';
+            document.getElementById('inputBio').value = '';
+            document.getElementById('spousesFormContainer').innerHTML = '';
+
+            toggleDeceasedFields();
+
+            const modal = document.getElementById('memberModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function openAddSpouseQuickModal(memberId) {
+            openEditMemberModal(memberId);
+            addSpouseRow();
+            setTimeout(() => {
+                const container = document.getElementById('spousesFormContainer');
+                container?.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const nameInput = container?.lastElementChild?.querySelector('.sp-name');
+                nameInput?.focus();
+            }, 120);
+        }
+
+        function openEditMemberModal(memberId) {
+            const m = familyData.members.find(item => item.id === memberId);
+            if (!m) return;
+
+            document.getElementById('memberModalTitle').textContent = `Chỉnh Sửa: ${m.fullName}`;
+            document.getElementById('formMemberId').value = m.id;
+            document.getElementById('formParentId').value = m.parentId || '';
+            document.getElementById('parentContextBanner').classList.add('hidden');
+
+            document.getElementById('inputFullName').value = m.fullName || '';
+            document.getElementById('inputGender').value = m.gender || 'male';
+            document.getElementById('inputOrderIndex').value = m.orderIndex || 1;
+            document.getElementById('inputRoleTitle').value = m.roleTitle || '';
+            document.getElementById('inputCourtesyName').value = m.courtesyName || '';
+            document.getElementById('inputTitleHonor').value = m.titleHonor || '';
+            document.getElementById('inputIsAlive').value = m.isAlive ? 'true' : 'false';
+            document.getElementById('inputBirthYear').value = m.birthYear || '';
+            document.getElementById('inputDeathYear').value = m.deathYear || '';
+            document.getElementById('inputDeathLunarDay').value = m.deathLunarDay || '';
+            document.getElementById('inputDeathLunarMonth').value = m.deathLunarMonth || '';
+            document.getElementById('inputBurialPlace').value = m.burialPlace || '';
+            document.getElementById('inputBio').value = m.bio || '';
+
+            const spousesContainer = document.getElementById('spousesFormContainer');
+            spousesContainer.innerHTML = '';
+            if (m.spouses && m.spouses.length > 0) {
+                m.spouses.forEach(sp => addSpouseRow(sp));
+            }
+
+            toggleDeceasedFields();
+
+            const modal = document.getElementById('memberModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMemberModal() {
+            const modal = document.getElementById('memberModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveMemberForm(e) {
+            e.preventDefault();
+            const memberId = document.getElementById('formMemberId').value;
+            const parentId = document.getElementById('formParentId').value || null;
+            const isAlive = document.getElementById('inputIsAlive').value === 'true';
+
+            // Thu thập danh sách phối ngẫu
+            const spouseEls = document.querySelectorAll('#spousesFormContainer .spouse-form-item');
+            const spouses = [];
+            spouseEls.forEach(el => {
+                const fullName = el.querySelector('.sp-name').value.trim();
+                if (!fullName) return;
+                spouses.push({
+                    relation: el.querySelector('.sp-relation').value,
+                    fullName,
+                    courtesyName: el.querySelector('.sp-courtesy').value.trim(),
+                    isAlive: el.querySelector('.sp-alive').value === 'true',
+                    birthYear: el.querySelector('.sp-birth').value.trim(),
+                    deathYear: el.querySelector('.sp-death').value.trim(),
+                    deathLunarDay: parseInt(el.querySelector('.sp-lunar-day').value, 10) || null,
+                    deathLunarMonth: parseInt(el.querySelector('.sp-lunar-month').value, 10) || null,
+                    burialPlace: el.querySelector('.sp-burial').value.trim()
+                });
+            });
+
+            const payload = {
+                id: memberId || ('mem_' + Date.now()),
+                parentId: parentId,
+                orderIndex: parseInt(document.getElementById('inputOrderIndex').value, 10) || 1,
+                fullName: document.getElementById('inputFullName').value.trim(),
+                gender: document.getElementById('inputGender').value,
+                roleTitle: document.getElementById('inputRoleTitle').value.trim(),
+                courtesyName: document.getElementById('inputCourtesyName').value.trim(),
+                titleHonor: document.getElementById('inputTitleHonor').value.trim(),
+                isAlive: isAlive,
+                birthYear: document.getElementById('inputBirthYear').value.trim(),
+                deathYear: isAlive ? '' : document.getElementById('inputDeathYear').value.trim(),
+                deathLunarDay: isAlive ? null : (parseInt(document.getElementById('inputDeathLunarDay').value, 10) || null),
+                deathLunarMonth: isAlive ? null : (parseInt(document.getElementById('inputDeathLunarMonth').value, 10) || null),
+                burialPlace: isAlive ? '' : document.getElementById('inputBurialPlace').value.trim(),
+                spouses: spouses,
+                bio: document.getElementById('inputBio').value.trim()
+            };
+
+            if (memberId) {
+                const idx = familyData.members.findIndex(m => m.id === memberId);
+                if (idx !== -1) familyData.members[idx] = payload;
+                showToast(`Đã cập nhật thông tin "${payload.fullName}"`);
+            } else {
+                familyData.members.push(payload);
+                showToast(`Đã thêm "${payload.fullName}" vào Phả Đồ`);
+            }
+
+            saveData();
+            closeMemberModal();
+            renderFamilyTree();
+        }
+
+        // Xóa thành viên (kèm các nhánh con nếu có)
+        function confirmDeleteMember(memberId) {
+            const m = familyData.members.find(item => item.id === memberId);
+            if (!m) return;
+
+            if (!m.parentId && familyData.members.filter(x => !x.parentId).length <= 1) {
+                openConfirmDialog(
+                    'Không Thể Xóa Thủy Tổ',
+                    'Cụ Thủy Tổ là gốc của toàn bộ cây gia phả. Bạn có thể bấm nút "Sửa" để thay đổi thông tin Thủy Tổ.',
+                    null
+                );
+                return;
+            }
+
+            // Đếm tổng số hậu duệ sẽ bị xóa theo
+            const descendants = getAllDescendantIds(memberId);
+            const msg = descendants.length > 1
+                ? `Bạn có chắc chắn muốn xóa "${m.fullName}" cùng ${descendants.length - 1} hậu duệ thuộc nhánh này khỏi Phả Đồ không?`
+                : `Bạn có chắc chắn muốn xóa thành viên "${m.fullName}" khỏi Phả Đồ không?`;
+
+            openConfirmDialog('Xác Nhận Xóa Thành Viên', msg, () => {
+                const removeSet = new Set(descendants);
+                familyData.members = familyData.members.filter(item => !removeSet.has(item.id));
+                saveData();
+                renderFamilyTree();
+                showToast(`Đã xóa "${m.fullName}" khỏi Phả Đồ`);
+            });
+        }
+
+        function getAllDescendantIds(rootId) {
+            const result = [rootId];
+            const queue = [rootId];
+            while (queue.length > 0) {
+                const current = queue.shift();
+                familyData.members.forEach(m => {
+                    if (m.parentId === current) {
+                        result.push(m.id);
+                        queue.push(m.id);
+                    }
+                });
+            }
+            return result;
+        }
+
+        // ==================== MODAL XEM CHI TIẾT PHẢ KÝ CÁ NHÂN ====================
+        function openDetailModal(memberId) {
+            const m = familyData.members.find(item => item.id === memberId);
+            if (!m) return;
+            const pos = nodePositions.get(memberId);
+            const gen = pos ? pos.generation : 1;
+            const parent = m.parentId ? familyData.members.find(p => p.id === m.parentId) : null;
+            const children = familyData.members.filter(c => c.parentId === m.id);
+            const longevity = calculateLongevityText(m.isAlive, m.birthYear, m.deathYear);
+
+            const gioText = (!m.isAlive && m.deathLunarDay && m.deathLunarMonth)
+                ? `Ngày ${String(m.deathLunarDay).padStart(2, '0')} tháng ${String(m.deathLunarMonth).padStart(2, '0')} Âm lịch (${getLunarMonthName(m.deathLunarMonth)})`
+                : (m.isAlive ? 'Còn sống (Hiện tiền)' : 'Chưa cập nhật ngày giỗ');
+
+            let spousesDetailHtml = '<p class="text-xs text-ink-muted italic">Chưa cập nhật thông tin phối ngẫu.</p>';
+            if (m.spouses && m.spouses.length > 0) {
+                spousesDetailHtml = m.spouses.map(sp => {
+                    const spGio = (!sp.isAlive && sp.deathLunarDay && sp.deathLunarMonth)
+                        ? `Ngày ${String(sp.deathLunarDay).padStart(2, '0')}/${String(sp.deathLunarMonth).padStart(2, '0')} ÂL`
+                        : (sp.isAlive ? 'Hiện tiền' : 'Chưa rõ');
+                    return `
+                        <div class="p-3 rounded-xl bg-imperial-parchment/70 border border-imperial-bronze/50 space-y-1 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-crimson uppercase">${escapeHtml(sp.relation || 'Phối ngẫu')}: ${escapeHtml(sp.fullName)}</span>
+                                <span class="font-semibold text-ink-muted">${escapeHtml(sp.birthYear || '?')} — ${sp.isAlive ? 'Nay' : escapeHtml(sp.deathYear || '?')}</span>
+                            </div>
+                            ${sp.courtesyName ? `<div class="italic text-ink-muted">${escapeHtml(sp.courtesyName)}</div>` : ''}
+                            <div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] pt-1">
+                                <span><strong class="text-crimson">🕯️ Ngày giỗ:</strong> ${spGio}</span>
+                                ${sp.burialPlace ? `<span><strong>⛰️ Mộ phần:</strong> ${escapeHtml(sp.burialPlace)}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const container = document.getElementById('detailModalContent');
+            container.innerHTML = `
+                <div class="text-center border-b-2 border-imperial-gold/60 pb-4">
+                    <span class="inline-block px-3 py-0.5 rounded-full bg-crimson text-imperial-pale text-xs font-bold mb-1">
+                        ĐỜI THỨ ${toRoman(gen)} • ${escapeHtml(m.roleTitle || 'Thành viên')}
+                    </span>
+                    <h2 class="font-serif font-black text-2xl text-crimson-deep uppercase tracking-wide mt-1">${escapeHtml(m.fullName)}</h2>
+                    ${m.courtesyName ? `<p class="font-serif italic text-sm text-ink-muted mt-0.5">${escapeHtml(m.courtesyName)}</p>` : ''}
+                    ${m.titleHonor ? `<p class="text-xs font-bold text-amber-900 mt-1">${escapeHtml(m.titleHonor)}</p>` : ''}
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 rounded-xl bg-white border border-imperial-gold/60">
+                        <div class="text-ink-muted font-medium">Niên đại & Thọ mệnh:</div>
+                        <div class="font-bold text-sm text-ink mt-0.5">${escapeHtml(m.birthYear || '?')} — ${m.isAlive ? 'Nay' : escapeHtml(m.deathYear || '?')}</div>
+                        <div class="text-amber-800 font-semibold mt-0.5">${longevity}</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-red-50/70 border border-crimson/40">
+                        <div class="text-crimson font-semibold"><i class="fa-solid fa-fire-flame-curved mr-1"></i>Ngày Giỗ Âm Lịch (Húy Kỵ):</div>
+                        <div class="font-bold text-sm text-crimson-deep mt-0.5">${gioText}</div>
+                    </div>
+                </div>
+
+                ${!m.isAlive && m.burialPlace ? `
+                    <div class="p-3 rounded-xl bg-white border border-imperial-gold/60 text-xs">
+                        <div class="font-bold text-crimson mb-0.5"><i class="fa-solid fa-mountain-sun mr-1.5 text-imperial-bronze"></i>Nơi An Táng / Mộ Phần:</div>
+                        <div class="text-ink">${escapeHtml(m.burialPlace)}</div>
+                    </div>
+                ` : ''}
+
+                <div class="space-y-2">
+                    <h4 class="font-serif font-bold text-crimson text-xs uppercase tracking-wider">Phối Ngẫu (Vợ / Chồng)</h4>
+                    <div class="space-y-2">${spousesDetailHtml}</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-white border border-imperial-gold/60 space-y-1">
+                    <h4 class="font-serif font-bold text-crimson text-xs uppercase tracking-wider"><i class="fa-solid fa-scroll mr-1.5 text-imperial-bronze"></i>Tiểu Sử, Hành Trạng & Công Đức</h4>
+                    <p class="text-xs sm:text-sm text-ink leading-relaxed whitespace-pre-line">${escapeHtml(m.bio || 'Chưa có ghi chép tiểu sử chi tiết.')}</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                    <div class="p-3 rounded-xl bg-imperial-parchment/60 border border-imperial-bronze/40">
+                        <span class="font-bold text-ink-muted block mb-1">Thân phụ / Thân mẫu:</span>
+                        ${parent ? `<button onclick="closeDetailModal(); focusOnMemberCard('${parent.id}')" class="font-serif font-bold text-crimson hover:underline"><i class="fa-solid fa-arrow-up mr-1"></i>${escapeHtml(parent.fullName)}</button>` : '<span class="italic text-ink-muted">Thủy Tổ khởi nguồn</span>'}
+                    </div>
+                    <div class="p-3 rounded-xl bg-imperial-parchment/60 border border-imperial-bronze/40">
+                        <span class="font-bold text-ink-muted block mb-1">Hậu duệ trực hệ (${children.length} người con):</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${children.length > 0 ? children.map(c => `<button onclick="closeDetailModal(); focusOnMemberCard('${c.id}')" class="px-2 py-0.5 rounded bg-white border border-imperial-bronze/50 font-semibold text-crimson hover:bg-crimson hover:text-white transition">${escapeHtml(c.fullName)}</button>`).join('') : '<span class="italic text-ink-muted">Chưa ghi nhận nhánh con</span>'}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-imperial-gold/50">
+                    <button onclick="closeDetailModal(); openAddChildModal('${m.id}')" class="px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-plus"></i> Thêm Con
+                    </button>
+                    <button onclick="closeDetailModal(); openAddSpouseQuickModal('${m.id}')" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-ring"></i> Thêm Vợ/Chồng
+                    </button>
+                    <button onclick="closeDetailModal(); openEditMemberModal('${m.id}')" class="px-4 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border border-imperial-gold text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen"></i> Sửa Thông Tin
+                    </button>
+                </div>
+            `;
+
+            const modal = document.getElementById('detailModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ==================== SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM ====================
+        function openAnniversaryModal() {
+            renderAnniversaryTable();
+            const modal = document.getElementById('anniversaryModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAnniversaryModal() {
+            const modal = document.getElementById('anniversaryModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderAnniversaryTable() {
+            const monthFilter = document.getElementById('lunarMonthFilter').value;
+            const list = [];
+
+            familyData.members.forEach(m => {
+                const pos = nodePositions.get(m.id);
+                const gen = pos ? pos.generation : 1;
+
+                if (!m.isAlive && m.deathLunarDay && m.deathLunarMonth) {
+                    list.push({
+                        memberId: m.id,
+                        fullName: m.fullName,
+                        role: `Đời ${toRoman(gen)} • ${m.roleTitle || 'Thành viên'}`,
+                        day: parseInt(m.deathLunarDay, 10),
+                        month: parseInt(m.deathLunarMonth, 10),
+                        deathYear: m.deathYear || '?',
+                        burialPlace: m.burialPlace || 'Chưa rõ nơi mộ táng'
+                    });
+                }
+
+                if (m.spouses && m.spouses.length > 0) {
+                    m.spouses.forEach(sp => {
+                        if (!sp.isAlive && sp.deathLunarDay && sp.deathLunarMonth) {
+                            list.push({
+                                memberId: m.id,
+                                fullName: sp.fullName,
+                                role: `${sp.relation || 'Phối ngẫu'} của ${m.fullName} (Đời ${toRoman(gen)})`,
+                                day: parseInt(sp.deathLunarDay, 10),
+                                month: parseInt(sp.deathLunarMonth, 10),
+                                deathYear: sp.deathYear || '?',
+                                burialPlace: sp.burialPlace || m.burialPlace || 'Chưa rõ nơi mộ táng'
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Sắp xếp theo tháng Âm lịch -> ngày Âm lịch
+            list.sort((a, b) => (a.month - b.month) || (a.day - b.day));
+
+            const filtered = monthFilter === 'all'
+                ? list
+                : list.filter(item => String(item.month) === String(monthFilter));
+
+            const container = document.getElementById('anniversaryListContainer');
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-white/70 rounded-xl border border-imperial-gold/50 text-ink-muted text-sm">
+                        Không có ngày giỗ Âm lịch nào trong tháng được chọn.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-white hover:bg-amber-50/70 transition rounded-xl p-3.5 border border-imperial-gold/70 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-start sm:items-center gap-3.5">
+                        <div class="w-16 h-16 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold flex flex-col items-center justify-center shrink-0 shadow">
+                            <span class="text-[10px] text-imperial-gold uppercase font-bold">${getLunarMonthName(item.month)}</span>
+                            <span class="font-serif font-black text-xl leading-none mt-0.5">${String(item.day).padStart(2, '0')}</span>
+                            <span class="text-[9px] opacity-85 mt-0.5">Âm lịch</span>
+                        </div>
+                        <div>
+                            <div class="text-[11px] font-bold text-amber-900 uppercase">${escapeHtml(item.role)}</div>
+                            <h4 class="font-serif font-bold text-base text-crimson-deep">${escapeHtml(item.fullName)}</h4>
+                            <div class="text-xs text-ink-muted mt-0.5 flex flex-wrap gap-x-4 gap-y-0.5">
+                                <span><strong>Năm mất:</strong> ${escapeHtml(item.deathYear)}</span>
+                                <span><i class="fa-solid fa-mountain-sun text-imperial-bronze mr-1"></i><strong>Mộ phần:</strong> ${escapeHtml(item.burialPlace)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="closeAnniversaryModal(); focusOnMemberCard('${item.memberId}')" class="self-end sm:self-center px-3 py-1.5 rounded-lg bg-imperial-parchment hover:bg-crimson hover:text-imperial-pale text-crimson border border-crimson/40 text-xs font-bold transition shrink-0 flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-crosshairs"></i> Xem trên Phả Đồ
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // ==================== CHỈNH SỬA BỨC TRƯỚNG & DÒNG HỌ ====================
+        function openClanInfoModal() {
+            const info = familyData.clanInfo;
+            document.getElementById('clanTitleInput').value = info.title || '';
+            document.getElementById('clanBranchInput').value = info.branch || '';
+            document.getElementById('clanYearInput').value = info.year || '';
+            document.getElementById('clanHometownInput').value = info.hometown || '';
+            document.getElementById('clanMottoInput').value = info.motto || '';
+            document.getElementById('clanCoupletLeftInput').value = info.coupletLeft || '';
+            document.getElementById('clanCoupletRightInput').value = info.coupletRight || '';
+
+            const modal = document.getElementById('clanInfoModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeClanInfoModal() {
+            const modal = document.getElementById('clanInfoModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveClanInfo(e) {
+            e.preventDefault();
+            familyData.clanInfo = {
+                title: document.getElementById('clanTitleInput').value.trim(),
+                branch: document.getElementById('clanBranchInput').value.trim(),
+                year: document.getElementById('clanYearInput').value.trim(),
+                hometown: document.getElementById('clanHometownInput').value.trim(),
+                motto: document.getElementById('clanMottoInput').value.trim(),
+                coupletLeft: document.getElementById('clanCoupletLeftInput').value.trim(),
+                coupletRight: document.getElementById('clanCoupletRightInput').value.trim()
+            };
+            saveData();
+            renderClanBanner();
+            closeClanInfoModal();
+            showToast('Đã cập nhật thông tin Bức Trướng Dòng Họ');
+        }
+
+        // ==================== CÁC TIỆN ÍCH KHÁC (CÂU ĐỐI, TRÌNH CHIẾU, XUẤT/NHẬP JSON) ====================
+        function toggleCouplets() {
+            showCouplets = !showCouplets;
+            const left = document.getElementById('leftCouplet');
+            const right = document.getElementById('rightCouplet');
+            if (showCouplets) {
+                left.classList.remove('!hidden');
+                right.classList.remove('!hidden');
+                showToast('Đã bật hiển thị Câu Đối truyền thống');
+            } else {
+                left.classList.add('!hidden');
+                right.classList.add('!hidden');
+                showToast('Đã ẩn Câu Đối hai bên');
+            }
+        }
+
+        function togglePresentationMode() {
+            document.body.classList.toggle('presentation-mode');
+            centerAndFitTree();
+        }
+
+        function toggleDataMenu() {
+            document.getElementById('dataDropdownMenu').classList.toggle('hidden');
+        }
+
+        // Đóng menu dropdown khi click ra ngoài
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#dataDropdownMenu') && !e.target.closest('button[onclick="toggleDataMenu()"]')) {
+                document.getElementById('dataDropdownMenu')?.classList.add('hidden');
+            }
+        });
+
+        function exportFamilyJSON() {
+            document.getElementById('dataDropdownMenu').classList.add('hidden');
+            const dataStr = JSON.stringify(familyData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Pha_Do_Gia_Pha_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast('Đã xuất tệp dữ liệu Gia Phả (.JSON)');
+        }
+
+        function importFamilyJSON(event) {
+            document.getElementById('dataDropdownMenu').classList.add('hidden');
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && Array.isArray(parsed.members) && parsed.clanInfo) {
+                        familyData = parsed;
+                        saveData();
+                        renderFamilyTree();
+                        centerAndFitTree();
+                        showToast('Đã nhập Phả Đồ thành công!');
+                    } else {
+                        openConfirmDialog('Tệp Không Hợp Lệ', 'Cấu trúc tệp JSON không đúng định dạng Phả Đồ.', null);
+                    }
+                } catch (err) {
+                    openConfirmDialog('Lỗi Đọc Tệp', 'Không thể đọc tệp JSON. Vui lòng kiểm tra lại.', null);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function confirmResetSampleData() {
+            document.getElementById('dataDropdownMenu').classList.add('hidden');
+            openConfirmDialog(
+                'Khôi Phục Phả Đồ Mẫu',
+                'Thao tác này sẽ khôi phục lại dữ liệu mẫu 4 đời của dòng họ Nguyễn Văn. Dữ liệu hiện tại trên trình duyệt sẽ được thay thế.',
+                () => {
+                    familyData = getDefaultFamilyData();
+                    saveData();
+                    renderFamilyTree();
+                    centerAndFitTree();
+                    showToast('Đã khôi phục dữ liệu Phả Đồ mẫu!');
+                }
+            );
+        }
+
+        // Hộp thoại xác nhận Custom
+        function openConfirmDialog(title, message, onConfirm) {
+            document.getElementById('confirmDialogTitle').textContent = title;
+            document.getElementById('confirmDialogMessage').textContent = message;
+            const actionBtn = document.getElementById('confirmDialogActionBtn');
+
+            if (onConfirm) {
+                actionBtn.classList.remove('hidden');
+                actionBtn.onclick = () => {
+                    closeConfirmDialog();
+                    onConfirm();
+                };
+            } else {
+                actionBtn.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('confirmDialogModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmDialog() {
+            const modal = document.getElementById('confirmDialogModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ==================== KHỞI CHẠY ỨNG DỤNG ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setupViewportInteractions();
+            renderFamilyTree();
+
+            // Căn giữa cây khi mở trang
+            setTimeout(() => {
+                centerAndFitTree();
+            }, 120);
+
+            // Sự kiện Tìm kiếm & Lọc theo Đời
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            searchInput.addEventListener('input', () => {
+                clearBtn.classList.toggle('hidden', !searchInput.value);
+                renderFamilyTree();
+            });
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.classList.add('hidden');
+                renderFamilyTree();
+            });
+
+            document.getElementById('generationFilter').addEventListener('change', () => {
+                renderFamilyTree();
+            });
+
+            window.addEventListener('resize', () => {
+                drawOrthogonalConnections();
+            });
+        });
+    </script>
+</body>
+</html>

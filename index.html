@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Điều Hướng Tính Năng</title>
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T8G11PLRK0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T8G11PLRK0');
+</script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f4f6f8;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 24px;
+      text-align: center;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .feature-card {
+      background: #fff;
+      padding: 18px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e1e4e8;
+    }
+    .feature-card:hover {
+      background: #007bff;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
+      border-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Bảng Điều Hướng Tính Năng</h1>
+
+  <!-- Lưới hiển thị các tính năng -->
+  <div class="grid-container">
+    <a href="SoGioGiaDinh.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Sổ Giỗ Gia Đình', 'SoGioGiaDinh.html')">Sổ Giỗ Gia Đình</a>
+    <a href="GiaPha.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Phả Đồ Dòng Họ', 'GiaPha.html')">Phả Đồ Dòng Họ</a>
+    <a href="bang-diem-cpa.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Bảng Điểm CPA', 'bang-diem-cpa.html')">Bảng Điểm CPA</a>
+  </div>
+
+  <script>
+    function trackFeatureClick(featureName, fileName) {
+      if (typeof window.gtag !== 'undefined') {
+        window.gtag('event', 'select_feature', {
+          'feature_name': featureName,
+          'file_html': fileName
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

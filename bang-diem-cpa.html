@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Điểm CPA</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-3{margin-bottom:0.75rem}.mr-1{margin-right:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-8{height:2rem}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-16{width:4rem}.w-32{width:8rem}.w-36{width:9rem}.w-52{width:13rem}.w-full{width:100%}.w-20{width:5rem}.w-8{width:2rem}.min-w-\[220px\]{min-width:220px}.max-w-5xl{max-width:64rem}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-4{gap:1rem}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(226 232 240 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-200\/80{border-color:rgb(226 232 240 / 0.8)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-slate-100\/80{background-color:rgb(241 245 249 / 0.8)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/20{background-color:rgb(255 255 255 / 0.2)}.bg-transparent{background-color:transparent}.bg-blue-50\/50{background-color:rgb(239 246 255 / 0.5)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.pb-5{padding-bottom:1.25rem}.pt-5{padding-top:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tracking-wider{letter-spacing:0.05em}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-900{--tw-text-opacity:1;color:rgb(30 58 138 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-50:hover{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50\/80:hover{background-color:rgb(248 250 252 / 0.8)}.hover\:text-rose-600:hover{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:col-span-2{grid-column:span 2 / span 2}.sm\:col-span-3{grid-column:span 3 / span 3}.sm\:col-span-5{grid-column:span 5 / span 5}.sm\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:p-6{padding:1.5rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}</style></head>
+<body class="text-slate-800 min-h-screen py-6 px-4 sm:px-6">
+
+    <div class="max-w-5xl mx-auto space-y-5">
+
+        <!-- Header & CPA Summary -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Bảng Tính Điểm CPA</h1>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                        Sửa trực tiếp dữ liệu trên bảng
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="saveHtmlFile()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down"></i>Lưu file HTML
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kết quả CPA -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5">
+                <div class="bg-blue-600 text-white rounded-xl p-4 flex items-center justify-between shadow-sm">
+                    <div>
+                        <span class="text-xs font-medium text-blue-100 uppercase tracking-wider">Điểm Tổng Kết CPA</span>
+                        <div class="text-3xl sm:text-4xl font-extrabold mt-1" id="cpaDisplay">3.82</div>
+                        <div class="text-xs text-blue-100 mt-1 font-mono" id="cpaDetail">160.5 / 42 = 3.821</div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-blue-100 block mb-1">Học lực</span>
+                        <span id="rankDisplay" class="inline-block px-2.5 py-1 rounded-lg bg-emerald-400 text-slate-950 text-xs font-bold">Xuất sắc</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center">
+                    <span class="text-xs font-medium text-slate-500 uppercase">Tín chỉ đã nhập điểm</span>
+                    <div class="text-2xl font-bold text-slate-900 mt-1">
+                        <span id="gradedCreditsDisplay">42</span>
+                        <span class="text-sm font-normal text-slate-400">/ <span id="totalCreditsDisplay">71</span> tín chỉ</span>
+                    </div>
+                    <span class="text-xs text-slate-500 mt-1">Đã nhập <strong id="gradedCountDisplay">17</strong> / <strong id="totalCountDisplay">27</strong> môn</span>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center text-xs text-slate-600 space-y-1.5">
+                    <div class="font-semibold text-slate-800">Mốc điểm hệ 4 thông dụng:</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A/A+: <b>4.0</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B+: <b>3.5</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B: <b>3.0</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C+: <b>2.5</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C: <b>2.0</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D+: <b>1.5</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D: <b>1.0</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">F: <b>0</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Thêm Môn Nhanh -->
+        <form onsubmit="handleAddCourse(event)" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+                <i class="fa-solid fa-plus-circle text-blue-600 mr-1"></i>Thêm môn học mới
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                <div class="sm:col-span-2">
+                    <input type="text" id="newCode" placeholder="Mã HP (VD: IT4080)" required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase" value="">
+                </div>
+                <div class="sm:col-span-5">
+                    <input type="text" id="newName" placeholder="Tên học phần..." required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
+                </div>
+                <div class="sm:col-span-2">
+                    <input type="number" id="newCredits" placeholder="Số tín (Cột 3)" min="1" max="20" step="1" value="3" required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="sm:col-span-3 flex gap-2">
+                    <input type="number" id="newGrade" placeholder="Điểm hệ 4" min="0" max="4" step="0.1" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shrink-0 transition">
+                        + Thêm
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Bảng Tổng Hợp Các Môn Học -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-left">
+                    <thead>
+                        <tr class="bg-slate-100/80 border-b border-slate-200 text-slate-700 text-xs sm:text-sm font-bold">
+                            <th class="py-3 px-3 text-center w-12 border-r border-slate-200">#</th>
+                            <th class="py-3 px-3 w-36 border-r border-slate-200">Cột 1: Mã HP</th>
+                            <th class="py-3 px-3 min-w-[220px] border-r border-slate-200">Cột 2: Tên Học Phần</th>
+                            <th class="py-3 px-3 w-32 text-center border-r border-slate-200">Cột 3: Hệ Số Tín</th>
+                            <th class="py-3 px-3 w-52 text-center border-r border-slate-200">Cột 4: Điểm Tổng Kết (Hệ 4)</th>
+                            <th class="py-3 px-3 w-16 text-center">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="courseListBody" class="divide-y divide-slate-200 text-sm"><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        1
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3090" placeholder="Mã HP" oninput="updateField('c1', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="CƠ SỞ DỮ LIỆU" placeholder="Nhập tên môn học..." oninput="updateField('c1', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c1', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="0" value="3.5" placeholder="Nhập 0 - 4.0" oninput="updateField('c1', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 0)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c1')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        2
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3100" placeholder="Mã HP" oninput="updateField('c2', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Lập trình hướng đối tượng" placeholder="Nhập tên môn học..." oninput="updateField('c2', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c2', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="1" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c2', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 1)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c2')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        3
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3120" placeholder="Mã HP" oninput="updateField('c3', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Phân tích và thiết kế hệ thống" placeholder="Nhập tên môn học..." oninput="updateField('c3', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c3', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="2" value="3" placeholder="Nhập 0 - 4.0" oninput="updateField('c3', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 2)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c3')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        4
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3150" placeholder="Mã HP" oninput="updateField('c4', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Project I" placeholder="Nhập tên môn học..." oninput="updateField('c4', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c4', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="3" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c4', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 3)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c4')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        5
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3160" placeholder="Mã HP" oninput="updateField('c5', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Nhập môn Trí tuệ nhân tạo" placeholder="Nhập tên môn học..." oninput="updateField('c5', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c5', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="4" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c5', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 4)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c5')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        6
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3170" placeholder="Mã HP" oninput="updateField('c6', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Thuật toán ứng dụng" placeholder="Nhập tên môn học..." oninput="updateField('c6', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c6', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="5" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c6', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 5)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c6')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        7
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3180" placeholder="Mã HP" oninput="updateField('c7', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="NHẬP MÔN CÔNG NGHỆ PHẦN MỀM" placeholder="Nhập tên môn học..." oninput="updateField('c7', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c7', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="6" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c7', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 6)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c7')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        8
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4015" placeholder="Mã HP" oninput="updateField('c8', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="NHẬP MÔN AN TOÀN THÔNG TIN" placeholder="Nhập tên môn học..." oninput="updateField('c8', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c8', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="7" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c8', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 7)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c8')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        9
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4060" placeholder="Mã HP" oninput="updateField('c9', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Lập trình mạng" placeholder="Nhập tên môn học..." oninput="updateField('c9', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c9', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="8" value="3.5" placeholder="Nhập 0 - 4.0" oninput="updateField('c9', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 8)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c9')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        10
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT2000" placeholder="Mã HP" oninput="updateField('c10', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Nhập môn CNTT và TT" placeholder="Nhập tên môn học..." oninput="updateField('c10', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c10', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="9" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c10', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 9)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c10')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        11
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3011" placeholder="Mã HP" oninput="updateField('c11', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Cấu trúc dữ liệu và thuật toán" placeholder="Nhập tên môn học..." oninput="updateField('c11', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c11', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="10" value="3" placeholder="Nhập 0 - 4.0" oninput="updateField('c11', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 10)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c11')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        12
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3030" placeholder="Mã HP" oninput="updateField('c12', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Kiến trúc máy tính" placeholder="Nhập tên môn học..." oninput="updateField('c12', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c12', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="11" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c12', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 11)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c12')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        13
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3040" placeholder="Mã HP" oninput="updateField('c13', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Kỹ thuật lập trình" placeholder="Nhập tên môn học..." oninput="updateField('c13', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c13', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="12" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c13', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 12)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c13')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        14
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3070" placeholder="Mã HP" oninput="updateField('c14', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="NGUYÊN LÝ HỆ ĐIỀU HÀNH" placeholder="Nhập tên môn học..." oninput="updateField('c14', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c14', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="13" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c14', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 13)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c14')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        15
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3080" placeholder="Mã HP" oninput="updateField('c15', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="MẠNG MÁY TÍNH" placeholder="Nhập tên môn học..." oninput="updateField('c15', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c15', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="14" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c15', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 14)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c15')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        16
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4480" placeholder="Mã HP" oninput="updateField('c16', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Làm việc nhóm và kỹ năng giao tiếp" placeholder="Nhập tên môn học..." oninput="updateField('c16', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c16', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="15" value="3.5" placeholder="Nhập 0 - 4.0" oninput="updateField('c16', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 15)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c16')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        17
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3930" placeholder="Mã HP" oninput="updateField('c_1794595288730', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Project 2" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595288730', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c_1794595288730', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="16" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595288730', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 16)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595288730')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        18
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT3940" placeholder="Mã HP" oninput="updateField('c_1794595297705', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Project 3" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595297705', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c_1794595297705', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="17" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595297705', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 17)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595297705')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        19
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4244" placeholder="Mã HP" oninput="updateField('c_1794595299028', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Quản trị dự án CNTT" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595299028', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c_1794595299028', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="18" value="4" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595299028', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 18)" class="w-full text-center px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-50/50 font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595299028')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        20
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4490" placeholder="Mã HP" oninput="updateField('c_1794595304609', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Thiết kế và xây dựng phần mềm" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595304609', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c_1794595304609', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="19" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595304609', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 19)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595304609')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        21
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4785" placeholder="Mã HP" oninput="updateField('c_1794595305938', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Phát triển ứng dụng cho thiết bị di động" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595305938', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c_1794595305938', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="20" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595305938', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 20)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595305938')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        22
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4350" placeholder="Mã HP" oninput="updateField('c_1794595306880', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Kiến trúc các HTTT và ứng dụng" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595306880', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c_1794595306880', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="21" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595306880', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 21)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595306880')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        23
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4651" placeholder="Mã HP" oninput="updateField('c_1794595307816', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Thiết kế và triển khai mạng IP" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595307816', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c_1794595307816', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="22" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595307816', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 22)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595307816')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        24
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4263" placeholder="Mã HP" oninput="updateField('c_1794595308769', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="An Ninh Mạng" placeholder="Nhập tên môn học..." oninput="updateField('c_1794595308769', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="3" oninput="updateField('c_1794595308769', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="23" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794595308769', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 23)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794595308769')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        25
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4501" placeholder="Mã HP" oninput="updateField('c_1794596095333', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Đảm bảo chất lượng phần mềm" placeholder="Nhập tên môn học..." oninput="updateField('c_1794596095333', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c_1794596095333', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="24" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794596095333', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 24)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794596095333')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        26
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4991" placeholder="Mã HP" oninput="updateField('c_1794596096721', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Thực tập kỹ thuật" placeholder="Nhập tên môn học..." oninput="updateField('c_1794596096721', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="2" oninput="updateField('c_1794596096721', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="25" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794596096721', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 25)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794596096721')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr><tr class="hover:bg-slate-50/80 transition">
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        27
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="IT4995" placeholder="Mã HP" oninput="updateField('c_1794596097636', 'code', this.value)" class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="Đồ án tốt nghiệp cử nhân" placeholder="Nhập tên môn học..." oninput="updateField('c_1794596097636', 'name', this.value)" class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="6" oninput="updateField('c_1794596097636', 'credits', this.value)" class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options" data-grade-index="26" value="" placeholder="Nhập 0 - 4.0" oninput="updateField('c_1794596097636', 'grade4', this.value, this)" onkeydown="handleGradeKeydown(event, 26)" class="w-full text-center px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('c_1794596097636')" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition" title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr></tbody>
+                </table>
+            </div>
+
+            <!-- Datalist gợi ý chọn nhanh điểm hệ 4 -->
+            <datalist id="grade4Options">
+                <option value="4.0">A / A+ (4.0)</option>
+                <option value="3.5">B+ (3.5)</option>
+                <option value="3.0">B (3.0)</option>
+                <option value="2.5">C+ (2.5)</option>
+                <option value="2.0">C (2.0)</option>
+                <option value="1.5">D+ (1.5)</option>
+                <option value="1.0">D (1.0)</option>
+                <option value="0">F (0.0)</option>
+            </datalist>
+
+            <!-- Nút thêm dòng trống nhanh & Lưu HTML ở cuối bảng -->
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <button onclick="addEmptyRow()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
+                        <i class="fa-solid fa-plus text-blue-600"></i> Thêm dòng trống
+                    </button>
+                    <button onclick="saveHtmlFile()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition">
+                        <i class="fa-solid fa-download"></i> Tải bản HTML đã lưu
+                    </button>
+                </div>
+                <span id="statusNotice" class="text-xs text-slate-400">Tự động lưu khi chỉnh sửa</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Danh sách 16 môn học gốc dùng khi bấm "Khôi phục mặc định"
+        const ORIGINAL_DEFAULT_COURSES = [
+            { id: 'c1',  code: 'IT3090', name: 'CƠ SỞ DỮ LIỆU', credits: 3, grade4: '' },
+            { id: 'c2',  code: 'IT3100', name: 'Lập trình hướng đối tượng', credits: 2, grade4: '' },
+            { id: 'c3',  code: 'IT3120', name: 'Phân tích và thiết kế hệ thống', credits: 2, grade4: '' },
+            { id: 'c4',  code: 'IT3150', name: 'Project I', credits: 2, grade4: '' },
+            { id: 'c5',  code: 'IT3160', name: 'Nhập môn Trí tuệ nhân tạo', credits: 3, grade4: '' },
+            { id: 'c6',  code: 'IT3170', name: 'Thuật toán ứng dụng', credits: 2, grade4: '' },
+            { id: 'c7',  code: 'IT3180', name: 'NHẬP MÔN CÔNG NGHỆ PHẦN MỀM', credits: 3, grade4: '' },
+            { id: 'c8',  code: 'IT4015', name: 'NHẬP MÔN AN TOÀN THÔNG TIN', credits: 3, grade4: '' },
+            { id: 'c9',  code: 'IT4060', name: 'Lập trình mạng', credits: 2, grade4: '' },
+            { id: 'c10', code: 'IT2000', name: 'Nhập môn CNTT và TT', credits: 3, grade4: '' },
+            { id: 'c11', code: 'IT3011', name: 'Cấu trúc dữ liệu và thuật toán', credits: 2, grade4: '' },
+            { id: 'c12', code: 'IT3030', name: 'Kiến trúc máy tính', credits: 3, grade4: '' },
+            { id: 'c13', code: 'IT3040', name: 'Kỹ thuật lập trình', credits: 2, grade4: '' },
+            { id: 'c14', code: 'IT3070', name: 'NGUYÊN LÝ HỆ ĐIỀU HÀNH', credits: 3, grade4: '' },
+            { id: 'c15', code: 'IT3080', name: 'MẠNG MÁY TÍNH', credits: 3, grade4: '' },
+            { id: 'c16', code: 'IT4480', name: 'Làm việc nhóm và kỹ năng giao tiếp', credits: 2, grade4: '' }
+        ];
+
+        // Vùng dữ liệu được ghi đè trực tiếp khi người dùng bấm "Lưu file HTML"
+        /*__EMBEDDED_STATE_START__*/
+        const EMBEDDED_STATE = {
+    "savedAt": 1794596199133,
+    "courses": [
+        {
+            "id": "c1",
+            "code": "IT3090",
+            "name": "CƠ SỞ DỮ LIỆU",
+            "credits": 3,
+            "grade4": 3.5
+        },
+        {
+            "id": "c2",
+            "code": "IT3100",
+            "name": "Lập trình hướng đối tượng",
+            "credits": 2,
+            "grade4": 4
+        },
+        {
+            "id": "c3",
+            "code": "IT3120",
+            "name": "Phân tích và thiết kế hệ thống",
+            "credits": 2,
+            "grade4": 3
+        },
+        {
+            "id": "c4",
+            "code": "IT3150",
+            "name": "Project I",
+            "credits": 2,
+            "grade4": 4
+        },
+        {
+            "id": "c5",
+            "code": "IT3160",
+            "name": "Nhập môn Trí tuệ nhân tạo",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c6",
+            "code": "IT3170",
+            "name": "Thuật toán ứng dụng",
+            "credits": 2,
+            "grade4": 4
+        },
+        {
+            "id": "c7",
+            "code": "IT3180",
+            "name": "NHẬP MÔN CÔNG NGHỆ PHẦN MỀM",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c8",
+            "code": "IT4015",
+            "name": "NHẬP MÔN AN TOÀN THÔNG TIN",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c9",
+            "code": "IT4060",
+            "name": "Lập trình mạng",
+            "credits": 2,
+            "grade4": 3.5
+        },
+        {
+            "id": "c10",
+            "code": "IT2000",
+            "name": "Nhập môn CNTT và TT",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c11",
+            "code": "IT3011",
+            "name": "Cấu trúc dữ liệu và thuật toán",
+            "credits": 2,
+            "grade4": 3
+        },
+        {
+            "id": "c12",
+            "code": "IT3030",
+            "name": "Kiến trúc máy tính",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c13",
+            "code": "IT3040",
+            "name": "Kỹ thuật lập trình",
+            "credits": 2,
+            "grade4": 4
+        },
+        {
+            "id": "c14",
+            "code": "IT3070",
+            "name": "NGUYÊN LÝ HỆ ĐIỀU HÀNH",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c15",
+            "code": "IT3080",
+            "name": "MẠNG MÁY TÍNH",
+            "credits": 3,
+            "grade4": 4
+        },
+        {
+            "id": "c16",
+            "code": "IT4480",
+            "name": "Làm việc nhóm và kỹ năng giao tiếp",
+            "credits": 2,
+            "grade4": 3.5
+        },
+        {
+            "id": "c_1794595288730",
+            "code": "IT3930",
+            "name": "Project 2",
+            "credits": 2,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595297705",
+            "code": "IT3940",
+            "name": "Project 3",
+            "credits": 3,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595299028",
+            "code": "IT4244",
+            "name": "Quản trị dự án CNTT",
+            "credits": 2,
+            "grade4": 4
+        },
+        {
+            "id": "c_1794595304609",
+            "code": "IT4490",
+            "name": "Thiết kế và xây dựng phần mềm",
+            "credits": 3,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595305938",
+            "code": "IT4785",
+            "name": "Phát triển ứng dụng cho thiết bị di động",
+            "credits": 2,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595306880",
+            "code": "IT4350",
+            "name": "Kiến trúc các HTTT và ứng dụng",
+            "credits": 3,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595307816",
+            "code": "IT4651",
+            "name": "Thiết kế và triển khai mạng IP",
+            "credits": 3,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794595308769",
+            "code": "IT4263",
+            "name": "An Ninh Mạng",
+            "credits": 3,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794596095333",
+            "code": "IT4501",
+            "name": "Đảm bảo chất lượng phần mềm",
+            "credits": 2,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794596096721",
+            "code": "IT4991",
+            "name": "Thực tập kỹ thuật",
+            "credits": 2,
+            "grade4": ""
+        },
+        {
+            "id": "c_1794596097636",
+            "code": "IT4995",
+            "name": "Đồ án tốt nghiệp cử nhân",
+            "credits": 6,
+            "grade4": ""
+        }
+    ]
+};
+        /*__EMBEDDED_STATE_END__*/
+
+        const STORAGE_KEY = 'simple_cpa_courses_v3';
+        let courses = [];
+
+        function loadData() {
+            let localState = null;
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.courses) && parsed.courses.length > 0) {
+                        localState = parsed;
+                    } else if (Array.isArray(parsed) && parsed.length > 0) {
+                        localState = { savedAt: 1, courses: parsed };
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Nếu file HTML được lưu có dữ liệu mới hơn hoặc trình duyệt chưa có localStorage thì ưu tiên dữ liệu nhúng trong file HTML
+            if (
+                EMBEDDED_STATE &&
+                Array.isArray(EMBEDDED_STATE.courses) &&
+                (!localState || (EMBEDDED_STATE.savedAt && EMBEDDED_STATE.savedAt >= (localState.savedAt || 0)))
+            ) {
+                courses = JSON.parse(JSON.stringify(EMBEDDED_STATE.courses));
+                return;
+            }
+
+            if (localState && Array.isArray(localState.courses)) {
+                courses = localState.courses;
+                return;
+            }
+
+            courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
+        }
+
+        function showStatus(msg, isHighlight = false) {
+            const notice = document.getElementById('statusNotice');
+            if (!notice) return;
+            notice.textContent = msg;
+            notice.className = isHighlight
+                ? 'text-xs font-semibold text-emerald-600'
+                : 'text-xs text-slate-400';
+            setTimeout(() => {
+                notice.textContent = 'Tự động lưu khi chỉnh sửa';
+                notice.className = 'text-xs text-slate-400';
+            }, 2500);
+        }
+
+        function saveData() {
+            try {
+                const payload = {
+                    savedAt: Date.now(),
+                    courses: courses
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                showStatus('Đã tự động lưu');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Lưu toàn bộ dữ liệu đã chỉnh sửa thành 1 file HTML độc lập
+        function saveHtmlFile() {
+            // Đồng bộ giá trị hiện tại trên tất cả các thẻ input vào attribute của DOM
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) input.setAttribute('checked', 'checked');
+                    else input.removeAttribute('checked');
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+
+            const newEmbeddedState = {
+                savedAt: Date.now(),
+                courses: courses
+            };
+
+            // Lấy toàn bộ mã nguồn HTML hiện tại và ghi đè biến EMBEDDED_STATE bằng dữ liệu mới nhất
+            let fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const replacementBlock =
+                '/*__EMBEDDED_STATE_START__*/\n        const EMBEDDED_STATE = ' +
+                JSON.stringify(newEmbeddedState, null, 4) +
+                ';\n        /*__EMBEDDED_STATE_END__*/';
+
+            fullHtml = fullHtml.replace(
+                /\/\*__EMBEDDED_STATE_START__\*\/[\s\S]*?\/\*__EMBEDDED_STATE_END__\*\//,
+                replacementBlock
+            );
+
+            // Tạo và tải xuống file .html
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bang-diem-cpa.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showStatus('Đã tải xuống file bang-diem-cpa.html kèm dữ liệu!', true);
+        }
+
+        function cleanNum(n) {
+            return Number.isInteger(n) ? n.toString() : parseFloat(n.toFixed(2)).toString();
+        }
+
+        // Tính điểm CPA tổng kết
+        function calculateCPA() {
+            let totalCredits = 0;
+            let gradedCredits = 0;
+            let totalPoints = 0;
+            let gradedCount = 0;
+
+            courses.forEach(c => {
+                const cr = parseFloat(c.credits) || 0;
+                totalCredits += cr;
+
+                if (c.grade4 !== '' && c.grade4 !== null && !isNaN(parseFloat(c.grade4))) {
+                    const g = parseFloat(c.grade4);
+                    if (g >= 0 && g <= 4 && cr > 0) {
+                        gradedCredits += cr;
+                        totalPoints += cr * g;
+                        gradedCount++;
+                    }
+                }
+            });
+
+            const cpa = gradedCredits > 0 ? (totalPoints / gradedCredits) : 0;
+
+            document.getElementById('cpaDisplay').textContent = gradedCredits > 0 ? cpa.toFixed(2) : '0.00';
+            document.getElementById('cpaDetail').textContent = `${cleanNum(totalPoints)} / ${cleanNum(gradedCredits)} = ${cpa.toFixed(3)}`;
+            document.getElementById('gradedCreditsDisplay').textContent = cleanNum(gradedCredits);
+            document.getElementById('totalCreditsDisplay').textContent = cleanNum(totalCredits);
+            document.getElementById('gradedCountDisplay').textContent = gradedCount;
+            document.getElementById('totalCountDisplay').textContent = courses.length;
+
+            const rankEl = document.getElementById('rankDisplay');
+            if (gradedCredits === 0) {
+                rankEl.textContent = 'Chưa có điểm';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-white/20 text-white text-xs font-bold';
+            } else if (cpa >= 3.6) {
+                rankEl.textContent = 'Xuất sắc';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-emerald-400 text-slate-950 text-xs font-bold';
+            } else if (cpa >= 3.2) {
+                rankEl.textContent = 'Giỏi';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-white text-blue-700 text-xs font-bold';
+            } else if (cpa >= 2.5) {
+                rankEl.textContent = 'Khá';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-sky-200 text-sky-950 text-xs font-bold';
+            } else if (cpa >= 2.0) {
+                rankEl.textContent = 'Trung bình';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-amber-300 text-slate-950 text-xs font-bold';
+            } else {
+                rankEl.textContent = 'Yếu / Kém';
+                rankEl.className = 'inline-block px-2.5 py-1 rounded-lg bg-rose-400 text-white text-xs font-bold';
+            }
+        }
+
+        // Render danh sách môn
+        function renderTable() {
+            const tbody = document.getElementById('courseListBody');
+            tbody.innerHTML = '';
+
+            if (courses.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-10 text-center text-slate-400">
+                            Danh sách trống. Hãy thêm môn mới hoặc nhấn "Khôi phục mặc định".
+                        </td>
+                    </tr>
+                `;
+                calculateCPA();
+                return;
+            }
+
+            courses.forEach((course, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition';
+
+                const hasGrade = course.grade4 !== '' && course.grade4 !== null && !isNaN(parseFloat(course.grade4));
+
+                tr.innerHTML = `
+                    <!-- STT -->
+                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                        ${index + 1}
+                    </td>
+
+                    <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="${escapeHtml(course.code)}" placeholder="Mã HP"
+                            oninput="updateField('${course.id}', 'code', this.value)"
+                            class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                    </td>
+
+                    <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 border-r border-slate-200">
+                        <input type="text" value="${escapeHtml(course.name)}" placeholder="Nhập tên môn học..."
+                            oninput="updateField('${course.id}', 'name', this.value)"
+                            class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
+                    <td class="py-2 px-2 text-center border-r border-slate-200">
+                        <input type="number" min="1" max="20" step="1" value="${course.credits}"
+                            oninput="updateField('${course.id}', 'credits', this.value)"
+                            class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </td>
+
+                    <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
+                    <td class="py-2 px-3 border-r border-slate-200">
+                        <input type="number" min="0" max="4" step="0.1" list="grade4Options"
+                            data-grade-index="${index}"
+                            value="${hasGrade ? course.grade4 : ''}"
+                            placeholder="Nhập 0 - 4.0"
+                            oninput="updateField('${course.id}', 'grade4', this.value, this)"
+                            onkeydown="handleGradeKeydown(event, ${index})"
+                            class="w-full text-center px-3 py-1.5 rounded-lg border ${hasGrade ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                    </td>
+
+                    <!-- Xóa môn -->
+                    <td class="py-2 px-2 text-center">
+                        <button onclick="deleteCourse('${course.id}')"
+                            class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition"
+                            title="Xóa môn này">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            calculateCPA();
+        }
+
+        // Sửa trực tiếp giá trị từng ô
+        function updateField(id, field, value, inputEl) {
+            const item = courses.find(c => c.id === id);
+            if (!item) return;
+
+            if (field === 'credits') {
+                const v = parseFloat(value);
+                item.credits = (!isNaN(v) && v >= 0) ? v : 0;
+            } else if (field === 'grade4') {
+                if (value === '' || value === null) {
+                    item.grade4 = '';
+                } else {
+                    let v = parseFloat(value);
+                    if (isNaN(v)) {
+                        item.grade4 = '';
+                    } else {
+                        if (v < 0) v = 0;
+                        if (v > 4) v = 4;
+                        item.grade4 = v;
+                    }
+                }
+                if (inputEl) {
+                    const hasG = item.grade4 !== '' && item.grade4 !== null && !isNaN(parseFloat(item.grade4));
+                    inputEl.className = `w-full text-center px-3 py-1.5 rounded-lg border ${hasG ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition`;
+                }
+            } else if (field === 'code') {
+                item.code = value.toUpperCase();
+            } else if (field === 'name') {
+                item.name = value;
+            }
+
+            saveData();
+            calculateCPA();
+        }
+
+        // Nhấn Enter ở cột 4 để nhảy nhanh xuống ô điểm môn tiếp theo
+        function handleGradeKeydown(event, currentIndex) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const nextInput = document.querySelector(`input[data-grade-index="${currentIndex + 1}"]`);
+                if (nextInput) {
+                    nextInput.focus();
+                    nextInput.select();
+                }
+            }
+        }
+
+        // Thêm môn từ thanh công cụ phía trên
+        function handleAddCourse(e) {
+            e.preventDefault();
+            const code = document.getElementById('newCode').value.trim().toUpperCase();
+            const name = document.getElementById('newName').value.trim();
+            const credits = parseFloat(document.getElementById('newCredits').value) || 3;
+            const gradeRaw = document.getElementById('newGrade').value.trim();
+            const grade4 = gradeRaw === '' ? '' : Math.min(4, Math.max(0, parseFloat(gradeRaw)));
+
+            courses.push({
+                id: 'c_' + Date.now(),
+                code,
+                name,
+                credits,
+                grade4
+            });
+
+            document.getElementById('newCode').value = '';
+            document.getElementById('newName').value = '';
+            document.getElementById('newCredits').value = '3';
+            document.getElementById('newGrade').value = '';
+
+            saveData();
+            renderTable();
+        }
+
+        // Thêm nhanh 1 dòng trống vào cuối bảng
+        function addEmptyRow() {
+            courses.push({
+                id: 'c_' + Date.now(),
+                code: '',
+                name: '',
+                credits: 2,
+                grade4: ''
+            });
+            saveData();
+            renderTable();
+        }
+
+        // Xóa 1 môn
+        function deleteCourse(id) {
+            courses = courses.filter(c => c.id !== id);
+            saveData();
+            renderTable();
+        }
+
+        // Xóa trắng toàn bộ cột 4
+        function clearGrades() {
+            courses.forEach(c => c.grade4 = '');
+            saveData();
+            renderTable();
+        }
+
+        // Khôi phục lại đúng 16 môn ban đầu
+        function resetDefaultCourses() {
+            courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
+            saveData();
+            renderTable();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        window.onload = function () {
+            loadData();
+            renderTable();
+        };
+    </script>
+
+</body></html>
