@@ -3,17 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bảng Điều Hướng Tính Năng</title>
-  
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T8G11PLRK0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-T8G11PLRK0');
-</script>
+  <title>Bảng Điều Hướng Nội Dung</title>
 
   <style>
     body {
@@ -26,6 +16,64 @@
       background: #f4f6f8;
       min-height: 100vh;
     }
+
+    /* CSS cho phần đăng nhập */
+    #login-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      border: 1px solid #e1e4e8;
+      max-width: 320px;
+      width: 100%;
+      margin-top: 50px;
+    }
+    #login-container h2 {
+      margin-top: 0;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    #login-container input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    #login-container button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      font-weight: bold;
+    }
+    #login-container button:hover {
+      background: #0056b3;
+    }
+    #error-message {
+      color: #dc3545;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* CSS cho nội dung chính */
+    #main-content {
+      display: none; /* Ẩn đi mặc định */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
     h1 {
       color: #333;
       margin-bottom: 25px;
@@ -65,22 +113,47 @@
 </head>
 <body>
 
-  <h1>Bảng Điều Hướng Tính Năng</h1>
+  <!-- Màn hình đăng nhập -->
+  <div id="login-container">
+    <h2>Đăng Nhập</h2>
+    <!-- Thêm thuộc tính autofocus vào đây để tự động trỏ chuột -->
+    <input type="password" id="password-input" placeholder="Nhập mật khẩu..." onkeypress="handleKeyPress(event)" autofocus>
+    <button onclick="checkPassword()">Đăng nhập</button>
+    <p id="error-message">Mật khẩu không đúng. Vui lòng thử lại!</p>
+  </div>
 
-  <!-- Lưới hiển thị các tính năng -->
-  <div class="grid-container">
-    <a href="SoGioGiaDinh.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Sổ Giỗ Gia Đình', 'SoGioGiaDinh.html')">Sổ Giỗ Gia Đình</a>
-    <a href="GiaPha.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Phả Đồ Dòng Họ', 'GiaPha.html')">Phả Đồ Dòng Họ</a>
-    <a href="bang-diem-cpa.html" target="_blank" class="feature-card" onclick="trackFeatureClick('Bảng Điểm CPA', 'bang-diem-cpa.html')">Bảng Điểm CPA</a>
+  <!-- Nội dung bảng điều hướng (Ban đầu bị ẩn) -->
+  <div id="main-content" style="display: none;">
+    <h1>Bảng Điều Hướng Nội Dung</h1>
+
+    <!-- Lưới hiển thị các tính năng -->
+    <div class="grid-container">
+    <a href="GiaPha.html" target="_blank" class="feature-card">Phả Đồ Gia Phả</a>
+    <a href="SoGioGiaDinh.html" target="_blank" class="feature-card">Sổ Giỗ Gia Đình</a>
+    <a href="bang-diem-cpa.html" target="_blank" class="feature-card">Bảng Điểm CPA</a>
+    </div>
   </div>
 
   <script>
-    function trackFeatureClick(featureName, fileName) {
-      if (typeof window.gtag !== 'undefined') {
-        window.gtag('event', 'select_feature', {
-          'feature_name': featureName,
-          'file_html': fileName
-        });
+    // Xử lý kiểm tra mật khẩu
+    function checkPassword() {
+      const password = document.getElementById('password-input').value;
+      const errorMessage = document.getElementById('error-message');
+      
+      if (password === '123') {
+        // Đúng mật khẩu: Ẩn phần đăng nhập, hiện phần nội dung chính
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('main-content').style.display = 'flex';
+      } else {
+        // Sai mật khẩu: Hiện thông báo lỗi
+        errorMessage.style.display = 'block';
+      }
+    }
+
+    // Xử lý nhấn phím Enter để đăng nhập
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        checkPassword();
       }
     }
   </script>
