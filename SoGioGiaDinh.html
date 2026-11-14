@@ -35,33 +35,36 @@
     <!-- THÔNG BÁO TOAST NHỎ GỌN -->
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- HEADER ĐỎ TRẦM TRUYỀN THỐNG -->
+<!-- HEADER ĐỎ TRẦM TRUYỀN THỐNG -->
     <header class="header-crimson text-white shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-5 sm:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-5 space-y-2">
+            <!-- Hàng 1: Tiêu đề bên trái + 3 nút đẩy lên cao bên phải -->
+            <div class="flex flex-wrap items-center justify-between gap-2.5">
                 <div class="flex items-center gap-2.5">
                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white/15 text-amber-200 font-bold text-lg">祠</span>
                     <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Sổ giỗ gia đình</h1>
                 </div>
-                <p id="todayBanner" class="text-xs sm:text-sm text-red-100/95 font-medium mt-1.5">
-                    <!-- Hiển thị ngày hôm nay Âm & Dương + Can Chi -->
-                </p>
+
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    <a href="#converterSection" class="px-2.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-medium transition flex items-center gap-1 whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>Đổi lịch Âm — Dương</span>
+                    </a>
+                    <button onclick="exportCleanHtmlFile()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition flex items-center gap-1 whitespace-nowrap cursor-pointer">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        <span>Lưu file HTML</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2.5">
-                <a href="#converterSection" class="px-3.5 py-2 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-medium transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    <span>Đổi lịch Âm — Dương</span>
-                </a>
-                <button onclick="openAnniversaryModal()" class="px-4 py-2 rounded-lg bg-[#f9e5c8] hover:bg-[#f4d7ab] text-[#7a161a] text-xs sm:text-sm font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    <span>Thêm lịch giỗ</span>
-                </button>
-            </div>
+            <!-- Hàng 2: Dòng Hôm nay trải full chiều ngang -->
+            <p id="todayBanner" class="text-xs sm:text-sm text-red-100/95 font-medium">
+                <!-- Hiển thị ngày hôm nay Âm & Dương + Can Chi -->
+            </p>
         </div>
     </header>
 
@@ -639,45 +642,29 @@
             }
         ];
 
-        function loadAnniversaries() {
-            try {
-                const raw = localStorage.getItem(STORAGE_DATA_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        anniversaries = parsed;
-                        return;
-                    }
-                }
-                // Kế thừa dữ liệu từ phiên bản v2 nếu người dùng đã lưu ghi chú hoặc thêm mới
-                const prevRaw = localStorage.getItem(PREV_STORAGE_KEY);
-                if (prevRaw) {
-                    const prevParsed = JSON.parse(prevRaw);
-                    if (Array.isArray(prevParsed) && prevParsed.length > 0) {
-                        anniversaries = prevParsed.map(item => ({
-                            id: item.id,
-                            lunarDay: item.lunarDay,
-                            lunarMonth: item.lunarMonth,
-                            displayName: item.displayName,
-                            subName: item.subName || "",
-                            note: item.note || ""
-                        }));
-                        saveAnniversaries();
-                        return;
-                    }
-                }
+/*__EMBEDDED_STATE_START__*/
+        const EMBEDDED_STATE = null;
+        /*__EMBEDDED_STATE_END__*/
 
-                anniversaries = DEFAULT_ANNIVERSARIES.map(item => ({ ...item }));
-                saveAnniversaries();
-            } catch (e) {
-                anniversaries = [...DEFAULT_ANNIVERSARIES];
+        function loadAnniversaries() {
+            // Xóa sạch dữ liệu cũ còn sót lại trong localStorage (nếu trước đó từng chạy bản cũ)
+            try {
+                localStorage.removeItem(STORAGE_DATA_KEY);
+                localStorage.removeItem(PREV_STORAGE_KEY);
+            } catch (e) {}
+
+            // 1. Đọc dữ liệu đã đóng gói trong file HTML (nếu là file đã xuất)
+            if (EMBEDDED_STATE && Array.isArray(EMBEDDED_STATE.anniversaries) && EMBEDDED_STATE.anniversaries.length > 0) {
+                anniversaries = JSON.parse(JSON.stringify(EMBEDDED_STATE.anniversaries));
+                return;
             }
+
+            // 2. Mặc định dùng 10 lịch giỗ gốc của Nhà Trần Đăng Anh
+            anniversaries = DEFAULT_ANNIVERSARIES.map(item => ({ ...item }));
         }
 
         function saveAnniversaries() {
-            try {
-                localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(anniversaries));
-            } catch (e) {}
+            // Không lưu vào localStorage; dữ liệu chỉ được ghi vào file khi bấm "Lưu file HTML"
         }
 
         function showToast(message) {
@@ -1273,6 +1260,74 @@
             initConverterInputs();
             renderPage();
         };
+/**************************************************************************
+         * 6. XUẤT FILE HTML ĐỘC LẬP & DỌN SẠCH DOM (KHÔNG PHÌNH DUNG LƯỢNG)
+         **************************************************************************/
+        function exportCleanHtmlFile() {
+            // Tạo bản sao DOM để dọn dẹp mà không làm nháy giao diện đang mở
+            const clone = document.documentElement.cloneNode(true);
+
+            // 1. Xóa thẻ <style> do Tailwind CSS CDN tự động bơm vào lúc chạy
+            clone.querySelectorAll('head style').forEach(styleEl => {
+                if (styleEl.textContent.includes('tailwindcss')) {
+                    styleEl.remove();
+                }
+            });
+
+            // 2. Làm trống toàn bộ các vùng nội dung render động & thông báo Toast
+            [
+                'toastContainer',
+                'todayBanner',
+                'nextUpcomingContainer',
+                'subSummaryText',
+                'gioTableBody',
+                'solToLunResult',
+                'lunToSolResult',
+                'modalSolarPreview'
+            ].forEach(id => {
+                const el = clone.querySelector('#' + id);
+                if (el) el.innerHTML = '';
+            });
+
+            // 3. Đảm bảo các modal luôn ở trạng thái đóng
+            ['anniversaryModal', 'confirmModal'].forEach(id => {
+                const modal = clone.querySelector('#' + id);
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+
+            // 4. Đóng gói danh sách lịch giỗ mới nhất vào EMBEDDED_STATE
+            const payload = {
+                savedAt: Date.now(),
+                anniversaries: anniversaries
+            };
+
+            let fullHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+            const replacementBlock =
+                '/*__EMBEDDED_STATE_START__*/\n        const EMBEDDED_STATE = ' +
+                JSON.stringify(payload, null, 4) +
+                ';\n        /*__EMBEDDED_STATE_END__*/';
+
+            fullHtml = fullHtml.replace(
+                /\/\*__EMBEDDED_STATE_START__\*\/[\s\S]*?\/\*__EMBEDDED_STATE_END__\*\//,
+                replacementBlock
+            );
+
+            // 5. Tải xuống file SoGioGiaDinh.html gọn nhẹ
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'SoGioGiaDinh.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('Đã tải xuống file SoGioGiaDinh.html kèm dữ liệu!');
+        }
     </script>
 </body>
 </html>

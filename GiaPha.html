@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
+<html lang="vi"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phả Đồ Dòng Họ</title>
@@ -8,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Noto Serif Display / Merriweather cho nét cổ kính & Plus Jakarta Sans cho chi tiết -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -241,25 +240,18 @@
         <div class="flex items-center gap-2 flex-1 max-w-md mx-2">
             <div class="relative flex-1">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-imperial-gold/80 text-xs"></i>
-                <input 
-                    id="searchInput" 
-                    type="text" 
-                    placeholder="Tìm họ tên, tên tự, mộ phần..." 
-                    class="w-full pl-8 pr-7 py-1.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream placeholder-imperial-cream/50 focus:outline-none focus:border-imperial-gold"
-                >
+                <input id="searchInput" type="text" placeholder="Tìm họ tên, tên tự, mộ phần..." class="w-full pl-8 pr-7 py-1.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream placeholder-imperial-cream/50 focus:outline-none focus:border-imperial-gold">
                 <button id="clearSearchBtn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-imperial-cream/60 hover:text-white text-xs">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <select id="generationFilter" class="py-1.5 px-2.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream focus:outline-none focus:border-imperial-gold cursor-pointer">
-                <option value="all">Tất cả các đời</option>
-            </select>
+            <select id="generationFilter" class="py-1.5 px-2.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream focus:outline-none focus:border-imperial-gold cursor-pointer"></select>
         </div>
 
         <!-- Cụm Nút Chức Năng Chính -->
         <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-            <button onclick="openClanInfoModal()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Sửa bức trướng & thông tin dòng họ">
+            <button onclick="openClanInfoModal()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Sửa bức trướng &amp; thông tin dòng họ">
                 <i class="fa-solid fa-scroll text-imperial-gold"></i>
                 <span class="hidden lg:inline">Bức Trướng</span>
             </button>
@@ -267,7 +259,7 @@
             <button onclick="openAnniversaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-imperial-gold text-imperial-pale text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" title="Tra cứu Sổ Giỗ Họ Âm lịch">
                 <i class="fa-solid fa-fire-flame-curved text-amber-300"></i>
                 <span>Sổ Giỗ Họ</span>
-                <span id="anniversaryCountBadge" class="bg-imperial-gold text-crimson-deep font-bold px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                <span id="anniversaryCountBadge" class="bg-imperial-gold text-crimson-deep font-bold px-1.5 py-0.2 rounded-full text-[10px]">10</span>
             </button>
 
             <button onclick="toggleCouplets()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Ẩn/Hiện Câu Đối hai bên">
@@ -285,9 +277,13 @@
                 <button onclick="toggleDataMenu()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold text-crimson-deep hover:bg-imperial-pale font-bold text-xs flex items-center gap-1.5 transition shadow">
                     <i class="fa-solid fa-database"></i>
                     <span class="hidden sm:inline">Dữ Liệu</span>
-                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i>					
                 </button>
-                <div id="dataDropdownMenu" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-imperial-cream border-2 border-crimson shadow-2xl py-1.5 text-ink z-50">
+                <div id="dataDropdownMenu" class="absolute right-0 mt-2 w-56 rounded-xl bg-imperial-cream border-2 border-crimson shadow-2xl py-1.5 text-ink z-50 hidden">
+					<button onclick="exportCleanHTML()" class="w-full px-4 py-2 text-left text-xs font-bold text-emerald-800 hover:bg-imperial-parchment flex items-center gap-2.5 border-b border-imperial-gold/40">
+                        <i class="fa-solid fa-file-code text-emerald-700 w-4"></i>
+                        <span>Lưu file HTML</span>
+                    </button>				
                     <button onclick="exportFamilyJSON()" class="w-full px-4 py-2 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5">
                         <i class="fa-solid fa-file-export text-crimson w-4"></i>
                         <span>Xuất file Gia Phả (.JSON)</span>
@@ -297,11 +293,6 @@
                         <span>Nhập file Gia Phả (.JSON)</span>
                         <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importFamilyJSON(event)">
                     </label>
-                    <hr class="my-1 border-imperial-gold/40">
-                    <button onclick="confirmResetSampleData()" class="w-full px-4 py-2 text-left text-xs font-medium text-crimson hover:bg-red-50 flex items-center gap-2.5">
-                        <i class="fa-solid fa-rotate-left w-4"></i>
-                        <span>Khôi phục Phả Đồ mẫu (4 đời)</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -324,8 +315,7 @@
         <aside id="leftCouplet" class="pointer-events-none fixed left-3 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center">
             <div class="scroll-banner px-3.5 py-4 rounded-xl text-center shadow-2xl border-2 border-imperial-gold">
                 <div class="text-imperial-gold text-xs mb-1.5">༺❖༻</div>
-                <div id="coupletLeftText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow">
-                </div>
+                <div id="coupletLeftText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow"></div>
                 <div class="text-imperial-gold text-xs mt-1.5">༺❖༻</div>
             </div>
         </aside>
@@ -333,8 +323,7 @@
         <aside id="rightCouplet" class="pointer-events-none fixed right-3 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col items-center">
             <div class="scroll-banner px-3.5 py-4 rounded-xl text-center shadow-2xl border-2 border-imperial-gold">
                 <div class="text-imperial-gold text-xs mb-1.5">༺❖༻</div>
-                <div id="coupletRightText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow">
-                </div>
+                <div id="coupletRightText" class="font-serif font-black text-imperial-gold text-xs sm:text-sm tracking-wider leading-tight flex flex-col items-center gap-1 drop-shadow"></div>
                 <div class="text-imperial-gold text-xs mt-1.5">༺❖༻</div>
             </div>
         </aside>
@@ -349,19 +338,19 @@
                 <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] mb-2.5">
                     <div class="flex justify-between">
                         <span class="text-ink-muted">Tổng thành viên:</span>
-                        <strong id="statTotalMembers" class="text-ink">0</strong>
+                        <strong id="statTotalMembers" class="text-ink">11</strong>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-ink-muted">Đinh (Nam):</span>
-                        <strong id="statMaleCount" class="text-crimson">0</strong>
+                        <strong id="statMaleCount" class="text-crimson">9</strong>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-ink-muted">Nữ (Con gái):</span>
-                        <strong id="statFemaleCount" class="text-amber-800">0</strong>
+                        <strong id="statFemaleCount" class="text-amber-800">2</strong>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-ink-muted">Phối ngẫu:</span>
-                        <strong id="statSpouseCount" class="text-ink">0</strong>
+                        <strong id="statSpouseCount" class="text-ink">12</strong>
                     </div>
                 </div>
                 <!-- Chú giải màu sắc -->
@@ -387,7 +376,7 @@
             <button onclick="zoomTree(-0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Thu nhỏ">
                 <i class="fa-solid fa-magnifying-glass-minus"></i>
             </button>
-            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">100%</span>
+            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">46%</span>
             <button onclick="zoomTree(0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Phóng to">
                 <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
@@ -399,7 +388,7 @@
         </div>
 
         <!-- VÙNG CANVAS CHỨA BỨC TRƯỚNG & CÂY GIA PHẢ (PAN & ZOOM LAYER) -->
-        <div id="panZoomStage" class="origin-top-left transition-transform duration-75 ease-out" style="transform: translate(0px, 0px) scale(1);">
+        <div id="panZoomStage" class="origin-top-left transition-transform duration-75 ease-out" style="transform: translate(504px, 12px) scale(0.46);">
             
             <!-- 1. BỨC TRƯỚNG / CUỐN THƯ ĐẦU PHẢ ĐỒ -->
             <div id="clanScrollHeader" class="pt-10 pb-8 flex flex-col items-center justify-center">
@@ -414,35 +403,31 @@
                         <span>༺ ❁ ༻</span>
                     </div>
 
-                    <h2 id="bannerClanTitle" class="font-serif font-black text-2xl sm:text-4xl text-imperial-gold tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                        PHẢ ĐỒ HỌ NGUYỄN ĐÌNH
-                    </h2>
+                    <h2 id="bannerClanTitle" class="font-serif font-black text-2xl sm:text-4xl text-imperial-gold tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">PHẢ ĐỒ HỌ NGUYỄN ĐÌNH</h2>
 
                     <div class="mt-2.5 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs sm:text-sm text-imperial-pale/95 font-medium">
                         <span><strong class="text-imperial-gold">Chi / Ngành:</strong> <span id="bannerBranch">Đại Tôn - Chi Giữa</span></span>
                         <span class="text-imperial-gold">•</span>
                         <span><strong class="text-imperial-gold">Nguyên quán:</strong> <span id="bannerHometown">Làng Cổ Lễ, Huyện Trực Ninh, Tỉnh Nam Định</span></span>
                         <span class="text-imperial-gold">•</span>
-                        <span><strong class="text-imperial-gold">Năm lập phả:</strong> <span id="bannerYear">Giáp Thìn - Cập nhật Bính Ngọ (2026)</span></span>
+                        <span><strong class="text-imperial-gold">Năm lập phả:</strong> <span id="bannerYear">Giáp Thìn - Tu bổ Bính Ngọ (2026)</span></span>
                     </div>
 
-                    <p id="bannerMotto" class="mt-2.5 text-xs italic text-imperial-gold/90 font-serif">
-                        "Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh"
-                    </p>
+                    <p id="bannerMotto" class="mt-2.5 text-xs italic text-imperial-gold/90 font-serif">"Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh"</p>
 
                     <div class="ui-chrome mt-2 inline-flex items-center gap-1.5 text-[11px] bg-black/25 text-imperial-gold px-3 py-0.5 rounded-full border border-imperial-gold/40 opacity-80 group-hover:opacity-100">
-                        <i class="fa-solid fa-pen-to-square"></i> Nhấn để sửa thông tin Dòng Họ & Bức Trướng
+                        <i class="fa-solid fa-pen-to-square"></i> Nhấn để sửa thông tin Dòng Họ &amp; Bức Trướng
                     </div>
                 </div>
             </div>
 
             <!-- 2. VÙNG CHỨA CÂY GIA PHẢ (DẢI ĐỜI + SVG ĐƯỜNG NỐI + CÁC THẺ THÀNH VIÊN) -->
-            <div id="treeCanvasWrapper" class="relative mx-auto">
+            <div id="treeCanvasWrapper" class="relative mx-auto" style="width: 1982px; height: 1500px;">
                 <!-- Dải phân tầng thế hệ (Đời thứ I, II, III...) -->
                 <div id="generationBandsContainer" class="absolute inset-0 pointer-events-none z-0"></div>
 
                 <!-- SVG vẽ đường kẻ vuông góc (Orthogonal Lines) -->
-                <svg id="treeConnectionsSvg" class="absolute inset-0 pointer-events-none z-10 overflow-visible"></svg>
+                <svg id="treeConnectionsSvg" class="absolute inset-0 pointer-events-none z-10 overflow-visible" width="1982" height="1500"></svg>
 
                 <!-- Lớp chứa các Thẻ Thành Viên -->
                 <div id="treeNodesContainer" class="relative z-20"></div>
@@ -482,12 +467,12 @@
                 <!-- Nhóm 1: Danh tính & Thế thứ -->
                 <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
                     <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
-                        <i class="fa-solid fa-id-card text-imperial-bronze"></i> 1. Danh Tính & Thế Thứ Trong Họ
+                        <i class="fa-solid fa-id-card text-imperial-bronze"></i> 1. Danh Tính &amp; Thế Thứ Trong Họ
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
                         <div class="sm:col-span-2">
                             <label class="block font-semibold text-ink mb-1">Họ và Tên thường gọi <span class="text-crimson">*</span></label>
-                            <input type="text" id="inputFullName" required placeholder="VD: Nguyễn Đình Phúc" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-semibold">
+                            <input type="text" id="inputFullName" required="" placeholder="VD: Nguyễn Đình Phúc" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-semibold">
                         </div>
                         <div>
                             <label class="block font-semibold text-ink mb-1">Giới tính (Đinh / Nữ)</label>
@@ -508,15 +493,15 @@
                             <input type="text" id="inputRoleTitle" list="roleTitleSuggestions" placeholder="VD: Thủy Tổ, Trưởng Nam, Thứ Nam..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
                             <datalist id="roleTitleSuggestions">
                                 <option value="Thủy Tổ Khai Cơ">
-                                <option value="Trưởng Nam (Trưởng Tộc)">
-                                <option value="Trưởng Nam">
-                                <option value="Thứ Nam">
-                                <option value="Đích Tôn">
-                                <option value="Trưởng Nữ">
-                                <option value="Thứ Nữ">
-                                <option value="Út Nam">
-                                <option value="Út Nữ">
-                            </datalist>
+                                </option><option value="Trưởng Nam (Trưởng Tộc)">
+                                </option><option value="Trưởng Nam">
+                                </option><option value="Thứ Nam">
+                                </option><option value="Đích Tôn">
+                                </option><option value="Trưởng Nữ">
+                                </option><option value="Thứ Nữ">
+                                </option><option value="Út Nam">
+                                </option><option value="Út Nữ">
+                            </option></datalist>
                         </div>
                         <div>
                             <label class="block font-semibold text-ink mb-1">Tên Húy / Tên Tự / Hiệu</label>
@@ -532,7 +517,7 @@
                 <!-- Nhóm 2: Sinh Thời, Ngày Giỗ Âm Lịch & Mộ Phần -->
                 <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
                     <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
-                        <i class="fa-solid fa-fire-flame-curved text-imperial-bronze"></i> 2. Sinh Thời, Ngày Giỗ Âm Lịch & Mộ Phần
+                        <i class="fa-solid fa-fire-flame-curved text-imperial-bronze"></i> 2. Sinh Thời, Ngày Giỗ Âm Lịch &amp; Mộ Phần
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                         <div>
@@ -591,15 +576,13 @@
                             <i class="fa-solid fa-plus"></i> Thêm Phối Ngẫu
                         </button>
                     </div>
-                    <div id="spousesFormContainer" class="space-y-3">
-                        <!-- Các dòng phối ngẫu render tự động tại đây -->
-                    </div>
+                    <div id="spousesFormContainer" class="space-y-3"></div>
                 </div>
 
                 <!-- Nhóm 4: Tiểu Sử & Công Đức -->
                 <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-2">
                     <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
-                        <i class="fa-solid fa-book-open text-imperial-bronze"></i> 4. Tiểu Sử, Hành Trạng & Công Đức Với Dòng Họ
+                        <i class="fa-solid fa-book-open text-imperial-bronze"></i> 4. Tiểu Sử, Hành Trạng &amp; Công Đức Với Dòng Họ
                     </h4>
                     <textarea id="inputBio" rows="3" placeholder="Ghi chép công đức khai cơ lập nghiệp, khoa bảng, nghề nghiệp, lời dặn dò con cháu..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson"></textarea>
                 </div>
@@ -629,9 +612,7 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div id="detailModalContent" class="p-6 max-h-[80vh] overflow-y-auto space-y-4">
-                <!-- Nội dung render bằng JS -->
-            </div>
+            <div id="detailModalContent" class="p-6 max-h-[80vh] overflow-y-auto space-y-4"></div>
         </div>
     </div>
 
@@ -687,7 +668,7 @@
             <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <i class="fa-solid fa-scroll text-imperial-gold text-lg"></i>
-                    <h3 class="font-serif font-bold text-lg text-imperial-pale">Thông Tin Bức Trướng & Dòng Họ</h3>
+                    <h3 class="font-serif font-bold text-lg text-imperial-pale">Thông Tin Bức Trướng &amp; Dòng Họ</h3>
                 </div>
                 <button onclick="closeClanInfoModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
@@ -696,7 +677,7 @@
             <form onsubmit="saveClanInfo(event)" class="p-6 space-y-4 text-xs sm:text-sm">
                 <div>
                     <label class="block font-semibold text-ink mb-1">Tiêu đề chính Bức Trướng <span class="text-crimson">*</span></label>
-                    <input type="text" id="clanTitleInput" required class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white font-serif font-bold text-crimson">
+                    <input type="text" id="clanTitleInput" required="" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white font-serif font-bold text-crimson">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
@@ -765,374 +746,372 @@
 
         // 1. DỮ LIỆU MẪU CHUẨN GIA PHẢ VIỆT NAM (4 ĐỜI DÒNG HỌ NGUYỄN ĐÌNH)
         function getDefaultFamilyData() {
+		/* START_FAMILY_DATA */
             return {
-                clanInfo: {
-                    title: 'PHẢ ĐỒ HỌ NGUYỄN ĐÌNH',
-                    branch: 'Đại Tôn - Chi Giữa',
-                    hometown: 'Làng Cổ Lễ, Huyện Trực Ninh, Tỉnh Nam Định',
-                    year: 'Giáp Thìn - Tu bổ Bính Ngọ (2026)',
-                    motto: '"Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh"',
-                    coupletLeft: 'CÂY CÓ CỘI MỚI NỞ CÀNH XANH NGỌN',
-                    coupletRight: 'NƯỚC CÓ NGUỒN MỚI BỂ RỘNG SÔNG SÂU'
+    "clanInfo": {
+        "title": "PHẢ ĐỒ HỌ NGUYỄN ĐÌNH",
+        "branch": "Đại Tôn - Chi Giữa",
+        "hometown": "Làng Cổ Lễ, Huyện Trực Ninh, Tỉnh Nam Định",
+        "year": "Giáp Thìn - Tu bổ Bính Ngọ (2026)",
+        "motto": "\"Tổ công tông đức thiên niên thịnh • Tử hiếu tôn hiền vạn đại vinh\"",
+        "coupletLeft": "CÂY CÓ CỘI MỚI NỞ CÀNH XANH NGỌN",
+        "coupletRight": "NƯỚC CÓ NGUỒN MỚI BỂ RỘNG SÔNG SÂU"
+    },
+    "members": [
+        {
+            "id": "mem_1",
+            "parentId": null,
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Đức",
+            "gender": "male",
+            "roleTitle": "Thủy Tổ Khai Cơ",
+            "courtesyName": "Húy: Đình Trọng • Tự: Phúc Đức • Hiệu: Tùng Hiên",
+            "titleHonor": "Tiền Triều Hương Cống - Thụy Đoan Chính",
+            "isAlive": false,
+            "birthYear": "1892 (Nhâm Thìn)",
+            "deathYear": "1974 (Giáp Dần)",
+            "deathLunarDay": 15,
+            "deathLunarMonth": 3,
+            "burialPlace": "Khu Lăng Tổ xứ Đồng Bãi, xã Cổ Lễ, Trực Ninh, Nam Định (Tọa Bắc hướng Nam)",
+            "spouses": [
+                {
+                    "relation": "Chính thất",
+                    "fullName": "Cụ bà Trần Thị Hiền",
+                    "courtesyName": "Hiệu: Từ Tâm",
+                    "isAlive": false,
+                    "birthYear": "1896",
+                    "deathYear": "1980",
+                    "deathLunarDay": 12,
+                    "deathLunarMonth": 8,
+                    "burialPlace": "An táng song mộ cùng Cụ Ông tại xứ Đồng Bãi"
                 },
-                members: [
-                    // ================= ĐỜI THỨ I (THỦY TỔ) =================
-                    {
-                        id: 'mem_1',
-                        parentId: null,
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Đức',
-                        gender: 'male',
-                        roleTitle: 'Thủy Tổ Khai Cơ',
-                        courtesyName: 'Húy: Đình Trọng • Tự: Phúc Đức • Hiệu: Tùng Hiên',
-                        titleHonor: 'Tiền Triều Hương Cống - Thụy Đoan Chính',
-                        isAlive: false,
-                        birthYear: '1892 (Nhâm Thìn)',
-                        deathYear: '1974 (Giáp Dần)',
-                        deathLunarDay: 15,
-                        deathLunarMonth: 3,
-                        burialPlace: 'Khu Lăng Tổ xứ Đồng Bãi, xã Cổ Lễ, Trực Ninh, Nam Định (Tọa Bắc hướng Nam)',
-                        spouses: [
-                            {
-                                relation: 'Chính thất',
-                                fullName: 'Cụ bà Trần Thị Hiền',
-                                courtesyName: 'Hiệu: Từ Tâm',
-                                isAlive: false,
-                                birthYear: '1896',
-                                deathYear: '1980',
-                                deathLunarDay: 12,
-                                deathLunarMonth: 8,
-                                burialPlace: 'An táng song mộ cùng Cụ Ông tại xứ Đồng Bãi'
-                            },
-                            {
-                                relation: 'Thứ thất',
-                                fullName: 'Cụ bà Lê Thị Khuê',
-                                courtesyName: 'Hiệu: Diệu Liên',
-                                isAlive: false,
-                                birthYear: '1902',
-                                deathYear: '1986',
-                                deathLunarDay: 24,
-                                deathLunarMonth: 10,
-                                burialPlace: 'Nghĩa trang Đồng Bãi (Khu B, hàng 1)'
-                            }
-                        ],
-                        bio: 'Cụ Thủy Tổ Nguyễn Đình Đức vốn người hiếu học, đỗ Hương Cống, mở trường dạy chữ Nho và bốc thuốc cứu người trong vùng. Năm 1925 cụ đứng ra quy tập điền sản, dựng Từ Đường 5 gian gỗ lim và lập quy ước khuyến học cho con cháu dòng họ Nguyễn Đình.'
-                    },
-
-                    // ================= ĐỜI THỨ II =================
-                    {
-                        id: 'mem_2',
-                        parentId: 'mem_1',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Chính',
-                        gender: 'male',
-                        roleTitle: 'Trưởng Nam (Trưởng Tộc)',
-                        courtesyName: 'Húy: Đình Trực • Tự: Minh Chính',
-                        titleHonor: 'Thụy Trung Nghĩa',
-                        isAlive: false,
-                        birthYear: '1920 (Canh Thân)',
-                        deathYear: '2001 (Tân Tỵ)',
-                        deathLunarDay: 20,
-                        deathLunarMonth: 11,
-                        burialPlace: 'Khu mộ Gia tộc xứ Đồng Bãi, Nam Định',
-                        spouses: [
-                            {
-                                relation: 'Chính thất',
-                                fullName: 'Cụ bà Phạm Thị Lan',
-                                courtesyName: 'Hiệu: Phúc An',
-                                isAlive: false,
-                                birthYear: '1923',
-                                deathYear: '2008',
-                                deathLunarDay: 6,
-                                deathLunarMonth: 4,
-                                burialPlace: 'Khu mộ Gia tộc xứ Đồng Bãi, Nam Định'
-                            }
-                        ],
-                        bio: 'Trưởng nam gánh vác việc hương khói từ đường, giữ gìn gia phả chữ Hán qua hai cuộc kháng chiến, trùng tu nhà thờ Tổ năm 1990.'
-                    },
-                    {
-                        id: 'mem_3',
-                        parentId: 'mem_1',
-                        orderIndex: 2,
-                        fullName: 'Nguyễn Đình Nghĩa',
-                        gender: 'male',
-                        roleTitle: 'Thứ Nam (Trưởng Chi Hai)',
-                        courtesyName: 'Tự: Trọng Đạo • Hiệu: Nhân Hòa',
-                        titleHonor: 'Lương Y Đạo Đức - Thụy Ôn Hòa',
-                        isAlive: false,
-                        birthYear: '1925 (Ất Sửu)',
-                        deathYear: '2012 (Nhâm Thìn)',
-                        deathLunarDay: 9,
-                        deathLunarMonth: 7,
-                        burialPlace: 'Nghĩa trang Thanh Tước, Mê Linh, Hà Nội',
-                        spouses: [
-                            {
-                                relation: 'Chính thất',
-                                fullName: 'Cụ bà Vũ Thị Ngọc',
-                                courtesyName: 'Hiệu: Thanh Tịnh',
-                                isAlive: false,
-                                birthYear: '1928',
-                                deathYear: '2018',
-                                deathLunarDay: 18,
-                                deathLunarMonth: 1,
-                                burialPlace: 'Nghĩa trang Thanh Tước, Hà Nội'
-                            }
-                        ],
-                        bio: 'Cụ nối nghiệp y thuật của Thủy Tổ, công tác tại Viện Đông Y tại Hà Nội, có công đỡ đầu con cháu trong họ ra kinh đô học tập.'
-                    },
-                    {
-                        id: 'mem_4',
-                        parentId: 'mem_1',
-                        orderIndex: 3,
-                        fullName: 'Nguyễn Thị Tâm',
-                        gender: 'female',
-                        roleTitle: 'Trưởng Nữ (Bà Cô Tổ)',
-                        courtesyName: 'Hiệu: Diệu Hòa',
-                        titleHonor: 'Thụy Trinh Thuận',
-                        isAlive: false,
-                        birthYear: '1930 (Canh Ngọ)',
-                        deathYear: '2016 (Bính Thân)',
-                        deathLunarDay: 2,
-                        deathLunarMonth: 9,
-                        burialPlace: 'An táng bên quê chồng tại Huyện Xuân Trường, Nam Định',
-                        spouses: [
-                            {
-                                relation: 'Phò mã (Chồng)',
-                                fullName: 'Ông Hoàng Văn Bách',
-                                courtesyName: 'Tự: Văn Minh (Giáo học)',
-                                isAlive: false,
-                                birthYear: '1928',
-                                deathYear: '2010',
-                                deathLunarDay: 14,
-                                deathLunarMonth: 5,
-                                burialPlace: 'Xuân Trường, Nam Định'
-                            }
-                        ],
-                        bio: 'Bà luôn hướng về cội nguồn, công đức đôi câu đối sơn son thếp vàng và chuông đồng tại Từ Đường họ Nguyễn Đình.'
-                    },
-
-                    // ================= ĐỜI THỨ III =================
-                    {
-                        id: 'mem_5',
-                        parentId: 'mem_2',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Hùng',
-                        gender: 'male',
-                        roleTitle: 'Đích Tôn (Trưởng Chi 1)',
-                        courtesyName: 'Tự: Quốc Cường',
-                        titleHonor: 'Đại tá Quân đội nghỉ hưu',
-                        isAlive: true,
-                        birthYear: '1948 (Mậu Tý)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Chính thất',
-                                fullName: 'Bà Đỗ Thị Mai',
-                                courtesyName: 'Giáo viên ưu tú',
-                                isAlive: true,
-                                birthYear: '1952',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Hiện là Trưởng Hội đồng Gia tộc dòng họ Nguyễn Đình, chủ trì biên tập và số hóa Phả Đồ dòng họ.'
-                    },
-                    {
-                        id: 'mem_6',
-                        parentId: 'mem_2',
-                        orderIndex: 2,
-                        fullName: 'Nguyễn Đình Dũng',
-                        gender: 'male',
-                        roleTitle: 'Thứ Nam',
-                        courtesyName: 'Tự: Minh Trí',
-                        titleHonor: 'Kỹ sư Cầu đường - Thụy Cương Trực',
-                        isAlive: false,
-                        birthYear: '1953 (Quý Tỵ)',
-                        deathYear: '2021 (Tân Sửu)',
-                        deathLunarDay: 27,
-                        deathLunarMonth: 6,
-                        burialPlace: 'Khu lăng mộ Gia tộc xứ Đồng Bãi, Nam Định',
-                        spouses: [
-                            {
-                                relation: 'Hiền nội',
-                                fullName: 'Bà Bùi Thị Hạnh',
-                                courtesyName: '',
-                                isAlive: true,
-                                birthYear: '1956',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Người có công quy hoạch khuôn viên lăng mộ đá xanh của dòng họ năm 2015.'
-                    },
-                    {
-                        id: 'mem_7',
-                        parentId: 'mem_3',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Khang',
-                        gender: 'male',
-                        roleTitle: 'Trưởng Nam Chi 2',
-                        courtesyName: 'Tự: Gia Bảo',
-                        titleHonor: 'Tiến sĩ Y khoa - Thầy thuốc Ưu tú',
-                        isAlive: true,
-                        birthYear: '1955 (Ất Mùi)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Hiền nội',
-                                fullName: 'Bà Ngô Thị Thanh Vân',
-                                courtesyName: 'Dược sĩ Chuyên khoa',
-                                isAlive: true,
-                                birthYear: '1958',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Kế thừa truyền thống y học gia truyền, sáng lập Quỹ Khuyến Học Nguyễn Đình hàng năm trao thưởng tại Từ Đường.'
-                    },
-
-                    // ================= ĐỜI THỨ IV =================
-                    {
-                        id: 'mem_8',
-                        parentId: 'mem_5',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Minh Quân',
-                        gender: 'male',
-                        roleTitle: 'Đích Tôn Đời IV',
-                        courtesyName: 'Tự: Kiến Quốc',
-                        titleHonor: 'Kiến trúc sư Quy hoạch',
-                        isAlive: true,
-                        birthYear: '1978 (Mậu Ngọ)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Hiền nội',
-                                fullName: 'Chị Lê Phương Thảo',
-                                courtesyName: 'Thạc sĩ Kinh tế',
-                                isAlive: true,
-                                birthYear: '1982',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Thiết kế bản vẽ trùng tu Nhà Thờ Tổ và cổng tam quan dòng họ năm 2024.'
-                    },
-                    {
-                        id: 'mem_9',
-                        parentId: 'mem_5',
-                        orderIndex: 2,
-                        fullName: 'Nguyễn Thị Minh Nguyệt',
-                        gender: 'female',
-                        roleTitle: 'Trưởng Nữ',
-                        courtesyName: '',
-                        titleHonor: 'Tiến sĩ - Giảng viên Đại học',
-                        isAlive: true,
-                        birthYear: '1983 (Quý Hợi)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Phò mã (Chồng)',
-                                fullName: 'Anh Đặng Quốc Huy',
-                                courtesyName: 'Kỹ sư CNTT',
-                                isAlive: true,
-                                birthYear: '1981',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Phụ trách ban liên lạc con cháu họ Nguyễn Đình tại khu vực miền Bắc.'
-                    },
-                    {
-                        id: 'mem_10',
-                        parentId: 'mem_6',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Hoàng Nam',
-                        gender: 'male',
-                        roleTitle: 'Trưởng Nam',
-                        courtesyName: '',
-                        titleHonor: 'Doanh nhân',
-                        isAlive: true,
-                        birthYear: '1984 (Giáp Tý)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Hiền nội',
-                                fullName: 'Chị Phan Thu Trang',
-                                courtesyName: 'Kế toán trưởng',
-                                isAlive: true,
-                                birthYear: '1987',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Hậu duệ đời thứ 4 tích cực phụng sự việc họ và đóng góp xây dựng Quỹ Từ Đường.'
-                    },
-                    {
-                        id: 'mem_11',
-                        parentId: 'mem_7',
-                        orderIndex: 1,
-                        fullName: 'Nguyễn Đình Bảo Long',
-                        gender: 'male',
-                        roleTitle: 'Trưởng Nam Chi 2',
-                        courtesyName: '',
-                        titleHonor: 'Bác sĩ Chuyên khoa II',
-                        isAlive: true,
-                        birthYear: '1986 (Bính Dần)',
-                        deathYear: '',
-                        deathLunarDay: null,
-                        deathLunarMonth: null,
-                        burialPlace: '',
-                        spouses: [
-                            {
-                                relation: 'Hiền nội',
-                                fullName: 'Chị Trịnh Ngọc Bích',
-                                courtesyName: 'Bác sĩ Nhi khoa',
-                                isAlive: true,
-                                birthYear: '1989',
-                                deathYear: '',
-                                deathLunarDay: null,
-                                deathLunarMonth: null,
-                                burialPlace: ''
-                            }
-                        ],
-                        bio: 'Nối truyền nghề y đời thứ 4 của dòng họ Nguyễn Đình.'
-                    }
-                ]
-            };
+                {
+                    "relation": "Thứ thất",
+                    "fullName": "Cụ bà Lê Thị Khuê",
+                    "courtesyName": "Hiệu: Diệu Liên",
+                    "isAlive": false,
+                    "birthYear": "1902",
+                    "deathYear": "1986",
+                    "deathLunarDay": 24,
+                    "deathLunarMonth": 10,
+                    "burialPlace": "Nghĩa trang Đồng Bãi (Khu B, hàng 1)"
+                }
+            ],
+            "bio": "Cụ Thủy Tổ Nguyễn Đình Đức vốn người hiếu học, đỗ Hương Cống, mở trường dạy chữ Nho và bốc thuốc cứu người trong vùng. Năm 1925 cụ đứng ra quy tập điền sản, dựng Từ Đường 5 gian gỗ lim và lập quy ước khuyến học cho con cháu dòng họ Nguyễn Đình."
+        },
+        {
+            "id": "mem_2",
+            "parentId": "mem_1",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Chính",
+            "gender": "male",
+            "roleTitle": "Trưởng Nam (Trưởng Tộc)",
+            "courtesyName": "Húy: Đình Trực • Tự: Minh Chính",
+            "titleHonor": "Thụy Trung Nghĩa",
+            "isAlive": false,
+            "birthYear": "1920 (Canh Thân)",
+            "deathYear": "2001 (Tân Tỵ)",
+            "deathLunarDay": 20,
+            "deathLunarMonth": 11,
+            "burialPlace": "Khu mộ Gia tộc xứ Đồng Bãi, Nam Định",
+            "spouses": [
+                {
+                    "relation": "Chính thất",
+                    "fullName": "Cụ bà Phạm Thị Lan",
+                    "courtesyName": "Hiệu: Phúc An",
+                    "isAlive": false,
+                    "birthYear": "1923",
+                    "deathYear": "2008",
+                    "deathLunarDay": 6,
+                    "deathLunarMonth": 4,
+                    "burialPlace": "Khu mộ Gia tộc xứ Đồng Bãi, Nam Định"
+                }
+            ],
+            "bio": "Trưởng nam gánh vác việc hương khói từ đường, giữ gìn gia phả chữ Hán qua hai cuộc kháng chiến, trùng tu nhà thờ Tổ năm 1990."
+        },
+        {
+            "id": "mem_3",
+            "parentId": "mem_1",
+            "orderIndex": 2,
+            "fullName": "Nguyễn Đình Nghĩa",
+            "gender": "male",
+            "roleTitle": "Thứ Nam (Trưởng Chi Hai)",
+            "courtesyName": "Tự: Trọng Đạo • Hiệu: Nhân Hòa",
+            "titleHonor": "Lương Y Đạo Đức - Thụy Ôn Hòa",
+            "isAlive": false,
+            "birthYear": "1925 (Ất Sửu)",
+            "deathYear": "2012 (Nhâm Thìn)",
+            "deathLunarDay": 9,
+            "deathLunarMonth": 7,
+            "burialPlace": "Nghĩa trang Thanh Tước, Mê Linh, Hà Nội",
+            "spouses": [
+                {
+                    "relation": "Chính thất",
+                    "fullName": "Cụ bà Vũ Thị Ngọc",
+                    "courtesyName": "Hiệu: Thanh Tịnh",
+                    "isAlive": false,
+                    "birthYear": "1928",
+                    "deathYear": "2018",
+                    "deathLunarDay": 18,
+                    "deathLunarMonth": 1,
+                    "burialPlace": "Nghĩa trang Thanh Tước, Hà Nội"
+                }
+            ],
+            "bio": "Cụ nối nghiệp y thuật của Thủy Tổ, công tác tại Viện Đông Y tại Hà Nội, có công đỡ đầu con cháu trong họ ra kinh đô học tập."
+        },
+        {
+            "id": "mem_4",
+            "parentId": "mem_1",
+            "orderIndex": 3,
+            "fullName": "Nguyễn Thị Tâm",
+            "gender": "female",
+            "roleTitle": "Trưởng Nữ (Bà Cô Tổ)",
+            "courtesyName": "Hiệu: Diệu Hòa",
+            "titleHonor": "Thụy Trinh Thuận",
+            "isAlive": false,
+            "birthYear": "1930 (Canh Ngọ)",
+            "deathYear": "2016 (Bính Thân)",
+            "deathLunarDay": 2,
+            "deathLunarMonth": 9,
+            "burialPlace": "An táng bên quê chồng tại Huyện Xuân Trường, Nam Định",
+            "spouses": [
+                {
+                    "relation": "Phò mã (Chồng)",
+                    "fullName": "Ông Hoàng Văn Bách",
+                    "courtesyName": "Tự: Văn Minh (Giáo học)",
+                    "isAlive": false,
+                    "birthYear": "1928",
+                    "deathYear": "2010",
+                    "deathLunarDay": 14,
+                    "deathLunarMonth": 5,
+                    "burialPlace": "Xuân Trường, Nam Định"
+                }
+            ],
+            "bio": "Bà luôn hướng về cội nguồn, công đức đôi câu đối sơn son thếp vàng và chuông đồng tại Từ Đường họ Nguyễn Đình."
+        },
+        {
+            "id": "mem_5",
+            "parentId": "mem_2",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Hùng",
+            "gender": "male",
+            "roleTitle": "Đích Tôn (Trưởng Chi 1)",
+            "courtesyName": "Tự: Quốc Cường",
+            "titleHonor": "Đại tá Quân đội nghỉ hưu",
+            "isAlive": true,
+            "birthYear": "1948 (Mậu Tý)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Chính thất",
+                    "fullName": "Bà Đỗ Thị Mai",
+                    "courtesyName": "Giáo viên ưu tú",
+                    "isAlive": true,
+                    "birthYear": "1952",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Hiện là Trưởng Hội đồng Gia tộc dòng họ Nguyễn Đình, chủ trì biên tập và số hóa Phả Đồ dòng họ."
+        },
+        {
+            "id": "mem_6",
+            "parentId": "mem_2",
+            "orderIndex": 2,
+            "fullName": "Nguyễn Đình Dũng",
+            "gender": "male",
+            "roleTitle": "Thứ Nam",
+            "courtesyName": "Tự: Minh Trí",
+            "titleHonor": "Kỹ sư Cầu đường - Thụy Cương Trực",
+            "isAlive": false,
+            "birthYear": "1953 (Quý Tỵ)",
+            "deathYear": "2021 (Tân Sửu)",
+            "deathLunarDay": 27,
+            "deathLunarMonth": 6,
+            "burialPlace": "Khu lăng mộ Gia tộc xứ Đồng Bãi, Nam Định",
+            "spouses": [
+                {
+                    "relation": "Hiền nội",
+                    "fullName": "Bà Bùi Thị Hạnh",
+                    "courtesyName": "",
+                    "isAlive": true,
+                    "birthYear": "1956",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Người có công quy hoạch khuôn viên lăng mộ đá xanh của dòng họ năm 2015."
+        },
+        {
+            "id": "mem_7",
+            "parentId": "mem_3",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Khang",
+            "gender": "male",
+            "roleTitle": "Trưởng Nam Chi 2",
+            "courtesyName": "Tự: Gia Bảo",
+            "titleHonor": "Tiến sĩ Y khoa - Thầy thuốc Ưu tú",
+            "isAlive": true,
+            "birthYear": "1955 (Ất Mùi)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Hiền nội",
+                    "fullName": "Bà Ngô Thị Thanh Vân",
+                    "courtesyName": "Dược sĩ Chuyên khoa",
+                    "isAlive": true,
+                    "birthYear": "1958",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Kế thừa truyền thống y học gia truyền, sáng lập Quỹ Khuyến Học Nguyễn Đình hàng năm trao thưởng tại Từ Đường."
+        },
+        {
+            "id": "mem_8",
+            "parentId": "mem_5",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Minh Quân",
+            "gender": "male",
+            "roleTitle": "Đích Tôn Đời IV",
+            "courtesyName": "Tự: Kiến Quốc",
+            "titleHonor": "Kiến trúc sư Quy hoạch",
+            "isAlive": true,
+            "birthYear": "1978 (Mậu Ngọ)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Hiền nội",
+                    "fullName": "Chị Lê Phương Thảo",
+                    "courtesyName": "Thạc sĩ Kinh tế",
+                    "isAlive": true,
+                    "birthYear": "1982",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Thiết kế bản vẽ trùng tu Nhà Thờ Tổ và cổng tam quan dòng họ năm 2024."
+        },
+        {
+            "id": "mem_9",
+            "parentId": "mem_5",
+            "orderIndex": 2,
+            "fullName": "Nguyễn Thị Minh Nguyệt",
+            "gender": "female",
+            "roleTitle": "Trưởng Nữ",
+            "courtesyName": "",
+            "titleHonor": "Tiến sĩ - Giảng viên Đại học",
+            "isAlive": true,
+            "birthYear": "1983 (Quý Hợi)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Phò mã (Chồng)",
+                    "fullName": "Anh Đặng Quốc Huy",
+                    "courtesyName": "Kỹ sư CNTT",
+                    "isAlive": true,
+                    "birthYear": "1981",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Phụ trách ban liên lạc con cháu họ Nguyễn Đình tại khu vực miền Bắc."
+        },
+        {
+            "id": "mem_10",
+            "parentId": "mem_6",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Hoàng Nam",
+            "gender": "male",
+            "roleTitle": "Trưởng Nam",
+            "courtesyName": "",
+            "titleHonor": "Doanh nhân",
+            "isAlive": true,
+            "birthYear": "1984 (Giáp Tý)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Hiền nội",
+                    "fullName": "Chị Phan Thu Trang",
+                    "courtesyName": "Kế toán trưởng",
+                    "isAlive": true,
+                    "birthYear": "1987",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Hậu duệ đời thứ 4 tích cực phụng sự việc họ và đóng góp xây dựng Quỹ Từ Đường."
+        },
+        {
+            "id": "mem_11",
+            "parentId": "mem_7",
+            "orderIndex": 1,
+            "fullName": "Nguyễn Đình Bảo Long",
+            "gender": "male",
+            "roleTitle": "Trưởng Nam Chi 2",
+            "courtesyName": "",
+            "titleHonor": "Bác sĩ Chuyên khoa II",
+            "isAlive": true,
+            "birthYear": "1986 (Bính Dần)",
+            "deathYear": "",
+            "deathLunarDay": null,
+            "deathLunarMonth": null,
+            "burialPlace": "",
+            "spouses": [
+                {
+                    "relation": "Hiền nội",
+                    "fullName": "Chị Trịnh Ngọc Bích",
+                    "courtesyName": "Bác sĩ Nhi khoa",
+                    "isAlive": true,
+                    "birthYear": "1989",
+                    "deathYear": "",
+                    "deathLunarDay": null,
+                    "deathLunarMonth": null,
+                    "burialPlace": ""
+                }
+            ],
+            "bio": "Nối truyền nghề y đời thứ 4 của dòng họ Nguyễn Đình."
+        }
+    ]
+};
+            /* END_FAMILY_DATA */
         }
 
-        // State ứng dụng
+		// State ứng dụng
         let familyData = null;
         let panState = { x: 0, y: 0, scale: 1, isDragging: false, startX: 0, startY: 0 };
         let nodePositions = new Map(); // id -> {x, y, width, height, generation}
         let showCouplets = true;
+
+// [THÊM MỚI] Lưu bản sao mã nguồn HTML gốc ngay khi tải trang (trước khi JS vẽ cây)
+const CLEAN_HTML_TEMPLATE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 
         // Hằng số kích thước thẻ để tính toán cây
         const CARD_WIDTH = 290;
@@ -1197,28 +1176,28 @@
         }
 
         // Khởi tạo dữ liệu
-        function loadData() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    familyData = JSON.parse(raw);
-                } else {
-                    familyData = getDefaultFamilyData();
-                    saveData();
-                }
-            } catch (e) {
-                console.error('Lỗi đọc localStorage:', e);
-                familyData = getDefaultFamilyData();
-            }
+function loadData() {
+    try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            familyData = JSON.parse(raw);
+        } else {
+            familyData = getDefaultFamilyData();
+            saveData();
         }
+    } catch (e) {
+        console.error('Lỗi đọc sessionStorage:', e);
+        familyData = getDefaultFamilyData();
+    }
+}
 
-        function saveData() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(familyData));
-            } catch (e) {
-                console.error('Lỗi lưu localStorage:', e);
-            }
-        }
+function saveData() {
+    try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(familyData));
+    } catch (e) {
+        console.error('Lỗi lưu sessionStorage:', e);
+    }
+}
 
         // Hiển thị Toast
         function showToast(msg) {
@@ -2319,6 +2298,70 @@
                 document.getElementById('dataDropdownMenu')?.classList.add('hidden');
             }
         });
+		
+	async function exportCleanHTML() {
+    document.getElementById('dataDropdownMenu').classList.add('hidden');
+
+    let rawHtml = '';
+
+    try {
+        // Đọc nguyên bản mã nguồn file HTML gốc (không chứa CSS/DOM do Tailwind CDN sinh ra)
+        const response = await fetch(window.location.href, { cache: 'no-store' });
+        rawHtml = await response.text();
+    } catch (e) {
+        // Dự phòng nếu mở trực tiếp bằng file:// bị trình duyệt chặn fetch:
+        // Clone DOM và dọn sạch toàn bộ dữ liệu động + style rác của Tailwind trước khi xuất
+        const clone = document.documentElement.cloneNode(true);
+        
+        // 1. Xóa các thẻ <style> do Tailwind CDN tự tiêm vào <head>
+        clone.querySelectorAll('head style').forEach(styleEl => {
+            if (!styleEl.textContent.includes('--crimson:')) {
+                styleEl.remove();
+            }
+        });
+
+        // 2. Xóa sạch nội dung động đã render trong các container
+        ['coupletLeftText', 'coupletRightText', 'generationBandsContainer', 
+         'treeConnectionsSvg', 'treeNodesContainer', 'generationFilter', 
+         'spousesFormContainer', 'detailModalContent', 'anniversaryListContainer']
+        .forEach(id => {
+            const el = clone.querySelector('#' + id);
+            if (el) el.innerHTML = '';
+        });
+
+        rawHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+    }
+
+    const startMarker = '/* START_FAMILY_DATA */';
+    const endMarker = '/* END_FAMILY_DATA */';
+    const startIdx = rawHtml.indexOf(startMarker);
+    const endIdx = rawHtml.indexOf(endMarker);
+
+    if (startIdx === -1 || endIdx === -1) {
+        showToast('Lỗi: Không tìm thấy thẻ đánh dấu dữ liệu trong HTML!');
+        return;
+    }
+
+    // Dùng thụt lề 4 khoảng trắng để file gọn nhẹ
+    const updatedDataJson = JSON.stringify(familyData, null, 4);
+    const replacementBlock = `${startMarker}\n            return ${updatedDataJson};\n            `;
+
+    const cleanHtml =
+        rawHtml.slice(0, startIdx) +
+        replacementBlock +
+        rawHtml.slice(endIdx);
+
+    const blob = new Blob([cleanHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `GiaPha.html`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('Đã xuất file HTML');
+}
 
         function exportFamilyJSON() {
             document.getElementById('dataDropdownMenu').classList.add('hidden');
@@ -2445,5 +2488,5 @@
             });
         });
     </script>
-</body>
-</html>
+
+</body></html>
