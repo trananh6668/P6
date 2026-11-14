@@ -63,17 +63,18 @@
                     <span class="text-xs text-slate-500 mt-1">Đã nhập <strong id="gradedCountDisplay">17</strong> / <strong id="totalCountDisplay">27</strong> môn</span>
                 </div>
 
-                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center text-xs text-slate-600 space-y-1.5">
-                    <div class="font-semibold text-slate-800">Mốc điểm hệ 4 thông dụng:</div>
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center text-[11px] text-slate-600 space-y-1.5">
+                    <div class="font-semibold text-slate-800">Quy đổi điểm hệ 4:</div>
                     <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A/A+: <b>4.0</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B+: <b>3.5</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B: <b>3.0</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C+: <b>2.5</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C: <b>2.0</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D+: <b>1.5</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D: <b>1.0</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">F: <b>0</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A+: <b>9.5 -> 10</b></span>					
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A: <b>8.5 -> 9.4</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B+: <b>8.0 -> 8.4</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B: <b>7.0 -> 7.9</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C+: <b>6.5 -> 6.9</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C: <b>5.5 -> 6.4</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D+: <b>5.0 -> 5.4</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D: <b>4.0 -> 4.9</b></span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">F: <b>0 -> 3.9</b></span>
                     </div>
                 </div>
             </div>
@@ -109,11 +110,11 @@
                 <table class="w-full border-collapse text-left">
                     <thead>
                         <tr class="bg-slate-100/80 border-b border-slate-200 text-slate-700 text-xs sm:text-sm font-bold">
-                            <th class="py-3 px-3 text-center w-12 border-r border-slate-200">#</th>
-                            <th class="py-3 px-3 w-36 border-r border-slate-200">Cột 1: Mã HP</th>
-                            <th class="py-3 px-3 min-w-[220px] border-r border-slate-200">Cột 2: Tên Học Phần</th>
-                            <th class="py-3 px-3 w-32 text-center border-r border-slate-200">Cột 3: Hệ Số Tín</th>
-                            <th class="py-3 px-3 w-52 text-center border-r border-slate-200">Cột 4: Điểm Tổng Kết (Hệ 4)</th>
+                            <th class="py-3 px-3 text-center w-12 border-r border-slate-200">STT</th>
+                            <th class="py-3 px-3 w-36 border-r border-slate-200">Mã HP</th>
+                            <th class="py-3 px-3 min-w-[220px] border-r border-slate-200">Tên Học Phần</th>
+                            <th class="py-3 px-3 w-32 text-center border-r border-slate-200">Hệ Số Tín</th>
+                            <th class="py-3 px-3 w-52 text-center border-r border-slate-200">Điểm Tổng Kết</th>
                             <th class="py-3 px-3 w-16 text-center">Xóa</th>
                         </tr>
                     </thead>
@@ -1007,7 +1008,7 @@
                         <i class="fa-solid fa-download"></i> Tải bản HTML đã lưu
                     </button>
                 </div>
-                <span id="statusNotice" class="text-xs text-slate-400">Tự động lưu khi chỉnh sửa</span>
+                <span id="statusNotice" class="text-xs text-slate-400">Nhấn F5 để khôi phục dữ liệu gốc</span>
             </div>
         </div>
 
@@ -1232,68 +1233,36 @@
 };
         /*__EMBEDDED_STATE_END__*/
 
-        const STORAGE_KEY = 'simple_cpa_courses_v3';
         let courses = [];
 
-        function loadData() {
-            let localState = null;
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && Array.isArray(parsed.courses) && parsed.courses.length > 0) {
-                        localState = parsed;
-                    } else if (Array.isArray(parsed) && parsed.length > 0) {
-                        localState = { savedAt: 1, courses: parsed };
-                    }
-                }
-            } catch (e) {
-                console.error(e);
-            }
+function loadData() {
+    // Xóa sạch dữ liệu cũ còn sót lại trong localStorage (nếu trước đây từng chạy bản cũ)
+    localStorage.removeItem('simple_cpa_courses_v3');
 
-            // Nếu file HTML được lưu có dữ liệu mới hơn hoặc trình duyệt chưa có localStorage thì ưu tiên dữ liệu nhúng trong file HTML
-            if (
-                EMBEDDED_STATE &&
-                Array.isArray(EMBEDDED_STATE.courses) &&
-                (!localState || (EMBEDDED_STATE.savedAt && EMBEDDED_STATE.savedAt >= (localState.savedAt || 0)))
-            ) {
-                courses = JSON.parse(JSON.stringify(EMBEDDED_STATE.courses));
-                return;
-            }
+    if (EMBEDDED_STATE && Array.isArray(EMBEDDED_STATE.courses)) {
+        courses = JSON.parse(JSON.stringify(EMBEDDED_STATE.courses));
+        return;
+    }
 
-            if (localState && Array.isArray(localState.courses)) {
-                courses = localState.courses;
-                return;
-            }
+    courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
+}
 
-            courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
-        }
+function showStatus(msg, isHighlight = false) {
+    const notice = document.getElementById('statusNotice');
+    if (!notice) return;
+    notice.textContent = msg;
+    notice.className = isHighlight
+        ? 'text-xs font-semibold text-emerald-600'
+        : 'text-xs text-slate-400';
+    setTimeout(() => {
+        notice.textContent = 'Nhấn F5 để khôi phục dữ liệu gốc';
+        notice.className = 'text-xs text-slate-400';
+    }, 2500);
+}
 
-        function showStatus(msg, isHighlight = false) {
-            const notice = document.getElementById('statusNotice');
-            if (!notice) return;
-            notice.textContent = msg;
-            notice.className = isHighlight
-                ? 'text-xs font-semibold text-emerald-600'
-                : 'text-xs text-slate-400';
-            setTimeout(() => {
-                notice.textContent = 'Tự động lưu khi chỉnh sửa';
-                notice.className = 'text-xs text-slate-400';
-            }, 2500);
-        }
-
-        function saveData() {
-            try {
-                const payload = {
-                    savedAt: Date.now(),
-                    courses: courses
-                };
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-                showStatus('Đã tự động lưu');
-            } catch (e) {
-                console.error(e);
-            }
-        }
+function saveData() {
+    // Không tự động lưu vào localStorage; dữ liệu chỉ lưu khi bấm "Lưu file HTML"
+}
 
         // Lưu toàn bộ dữ liệu đã chỉnh sửa thành 1 file HTML độc lập
         function saveHtmlFile() {
