@@ -1,0 +1,2628 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Studio Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cv-accent: #1e3a8a;
+            --cv-accent-light: rgba(30, 58, 138, 0.08);
+            --cv-accent-border: rgba(30, 58, 138, 0.25);
+            --cv-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --cv-font-size: 13.5px;
+            --cv-line-height: 1.5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            margin: 0;
+            padding: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* KHỔ GIẤY A4 CHUẨN PIXEL (794px x 1123px = 210mm x 297mm @ 96 DPI) */
+        .cv-page-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .cv-page-wrapper:last-child {
+            margin-bottom: 0;
+        }
+        .cv-page-header-bar {
+            width: 794px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 0 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .a4-sheet {
+            width: 794px;
+            height: 1123px;
+            min-width: 794px;
+            max-width: 794px;
+            min-height: 1123px;
+            max-height: 1123px;
+            background: #ffffff;
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.14), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+            font-family: var(--cv-font);
+            font-size: var(--cv-font-size);
+            line-height: var(--cv-line-height);
+            color: #1f2937;
+            position: relative;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .cv-bullets {
+            list-style-type: disc;
+            padding-left: 18px;
+            margin-top: 4px;
+            margin-bottom: 0;
+        }
+        .cv-bullets li {
+            margin-bottom: 3px;
+        }
+        .cv-bullets li:last-child {
+            margin-bottom: 0;
+        }
+
+        #cv-measure-sandbox {
+            position: fixed;
+            left: -99999px;
+            top: 0;
+            visibility: hidden;
+            pointer-events: none;
+            z-index: -9999;
+            font-family: var(--cv-font);
+            font-size: var(--cv-font-size);
+            line-height: var(--cv-line-height);
+        }
+
+        /* IN ẤN & XUẤT PDF CHUẨN KHỔ A4 */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0 !important;
+            }
+            html, body {
+                width: 210mm !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+                overflow: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print,
+            .cv-page-header-bar {
+                display: none !important;
+            }
+            #app-shell,
+            #main-workspace,
+            #preview-panel {
+                display: block !important;
+                width: 210mm !important;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #ffffff !important;
+                position: static !important;
+            }
+            #preview-zoom-stage {
+                transform: none !important;
+                width: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .cv-page-wrapper {
+                display: block !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                overflow: hidden !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+            .cv-page-wrapper:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+            .a4-sheet {
+                width: 794px !important;
+                height: 1123px !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                zoom: 1.0005;
+            }
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden flex flex-col">
+
+    <div id="app-shell" class="h-full flex flex-col overflow-hidden">
+
+        <!-- THANH CÔNG CỤ TRÊN CÙNG -->
+        <header class="no-print bg-white border-b border-slate-200 px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2.5 z-30 shadow-2xs shrink-0">
+            <!-- Logo & Tên ứng dụng -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-900 text-white flex items-center justify-center font-bold text-base shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-bold text-slate-800 text-sm sm:text-base leading-tight">CV Studio Pro</h1>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Chuẩn A4</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 hidden sm:block">Tự động lưu &bull; Tách trang A4 thông minh</p>
+                </div>
+            </div>
+
+            <!-- Chọn 3 Mẫu CV -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/90">
+                <button type="button" onclick="setTemplate('modern')" id="btn-tpl-modern" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+                    <span>1. Hiện đại 2 cột</span>
+                </button>
+                <button type="button" onclick="setTemplate('ats')" id="btn-tpl-ats" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+                    <span>2. Chuẩn ATS 1 cột</span>
+                </button>
+                <button type="button" onclick="setTemplate('executive')" id="btn-tpl-executive" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+                    <span>3. Chuyên nghiệp</span>
+                </button>
+            </div>
+
+            <!-- Ngôn ngữ VI/EN, Dữ liệu & Xuất PDF -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Bộ chuyển đổi ngôn ngữ CV -->
+                <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/90" title="Ngôn ngữ hiển thị trên CV">
+                    <button type="button" onclick="setCVLanguage('vi')" id="btn-lang-vi" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1">
+                        <span>VI</span>
+                        <span class="hidden sm:inline">Tiếng Việt</span>
+                    </button>
+                    <button type="button" onclick="setCVLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1">
+                        <span>EN</span>
+                        <span class="hidden sm:inline">English</span>
+                    </button>
+                </div>
+
+                <!-- Chuyển chế độ Mobile -->
+                <button type="button" onclick="toggleMobileView()" id="btn-mobile-view" class="lg:hidden px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-300 flex items-center gap-1.5">
+                    <span id="mobile-view-label">Xem CV</span>
+                </button>
+
+                <!-- Menu Dữ liệu -->
+                <div class="relative" id="data-dropdown-wrapper">
+                    <button type="button" onclick="toggleDataDropdown()" class="px-3 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 flex items-center gap-1.5 transition">
+                        <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                        <span class="hidden sm:inline">Dữ liệu</span>
+                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="data-dropdown-menu" class="hidden absolute right-0 mt-1.5 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+                        <button type="button" onclick="confirmResetSample('vi')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center gap-2.5">
+                            <span class="font-bold text-blue-700 w-5">VI</span>
+                            <span>Nạp dữ liệu mẫu Tiếng Việt</span>
+                        </button>
+                        <button type="button" onclick="confirmResetSample('en')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center gap-2.5">
+                            <span class="font-bold text-indigo-700 w-5">EN</span>
+                            <span>Nạp dữ liệu mẫu English</span>
+                        </button>
+                        <button type="button" onclick="confirmClearAll()" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 flex items-center gap-2.5">
+                            <span class="font-bold w-5">✕</span>
+                            <span>Xóa trắng để nhập mới</span>
+                        </button>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <button type="button" onclick="exportJSON()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center gap-2.5">
+                            <span class="font-bold text-emerald-600 w-5">↓</span>
+                            <span>Xuất file sao lưu (.JSON)</span>
+                        </button>
+                        <label class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-slate-700 flex items-center gap-2.5 cursor-pointer">
+                            <span class="font-bold text-amber-600 w-5">↑</span>
+                            <span>Nhập từ file (.JSON)</span>
+                            <input type="file" id="inp-import-json" accept=".json" class="hidden" onchange="importJSON(event)">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Nút Xuất PDF -->
+                <button type="button" onclick="openPrintModal()" class="px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold shadow-sm shadow-blue-700/25 flex items-center gap-2 transition cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    <span>Xuất PDF</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KHÔNG GIAN LÀM VIỆC CHIA ĐÔI -->
+        <main id="main-workspace" class="flex-1 flex overflow-hidden relative">
+
+            <!-- BÊN TRÁI: TRÌNH NHẬP LIỆU & TÙY CHỈNH -->
+            <section id="editor-panel" class="no-print w-full lg:w-[46%] xl:w-[44%] h-full overflow-y-auto bg-slate-50 border-r border-slate-200 p-4 sm:p-5 space-y-4">
+
+                <!-- 1. TÙY CHỈNH GIAO DIỆN -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+                    <button type="button" onclick="toggleSection('acc-design')" class="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between text-left font-bold text-slate-800 text-sm border-b border-slate-100">
+                        <span class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">Aa</span>
+                            Giao diện, Màu chủ đạo & Cỡ chữ
+                        </span>
+                        <span id="chevron-acc-design" class="text-slate-400 text-xs transition-transform">▲</span>
+                    </button>
+                    <div id="acc-design" class="p-4 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-2">Màu chủ đạo (Accent Color)</label>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="setAccentColor('#1e3a8a')" title="Xanh Navy" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#1e3a8a"></button>
+                                <button type="button" onclick="setAccentColor('#0f766e')" title="Xanh Cổ Vịt" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#0f766e"></button>
+                                <button type="button" onclick="setAccentColor('#1d4ed8')" title="Xanh Hoàng Gia" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#1d4ed8"></button>
+                                <button type="button" onclick="setAccentColor('#334155')" title="Xám Than" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#334155"></button>
+                                <button type="button" onclick="setAccentColor('#881337')" title="Đỏ Đô" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#881337"></button>
+                                <button type="button" onclick="setAccentColor('#14532d')" title="Xanh Rừng" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#14532d"></button>
+                                <button type="button" onclick="setAccentColor('#4338ca')" title="Xanh Chàm" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#4338ca"></button>
+                                <button type="button" onclick="setAccentColor('#9a3412')" title="Nâu Cam Đất" class="w-7 h-7 rounded-full border-2 border-white shadow ring-1 ring-slate-300 hover:scale-110 transition" style="background:#9a3412"></button>
+
+                                <div class="flex items-center gap-1.5 ml-1 pl-2 border-l border-slate-200">
+                                    <input type="color" id="inp-accent-color" value="#1e3a8a" oninput="setAccentColor(this.value)" class="w-7 h-7 rounded cursor-pointer border-0 bg-transparent p-0">
+                                    <span id="lbl-accent-hex" class="text-[11px] font-mono text-slate-500 uppercase">#1E3A8A</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Kiểu chữ</label>
+                                <select id="sel-font-family" onchange="updateTypography()" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                                    <option value="'Inter', sans-serif">Inter (Hiện đại)</option>
+                                    <option value="'Roboto', sans-serif">Roboto (Tiêu chuẩn)</option>
+                                    <option value="'Merriweather', Georgia, serif">Merriweather (Cổ điển)</option>
+                                    <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Cỡ chữ</label>
+                                <select id="sel-font-size" onchange="updateTypography()" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                                    <option value="12.5">Nhỏ (12.5px)</option>
+                                    <option value="13.5" selected>Vừa (13.5px)</option>
+                                    <option value="14.5">Lớn (14.5px)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Giãn dòng</label>
+                                <select id="sel-line-height" onchange="updateTypography()" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                                    <option value="1.35">Gọn (1.35)</option>
+                                    <option value="1.5" selected>Chuẩn (1.5)</option>
+                                    <option value="1.65">Thoáng (1.65)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. THÔNG TIN CÁ NHÂN, ẢNH ĐẠI DIỆN & LIÊN HỆ -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+                    <button type="button" onclick="toggleSection('acc-personal')" class="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between text-left font-bold text-slate-800 text-sm border-b border-slate-100">
+                        <span class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">ID</span>
+                            Thông tin cá nhân, Ảnh đại diện & Liên hệ
+                        </span>
+                        <span id="chevron-acc-personal" class="text-slate-400 text-xs transition-transform">▲</span>
+                    </button>
+                    <div id="acc-personal" class="p-4 space-y-3.5">
+                        <!-- Ảnh đại diện -->
+                        <div class="flex flex-wrap items-center gap-3.5 p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                            <div id="editor-avatar-box" class="w-16 h-16 rounded-full overflow-hidden bg-slate-200 border-2 border-white shadow-xs shrink-0 flex items-center justify-center">
+                                <img id="editor-avatar-img" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                                <span id="editor-avatar-icon" class="text-slate-400 text-xs font-bold">AVATAR</span>
+                            </div>
+                            <div class="flex-1 min-w-[180px] space-y-2">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <label class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-300 cursor-pointer transition">
+                                        Tải ảnh lên
+                                        <input type="file" id="inp-avatar-file" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                                    </label>
+                                    <button type="button" id="btn-remove-avatar" onclick="removeAvatar()" class="px-2.5 py-1.5 rounded-lg text-xs text-rose-600 hover:bg-rose-50 font-medium hidden">
+                                        Xóa ảnh
+                                    </button>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                        <input type="checkbox" id="chk-show-avatar" checked onchange="updatePersonal()" class="rounded text-blue-700">
+                                        <span>Hiện ảnh trên CV</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                        <input type="checkbox" id="chk-round-avatar" checked onchange="updatePersonal()" class="rounded text-blue-700">
+                                        <span>Bo tròn ảnh</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Điều khiển Ẩn/Hiện & Tên đầu mục Liên hệ -->
+                        <div id="card-sec-contact" class="p-3 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5 transition-opacity">
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200/80">
+                                <span class="text-xs font-bold text-slate-700">Khối thông tin liên hệ</span>
+                                <div class="flex items-center gap-2">
+                                    <span id="badge-hidden-contact" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                                    <button type="button" onclick="toggleSectionVisibility('contact')" id="btn-vis-contact" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1.5 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                        <span>Đang hiện</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                                <input type="text" id="inp-title-contact" oninput="updateSectionTitle('contact', this.value)" class="flex-1 px-2.5 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600" placeholder="VD: Liên hệ / Contact">
+                            </div>
+                        </div>
+
+                        <!-- Các trường thông tin -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Họ và tên *</label>
+                                <input type="text" id="inp-fullName" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Vị trí ứng tuyển *</label>
+                                <input type="text" id="inp-jobTitle" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại</label>
+                                <input type="text" id="inp-phone" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+                                <input type="email" id="inp-email" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Địa chỉ</label>
+                                <input type="text" id="inp-address" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày sinh</label>
+                                <input type="text" id="inp-dob" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">LinkedIn / GitHub / Portfolio</label>
+                                <input type="text" id="inp-website" oninput="updatePersonal()" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. GIỚI THIỆU BẢN THÂN -->
+                <div id="card-sec-summary" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-summary')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">01</span>
+                            <span>Giới thiệu bản thân & Mục tiêu</span>
+                            <span id="badge-hidden-summary" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('summary')" id="btn-vis-summary" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-summary')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-summary">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-summary" class="p-4 space-y-3">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-summary" oninput="updateSectionTitle('summary', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+                        <textarea id="inp-summary" rows="4" oninput="updatePersonal()" placeholder="Tóm tắt kinh nghiệm, thế mạnh cốt lõi và mục tiêu nghề nghiệp..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 leading-relaxed"></textarea>
+                    </div>
+                </div>
+
+                <!-- 4. KỸ NĂNG & THANH KÉO LEVEL -->
+                <div id="card-sec-skills" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-skills')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-bold shrink-0">02</span>
+                            <span>Kỹ năng & Thanh kéo Level</span>
+                            <span id="badge-hidden-skills" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('skills')" id="btn-vis-skills" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-skills')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-skills">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-skills" class="p-4 space-y-4">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-skills" oninput="updateSectionTitle('skills', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+
+                        <!-- Kiểu thanh Level -->
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/90 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <span class="font-semibold text-slate-700">Kiểu hiển thị thanh Level:</span>
+                                <div class="inline-flex rounded-lg bg-slate-200/80 p-0.5">
+                                    <button type="button" onclick="setSkillBarStyle('bar')" id="btn-skill-style-bar" class="px-2.5 py-1 rounded-md text-[11px] font-semibold transition">
+                                        Thanh tiến trình
+                                    </button>
+                                    <button type="button" onclick="setSkillBarStyle('dots')" id="btn-skill-style-dots" class="px-2.5 py-1 rounded-md text-[11px] font-semibold transition">
+                                        Chấm tròn 5 nấc
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-1.5 border-t border-slate-200/70 text-xs">
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-600 font-medium">
+                                    <input type="checkbox" id="chk-skill-percent" checked onchange="updateSkillOptions()" class="rounded text-blue-700">
+                                    <span>Hiển thị số % bên cạnh tên kỹ năng</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Danh sách kỹ năng Level -->
+                        <div class="space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-700">Kỹ năng đánh giá theo Level (10% – 100%)</span>
+                                <span class="text-[11px] text-slate-400">Kéo thanh trượt</span>
+                            </div>
+                            <div id="editor-skill-levels" class="space-y-2.5"></div>
+                            <button type="button" onclick="addSkillLevel()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-600 hover:text-blue-700 rounded-xl text-xs font-semibold transition">
+                                + Thêm kỹ năng có thanh Level
+                            </button>
+                        </div>
+
+                        <!-- Nhóm kỹ năng liệt kê -->
+                        <div class="pt-3 border-t border-slate-200 space-y-2.5">
+                            <span class="block text-xs font-bold text-slate-700">Nhóm kỹ năng liệt kê theo danh mục</span>
+                            <div id="editor-skill-groups" class="space-y-2"></div>
+                            <button type="button" onclick="addSkillGroup()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-emerald-500 hover:bg-emerald-50/50 text-slate-600 hover:text-emerald-700 rounded-xl text-xs font-semibold transition">
+                                + Thêm nhóm kỹ năng liệt kê
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. KINH NGHIỆM LÀM VIỆC -->
+                <div id="card-sec-experience" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-experience')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">03</span>
+                            <span>Kinh nghiệm làm việc</span>
+                            <span id="badge-hidden-experience" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('experience')" id="btn-vis-experience" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-experience')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-experience">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-experience" class="p-4 space-y-3">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-experience" oninput="updateSectionTitle('experience', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div id="editor-experiences" class="space-y-3"></div>
+                        <button type="button" onclick="addExperience()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-600 hover:text-blue-700 rounded-xl text-xs font-semibold transition">
+                            + Thêm kinh nghiệm làm việc
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. DỰ ÁN NỔI BẬT -->
+                <div id="card-sec-projects" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-projects')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0">04</span>
+                            <span>Dự án nổi bật</span>
+                            <span id="badge-hidden-projects" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('projects')" id="btn-vis-projects" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-projects')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-projects">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-projects" class="p-4 space-y-3">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-projects" oninput="updateSectionTitle('projects', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div id="editor-projects" class="space-y-3"></div>
+                        <button type="button" onclick="addProject()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-600 hover:text-blue-700 rounded-xl text-xs font-semibold transition">
+                            + Thêm dự án nổi bật
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 7. HỌC VẤN -->
+                <div id="card-sec-education" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-education')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs font-bold shrink-0">05</span>
+                            <span>Học vấn</span>
+                            <span id="badge-hidden-education" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('education')" id="btn-vis-education" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-education')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-education">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-education" class="p-4 space-y-3">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-education" oninput="updateSectionTitle('education', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div id="editor-education" class="space-y-3"></div>
+                        <button type="button" onclick="addEducation()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-600 hover:text-blue-700 rounded-xl text-xs font-semibold transition">
+                            + Thêm trình độ học vấn
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8. CHỨNG CHỈ & GIẢI THƯỞNG -->
+                <div id="card-sec-certs" class="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden transition-opacity">
+                    <div class="px-4 py-2.5 bg-slate-50/70 hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-100">
+                        <button type="button" onclick="toggleSection('acc-certs')" class="flex-1 flex items-center gap-2 text-left font-bold text-slate-800 text-sm">
+                            <span class="w-6 h-6 rounded-md bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold shrink-0">06</span>
+                            <span>Chứng chỉ & Giải thưởng</span>
+                            <span id="badge-hidden-certs" class="hidden text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Đã ẩn</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="toggleSectionVisibility('certs')" id="btn-vis-certs" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                                <span>Hiện</span>
+                            </button>
+                            <button type="button" onclick="toggleSection('acc-certs')" class="p-1.5 text-slate-400 hover:text-slate-600 text-xs">
+                                <span id="chevron-acc-certs">▲</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="acc-certs" class="p-4 space-y-3">
+                        <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/80">
+                            <label class="text-[11px] font-semibold text-slate-500 shrink-0">Tên đầu mục trên CV:</label>
+                            <input type="text" id="inp-title-certs" oninput="updateSectionTitle('certs', this.value)" class="flex-1 px-2 py-1 text-xs font-semibold bg-white border border-slate-300 rounded-md focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div id="editor-certs" class="space-y-2.5"></div>
+                        <button type="button" onclick="addCert()" class="w-full py-2 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 text-slate-600 hover:text-blue-700 rounded-xl text-xs font-semibold transition">
+                            + Thêm chứng chỉ / giải thưởng
+                        </button>
+                    </div>
+                </div>
+
+                <div class="h-6"></div>
+            </section>
+
+            <!-- BÊN PHẢI: LIVE PREVIEW KHỔ GIẤY A4 -->
+            <section id="preview-panel" class="hidden lg:flex flex-col flex-1 h-full bg-slate-200/75 overflow-auto items-center p-4 sm:p-6">
+
+                <!-- Thanh điều khiển Zoom & Trạng thái trang -->
+                <div class="no-print sticky top-0 z-20 mb-5 bg-white/95 backdrop-blur-xs border border-slate-300/80 rounded-full px-4 py-1.5 shadow-sm flex flex-wrap items-center justify-center gap-3 text-xs text-slate-600">
+                    <span id="toolbar-page-summary" class="font-semibold text-slate-800">Khổ giấy A4 (VI) &bull; 1 trang</span>
+                    <span id="toolbar-page-status" class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Vừa chuẩn 1 trang
+                    </span>
+                    <div class="h-3.5 w-[1px] bg-slate-300 hidden sm:block"></div>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="changeZoom(-0.1)" title="Thu nhỏ" class="w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold">-</button>
+                        <span id="lbl-zoom-percent" class="font-mono font-semibold w-11 text-center text-slate-800">75%</span>
+                        <button type="button" onclick="changeZoom(0.1)" title="Phóng to" class="w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold">+</button>
+                        <button type="button" onclick="autoFitZoom()" class="ml-1 px-2.5 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-[11px] font-semibold text-slate-700">Vừa khung</button>
+                    </div>
+                </div>
+
+                <!-- Sân khấu hiển thị các tờ A4 -->
+                <div id="preview-zoom-stage" class="origin-top transition-transform duration-150 pb-10">
+                    <div id="cv-pages-root"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Sandbox ẩn dùng để đo chiều cao chính xác từng khối nội dung -->
+    <div id="cv-measure-sandbox" aria-hidden="true"></div>
+
+    <!-- MODAL XUẤT PDF -->
+    <div id="modal-print" class="no-print fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-2xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-bold shrink-0">
+                    PDF
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-900 text-base">Xuất CV ra file PDF chuẩn A4</h3>
+                    <p class="text-xs text-slate-500">Khớp chính xác từng trang như bản xem trước</p>
+                </div>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200/80 space-y-2 text-xs text-slate-700 leading-relaxed">
+                <p class="font-semibold text-slate-900">Thiết lập nhanh trong hộp thoại in:</p>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li><strong>Máy in (Destination):</strong> Chọn <strong>Save as PDF / Lưu dưới dạng PDF</strong>.</li>
+                    <li><strong>Khổ giấy (Paper size):</strong> Chọn <strong>A4</strong>.</li>
+                    <li><strong>Lề (Margins):</strong> Chọn <strong>None / Không</strong>.</li>
+                    <li><strong>Tùy chọn:</strong> Bật <strong>Background graphics / Đồ họa nền</strong> để giữ nguyên màu chủ đạo.</li>
+                </ul>
+            </div>
+            <div class="flex items-center justify-end gap-2.5 pt-2">
+                <button type="button" onclick="closePrintModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 border border-slate-300">
+                    Đóng
+                </button>
+                <button type="button" onclick="executePrint()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-blue-700 hover:bg-blue-800 text-white shadow-sm">
+                    Mở hộp thoại In / Lưu PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XÁC NHẬN -->
+    <div id="modal-confirm" class="no-print fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-2xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-4">
+            <h3 id="confirm-title" class="font-bold text-slate-900 text-base">Xác nhận thao tác</h3>
+            <p id="confirm-message" class="text-xs text-slate-600 leading-relaxed"></p>
+            <div class="flex items-center justify-end gap-2 pt-1">
+                <button type="button" onclick="closeConfirmModal()" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 border border-slate-300">
+                    Hủy bỏ
+                </button>
+                <button type="button" id="confirm-ok-btn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-700 hover:bg-blue-800 text-white">
+                    Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST THÔNG BÁO -->
+    <div id="toast-box" class="no-print fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2">
+            <span id="toast-dot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span id="toast-text">Đã lưu thay đổi</span>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. HẰNG SỐ & DỮ LIỆU MẶC ĐỊNH
+           ========================================================================== */
+        const STORAGE_KEY = 'cv_studio_pro_v4_data';
+        const A4_WIDTH_PX = 794;
+        const A4_HEIGHT_PX = 1123;
+
+        const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
+            '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e3a8a"/>' +
+            '</linearGradient></defs>' +
+            '<rect width="200" height="200" fill="url(#g)"/>' +
+            '<circle cx="100" cy="76" r="36" fill="#ffffff" opacity="0.92"/>' +
+            '<path d="M36 184c0-36 28-60 64-60s64 24 64 60" fill="#ffffff" opacity="0.92"/>' +
+            '</svg>'
+        );
+
+        const DEFAULT_SECTION_TITLES = {
+            vi: {
+                contact: 'Liên hệ',
+                summary: 'Giới thiệu bản thân',
+                skills: 'Kỹ năng chuyên môn',
+                experience: 'Kinh nghiệm làm việc',
+                projects: 'Dự án nổi bật',
+                education: 'Học vấn',
+                certs: 'Chứng chỉ & Giải thưởng'
+            },
+            en: {
+                contact: 'Contact',
+                summary: 'Professional Summary',
+                skills: 'Core Skills',
+                experience: 'Work Experience',
+                projects: 'Featured Projects',
+                education: 'Education',
+                certs: 'Certifications & Awards'
+            }
+        };
+
+        const DEFAULT_SECTION_VISIBILITY = {
+            contact: true,
+            summary: true,
+            skills: true,
+            experience: true,
+            projects: true,
+            education: true,
+            certs: true
+        };
+
+        const SAMPLE_DATA_VI = {
+            settings: {
+                language: 'vi',
+                template: 'modern',
+                accentColor: '#1e3a8a',
+                fontFamily: "'Inter', sans-serif",
+                fontSize: '13.5',
+                lineHeight: '1.5',
+                showAvatar: true,
+                roundAvatar: true,
+                skillBarStyle: 'bar',
+                skillShowPercent: true,
+                sectionTitles: { ...DEFAULT_SECTION_TITLES.vi },
+                sectionVisibility: { ...DEFAULT_SECTION_VISIBILITY }
+            },
+            personal: {
+                avatar: DEFAULT_AVATAR_SVG,
+                fullName: 'NGUYỄN MINH QUÂN',
+                jobTitle: 'Senior Full-Stack Software Engineer',
+                phone: '0912 345 678',
+                email: 'minhquan.nguyen@email.com',
+                address: 'Quận Cầu Giấy, Hà Nội',
+                dob: '15/08/1997',
+                website: 'linkedin.com/in/minhquan-dev | github.com/minhquan-dev',
+                summary: 'Kỹ sư phát triển phần mềm Full-Stack với hơn 5 năm kinh nghiệm thiết kế, xây dựng và tối ưu hóa các hệ thống web quy mô lớn phục vụ hàng trăm nghìn người dùng mỗi ngày. Thành thạo hệ sinh thái JavaScript/TypeScript (React, Next.js, Node.js) và kiến trúc Cloud/Microservices. Đam mê viết mã sạch (Clean Code), tối ưu hiệu năng hệ thống và dẫn dắt đội ngũ kỹ thuật đạt mục tiêu kinh doanh.'
+            },
+            skillLevels: [
+                { id: 'skl-1', name: 'JavaScript / TypeScript', level: 95 },
+                { id: 'skl-2', name: 'ReactJS & Next.js', level: 90 },
+                { id: 'skl-3', name: 'Node.js & NestJS', level: 85 },
+                { id: 'skl-4', name: 'PostgreSQL & Redis', level: 80 },
+                { id: 'skl-5', name: 'Docker & AWS Cloud', level: 75 }
+            ],
+            skillGroups: [
+                { id: 'skg-1', category: 'Công cụ & Quy trình', items: 'Git, CI/CD, Linux, Agile/Scrum, RESTful API, GraphQL' },
+                { id: 'skg-2', category: 'Ngoại ngữ', items: 'Tiếng Anh giao tiếp & đọc hiểu tài liệu (TOEIC 865)' }
+            ],
+            experiences: [
+                {
+                    id: 'exp-1',
+                    role: 'Senior Full-Stack Developer',
+                    company: 'Công ty Công nghệ FinTech Việt Nam (VNPAY-Tech)',
+                    period: '03/2023 – Hiện tại',
+                    description: 'Chủ trì thiết kế kiến trúc Frontend & Backend cho cổng thanh toán doanh nghiệp thế hệ mới.\nTối ưu hóa truy vấn cơ sở dữ liệu PostgreSQL và triển khai Redis Caching, giúp giảm 45% thời gian phản hồi API trung bình.\nXây dựng thư viện UI Component dùng chung bằng React & TypeScript, rút ngắn 30% thời gian phát triển tính năng mới cho 4 team sản phẩm.\nTrực tiếp hướng dẫn (mentor) và review code cho 6 lập trình viên Junior/Middle.'
+                },
+                {
+                    id: 'exp-2',
+                    role: 'Full-Stack Web Developer',
+                    company: 'Tập đoàn Phần mềm & Giải pháp Số FPT Software',
+                    period: '06/2020 – 02/2023',
+                    description: 'Tham gia phát triển nền tảng thương mại điện tử B2B cho khách hàng thị trường Nhật Bản & Singapore.\nPhát triển các dịch vụ RESTful API và GraphQL bằng Node.js (NestJS), tích hợp thanh toán quốc tế Stripe và hệ thống quản lý kho vận.\nThiết lập quy trình CI/CD tự động với Docker và GitHub Actions, nâng tỷ lệ bao phủ Unit Test đạt trên 85%.'
+                }
+            ],
+            projects: [
+                {
+                    id: 'proj-1',
+                    name: 'Hệ thống Quản lý Tài chính & Hóa đơn Thông minh (SmartInvoice)',
+                    role: 'Tech Lead & Full-Stack Developer',
+                    period: '2024',
+                    link: 'github.com/minhquan-dev/smart-invoice',
+                    description: 'Công nghệ: Next.js 14, TypeScript, Node.js, PostgreSQL, Docker.\nXây dựng nền tảng tạo, ký số và đối soát hóa đơn điện tử tự động cho hơn 2.500 doanh nghiệp SME, xử lý ổn định 50.000+ giao dịch/ngày.'
+                },
+                {
+                    id: 'proj-2',
+                    name: 'Nền tảng Học trực tuyến Tương tác Thời gian thực (EduLive)',
+                    role: 'Core Backend & Frontend Developer',
+                    period: '2022',
+                    link: 'edulive-demo.vn',
+                    description: 'Công nghệ: ReactJS, WebRTC, Socket.io, MongoDB, AWS S3.\nPhát triển tính năng phòng học trực tuyến tích hợp bảng trắng tương tác và chấm điểm trắc nghiệm tức thì với độ trễ dưới 200ms.'
+                }
+            ],
+            education: [
+                {
+                    id: 'edu-1',
+                    school: 'Đại học Bách Khoa Hà Nội (HUST)',
+                    degree: 'Kỹ sư Công nghệ Thông tin – Khoa học Máy tính',
+                    period: '09/2015 – 06/2020',
+                    gpa: 'GPA: 3.65 / 4.0 (Loại Giỏi)'
+                }
+            ],
+            certs: [
+                { id: 'cert-1', name: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon Web Services', year: '2024' },
+                { id: 'cert-2', name: 'Chứng chỉ Tiếng Anh TOEIC 865 / 990', issuer: 'IIG Việt Nam', year: '2023' }
+            ]
+        };
+
+        const SAMPLE_DATA_EN = {
+            settings: {
+                language: 'en',
+                template: 'modern',
+                accentColor: '#1e3a8a',
+                fontFamily: "'Inter', sans-serif",
+                fontSize: '13.5',
+                lineHeight: '1.5',
+                showAvatar: true,
+                roundAvatar: true,
+                skillBarStyle: 'bar',
+                skillShowPercent: true,
+                sectionTitles: { ...DEFAULT_SECTION_TITLES.en },
+                sectionVisibility: { ...DEFAULT_SECTION_VISIBILITY }
+            },
+            personal: {
+                avatar: DEFAULT_AVATAR_SVG,
+                fullName: 'MICHAEL NGUYEN',
+                jobTitle: 'Senior Full-Stack Software Engineer',
+                phone: '+84 912 345 678',
+                email: 'michael.nguyen@email.com',
+                address: 'Cau Giay District, Hanoi, Vietnam',
+                dob: 'Aug 15, 1997',
+                website: 'linkedin.com/in/michael-nguyen | github.com/michael-dev',
+                summary: 'Results-driven Full-Stack Software Engineer with 5+ years of experience designing, building, and scaling high-traffic web applications. Proficient in the JavaScript/TypeScript ecosystem (React, Next.js, Node.js) and Cloud/Microservices architecture. Passionate about clean code, system performance optimization, and mentoring engineering teams.'
+            },
+            skillLevels: [
+                { id: 'skl-1', name: 'JavaScript / TypeScript', level: 95 },
+                { id: 'skl-2', name: 'ReactJS & Next.js', level: 90 },
+                { id: 'skl-3', name: 'Node.js & NestJS', level: 85 },
+                { id: 'skl-4', name: 'PostgreSQL & Redis', level: 80 },
+                { id: 'skl-5', name: 'Docker & AWS Cloud', level: 75 }
+            ],
+            skillGroups: [
+                { id: 'skg-1', category: 'Tools & Methodologies', items: 'Git, CI/CD, Linux, Agile/Scrum, RESTful API, GraphQL' },
+                { id: 'skg-2', category: 'Languages', items: 'English (Fluent – TOEIC 865), Vietnamese (Native)' }
+            ],
+            experiences: [
+                {
+                    id: 'exp-1',
+                    role: 'Senior Full-Stack Developer',
+                    company: 'Vietnam FinTech Corporation (VNPAY-Tech)',
+                    period: '03/2023 – Present',
+                    description: 'Spearheaded Frontend & Backend architecture for the next-generation enterprise payment gateway.\nOptimized PostgreSQL queries and implemented Redis Caching, reducing average API latency by 45%.\nBuilt a shared React & TypeScript UI component library, accelerating feature delivery by 30% across 4 product squads.\nMentored and conducted code reviews for 6 Junior and Mid-level engineers.'
+                },
+                {
+                    id: 'exp-2',
+                    role: 'Full-Stack Web Developer',
+                    company: 'FPT Software Corporation',
+                    period: '06/2020 – 02/2023',
+                    description: 'Developed a scalable B2B e-commerce platform serving enterprise clients in Japan and Singapore.\nEngineered RESTful and GraphQL microservices using Node.js (NestJS), integrating Stripe payments and inventory workflows.\nAutomated CI/CD pipelines with Docker and GitHub Actions, raising unit test coverage above 85%.'
+                }
+            ],
+            projects: [
+                {
+                    id: 'proj-1',
+                    name: 'SmartInvoice – Automated Financial & E-Invoicing SaaS',
+                    role: 'Tech Lead & Full-Stack Developer',
+                    period: '2024',
+                    link: 'github.com/michael-dev/smart-invoice',
+                    description: 'Tech Stack: Next.js 14, TypeScript, Node.js, PostgreSQL, Docker.\nArchitected an automated e-invoice issuance and reconciliation platform serving 2,500+ SMEs, handling 50,000+ daily transactions.'
+                },
+                {
+                    id: 'proj-2',
+                    name: 'EduLive – Real-Time Interactive Learning Platform',
+                    role: 'Core Backend & Frontend Developer',
+                    period: '2022',
+                    link: 'edulive-demo.vn',
+                    description: 'Tech Stack: ReactJS, WebRTC, Socket.io, MongoDB, AWS S3.\nBuilt live virtual classrooms featuring interactive whiteboards and instant quiz grading with sub-200ms latency.'
+                }
+            ],
+            education: [
+                {
+                    id: 'edu-1',
+                    school: 'Hanoi University of Science and Technology (HUST)',
+                    degree: 'B.Eng. in Information Technology – Computer Science',
+                    period: '09/2015 – 06/2020',
+                    gpa: 'GPA: 3.65 / 4.0 (Distinction)'
+                }
+            ],
+            certs: [
+                { id: 'cert-1', name: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon Web Services', year: '2024' },
+                { id: 'cert-2', name: 'TOEIC Certificate (Score: 865 / 990)', issuer: 'IIG Vietnam', year: '2023' }
+            ]
+        };
+
+        const EMPTY_DATA = {
+            settings: { ...SAMPLE_DATA_VI.settings },
+            personal: {
+                avatar: '',
+                fullName: '',
+                jobTitle: '',
+                phone: '',
+                email: '',
+                address: '',
+                dob: '',
+                website: '',
+                summary: ''
+            },
+            skillLevels: [],
+            skillGroups: [],
+            experiences: [],
+            projects: [],
+            education: [],
+            certs: []
+        };
+
+        let cvData = JSON.parse(JSON.stringify(SAMPLE_DATA_VI));
+        let currentZoom = 0.72;
+        let isMobilePreview = false;
+
+        /* ==========================================================================
+           2. KHỞI TẠO & LƯU TRỮ LOCALSTORAGE
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromStorage();
+            syncStateToUI();
+            applyCSSVariables();
+            renderAllEditors();
+            renderCV();
+
+            setTimeout(() => {
+                if (window.innerWidth >= 1024) {
+                    autoFitZoom();
+                }
+            }, 60);
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) {
+                    document.getElementById('editor-panel').classList.remove('hidden');
+                    const prev = document.getElementById('preview-panel');
+                    prev.classList.remove('hidden');
+                    prev.classList.add('flex');
+                    autoFitZoom();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                const wrap = document.getElementById('data-dropdown-wrapper');
+                const menu = document.getElementById('data-dropdown-menu');
+                if (wrap && menu && !wrap.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+
+        function loadFromStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return;
+
+                const lang = (parsed.settings && parsed.settings.language) || 'vi';
+                cvData = {
+                    settings: {
+                        ...SAMPLE_DATA_VI.settings,
+                        ...(parsed.settings || {}),
+                        sectionTitles: {
+                            ...DEFAULT_SECTION_TITLES[lang],
+                            ...((parsed.settings && parsed.settings.sectionTitles) || {})
+                        },
+                        sectionVisibility: {
+                            ...DEFAULT_SECTION_VISIBILITY,
+                            ...((parsed.settings && parsed.settings.sectionVisibility) || {})
+                        }
+                    },
+                    personal: { ...SAMPLE_DATA_VI.personal, ...(parsed.personal || {}) },
+                    skillLevels: Array.isArray(parsed.skillLevels) ? parsed.skillLevels : [],
+                    skillGroups: Array.isArray(parsed.skillGroups) ? parsed.skillGroups : [],
+                    experiences: Array.isArray(parsed.experiences) ? parsed.experiences : [],
+                    projects: Array.isArray(parsed.projects) ? parsed.projects : [],
+                    education: Array.isArray(parsed.education) ? parsed.education : [],
+                    certs: Array.isArray(parsed.certs) ? parsed.certs : []
+                };
+            } catch (e) {
+                console.warn('Không thể đọc dữ liệu đã lưu:', e);
+            }
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(cvData));
+            } catch (e) {
+                console.warn('Không thể lưu vào localStorage:', e);
+            }
+        }
+
+        /* ==========================================================================
+           3. ĐIỀU KHIỂN ĐẦU MỤC (ẨN/HIỆN, ĐỔI TÊN) & NGÔN NGỮ VI / EN
+           ========================================================================== */
+        function getSectionTitle(key) {
+            const lang = cvData.settings.language || 'vi';
+            const titles = cvData.settings.sectionTitles || {};
+            if (titles[key] && titles[key].trim()) {
+                return titles[key].trim();
+            }
+            return DEFAULT_SECTION_TITLES[lang][key] || DEFAULT_SECTION_TITLES.vi[key] || '';
+        }
+
+        function isSectionVisible(key) {
+            const vis = cvData.settings.sectionVisibility || {};
+            return vis[key] !== false;
+        }
+
+        function syncSectionControlsUI() {
+            const keys = ['contact', 'summary', 'skills', 'experience', 'projects', 'education', 'certs'];
+            keys.forEach(key => {
+                const visible = isSectionVisible(key);
+                const titleVal = getSectionTitle(key);
+
+                const inpTitle = document.getElementById('inp-title-' + key);
+                if (inpTitle && inpTitle.value !== titleVal) {
+                    inpTitle.value = titleVal;
+                }
+
+                const btnVis = document.getElementById('btn-vis-' + key);
+                const badgeHidden = document.getElementById('badge-hidden-' + key);
+                const cardEl = document.getElementById('card-sec-' + key);
+
+                if (badgeHidden) badgeHidden.classList.toggle('hidden', visible);
+                if (cardEl) cardEl.classList.toggle('opacity-65', !visible);
+
+                if (btnVis) {
+                    if (visible) {
+                        btnVis.className = 'px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+                        btnVis.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>${key === 'contact' ? 'Đang hiện' : 'Hiện'}</span>`;
+                    } else {
+                        btnVis.className = 'px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition flex items-center gap-1 bg-slate-200 text-slate-600 border-slate-300 hover:bg-slate-300';
+                        btnVis.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>Đang ẩn</span>`;
+                    }
+                }
+            });
+        }
+
+        function toggleSectionVisibility(key) {
+            if (!cvData.settings.sectionVisibility) {
+                cvData.settings.sectionVisibility = { ...DEFAULT_SECTION_VISIBILITY };
+            }
+            const nextState = !isSectionVisible(key);
+            cvData.settings.sectionVisibility[key] = nextState;
+            syncSectionControlsUI();
+            saveToStorage();
+            renderCV();
+            showToast(nextState ? 'Đã hiển thị mục trên CV' : 'Đã ẩn mục khỏi CV');
+        }
+
+        function updateSectionTitle(key, value) {
+            if (!cvData.settings.sectionTitles) {
+                cvData.settings.sectionTitles = { ...DEFAULT_SECTION_TITLES[cvData.settings.language || 'vi'] };
+            }
+            cvData.settings.sectionTitles[key] = value;
+            saveToStorage();
+            renderCV();
+        }
+
+        function updateLanguageButtonsUI() {
+            const lang = cvData.settings.language || 'vi';
+            ['vi', 'en'].forEach(code => {
+                const btn = document.getElementById('btn-lang-' + code);
+                if (!btn) return;
+                if (code === lang) {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 bg-white text-blue-800 shadow-2xs border border-slate-200/80';
+                } else {
+                    btn.className = 'px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900';
+                }
+            });
+        }
+
+        function translatePeriodLabel(periodStr, targetLang) {
+            if (!periodStr) return periodStr;
+            if (targetLang === 'en') {
+                return periodStr.replace(/Hiện tại/gi, 'Present').replace(/Nay/gi, 'Present');
+            }
+            return periodStr.replace(/Present/gi, 'Hiện tại').replace(/Current/gi, 'Hiện tại');
+        }
+
+        function setCVLanguage(targetLang) {
+            const prevLang = cvData.settings.language || 'vi';
+            if (prevLang === targetLang) return;
+
+            cvData.settings.language = targetLang;
+            if (!cvData.settings.sectionTitles) {
+                cvData.settings.sectionTitles = {};
+            }
+
+            const keys = ['contact', 'summary', 'skills', 'experience', 'projects', 'education', 'certs'];
+            keys.forEach(k => {
+                const cur = (cvData.settings.sectionTitles[k] || '').trim();
+                const prevDefault = DEFAULT_SECTION_TITLES[prevLang][k];
+                if (!cur || cur.toLowerCase() === prevDefault.toLowerCase()) {
+                    cvData.settings.sectionTitles[k] = DEFAULT_SECTION_TITLES[targetLang][k];
+                }
+            });
+
+            (cvData.experiences || []).forEach(item => {
+                item.period = translatePeriodLabel(item.period, targetLang);
+            });
+            (cvData.projects || []).forEach(item => {
+                item.period = translatePeriodLabel(item.period, targetLang);
+            });
+
+            updateLanguageButtonsUI();
+            syncSectionControlsUI();
+            renderAllEditors();
+            saveToStorage();
+            renderCV();
+
+            const isDefaultSample =
+                (prevLang === 'vi' && cvData.personal.fullName === SAMPLE_DATA_VI.personal.fullName) ||
+                (prevLang === 'en' && cvData.personal.fullName === SAMPLE_DATA_EN.personal.fullName);
+
+            if (isDefaultSample) {
+                openConfirmModal(
+                    targetLang === 'en' ? 'Chuyển toàn bộ dữ liệu mẫu sang tiếng Anh?' : 'Chuyển toàn bộ dữ liệu mẫu sang tiếng Việt?',
+                    targetLang === 'en'
+                        ? 'Bạn đang dùng CV mẫu tiếng Việt. Bạn có muốn chuyển toàn bộ nội dung mẫu sang tiếng Anh để xem trước ngay không?'
+                        : 'Bạn đang dùng CV mẫu tiếng Anh. Bạn có muốn chuyển toàn bộ nội dung mẫu về tiếng Việt không?',
+                    () => {
+                        const keepSettings = {
+                            ...cvData.settings,
+                            language: targetLang,
+                            sectionTitles: { ...DEFAULT_SECTION_TITLES[targetLang] }
+                        };
+                        const source = targetLang === 'en' ? SAMPLE_DATA_EN : SAMPLE_DATA_VI;
+                        cvData = JSON.parse(JSON.stringify(source));
+                        cvData.settings = keepSettings;
+                        syncStateToUI();
+                        renderAllEditors();
+                        saveToStorage();
+                        renderCV();
+                        showToast(targetLang === 'en' ? 'Switched sample CV to English!' : 'Đã chuyển CV mẫu sang Tiếng Việt!');
+                    }
+                );
+            } else {
+                showToast(targetLang === 'en' ? 'Switched CV headings to English' : 'Đã chuyển đầu mục CV sang Tiếng Việt');
+            }
+        }
+
+        /* ==========================================================================
+           4. ĐỒNG BỘ GIAO DIỆN FORM & TÙY CHỈNH MÀU SẮC / FONT
+           ========================================================================== */
+        function syncStateToUI() {
+            const s = cvData.settings;
+            const p = cvData.personal;
+
+            document.getElementById('inp-accent-color').value = s.accentColor || '#1e3a8a';
+            document.getElementById('lbl-accent-hex').textContent = (s.accentColor || '#1e3a8a').toUpperCase();
+            document.getElementById('sel-font-family').value = s.fontFamily || "'Inter', sans-serif";
+            document.getElementById('sel-font-size').value = String(s.fontSize || '13.5');
+            document.getElementById('sel-line-height').value = String(s.lineHeight || '1.5');
+
+            document.getElementById('chk-show-avatar').checked = s.showAvatar !== false;
+            document.getElementById('chk-round-avatar').checked = s.roundAvatar !== false;
+            updateAvatarPreviewBox();
+
+            document.getElementById('inp-fullName').value = p.fullName || '';
+            document.getElementById('inp-jobTitle').value = p.jobTitle || '';
+            document.getElementById('inp-phone').value = p.phone || '';
+            document.getElementById('inp-email').value = p.email || '';
+            document.getElementById('inp-address').value = p.address || '';
+            document.getElementById('inp-dob').value = p.dob || '';
+            document.getElementById('inp-website').value = p.website || '';
+            document.getElementById('inp-summary').value = p.summary || '';
+
+            document.getElementById('chk-skill-percent').checked = s.skillShowPercent !== false;
+            updateSkillStyleButtonsUI();
+            updateTemplateButtonsUI();
+            updateLanguageButtonsUI();
+            syncSectionControlsUI();
+        }
+
+        function applyCSSVariables() {
+            const root = document.documentElement;
+            const hex = cvData.settings.accentColor || '#1e3a8a';
+            root.style.setProperty('--cv-accent', hex);
+            root.style.setProperty('--cv-accent-light', hexToRgba(hex, 0.08));
+            root.style.setProperty('--cv-accent-border', hexToRgba(hex, 0.25));
+            root.style.setProperty('--cv-font', cvData.settings.fontFamily || "'Inter', sans-serif");
+            root.style.setProperty('--cv-font-size', (cvData.settings.fontSize || '13.5') + 'px');
+            root.style.setProperty('--cv-line-height', String(cvData.settings.lineHeight || '1.5'));
+        }
+
+        function hexToRgba(hex, alpha) {
+            const clean = (hex || '#1e3a8a').replace('#', '');
+            if (clean.length !== 6) return `rgba(30, 58, 138, ${alpha})`;
+            const r = parseInt(clean.substring(0, 2), 16) || 30;
+            const g = parseInt(clean.substring(2, 4), 16) || 58;
+            const b = parseInt(clean.substring(4, 6), 16) || 138;
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        function setTemplate(tpl) {
+            cvData.settings.template = tpl;
+            updateTemplateButtonsUI();
+            saveToStorage();
+            renderCV();
+        }
+
+        function updateTemplateButtonsUI() {
+            ['modern', 'ats', 'executive'].forEach(t => {
+                const btn = document.getElementById('btn-tpl-' + t);
+                if (!btn) return;
+                if (t === cvData.settings.template) {
+                    btn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 bg-white text-blue-800 shadow-2xs border border-slate-200/80';
+                } else {
+                    btn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900';
+                }
+            });
+        }
+
+        function setAccentColor(hex) {
+            cvData.settings.accentColor = hex;
+            document.getElementById('inp-accent-color').value = hex;
+            document.getElementById('lbl-accent-hex').textContent = hex.toUpperCase();
+            applyCSSVariables();
+            saveToStorage();
+            renderCV();
+        }
+
+        function updateTypography() {
+            cvData.settings.fontFamily = document.getElementById('sel-font-family').value;
+            cvData.settings.fontSize = document.getElementById('sel-font-size').value;
+            cvData.settings.lineHeight = document.getElementById('sel-line-height').value;
+            applyCSSVariables();
+            saveToStorage();
+            renderCV();
+        }
+
+        function updatePersonal() {
+            cvData.settings.showAvatar = document.getElementById('chk-show-avatar').checked;
+            cvData.settings.roundAvatar = document.getElementById('chk-round-avatar').checked;
+            cvData.personal.fullName = document.getElementById('inp-fullName').value;
+            cvData.personal.jobTitle = document.getElementById('inp-jobTitle').value;
+            cvData.personal.phone = document.getElementById('inp-phone').value;
+            cvData.personal.email = document.getElementById('inp-email').value;
+            cvData.personal.address = document.getElementById('inp-address').value;
+            cvData.personal.dob = document.getElementById('inp-dob').value;
+            cvData.personal.website = document.getElementById('inp-website').value;
+            cvData.personal.summary = document.getElementById('inp-summary').value;
+
+            updateAvatarPreviewBox();
+            saveToStorage();
+            renderCV();
+        }
+
+        /* ==========================================================================
+           5. XỬ LÝ ẢNH ĐẠI DIỆN
+           ========================================================================== */
+        function handleAvatarUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const size = 320;
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        const minSide = Math.min(img.width, img.height);
+                        const sx = (img.width - minSide) / 2;
+                        const sy = (img.height - minSide) / 2;
+                        ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+                        cvData.personal.avatar = canvas.toDataURL('image/jpeg', 0.88);
+                        cvData.settings.showAvatar = true;
+                        document.getElementById('chk-show-avatar').checked = true;
+                        updateAvatarPreviewBox();
+                        saveToStorage();
+                        renderCV();
+                        showToast('Đã cập nhật ảnh đại diện!');
+                    } catch (err) {
+                        showToast('Không thể xử lý ảnh này', true);
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeAvatar() {
+            cvData.personal.avatar = '';
+            document.getElementById('inp-avatar-file').value = '';
+            updateAvatarPreviewBox();
+            saveToStorage();
+            renderCV();
+            showToast('Đã xóa ảnh đại diện');
+        }
+
+        function updateAvatarPreviewBox() {
+            const box = document.getElementById('editor-avatar-box');
+            const img = document.getElementById('editor-avatar-img');
+            const icon = document.getElementById('editor-avatar-icon');
+            const btnRemove = document.getElementById('btn-remove-avatar');
+
+            box.className = cvData.settings.roundAvatar
+                ? 'w-16 h-16 rounded-full overflow-hidden bg-slate-200 border-2 border-white shadow-xs shrink-0 flex items-center justify-center'
+                : 'w-16 h-16 rounded-xl overflow-hidden bg-slate-200 border-2 border-white shadow-xs shrink-0 flex items-center justify-center';
+
+            if (cvData.personal.avatar) {
+                img.src = cvData.personal.avatar;
+                img.classList.remove('hidden');
+                icon.classList.add('hidden');
+                btnRemove.classList.remove('hidden');
+            } else {
+                img.src = '';
+                img.classList.add('hidden');
+                icon.classList.remove('hidden');
+                btnRemove.classList.add('hidden');
+            }
+        }
+
+        /* ==========================================================================
+           6. TRÌNH QUẢN LÝ CÁC MỤC ĐỘNG (KỸ NĂNG LEVEL, KINH NGHIỆM, DỰ ÁN...)
+           ========================================================================== */
+        function escAttr(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function getLevelRankText(val) {
+            const n = Number(val) || 0;
+            if (n >= 90) return 'Chuyên gia';
+            if (n >= 75) return 'Thành thạo';
+            if (n >= 55) return 'Khá';
+            return 'Cơ bản';
+        }
+
+        function setSkillBarStyle(style) {
+            cvData.settings.skillBarStyle = style;
+            updateSkillStyleButtonsUI();
+            saveToStorage();
+            renderCV();
+        }
+
+        function updateSkillStyleButtonsUI() {
+            const style = cvData.settings.skillBarStyle || 'bar';
+            const btnBar = document.getElementById('btn-skill-style-bar');
+            const btnDots = document.getElementById('btn-skill-style-dots');
+            if (style === 'bar') {
+                btnBar.className = 'px-2.5 py-1 rounded-md text-[11px] font-semibold transition bg-white text-blue-800 shadow-2xs';
+                btnDots.className = 'px-2.5 py-1 rounded-md text-[11px] font-medium transition text-slate-600 hover:text-slate-900';
+            } else {
+                btnDots.className = 'px-2.5 py-1 rounded-md text-[11px] font-semibold transition bg-white text-blue-800 shadow-2xs';
+                btnBar.className = 'px-2.5 py-1 rounded-md text-[11px] font-medium transition text-slate-600 hover:text-slate-900';
+            }
+        }
+
+        function updateSkillOptions() {
+            cvData.settings.skillShowPercent = document.getElementById('chk-skill-percent').checked;
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderAllEditors() {
+            renderSkillLevelsEditor();
+            renderSkillGroupsEditor();
+            renderExperiencesEditor();
+            renderProjectsEditor();
+            renderEducationEditor();
+            renderCertsEditor();
+        }
+
+        function renderSkillLevelsEditor() {
+            const el = document.getElementById('editor-skill-levels');
+            if (!cvData.skillLevels || cvData.skillLevels.length === 0) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Chưa có kỹ năng nào có thanh Level.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.skillLevels.map((item, idx) => {
+                const lvl = Number(item.level) || 50;
+                return `
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <input type="text" value="${escAttr(item.name)}" oninput="updateListItem('skillLevels', ${idx}, 'name', this.value)" placeholder="Tên kỹ năng (VD: ReactJS, Tiếng Anh...)" class="flex-1 px-2.5 py-1.5 text-xs font-semibold bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        <div class="flex items-center gap-1 shrink-0">
+                            ${idx > 0 ? `<button type="button" onclick="moveListItem('skillLevels', ${idx}, -1)" title="Lên" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↑</button>` : ''}
+                            ${idx < cvData.skillLevels.length - 1 ? `<button type="button" onclick="moveListItem('skillLevels', ${idx}, 1)" title="Xuống" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↓</button>` : ''}
+                            <button type="button" onclick="removeListItem('skillLevels', ${idx})" title="Xóa" class="px-1.5 py-0.5 text-rose-500 hover:text-rose-700 text-xs font-bold">✕</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="range" min="10" max="100" step="5" value="${lvl}" oninput="onSkillSliderInput(${idx}, this.value)" class="flex-1 accent-blue-700 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+                        <div class="flex items-center gap-1.5 shrink-0 min-w-[108px] justify-end">
+                            <span id="lbl-skl-pct-${idx}" class="font-mono font-bold text-xs text-blue-700">${lvl}%</span>
+                            <span id="lbl-skl-rank-${idx}" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200/80">${getLevelRankText(lvl)}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function onSkillSliderInput(index, rawVal) {
+            const val = parseInt(rawVal, 10) || 50;
+            if (!cvData.skillLevels[index]) return;
+            cvData.skillLevels[index].level = val;
+            const pctEl = document.getElementById(`lbl-skl-pct-${index}`);
+            const rankEl = document.getElementById(`lbl-skl-rank-${index}`);
+            if (pctEl) pctEl.textContent = val + '%';
+            if (rankEl) rankEl.textContent = getLevelRankText(val);
+            saveToStorage();
+            renderCV();
+        }
+
+        function addSkillLevel() {
+            cvData.skillLevels.push({ id: 'skl-' + Date.now(), name: '', level: 80 });
+            renderSkillLevelsEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderSkillGroupsEditor() {
+            const el = document.getElementById('editor-skill-groups');
+            if (!cvData.skillGroups || cvData.skillGroups.length === 0) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-1">Không có nhóm kỹ năng liệt kê.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.skillGroups.map((item, idx) => `
+                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                    <input type="text" value="${escAttr(item.category)}" oninput="updateListItem('skillGroups', ${idx}, 'category', this.value)" placeholder="Danh mục (VD: Ngoại ngữ)" class="w-full sm:w-1/3 px-2.5 py-1.5 text-xs font-semibold bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                    <input type="text" value="${escAttr(item.items)}" oninput="updateListItem('skillGroups', ${idx}, 'items', this.value)" placeholder="Chi tiết kỹ năng..." class="w-full sm:flex-1 px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                    <button type="button" onclick="removeListItem('skillGroups', ${idx})" class="px-2 py-1 text-rose-500 hover:text-rose-700 text-xs font-bold self-end sm:self-center">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addSkillGroup() {
+            cvData.skillGroups.push({ id: 'skg-' + Date.now(), category: '', items: '' });
+            renderSkillGroupsEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderExperiencesEditor() {
+            const el = document.getElementById('editor-experiences');
+            if (!cvData.experiences.length) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Chưa có mục kinh nghiệm làm việc nào.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.experiences.map((item, idx) => `
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+                        <span class="text-xs font-bold text-slate-700">#${idx + 1}. ${escAttr(item.role) || 'Vị trí công việc'}</span>
+                        <div class="flex items-center gap-1">
+                            ${idx > 0 ? `<button type="button" onclick="moveListItem('experiences', ${idx}, -1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↑</button>` : ''}
+                            ${idx < cvData.experiences.length - 1 ? `<button type="button" onclick="moveListItem('experiences', ${idx}, 1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↓</button>` : ''}
+                            <button type="button" onclick="removeListItem('experiences', ${idx})" class="px-1.5 py-0.5 text-rose-500 hover:text-rose-700 text-xs font-bold ml-1">✕</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Chức danh / Vị trí</label>
+                            <input type="text" value="${escAttr(item.role)}" oninput="updateListItem('experiences', ${idx}, 'role', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Thời gian</label>
+                            <input type="text" value="${escAttr(item.period)}" oninput="updateListItem('experiences', ${idx}, 'period', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tên công ty / Tổ chức</label>
+                            <input type="text" value="${escAttr(item.company)}" oninput="updateListItem('experiences', ${idx}, 'company', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Mô tả công việc & Thành tựu (Mỗi dòng 1 ý)</label>
+                            <textarea rows="4" oninput="updateListItem('experiences', ${idx}, 'description', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 leading-relaxed">${escAttr(item.description)}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addExperience() {
+            cvData.experiences.push({ id: 'exp-' + Date.now(), role: '', company: '', period: '', description: '' });
+            renderExperiencesEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderProjectsEditor() {
+            const el = document.getElementById('editor-projects');
+            if (!cvData.projects.length) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Chưa có dự án nổi bật nào.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.projects.map((item, idx) => `
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+                        <span class="text-xs font-bold text-slate-700">#${idx + 1}. ${escAttr(item.name) || 'Tên dự án'}</span>
+                        <div class="flex items-center gap-1">
+                            ${idx > 0 ? `<button type="button" onclick="moveListItem('projects', ${idx}, -1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↑</button>` : ''}
+                            ${idx < cvData.projects.length - 1 ? `<button type="button" onclick="moveListItem('projects', ${idx}, 1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↓</button>` : ''}
+                            <button type="button" onclick="removeListItem('projects', ${idx})" class="px-1.5 py-0.5 text-rose-500 hover:text-rose-700 text-xs font-bold ml-1">✕</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tên dự án</label>
+                            <input type="text" value="${escAttr(item.name)}" oninput="updateListItem('projects', ${idx}, 'name', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Vai trò</label>
+                            <input type="text" value="${escAttr(item.role)}" oninput="updateListItem('projects', ${idx}, 'role', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Thời gian</label>
+                            <input type="text" value="${escAttr(item.period)}" oninput="updateListItem('projects', ${idx}, 'period', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Link dự án / GitHub</label>
+                            <input type="text" value="${escAttr(item.link)}" oninput="updateListItem('projects', ${idx}, 'link', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Công nghệ & Kết quả đạt được</label>
+                            <textarea rows="3" oninput="updateListItem('projects', ${idx}, 'description', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 leading-relaxed">${escAttr(item.description)}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addProject() {
+            cvData.projects.push({ id: 'proj-' + Date.now(), name: '', role: '', period: '', link: '', description: '' });
+            renderProjectsEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderEducationEditor() {
+            const el = document.getElementById('editor-education');
+            if (!cvData.education.length) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Chưa có thông tin học vấn.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.education.map((item, idx) => `
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+                        <span class="text-xs font-bold text-slate-700">#${idx + 1}. ${escAttr(item.school) || 'Trường học'}</span>
+                        <div class="flex items-center gap-1">
+                            ${idx > 0 ? `<button type="button" onclick="moveListItem('education', ${idx}, -1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↑</button>` : ''}
+                            ${idx < cvData.education.length - 1 ? `<button type="button" onclick="moveListItem('education', ${idx}, 1)" class="px-1.5 py-0.5 text-slate-500 hover:text-slate-800 text-xs font-bold">↓</button>` : ''}
+                            <button type="button" onclick="removeListItem('education', ${idx})" class="px-1.5 py-0.5 text-rose-500 hover:text-rose-700 text-xs font-bold ml-1">✕</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Tên trường Đại học / Học viện</label>
+                            <input type="text" value="${escAttr(item.school)}" oninput="updateListItem('education', ${idx}, 'school', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Chuyên ngành / Bằng cấp</label>
+                            <input type="text" value="${escAttr(item.degree)}" oninput="updateListItem('education', ${idx}, 'degree', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Thời gian</label>
+                            <input type="text" value="${escAttr(item.period)}" oninput="updateListItem('education', ${idx}, 'period', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1">GPA / Thành tích</label>
+                            <input type="text" value="${escAttr(item.gpa)}" oninput="updateListItem('education', ${idx}, 'gpa', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addEducation() {
+            cvData.education.push({ id: 'edu-' + Date.now(), school: '', degree: '', period: '', gpa: '' });
+            renderEducationEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function renderCertsEditor() {
+            const el = document.getElementById('editor-certs');
+            if (!cvData.certs.length) {
+                el.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-2">Chưa có chứng chỉ hoặc giải thưởng nào.</p>`;
+                return;
+            }
+            el.innerHTML = cvData.certs.map((item, idx) => `
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+                    <input type="text" value="${escAttr(item.name)}" oninput="updateListItem('certs', ${idx}, 'name', this.value)" placeholder="Tên chứng chỉ / giải thưởng" class="sm:col-span-6 px-2.5 py-1.5 text-xs font-semibold bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                    <input type="text" value="${escAttr(item.issuer)}" oninput="updateListItem('certs', ${idx}, 'issuer', this.value)" placeholder="Tổ chức cấp" class="sm:col-span-3 px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                    <input type="text" value="${escAttr(item.year)}" oninput="updateListItem('certs', ${idx}, 'year', this.value)" placeholder="Năm" class="sm:col-span-2 px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600">
+                    <button type="button" onclick="removeListItem('certs', ${idx})" class="sm:col-span-1 px-2 py-1 text-rose-500 hover:text-rose-700 text-xs font-bold justify-self-end">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addCert() {
+            cvData.certs.push({ id: 'cert-' + Date.now(), name: '', issuer: '', year: '' });
+            renderCertsEditor();
+            saveToStorage();
+            renderCV();
+        }
+
+        function updateListItem(key, index, field, value) {
+            if (cvData[key] && cvData[key][index]) {
+                cvData[key][index][field] = value;
+                saveToStorage();
+                renderCV();
+            }
+        }
+
+        function removeListItem(key, index) {
+            if (!cvData[key]) return;
+            cvData[key].splice(index, 1);
+            renderAllEditors();
+            saveToStorage();
+            renderCV();
+        }
+
+        function moveListItem(key, index, delta) {
+            const target = index + delta;
+            if (!cvData[key] || target < 0 || target >= cvData[key].length) return;
+            const tmp = cvData[key][index];
+            cvData[key][index] = cvData[key][target];
+            cvData[key][target] = tmp;
+            renderAllEditors();
+            saveToStorage();
+            renderCV();
+        }
+
+        /* ==========================================================================
+           7. ENGINE TÁCH TRANG A4 CHÍNH XÁC TUYỆT ĐỐI (794px x 1123px)
+           ========================================================================== */
+        function escHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function formatBulletsHTML(text) {
+            if (!text || !text.trim()) return '';
+            const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+            if (!lines.length) return '';
+            return `<ul class="cv-bullets text-slate-700">
+                ${lines.map(l => `<li>${escHTML(l.replace(/^[•\-\*]\s*/, ''))}</li>`).join('')}
+            </ul>`;
+        }
+
+        function getAvatarTag(sizeClass = 'w-24 h-24', borderClass = 'border-2 border-white shadow-sm') {
+            if (cvData.settings.showAvatar === false || !cvData.personal.avatar) return '';
+            const roundClass = cvData.settings.roundAvatar !== false ? 'rounded-full' : 'rounded-xl';
+            return `<img src="${cvData.personal.avatar}" alt="Avatar" class="${sizeClass} ${roundClass} ${borderClass} object-cover shrink-0">`;
+        }
+
+        function renderSkillLevelItemHTML(item, theme = 'light') {
+            const fallbackName = (cvData.settings.language === 'en') ? 'Skill' : 'Kỹ năng';
+            const name = escHTML(item.name) || fallbackName;
+            const lvl = Math.min(100, Math.max(10, Number(item.level) || 50));
+            const style = cvData.settings.skillBarStyle || 'bar';
+            const showPct = cvData.settings.skillShowPercent !== false;
+            const accent = cvData.settings.accentColor || '#1e3a8a';
+
+            const isDark = theme === 'dark';
+            const titleColor = isDark ? 'text-white' : 'text-slate-800';
+            const subColor = isDark ? 'text-white/80' : 'text-slate-500';
+            const trackBg = isDark ? 'rgba(255,255,255,0.22)' : '#e2e8f0';
+            const fillBg = isDark ? '#ffffff' : accent;
+
+            if (style === 'dots') {
+                const activeDots = Math.round(lvl / 20);
+                let dots = '';
+                for (let i = 1; i <= 5; i++) {
+                    dots += `<span style="display:inline-block;width:9px;height:9px;border-radius:9999px;background:${i <= activeDots ? fillBg : trackBg};"></span>`;
+                }
+                return `
+                <div class="flex items-center justify-between gap-2 py-0.5">
+                    <span class="font-semibold ${titleColor} text-[0.93em] truncate">${name}</span>
+                    <div class="flex items-center gap-2 shrink-0">
+                        ${showPct ? `<span class="text-[0.82em] font-medium ${subColor}">${lvl}%</span>` : ''}
+                        <div class="flex items-center gap-1">${dots}</div>
+                    </div>
+                </div>`;
+            }
+
+            return `
+            <div class="space-y-1 py-0.5">
+                <div class="flex items-baseline justify-between gap-2">
+                    <span class="font-semibold ${titleColor} text-[0.93em]">${name}</span>
+                    ${showPct ? `<span class="text-[0.82em] font-semibold ${subColor} shrink-0">${lvl}%</span>` : ''}
+                </div>
+                <div style="width:100%;height:6px;border-radius:9999px;background:${trackBg};overflow:hidden;">
+                    <div style="width:${lvl}%;height:100%;border-radius:9999px;background:${fillBg};"></div>
+                </div>
+            </div>`;
+        }
+
+        function measureBlockPx(sandbox, widthPx, htmlContent) {
+            sandbox.innerHTML = `<div style="width:${widthPx}px;padding:0;margin:0;overflow:hidden;">${htmlContent}</div>`;
+            const node = sandbox.firstElementChild;
+            if (!node) return 0;
+            const rect = node.getBoundingClientRect();
+            return Math.ceil(rect.height);
+        }
+
+        function paginateAtomicBlocks(blocks, firstPageMaxH, nextPageMaxH, sandbox, widthPx) {
+            const pages = [[]];
+            let pageIdx = 0;
+            let usedH = 0;
+
+            for (let i = 0; i < blocks.length; i++) {
+                const blk = blocks[i];
+                const limitH = pageIdx === 0 ? firstPageMaxH : nextPageMaxH;
+                const h = measureBlockPx(sandbox, widthPx, blk.html);
+
+                if (usedH > 0 && (usedH + h > limitH)) {
+                    pages.push([]);
+                    pageIdx++;
+                    usedH = 0;
+                }
+
+                pages[pageIdx].push(blk.html);
+                usedH += h;
+            }
+
+            return pages;
+        }
+
+        function updateToolbarPageStatus(totalPages) {
+            const summaryEl = document.getElementById('toolbar-page-summary');
+            const statusEl = document.getElementById('toolbar-page-status');
+            if (!summaryEl || !statusEl) return;
+
+            const langBadge = (cvData.settings.language === 'en') ? 'EN' : 'VI';
+            summaryEl.innerHTML = `Khổ giấy A4 (${langBadge}) &bull; ${totalPages} trang`;
+            if (totalPages === 1) {
+                statusEl.textContent = 'Vừa chuẩn 1 trang';
+                statusEl.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+            } else {
+                statusEl.textContent = `Dài sang ${totalPages} trang (Nên cân đối)`;
+                statusEl.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200';
+            }
+        }
+
+        function renderCV() {
+            const pagesRoot = document.getElementById('cv-pages-root');
+            const sandbox = document.getElementById('cv-measure-sandbox');
+            if (!pagesRoot || !sandbox) return;
+
+            try {
+                const tpl = cvData.settings.template || 'modern';
+                let pageInnerList = [];
+
+                if (tpl === 'modern') {
+                    pageInnerList = buildModernPages(sandbox);
+                } else if (tpl === 'ats') {
+                    pageInnerList = buildATSPages(sandbox);
+                } else {
+                    pageInnerList = buildExecutivePages(sandbox);
+                }
+
+                sandbox.innerHTML = '';
+                if (!pageInnerList || pageInnerList.length === 0) {
+                    pageInnerList = ['<div class="p-12"></div>'];
+                }
+
+                const total = pageInnerList.length;
+                updateToolbarPageStatus(total);
+
+                pagesRoot.innerHTML = pageInnerList.map((innerHTML, idx) => {
+                    const pageNum = idx + 1;
+                    const tipBadge = total > 1
+                        ? (pageNum === 1
+                            ? `<span class="text-[11px] font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">Nội dung vượt quá 1 trang A4 — Đã tự động tách sang Trang 2</span>`
+                            : `<span class="text-[11px] font-medium text-slate-500">Phần tiếp theo từ Trang ${pageNum - 1}</span>`)
+                        : `<span class="text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Gói gọn chuẩn 1 tờ A4</span>`;
+
+                    return `
+                    <div class="cv-page-wrapper">
+                        <div class="cv-page-header-bar no-print">
+                            <span class="text-xs font-bold text-slate-700 bg-white px-3 py-1 rounded-full shadow-2xs border border-slate-300/80">
+                                Trang ${pageNum} / ${total}
+                            </span>
+                            ${tipBadge}
+                        </div>
+                        <div class="a4-sheet">
+                            ${innerHTML}
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (err) {
+                console.error('Lỗi render CV:', err);
+                pagesRoot.innerHTML = `
+                <div class="cv-page-wrapper">
+                    <div class="a4-sheet p-12">
+                        <h1 class="text-2xl font-bold text-slate-900">${escHTML(cvData.personal.fullName || 'CV CỦA BẠN')}</h1>
+                        <p class="text-slate-600 mt-1">${escHTML(cvData.personal.jobTitle || '')}</p>
+                        <p class="text-slate-700 mt-4">${escHTML(cvData.personal.summary || '')}</p>
+                    </div>
+                </div>`;
+            }
+        }
+
+        /* MẪU 1: HIỆN ĐẠI 2 CỘT (260px + 534px = 794px) */
+        function buildModernPages(sandbox) {
+            const p = cvData.personal;
+            const accent = cvData.settings.accentColor || '#1e3a8a';
+
+            const leftMeasureW = 192;
+            const leftMaxH = A4_HEIGHT_PX - 68;
+            const rightMeasureW = 450;
+            const rightMaxH = A4_HEIGHT_PX - 84;
+
+            const leftBlocks = [];
+
+            leftBlocks.push({
+                html: `
+                <div class="text-center pb-4 mb-4 border-b border-white/20">
+                    ${cvData.settings.showAvatar !== false && p.avatar ? `
+                    <div class="flex justify-center mb-3">
+                        ${getAvatarTag('w-28 h-28', 'border-4 border-white/25 shadow-md')}
+                    </div>` : ''}
+                    <h1 class="text-[1.4em] font-extrabold tracking-tight uppercase leading-snug text-white">
+                        ${escHTML(p.fullName) || (cvData.settings.language === 'en' ? 'YOUR FULL NAME' : 'HỌ VÀ TÊN')}
+                    </h1>
+                    ${p.jobTitle ? `<p class="text-[0.94em] font-medium text-white/85 mt-1">${escHTML(p.jobTitle)}</p>` : ''}
+                </div>`
+            });
+
+            const hasContact = isSectionVisible('contact') && (p.phone || p.email || p.address || p.dob || p.website);
+            if (hasContact) {
+                leftBlocks.push({
+                    html: `
+                    <div class="mb-5 text-[0.89em]">
+                        <h2 class="text-[0.96em] font-bold uppercase tracking-wider text-white border-b border-white/25 pb-1 mb-2.5">${escHTML(getSectionTitle('contact'))}</h2>
+                        <div class="space-y-2 text-white/90">
+                            ${p.phone ? `<div class="flex items-start gap-2"><span class="opacity-75 font-bold shrink-0">Tel:</span><span>${escHTML(p.phone)}</span></div>` : ''}
+                            ${p.email ? `<div class="flex items-start gap-2 break-all"><span class="opacity-75 font-bold shrink-0">Email:</span><span>${escHTML(p.email)}</span></div>` : ''}
+                            ${p.address ? `<div class="flex items-start gap-2"><span class="opacity-75 font-bold shrink-0">Addr:</span><span>${escHTML(p.address)}</span></div>` : ''}
+                            ${p.dob ? `<div class="flex items-start gap-2"><span class="opacity-75 font-bold shrink-0">DOB:</span><span>${escHTML(p.dob)}</span></div>` : ''}
+                            ${p.website ? `<div class="flex items-start gap-2 break-words"><span class="opacity-75 font-bold shrink-0">Link:</span><span>${escHTML(p.website)}</span></div>` : ''}
+                        </div>
+                    </div>`
+                });
+            }
+
+            const hasSkills = isSectionVisible('skills') && ((cvData.skillLevels && cvData.skillLevels.length > 0) || (cvData.skillGroups && cvData.skillGroups.length > 0));
+            if (hasSkills) {
+                const firstSkillHTML = cvData.skillLevels.length > 0
+                    ? `<div class="mb-2">${renderSkillLevelItemHTML(cvData.skillLevels[0], 'dark')}</div>`
+                    : `<div class="text-[0.89em] mb-2">
+                        ${cvData.skillGroups[0].category ? `<div class="font-bold text-white">${escHTML(cvData.skillGroups[0].category)}</div>` : ''}
+                        <div class="text-white/85">${escHTML(cvData.skillGroups[0].items)}</div>
+                       </div>`;
+
+                leftBlocks.push({
+                    html: `
+                    <div>
+                        <h2 class="text-[0.96em] font-bold uppercase tracking-wider text-white border-b border-white/25 pb-1 mb-2.5">${escHTML(getSectionTitle('skills'))}</h2>
+                        ${firstSkillHTML}
+                    </div>`
+                });
+
+                const startLvlIdx = cvData.skillLevels.length > 0 ? 1 : 0;
+                for (let i = startLvlIdx; i < cvData.skillLevels.length; i++) {
+                    const isLastAll = (i === cvData.skillLevels.length - 1) && (!cvData.skillGroups || cvData.skillGroups.length === 0);
+                    leftBlocks.push({
+                        html: `<div class="${isLastAll ? 'mb-5' : 'mb-2'}">${renderSkillLevelItemHTML(cvData.skillLevels[i], 'dark')}</div>`
+                    });
+                }
+
+                const startGrpIdx = cvData.skillLevels.length > 0 ? 0 : 1;
+                for (let j = startGrpIdx; j < cvData.skillGroups.length; j++) {
+                    const grp = cvData.skillGroups[j];
+                    const isLastGrp = j === cvData.skillGroups.length - 1;
+                    leftBlocks.push({
+                        html: `
+                        <div class="text-[0.89em] ${isLastGrp ? 'mb-5' : 'mb-2.5'} mt-1.5">
+                            ${grp.category ? `<div class="font-bold text-white mb-0.5">${escHTML(grp.category)}</div>` : ''}
+                            <div class="text-white/85 leading-snug">${escHTML(grp.items)}</div>
+                        </div>`
+                    });
+                }
+            }
+
+            if (isSectionVisible('education') && cvData.education && cvData.education.length > 0) {
+                cvData.education.forEach((edu, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.education.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[0.96em] font-bold uppercase tracking-wider text-white border-b border-white/25 pb-1 mb-2.5">${escHTML(getSectionTitle('education'))}</h2>`
+                        : '';
+                    leftBlocks.push({
+                        html: `
+                        <div class="text-[0.89em] ${isLast ? 'mb-5' : 'mb-3'}">
+                            ${headerHTML}
+                            <div class="font-bold text-white leading-snug">${escHTML(edu.school)}</div>
+                            <div class="text-white/90 mt-0.5">${escHTML(edu.degree)}</div>
+                            ${edu.period ? `<div class="text-white/70 text-[0.88em] mt-0.5">${escHTML(edu.period)}</div>` : ''}
+                            ${edu.gpa ? `<div class="text-white/85 text-[0.88em] mt-0.5 italic">${escHTML(edu.gpa)}</div>` : ''}
+                        </div>`
+                    });
+                });
+            }
+
+            if (isSectionVisible('certs') && cvData.certs && cvData.certs.length > 0) {
+                cvData.certs.forEach((c, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.certs.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[0.96em] font-bold uppercase tracking-wider text-white border-b border-white/25 pb-1 mb-2.5">${escHTML(getSectionTitle('certs'))}</h2>`
+                        : '';
+                    leftBlocks.push({
+                        html: `
+                        <div class="text-[0.89em] ${isLast ? 'mb-2' : 'mb-2.5'}">
+                            ${headerHTML}
+                            <div class="font-semibold text-white leading-snug">${escHTML(c.name)}</div>
+                            <div class="text-white/75 text-[0.88em]">${escHTML(c.issuer)}${c.year ? ` (${escHTML(c.year)})` : ''}</div>
+                        </div>`
+                    });
+                });
+            }
+
+            const rightBlocks = [];
+
+            if (isSectionVisible('summary') && p.summary) {
+                rightBlocks.push({
+                    html: `
+                    <div class="mb-5">
+                        <h2 class="text-[1.06em] font-extrabold uppercase tracking-wider pb-1.5 mb-2.5 border-b-2" style="color:${accent};border-color:${accent};">
+                            ${escHTML(getSectionTitle('summary'))}
+                        </h2>
+                        <p class="text-slate-700 text-justify">${escHTML(p.summary)}</p>
+                    </div>`
+                });
+            }
+
+            if (isSectionVisible('experience') && cvData.experiences && cvData.experiences.length > 0) {
+                cvData.experiences.forEach((exp, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.experiences.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[1.06em] font-extrabold uppercase tracking-wider pb-1.5 mb-3 border-b-2" style="color:${accent};border-color:${accent};">
+                            ${escHTML(getSectionTitle('experience'))}
+                           </h2>`
+                        : '';
+                    rightBlocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-5' : 'mb-4'}">
+                            ${headerHTML}
+                            <div class="relative pl-3.5 border-l-2 border-slate-200">
+                                <span style="width:9px;height:9px;border-radius:9999px;background:${accent};position:absolute;left:-5.5px;top:6px;"></span>
+                                <div class="flex flex-wrap justify-between items-baseline gap-1">
+                                    <h3 class="font-bold text-[1.03em] text-slate-900">${escHTML(exp.role)}</h3>
+                                    <span class="text-[0.85em] font-semibold px-2 py-0.5 rounded" style="background:var(--cv-accent-light);color:${accent};">
+                                        ${escHTML(exp.period)}
+                                    </span>
+                                </div>
+                                <div class="font-semibold text-[0.94em] text-slate-600 mt-0.5">${escHTML(exp.company)}</div>
+                                ${formatBulletsHTML(exp.description)}
+                            </div>
+                        </div>`
+                    });
+                });
+            }
+
+            if (isSectionVisible('projects') && cvData.projects && cvData.projects.length > 0) {
+                cvData.projects.forEach((proj, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.projects.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[1.06em] font-extrabold uppercase tracking-wider pb-1.5 mb-3 border-b-2" style="color:${accent};border-color:${accent};">
+                            ${escHTML(getSectionTitle('projects'))}
+                           </h2>`
+                        : '';
+                    rightBlocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-2' : 'mb-3.5'}">
+                            ${headerHTML}
+                            <div class="p-3 rounded-lg bg-slate-50/90 border border-slate-200/90">
+                                <div class="flex justify-between items-baseline gap-2">
+                                    <h3 class="font-bold text-[1.02em] text-slate-900">${escHTML(proj.name)}</h3>
+                                    <span class="text-[0.86em] font-semibold text-slate-500 shrink-0">${escHTML(proj.period)}</span>
+                                </div>
+                                <div class="text-[0.9em] font-medium mt-0.5" style="color:${accent};">
+                                    ${escHTML(proj.role)} ${proj.link ? `<span class="text-slate-500 font-normal">| ${escHTML(proj.link)}</span>` : ''}
+                                </div>
+                                ${formatBulletsHTML(proj.description)}
+                            </div>
+                        </div>`
+                    });
+                });
+            }
+
+            const leftPages = paginateAtomicBlocks(leftBlocks, leftMaxH, leftMaxH, sandbox, leftMeasureW);
+            const rightPages = paginateAtomicBlocks(rightBlocks, rightMaxH, rightMaxH, sandbox, rightMeasureW);
+            const totalPages = Math.max(leftPages.length, rightPages.length, 1);
+
+            const outputPages = [];
+            for (let pIdx = 0; pIdx < totalPages; pIdx++) {
+                const lHTML = (leftPages[pIdx] || []).join('');
+                const rHTML = (rightPages[pIdx] || []).join('');
+                outputPages.push(`
+                <div style="display:flex;width:794px;height:1123px;">
+                    <aside style="width:260px;min-width:260px;height:1123px;padding:34px;background:${accent};color:#ffffff;overflow:hidden;">
+                        ${lHTML}
+                    </aside>
+                    <main style="width:534px;min-width:534px;height:1123px;padding:42px;background:#ffffff;color:#1f2937;overflow:hidden;">
+                        ${rHTML}
+                    </main>
+                </div>`);
+            }
+            return outputPages;
+        }
+
+        /* MẪU 2: CHUẨN ATS 1 CỘT (698px nội dung) */
+        function buildATSPages(sandbox) {
+            const p = cvData.personal;
+            const accent = cvData.settings.accentColor || '#1e3a8a';
+            const contentW = 698;
+            const maxPageH = A4_HEIGHT_PX - 96;
+
+            const contacts = [
+                p.phone ? `<span>${escHTML(p.phone)}</span>` : '',
+                p.email ? `<span>${escHTML(p.email)}</span>` : '',
+                p.address ? `<span>${escHTML(p.address)}</span>` : '',
+                p.dob ? `<span>${escHTML(p.dob)}</span>` : ''
+            ].filter(Boolean).join('<span class="mx-2 text-slate-300">|</span>');
+
+            const blocks = [];
+
+            blocks.push({
+                html: `
+                <header class="pb-4 mb-4 border-b-2 flex items-center justify-between gap-5" style="border-color:${accent};">
+                    <div class="flex-1">
+                        <h1 class="text-[1.95em] font-extrabold tracking-tight uppercase leading-tight" style="color:${accent};">
+                            ${escHTML(p.fullName) || (cvData.settings.language === 'en' ? 'YOUR FULL NAME' : 'HỌ VÀ TÊN CỦA BẠN')}
+                        </h1>
+                        ${p.jobTitle ? `<p class="text-[1.12em] font-semibold text-slate-700 mt-0.5">${escHTML(p.jobTitle)}</p>` : ''}
+                        ${isSectionVisible('contact') ? `
+                        <div class="mt-2 text-[0.9em] text-slate-600 flex flex-wrap items-center gap-y-1">${contacts}</div>
+                        ${p.website ? `<div class="mt-1 text-[0.9em] text-slate-600">${escHTML(p.website)}</div>` : ''}
+                        ` : ''}
+                    </div>
+                    ${getAvatarTag('w-24 h-24', 'border border-slate-300')}
+                </header>`
+            });
+
+            if (isSectionVisible('summary') && p.summary) {
+                blocks.push({
+                    html: `
+                    <div class="mb-4">
+                        <h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('summary'))}</h2>
+                        <p class="text-slate-700 text-justify">${escHTML(p.summary)}</p>
+                    </div>`
+                });
+            }
+
+            if (isSectionVisible('experience') && cvData.experiences.length > 0) {
+                cvData.experiences.forEach((exp, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.experiences.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2.5 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('experience'))}</h2>`
+                        : '';
+                    blocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-4' : 'mb-3'}">
+                            ${headerHTML}
+                            <div class="flex justify-between items-baseline gap-2">
+                                <h3 class="font-bold text-[1.03em] text-slate-900">${escHTML(exp.role)}</h3>
+                                <span class="text-[0.9em] font-semibold text-slate-600 shrink-0">${escHTML(exp.period)}</span>
+                            </div>
+                            <div class="font-semibold text-[0.95em]" style="color:${accent};">${escHTML(exp.company)}</div>
+                            ${formatBulletsHTML(exp.description)}
+                        </div>`
+                    });
+                });
+            }
+
+            if (isSectionVisible('projects') && cvData.projects.length > 0) {
+                const rolePrefix = (cvData.settings.language === 'en') ? 'Role' : 'Vai trò';
+                cvData.projects.forEach((proj, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.projects.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2.5 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('projects'))}</h2>`
+                        : '';
+                    blocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-4' : 'mb-3'}">
+                            ${headerHTML}
+                            <div class="flex justify-between items-baseline gap-2">
+                                <h3 class="font-bold text-[1.02em] text-slate-900">${escHTML(proj.name)}</h3>
+                                <span class="text-[0.9em] font-semibold text-slate-600 shrink-0">${escHTML(proj.period)}</span>
+                            </div>
+                            <div class="text-[0.92em] text-slate-600 font-medium">
+                                ${proj.role ? `<span>${rolePrefix}: ${escHTML(proj.role)}</span>` : ''}
+                                ${proj.role && proj.link ? `<span class="mx-2">&bull;</span>` : ''}
+                                ${proj.link ? `<span style="color:${accent}">${escHTML(proj.link)}</span>` : ''}
+                            </div>
+                            ${formatBulletsHTML(proj.description)}
+                        </div>`
+                    });
+                });
+            }
+
+            const hasSkills = isSectionVisible('skills') && (cvData.skillLevels.length > 0 || cvData.skillGroups.length > 0);
+            if (hasSkills) {
+                blocks.push({
+                    html: `
+                    <div class="mb-4">
+                        <h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2.5 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('skills'))}</h2>
+                        ${cvData.skillLevels.length > 0 ? `
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-2 mb-2.5">
+                            ${cvData.skillLevels.map(skl => renderSkillLevelItemHTML(skl, 'light')).join('')}
+                        </div>` : ''}
+                        ${cvData.skillGroups.length > 0 ? `
+                        <div class="space-y-1">
+                            ${cvData.skillGroups.map(g => `
+                            <div class="text-slate-700">
+                                ${g.category ? `<strong class="text-slate-900">${escHTML(g.category)}:</strong> ` : ''}
+                                <span>${escHTML(g.items)}</span>
+                            </div>`).join('')}
+                        </div>` : ''}
+                    </div>`
+                });
+            }
+
+            if (isSectionVisible('education') && cvData.education.length > 0) {
+                cvData.education.forEach((edu, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.education.length - 1;
+                    const headerHTML = isFirst
+                        ? `<h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('education'))}</h2>`
+                        : '';
+                    blocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-4' : 'mb-2'}">
+                            ${headerHTML}
+                            <div class="flex justify-between items-baseline gap-2">
+                                <h3 class="font-bold text-slate-900">${escHTML(edu.school)}</h3>
+                                <span class="text-[0.9em] font-semibold text-slate-600 shrink-0">${escHTML(edu.period)}</span>
+                            </div>
+                            <div class="text-slate-700 font-medium">${escHTML(edu.degree)}</div>
+                            ${edu.gpa ? `<div class="text-[0.92em] text-slate-600">${escHTML(edu.gpa)}</div>` : ''}
+                        </div>`
+                    });
+                });
+            }
+
+            if (isSectionVisible('certs') && cvData.certs.length > 0) {
+                blocks.push({
+                    html: `
+                    <div>
+                        <h2 class="text-[1.04em] font-bold uppercase tracking-wider pb-1 mb-2 border-b border-slate-300" style="color:${accent};">${escHTML(getSectionTitle('certs'))}</h2>
+                        <ul class="cv-bullets text-slate-700">
+                            ${cvData.certs.map(c => `
+                            <li>
+                                <strong class="text-slate-900">${escHTML(c.name)}</strong>
+                                ${c.issuer ? ` – ${escHTML(c.issuer)}` : ''}
+                                ${c.year ? ` <span class="text-slate-500">(${escHTML(c.year)})</span>` : ''}
+                            </li>`).join('')}
+                        </ul>
+                    </div>`
+                });
+            }
+
+            const pages = paginateAtomicBlocks(blocks, maxPageH, maxPageH, sandbox, contentW);
+            return pages.map(pBlocks => `<div style="padding:48px;width:794px;height:1123px;overflow:hidden;">${pBlocks.join('')}</div>`);
+        }
+
+        /* MẪU 3: CHUYÊN NGHIỆP BANNER */
+        function buildExecutivePages(sandbox) {
+            const p = cvData.personal;
+            const accent = cvData.settings.accentColor || '#1e3a8a';
+            const contentW = 706;
+
+            const bannerHTML = `
+            <header style="background:linear-gradient(135deg, ${accent} 0%, #0f172a 145%);padding:36px 44px;color:#ffffff;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+                <div class="flex-1 space-y-2">
+                    <div class="inline-block px-2.5 py-0.5 rounded-full text-[0.8em] font-semibold uppercase tracking-wider bg-white/15 text-white">
+                        Curriculum Vitae
+                    </div>
+                    <h1 class="text-[1.95em] font-extrabold tracking-tight uppercase leading-none text-white">
+                        ${escHTML(p.fullName) || (cvData.settings.language === 'en' ? 'YOUR FULL NAME' : 'HỌ VÀ TÊN CỦA BẠN')}
+                    </h1>
+                    ${p.jobTitle ? `<p class="text-[1.12em] font-medium text-white/90">${escHTML(p.jobTitle)}</p>` : ''}
+                    ${isSectionVisible('contact') ? `
+                    <div class="pt-2 flex flex-wrap gap-2 text-[0.85em]">
+                        ${p.phone ? `<span class="px-2.5 py-1 rounded-md bg-white/15 text-white">${escHTML(p.phone)}</span>` : ''}
+                        ${p.email ? `<span class="px-2.5 py-1 rounded-md bg-white/15 text-white">${escHTML(p.email)}</span>` : ''}
+                        ${p.address ? `<span class="px-2.5 py-1 rounded-md bg-white/15 text-white">${escHTML(p.address)}</span>` : ''}
+                        ${p.dob ? `<span class="px-2.5 py-1 rounded-md bg-white/15 text-white">${escHTML(p.dob)}</span>` : ''}
+                        ${p.website ? `<span class="px-2.5 py-1 rounded-md bg-white/15 text-white">${escHTML(p.website)}</span>` : ''}
+                    </div>` : ''}
+                </div>
+                ${getAvatarTag('w-28 h-28', 'border-4 border-white/30 shadow-lg')}
+            </header>`;
+
+            const bannerH = measureBlockPx(sandbox, A4_WIDTH_PX, bannerHTML);
+            const firstPageMaxH = Math.max(200, A4_HEIGHT_PX - bannerH - 80);
+            const nextPageMaxH = A4_HEIGHT_PX - 88;
+
+            const blocks = [];
+
+            if (isSectionVisible('summary') && p.summary) {
+                blocks.push({
+                    html: `
+                    <div class="p-3.5 rounded-xl border-l-4 mb-5" style="background:var(--cv-accent-light);border-color:${accent};">
+                        <h2 class="text-[0.94em] font-bold uppercase tracking-wider mb-1" style="color:${accent};">${escHTML(getSectionTitle('summary'))}</h2>
+                        <p class="text-slate-700 text-justify">${escHTML(p.summary)}</p>
+                    </div>`
+                });
+            }
+
+            if (isSectionVisible('experience') && cvData.experiences.length > 0) {
+                cvData.experiences.forEach((exp, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.experiences.length - 1;
+                    const headerHTML = isFirst
+                        ? `<div class="flex items-center gap-2.5 mb-3">
+                            <h2 class="text-[1.1em] font-extrabold uppercase tracking-wide" style="color:${accent};">${escHTML(getSectionTitle('experience'))}</h2>
+                            <div class="flex-1 h-[1.5px] bg-slate-200"></div>
+                           </div>`
+                        : '';
+                    blocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-5' : 'mb-4'}">
+                            ${headerHTML}
+                            <div class="flex flex-wrap justify-between items-center gap-2">
+                                <div>
+                                    <h3 class="font-bold text-[1.04em] text-slate-900">${escHTML(exp.role)}</h3>
+                                    <div class="font-semibold text-[0.94em]" style="color:${accent};">${escHTML(exp.company)}</div>
+                                </div>
+                                <span class="text-[0.85em] font-bold px-3 py-1 rounded-full border" style="color:${accent};border-color:${accent};background:var(--cv-accent-light);">
+                                    ${escHTML(exp.period)}
+                                </span>
+                            </div>
+                            <div class="mt-1">${formatBulletsHTML(exp.description)}</div>
+                        </div>`
+                    });
+                });
+            }
+
+            if (isSectionVisible('projects') && cvData.projects.length > 0) {
+                cvData.projects.forEach((proj, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === cvData.projects.length - 1;
+                    const headerHTML = isFirst
+                        ? `<div class="flex items-center gap-2.5 mb-3">
+                            <h2 class="text-[1.1em] font-extrabold uppercase tracking-wide" style="color:${accent};">${escHTML(getSectionTitle('projects'))}</h2>
+                            <div class="flex-1 h-[1.5px] bg-slate-200"></div>
+                           </div>`
+                        : '';
+                    blocks.push({
+                        html: `
+                        <div class="${isLast ? 'mb-5' : 'mb-3'}">
+                            ${headerHTML}
+                            <div class="p-3.5 rounded-xl border border-slate-200">
+                                <div class="flex justify-between items-baseline gap-2">
+                                    <h3 class="font-bold text-[1.02em] text-slate-900">${escHTML(proj.name)}</h3>
+                                    <span class="text-[0.85em] font-semibold text-slate-500 shrink-0">${escHTML(proj.period)}</span>
+                                </div>
+                                <div class="text-[0.9em] font-semibold mt-0.5" style="color:${accent};">
+                                    ${escHTML(proj.role)} ${proj.link ? `<span class="text-slate-500 font-normal ml-1">&bull; ${escHTML(proj.link)}</span>` : ''}
+                                </div>
+                                ${formatBulletsHTML(proj.description)}
+                            </div>
+                        </div>`
+                    });
+                });
+            }
+
+            const hasSkills = isSectionVisible('skills') && (cvData.skillLevels.length > 0 || cvData.skillGroups.length > 0);
+            if (hasSkills) {
+                blocks.push({
+                    html: `
+                    <div class="mb-5">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <h2 class="text-[1.1em] font-extrabold uppercase tracking-wide" style="color:${accent};">${escHTML(getSectionTitle('skills'))}</h2>
+                            <div class="flex-1 h-[1.5px] bg-slate-200"></div>
+                        </div>
+                        ${cvData.skillLevels.length > 0 ? `
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-2.5 mb-3">
+                            ${cvData.skillLevels.map(skl => renderSkillLevelItemHTML(skl, 'light')).join('')}
+                        </div>` : ''}
+                        ${cvData.skillGroups.length > 0 ? `
+                        <div class="space-y-2">
+                            ${cvData.skillGroups.map(g => {
+                                const tags = (g.items || '').split(',').map(t => t.trim()).filter(Boolean);
+                                return `
+                                <div class="flex flex-wrap items-baseline gap-2">
+                                    ${g.category ? `<span class="font-bold text-slate-800 min-w-[130px]">${escHTML(g.category)}:</span>` : ''}
+                                    <div class="flex flex-wrap gap-1.5 flex-1">
+                                        ${tags.map(t => `<span class="px-2.5 py-0.5 rounded-md text-[0.86em] font-semibold" style="background:var(--cv-accent-light);color:${accent};">${escHTML(t)}</span>`).join('')}
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>` : ''}
+                    </div>`
+                });
+            }
+
+            const showEdu = isSectionVisible('education') && cvData.education.length > 0;
+            const showCert = isSectionVisible('certs') && cvData.certs.length > 0;
+            if (showEdu || showCert) {
+                blocks.push({
+                    html: `
+                    <div class="grid grid-cols-12 gap-6 pt-1">
+                        ${showEdu ? `
+                        <div class="${showCert ? 'col-span-6' : 'col-span-12'}">
+                            <h2 class="text-[1.04em] font-extrabold uppercase mb-2.5 pb-1 border-b border-slate-200" style="color:${accent};">${escHTML(getSectionTitle('education'))}</h2>
+                            <div class="space-y-2.5">
+                                ${cvData.education.map(edu => `
+                                <div>
+                                    <div class="font-bold text-slate-900">${escHTML(edu.school)}</div>
+                                    <div class="text-[0.93em] font-medium text-slate-700">${escHTML(edu.degree)}</div>
+                                    <div class="text-[0.85em] text-slate-500">${escHTML(edu.period)}</div>
+                                    ${edu.gpa ? `<div class="text-[0.88em] font-medium mt-0.5" style="color:${accent};">${escHTML(edu.gpa)}</div>` : ''}
+                                </div>`).join('')}
+                            </div>
+                        </div>` : ''}
+
+                        ${showCert ? `
+                        <div class="${showEdu ? 'col-span-6' : 'col-span-12'}">
+                            <h2 class="text-[1.04em] font-extrabold uppercase mb-2.5 pb-1 border-b border-slate-200" style="color:${accent};">${escHTML(getSectionTitle('certs'))}</h2>
+                            <div class="space-y-2">
+                                ${cvData.certs.map(c => `
+                                <div class="text-[0.93em]">
+                                    <div class="font-bold text-slate-900">${escHTML(c.name)}</div>
+                                    <div class="text-[0.88em] text-slate-600">${escHTML(c.issuer)}${c.year ? ` &bull; ${escHTML(c.year)}` : ''}</div>
+                                </div>`).join('')}
+                            </div>
+                        </div>` : ''}
+                    </div>`
+                });
+            }
+
+            const pages = paginateAtomicBlocks(blocks, firstPageMaxH, nextPageMaxH, sandbox, contentW);
+            return pages.map((pBlocks, idx) => {
+                if (idx === 0) {
+                    return `<div style="width:794px;height:1123px;overflow:hidden;">${bannerHTML}<div style="padding:40px 44px;">${pBlocks.join('')}</div></div>`;
+                }
+                return `<div style="padding:44px;width:794px;height:1123px;overflow:hidden;">${pBlocks.join('')}</div>`;
+            });
+        }
+
+        /* ==========================================================================
+           8. ĐIỀU KHIỂN UI: ACCORDION, ZOOM, MOBILE, JSON, PRINT PDF
+           ========================================================================== */
+        function toggleSection(id) {
+            const box = document.getElementById(id);
+            const chev = document.getElementById('chevron-' + id);
+            if (!box) return;
+            const hidden = box.classList.toggle('hidden');
+            if (chev) chev.style.transform = hidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        function changeZoom(delta) {
+            currentZoom = Math.min(1.25, Math.max(0.4, +(currentZoom + delta).toFixed(2)));
+            applyZoom();
+        }
+
+        function autoFitZoom() {
+            const panel = document.getElementById('preview-panel');
+            if (!panel || panel.classList.contains('hidden')) return;
+            const availW = panel.clientWidth - 48;
+            if (availW > 0) {
+                currentZoom = Math.min(0.92, Math.max(0.4, +(availW / A4_WIDTH_PX).toFixed(2)));
+                applyZoom();
+            }
+        }
+
+        function applyZoom() {
+            const stage = document.getElementById('preview-zoom-stage');
+            const lbl = document.getElementById('lbl-zoom-percent');
+            if (stage) stage.style.transform = `scale(${currentZoom})`;
+            if (lbl) lbl.textContent = Math.round(currentZoom * 100) + '%';
+        }
+
+        function toggleMobileView() {
+            const editor = document.getElementById('editor-panel');
+            const preview = document.getElementById('preview-panel');
+            const label = document.getElementById('mobile-view-label');
+
+            isMobilePreview = !isMobilePreview;
+            if (isMobilePreview) {
+                editor.classList.add('hidden');
+                preview.classList.remove('hidden');
+                preview.classList.add('flex');
+                label.textContent = 'Nhập liệu';
+                autoFitZoom();
+            } else {
+                preview.classList.add('hidden');
+                preview.classList.remove('flex');
+                editor.classList.remove('hidden');
+                label.textContent = 'Xem CV';
+            }
+        }
+
+        function toggleDataDropdown() {
+            document.getElementById('data-dropdown-menu').classList.toggle('hidden');
+        }
+
+        function openConfirmModal(title, message, onYes) {
+            document.getElementById('data-dropdown-menu').classList.add('hidden');
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            const okBtn = document.getElementById('confirm-ok-btn');
+            okBtn.onclick = () => {
+                closeConfirmModal();
+                onYes();
+            };
+            const modal = document.getElementById('modal-confirm');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('modal-confirm');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmResetSample(lang = 'vi') {
+            const isEn = lang === 'en';
+            openConfirmModal(
+                isEn ? 'Nạp dữ liệu mẫu tiếng Anh?' : 'Đặt lại dữ liệu mẫu tiếng Việt?',
+                isEn
+                    ? 'Dữ liệu CV hiện tại sẽ được thay thế bằng CV mẫu tiếng Anh chuẩn quốc tế.'
+                    : 'Dữ liệu CV hiện tại sẽ được khôi phục về bản mẫu tiếng Việt tiêu chuẩn.',
+                () => {
+                    const keepTpl = cvData.settings.template;
+                    const keepColor = cvData.settings.accentColor;
+                    cvData = JSON.parse(JSON.stringify(isEn ? SAMPLE_DATA_EN : SAMPLE_DATA_VI));
+                    cvData.settings.template = keepTpl;
+                    cvData.settings.accentColor = keepColor;
+                    syncStateToUI();
+                    applyCSSVariables();
+                    renderAllEditors();
+                    saveToStorage();
+                    renderCV();
+                    showToast(isEn ? 'Đã nạp dữ liệu mẫu tiếng Anh!' : 'Đã đặt lại dữ liệu mẫu tiếng Việt!');
+                }
+            );
+        }
+
+        function confirmClearAll() {
+            openConfirmModal(
+                'Xóa trắng toàn bộ nội dung?',
+                'Tất cả thông tin hiện tại sẽ bị xóa để bạn nhập CV mới từ đầu.',
+                () => {
+                    const keepSettings = { ...cvData.settings };
+                    cvData = JSON.parse(JSON.stringify(EMPTY_DATA));
+                    cvData.settings = keepSettings;
+                    syncStateToUI();
+                    renderAllEditors();
+                    saveToStorage();
+                    renderCV();
+                    showToast('Đã xóa trắng dữ liệu CV');
+                }
+            );
+        }
+
+        function exportJSON() {
+            document.getElementById('data-dropdown-menu').classList.add('hidden');
+            const blob = new Blob([JSON.stringify(cvData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const safeName = (cvData.personal.fullName || 'Ung_Vien').trim().replace(/\s+/g, '_');
+            a.href = url;
+            a.download = `CV_${safeName}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Đã tải xuống file sao lưu JSON!');
+        }
+
+        function importJSON(event) {
+            document.getElementById('data-dropdown-menu').classList.add('hidden');
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const obj = JSON.parse(e.target.result);
+                    if (!obj || typeof obj !== 'object') throw new Error('Invalid JSON');
+                    const lang = (obj.settings && obj.settings.language) || 'vi';
+                    cvData = {
+                        settings: {
+                            ...SAMPLE_DATA_VI.settings,
+                            ...(obj.settings || {}),
+                            sectionTitles: {
+                                ...DEFAULT_SECTION_TITLES[lang],
+                                ...((obj.settings && obj.settings.sectionTitles) || {})
+                            },
+                            sectionVisibility: {
+                                ...DEFAULT_SECTION_VISIBILITY,
+                                ...((obj.settings && obj.settings.sectionVisibility) || {})
+                            }
+                        },
+                        personal: { ...SAMPLE_DATA_VI.personal, ...(obj.personal || {}) },
+                        skillLevels: Array.isArray(obj.skillLevels) ? obj.skillLevels : [],
+                        skillGroups: Array.isArray(obj.skillGroups) ? obj.skillGroups : [],
+                        experiences: Array.isArray(obj.experiences) ? obj.experiences : [],
+                        projects: Array.isArray(obj.projects) ? obj.projects : [],
+                        education: Array.isArray(obj.education) ? obj.education : [],
+                        certs: Array.isArray(obj.certs) ? obj.certs : []
+                    };
+                    syncStateToUI();
+                    applyCSSVariables();
+                    renderAllEditors();
+                    saveToStorage();
+                    renderCV();
+                    showToast('Đã khôi phục dữ liệu từ file JSON!');
+                } catch (err) {
+                    showToast('File JSON không hợp lệ!', true);
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function openPrintModal() {
+            const modal = document.getElementById('modal-print');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePrintModal() {
+            const modal = document.getElementById('modal-print');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function executePrint() {
+            closePrintModal();
+            const oldTitle = document.title;
+            const safeName = (cvData.personal.fullName || 'CV_Ung_Vien').trim().replace(/\s+/g, '_');
+            document.title = `CV_${safeName}`;
+
+            setTimeout(() => {
+                window.print();
+                document.title = oldTitle;
+            }, 150);
+        }
+
+        let toastTimeout = null;
+        function showToast(msg, isError = false) {
+            const box = document.getElementById('toast-box');
+            const textEl = document.getElementById('toast-text');
+            const dotEl = document.getElementById('toast-dot');
+            if (!box) return;
+
+            textEl.textContent = msg;
+            dotEl.className = isError
+                ? 'w-2 h-2 rounded-full bg-rose-400'
+                : 'w-2 h-2 rounded-full bg-emerald-400';
+
+            box.classList.remove('translate-y-20', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add('translate-y-20', 'opacity-0');
+            }, 2600);
+        }
+    </script>
+</body>
+</html>

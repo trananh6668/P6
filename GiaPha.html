@@ -376,7 +376,7 @@
             <button onclick="zoomTree(-0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Thu nhỏ">
                 <i class="fa-solid fa-magnifying-glass-minus"></i>
             </button>
-            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">32%</span>
+            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">58%</span>
             <button onclick="zoomTree(0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Phóng to">
                 <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
@@ -388,7 +388,7 @@
         </div>
 
 		<!-- VÙNG CANVAS CHỨA BỨC TRƯỚNG & CÂY GIA PHẢ (PAN & ZOOM LAYER) -->
-        <div id="panZoomStage" class="origin-top-left transition-transform duration-75 ease-out inline-flex flex-col items-center" style="transform: translate(123.956px, -5.97814px) scale(0.32);">
+        <div id="panZoomStage" class="origin-top-left transition-transform duration-75 ease-out inline-flex flex-col items-center" style="transform: translate(-298.216px, -381.112px) scale(0.58);">
             
             <!-- 1. BỨC TRƯỚNG / CUỐN THƯ ĐẦU PHẢ ĐỒ -->
             <div id="clanScrollHeader" class="w-full pt-10 pb-8 flex flex-col items-center justify-center" style="display: block; width: 5024px;">
@@ -443,7 +443,7 @@
             <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <i class="fa-solid fa-user-pen text-imperial-gold text-lg"></i>
-                    <h3 id="memberModalTitle" class="font-serif font-bold text-lg text-imperial-pale">Chỉnh Sửa: Trần Đăng Tý</h3>
+                    <h3 id="memberModalTitle" class="font-serif font-bold text-lg text-imperial-pale">Chỉnh Sửa: Trần Đăng Hàm</h3>
                 </div>
                 <button onclick="closeMemberModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
@@ -452,8 +452,8 @@
 
             <!-- Form Nội Dung -->
             <form id="memberForm" onsubmit="saveMemberForm(event)" class="p-5 sm:p-6 max-h-[82vh] overflow-y-auto space-y-5 text-xs sm:text-sm">
-                <input type="hidden" id="formMemberId" value="mem_1">
-                <input type="hidden" id="formParentId" value="">
+                <input type="hidden" id="formMemberId" value="mem_2">
+                <input type="hidden" id="formParentId" value="mem_1">
 
                 <!-- Thông báo cha/mẹ khi thêm con -->
                 <div id="parentContextBanner" class="bg-amber-100/90 border border-imperial-bronze rounded-xl px-4 py-2.5 text-ink flex items-center justify-between hidden">
@@ -737,7 +737,7 @@
     <!-- Toast Thông Báo Nhanh -->
     <div id="toastMessage" class="fixed top-16 right-5 z-50 items-center gap-2.5 bg-crimson-deep text-imperial-pale border-2 border-imperial-gold px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-semibold hidden">
         <i class="fa-solid fa-circle-check text-imperial-gold text-base"></i>
-        <span id="toastText">Đã bật hiển thị Câu Đối truyền thống</span>
+        <span id="toastText">Đã cập nhật thông tin "Trần Đăng Hàm"</span>
     </div>
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
@@ -810,7 +810,7 @@
             "titleHonor": "",
             "isAlive": false,
             "birthYear": "",
-            "deathYear": "",
+            "deathYear": "1988",
             "deathLunarDay": 25,
             "deathLunarMonth": 8,
             "burialPlace": "20.999638,105.743904",
