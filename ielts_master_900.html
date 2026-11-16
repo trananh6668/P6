@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Master 900 & Full Ngữ Pháp Tiếng Anh</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .flashcard-inner {
+      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.7);
+    }
+    .glass-header {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Top Navigation & Global Stats Header -->
+  <header class="sticky top-0 z-40 glass-header bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between py-3 gap-3">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-teal-500 flex items-center justify-center text-white font-extrabold text-base shadow-md shadow-brand-500/20">
+            IELTS
+          </div>
+          <div>
+            <h1 class="font-extrabold text-base sm:text-xl tracking-tight text-slate-900 dark:text-white leading-tight">
+              IELTS Master <span class="text-brand-600 dark:text-brand-400">900</span>
+            </h1>
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">28 Chủ Đề Từ Vựng & Full Ngữ Pháp IELTS</p>
+          </div>
+        </div>
+
+        <!-- Live Progress Metrics + Controls -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <!-- Stats Pill -->
+          <div class="flex items-center gap-2.5 sm:gap-3.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-medium border border-slate-200/70 dark:border-slate-700/70">
+            <span class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400" title="Số từ đã thuộc">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Thuộc: <strong id="hdr-mastered">0</strong>/841
+            </span>
+            <span class="text-slate-300 dark:text-slate-600">|</span>
+            <span class="flex items-center gap-1 text-brand-600 dark:text-brand-400" title="Tỷ lệ trả lời đúng trắc nghiệm">
+              🎯 Đúng: <strong id="hdr-accuracy">0%</strong>
+            </span>
+            <span class="hidden sm:inline text-slate-300 dark:text-slate-600">|</span>
+            <span class="hidden sm:flex items-center gap-1 text-orange-500 font-semibold" title="Chuỗi ngày học liên tiếp">
+              🔥 <strong id="hdr-streak">1</strong> ngày
+            </span>
+          </div>
+
+          <!-- Accent Selector -->
+          <select id="voice-accent" aria-label="Giọng đọc US/UK" class="text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="en-GB">🇬🇧 UK</option>
+            <option value="en-US">🇺🇸 US</option>
+          </select>
+
+          <!-- Export / Import Backup Buttons -->
+          <div class="flex items-center gap-1">
+            <button id="export-btn" title="Xuất file sao lưu tiến độ JSON" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition">
+              ⬇ JSON
+            </button>
+            <label title="Nhập file khôi phục tiến độ JSON" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold cursor-pointer transition">
+              ⬆ JSON
+              <input type="file" id="import-input" accept=".json" class="hidden" />
+            </label>
+          </div>
+
+          <!-- Dark Mode Toggle -->
+          <button id="theme-toggle" title="Chuyển chế độ Sáng / Tối" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Main Navigation Tabs -->
+      <nav class="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2.5 pt-0.5" aria-label="Main Tabs">
+        <button data-tab="vocab" class="nav-tab-btn active flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-brand-600 text-white shadow-sm">
+          <span>📚</span> Kho Từ Vựng IELTS (841)
+        </button>
+        <button data-tab="flashcard" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span>🗂️</span> Flashcard 3D Thông Minh
+        </button>
+        <button data-tab="quiz" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span>✍️</span> Luyện Tập & Thi Thử
+        </button>
+        <button data-tab="grammar" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span>🎓</span> Full Ngữ Pháp IELTS
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- =====================================================================
+         TAB 1: KHO TỪ VỰNG IELTS (VOCABULARY HUB)
+         ===================================================================== -->
+    <section id="tab-vocab" class="tab-panel animate-fade-in">
+      <!-- Filter Controls -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+          <!-- Search -->
+          <div class="md:col-span-5 relative">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="vocab-search" placeholder="Tìm từ tiếng Anh, nghĩa tiếng Việt hoặc số câu (1-841)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+          </div>
+
+          <!-- 28 Topics Filter -->
+          <div class="md:col-span-4">
+            <select id="vocab-topic-filter" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">🌐 Tất cả 28 Chủ đề IELTS (841 từ)</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="md:col-span-3">
+            <select id="vocab-status-filter" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="unmastered">📖 Chưa thuộc</option>
+              <option value="mastered">✓ Đã thuộc</option>
+              <option value="starred">★ Đánh dấu sao</option>
+              <option value="wrong">⚠️ Hay làm sai</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+          <span id="vocab-count-label">Đang hiển thị 841 / 841 từ vựng</span>
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="bulk-master-btn" class="text-emerald-600 dark:text-emerald-400 hover:underline font-semibold hidden">
+              ✓ Đánh dấu thuộc tất cả từ trong chủ đề này
+            </button>
+            <button id="study-filtered-fc-btn" class="text-brand-600 dark:text-brand-400 hover:underline font-semibold">
+              🗂️ Học nhóm từ này bằng Flashcard →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vocabulary Grid -->
+      <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Cards rendered via JS -->
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 2: FLASHCARD 3D THÔNG MINH
+         ===================================================================== -->
+    <section id="tab-flashcard" class="tab-panel hidden animate-fade-in">
+      <div class="max-w-2xl mx-auto">
+        <!-- Flashcard Topic & Status Selector -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm mb-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <select id="fc-topic-select" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">🌐 Tất cả 28 Chủ đề (841 thẻ)</option>
+            </select>
+            <select id="fc-status-select" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">Tất cả thẻ trong chủ đề</option>
+              <option value="unmastered">Chỉ thẻ Chưa thuộc</option>
+              <option value="starred">Chỉ thẻ Đánh dấu sao ★</option>
+              <option value="wrong">Chỉ thẻ Hay làm sai ⚠️</option>
+            </select>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <span id="fc-counter" class="font-bold">Thẻ 1 / 841</span>
+            <div class="flex items-center gap-2">
+              <button id="fc-shuffle-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-semibold transition">
+                🔀 Trộn thẻ
+              </button>
+              <label class="flex items-center gap-1.5 cursor-pointer bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl font-medium">
+                <input type="checkbox" id="fc-autoplay" checked class="rounded text-brand-600 focus:ring-brand-500" />
+                Tự phát âm
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Flip Card Stage (Supports Touch Swipe + Click) -->
+        <div id="fc-stage" class="perspective-1000 w-full h-80 sm:h-96 cursor-pointer select-none touch-pan-y">
+          <div id="fc-inner" class="flashcard-inner relative w-full h-full transform-style-3d">
+            <!-- Front Face -->
+            <div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200 dark:border-slate-800 shadow-xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between gap-2">
+                <span id="fc-topic-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 truncate max-w-[230px]">
+                  1. Environment & Nature
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <button id="fc-star-btn" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-xl leading-none transition" title="Đánh dấu sao (Phím S)">
+                    ★
+                  </button>
+                  <button id="fc-speak-front-btn" class="p-2.5 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 transition" title="Nghe phát âm (Phím A)">
+                    🔊
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center my-auto px-2">
+                <span id="fc-id-label" class="text-xs font-mono text-slate-400 block mb-2">#1</span>
+                <h2 id="fc-en-word" class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
+                  Acid rain
+                </h2>
+                <p class="mt-4 text-[11px] sm:text-xs text-slate-400">
+                  Chạm thẻ hoặc nhấn <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">Space</kbd> để lật • Vuốt trái/phải để chuyển
+                </p>
+              </div>
+
+              <div class="flex justify-center">
+                <span id="fc-status-pill" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500">
+                  Chưa thuộc
+                </span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-brand-600 to-teal-600 text-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider opacity-85">Nghĩa Tiếng Việt</span>
+                <button id="fc-speak-back-btn" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold transition">
+                  🔊 Nghe lại (A)
+                </button>
+              </div>
+
+              <div class="text-center my-auto px-2">
+                <p id="fc-en-small" class="text-base sm:text-lg font-medium opacity-85 mb-2">Acid rain</p>
+                <h3 id="fc-vi-meaning" class="text-2xl sm:text-4xl font-extrabold leading-snug">
+                  Mưa axit
+                </h3>
+                <div id="fc-distractors-box" class="mt-5 text-xs opacity-90 bg-black/20 rounded-2xl p-3 max-w-md mx-auto">
+                  3 nghĩa nhiễu tham khảo: Đính hôn • Khí hậu • Ruy băng
+                </div>
+              </div>
+
+              <div class="flex justify-center">
+                <button id="fc-master-btn" class="px-5 py-2.5 rounded-xl bg-white text-brand-700 font-bold text-xs sm:text-sm shadow hover:bg-brand-50 transition">
+                  ✓ Đánh dấu Đã thuộc (Phím M)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Controls -->
+        <div class="flex items-center justify-between gap-3 mt-5">
+          <button id="fc-prev-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-xs sm:text-sm shadow-sm transition">
+            ← Thẻ trước
+          </button>
+          <button id="fc-flip-btn" class="py-3 px-6 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-brand-500/20 transition">
+            Lật thẻ
+          </button>
+          <button id="fc-next-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-xs sm:text-sm shadow-sm transition">
+            Thẻ tiếp →
+          </button>
+        </div>
+
+        <!-- Keyboard Shortcut Legend -->
+        <div class="mt-4 text-center text-[11px] text-slate-400">
+          Phím tắt: <strong>Space</strong> (Lật) • <strong>← / →</strong> (Chuyển thẻ) • <strong>A</strong> (Phát âm) • <strong>S</strong> (Đánh dấu sao) • <strong>M</strong> (Đã thuộc)
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 3: LUYỆN TẬP & THI THỬ TRẮC NGHIỆM (IELTS QUIZ)
+         ===================================================================== -->
+    <section id="tab-quiz" class="tab-panel hidden animate-fade-in">
+      <!-- Quiz Setup -->
+      <div id="quiz-setup" class="max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="text-center mb-6">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 mb-2">
+            NGÂN HÀNG 841 CÂU HỎI IELTS CHUẨN
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Luyện Tập & Thi Thử Trắc Nghiệm</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Tự động trộn thứ tự đáp án A/B/C/D, chấm điểm trực tiếp và tổng hợp từ sai</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">1. Phạm vi kiến thức</label>
+            <select id="quiz-scope-select" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="random">🎲 Đề tổng hợp ngẫu nhiên (841 từ)</option>
+              <option value="wrong">⚠️ Tập trung các từ hay làm sai</option>
+              <option value="starred">★ Tập trung các từ đã đánh dấu sao</option>
+              <option value="unmastered">📖 Chỉ các từ chưa thuộc</option>
+              <optgroup label="Theo 28 Chủ Đề IELTS" id="quiz-topic-optgroup"></optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">2. Số lượng câu hỏi</label>
+            <select id="quiz-limit-select" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="15">15 câu (Luyện nhanh 3 phút)</option>
+              <option value="30" selected>30 câu (Chuẩn 1 chủ đề)</option>
+              <option value="50">50 câu (Thử thách nâng cao)</option>
+              <option value="100">100 câu (Tổng ôn chuyên sâu)</option>
+              <option value="all">Toàn bộ câu trong phạm vi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 mb-8 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl">
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" id="quiz-shuffle-opts" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500" />
+            <span>Trộn ngẫu nhiên thứ tự đáp án A, B, C, D</span>
+          </label>
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" id="quiz-autospeak" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500" />
+            <span>Tự động đọc từ vựng khi sang câu mới</span>
+          </label>
+        </div>
+
+        <button id="quiz-start-btn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-teal-600 hover:from-brand-700 hover:to-teal-700 text-white font-bold text-base shadow-lg shadow-brand-500/25 transition">
+          🚀 Bắt Đầu Làm Bài Thi
+        </button>
+      </div>
+
+      <!-- Quiz Active Arena -->
+      <div id="quiz-arena" class="hidden max-w-3xl mx-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 mb-4 flex items-center justify-between gap-4">
+          <button id="quiz-quit-btn" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 hover:text-rose-600 transition">
+            ✕ Thoát
+          </button>
+          <div class="flex-1">
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span id="quiz-progress-label">Câu 1 / 30</span>
+              <span id="quiz-live-score" class="text-emerald-600 dark:text-emerald-400">Đúng: 0</span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div id="quiz-bar" class="h-full bg-brand-600 transition-all duration-300" style="width: 3%"></div>
+            </div>
+          </div>
+          <div id="quiz-clock" class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800">
+            00:00
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <span id="quiz-meta" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              Câu #1 • 1. Environment & Nature
+            </span>
+            <button id="quiz-speak-btn" class="px-3 py-1.5 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 text-xs font-semibold hover:bg-brand-100 transition">
+              🔊 Nghe phát âm
+            </button>
+          </div>
+
+          <div class="text-center py-6">
+            <p class="text-xs uppercase tracking-wider text-slate-400 mb-2">Chọn nghĩa tiếng Việt chính xác:</p>
+            <h3 id="quiz-question-word" class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+              Acid rain
+            </h3>
+          </div>
+
+          <div id="quiz-options-box" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+            <!-- Options injected -->
+          </div>
+
+          <!-- Instant Explanation Banner -->
+          <div id="quiz-feedback-box" class="hidden mt-5 p-4 rounded-2xl text-sm border"></div>
+
+          <div id="quiz-next-wrap" class="mt-6 hidden flex justify-end">
+            <button id="quiz-next-btn" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow transition">
+              Câu tiếp theo →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Result Summary -->
+      <div id="quiz-result" class="hidden max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="text-center mb-6">
+          <div id="res-emoji" class="text-5xl mb-3">🏆</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Kết Quả Bài Thi IELTS</h2>
+          <p id="res-time" class="text-sm text-slate-500 mt-1">Thời gian hoàn thành: 01:45</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 mb-6 text-center">
+          <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900">
+            <div id="res-correct" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
+            <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300 mt-1">Số câu đúng</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900">
+            <div id="res-wrong" class="text-2xl sm:text-3xl font-extrabold text-rose-600 dark:text-rose-400">0</div>
+            <div class="text-xs font-medium text-rose-700 dark:text-rose-300 mt-1">Số câu sai</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900">
+            <div id="res-pct" class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">0%</div>
+            <div class="text-xs font-medium text-brand-700 dark:text-brand-300 mt-1">Độ chính xác</div>
+          </div>
+        </div>
+
+        <div id="res-wrong-section" class="mb-6 hidden">
+          <h4 class="font-bold text-sm text-rose-600 dark:text-rose-400 mb-3">Danh sách các câu làm sai cần ôn tập ngay:</h4>
+          <div id="res-wrong-list" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <button id="quiz-retry-wrong-btn" class="hidden flex-1 py-3.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm transition">
+            🔄 Ôn lại các câu làm sai
+          </button>
+          <button id="quiz-new-btn" class="flex-1 py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition">
+            Làm bài kiểm tra khác
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 4: TỔNG HỢP FULL NGỮ PHÁP TIẾNG ANH (CHUẨN IELTS)
+         ===================================================================== -->
+    <section id="tab-grammar" class="tab-panel hidden animate-fade-in">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Grammar Sidebar -->
+        <aside class="lg:w-80 shrink-0">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm lg:sticky lg:top-28">
+            <div class="mb-3">
+              <h2 class="font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                <span>🎓</span> 12 Chuyên Đề Ngữ Pháp IELTS
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">Hệ thống từ Cơ bản đến Band 8.0+</p>
+            </div>
+            <input type="text" id="grammar-search" placeholder="Tìm chủ điểm ngữ pháp..." class="w-full px-3.5 py-2 mb-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500" />
+            <nav id="grammar-sidebar-list" class="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+              <!-- Grammar topics injected -->
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Grammar Detail Reader -->
+        <div class="flex-1 min-w-0">
+          <div id="grammar-reader" class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <!-- Selected grammar lesson -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /**
+     * ============================================================================
+     * 1. 28 IELTS TOPICS DEFINITION (EXACT RANGES 1 TO 841)
+     * ============================================================================
+     */
+    const IELTS_TOPICS = [
+      { id: 1, name: "1. Environment & Nature", start: 1, end: 30 },
+      { id: 2, name: "2. Family & Relationships", start: 31, end: 60 },
+      { id: 3, name: "3. Weather & Climate", start: 61, end: 90 },
+      { id: 4, name: "4. Sports & Athletics", start: 91, end: 120 },
+      { id: 5, name: "5. Travel & Tourism", start: 121, end: 149 },
+      { id: 6, name: "6. Music & Performing Arts", start: 150, end: 177 },
+      { id: 7, name: "7. Cinema & Film", start: 178, end: 203 },
+      { id: 8, name: "8. Food & Gastronomy", start: 204, end: 232 },
+      { id: 9, name: "9. Shopping & Fashion", start: 233, end: 261 },
+      { id: 10, name: "10. Transportation & Traffic", start: 262, end: 291 },
+      { id: 11, name: "11. Soft Skills & Personal Traits", start: 292, end: 311 },
+      { id: 12, name: "12. Pets & Animals", start: 312, end: 339 },
+      { id: 13, name: "13. Wedding & Marriage", start: 340, end: 369 },
+      { id: 14, name: "14. Birthday & Celebrations", start: 370, end: 398 },
+      { id: 15, name: "15. Education & Academia", start: 399, end: 428 },
+      { id: 16, name: "16. Career & Workplace", start: 429, end: 455 },
+      { id: 17, name: "17. Technology & Innovation", start: 456, end: 485 },
+      { id: 18, name: "18. Flowers & Botany", start: 486, end: 514 },
+      { id: 19, name: "19. Health & Medicine", start: 515, end: 543 },
+      { id: 20, name: "20. Pandemic & Public Health", start: 544, end: 569 },
+      { id: 21, name: "21. Professions & Jobs", start: 570, end: 598 },
+      { id: 22, name: "22. Crime & Law", start: 599, end: 628 },
+      { id: 23, name: "23. Culture & Heritage", start: 629, end: 654 },
+      { id: 24, name: "24. Finance & Economics", start: 655, end: 681 },
+      { id: 25, name: "25. E-Commerce & Digital Retail", start: 682, end: 705 },
+      { id: 26, name: "26. Human Bonds & Values", start: 706, end: 734 },
+      { id: 27, name: "27. History & Civilization", start: 735, end: 761 },
+      { id: 28, name: "28. Hobbies, Home & Fine Arts", start: 762, end: 841 }
+    ];
+
+    function getTopicForId(id) {
+      return IELTS_TOPICS.find(t => id >= t.start && id <= t.end) || IELTS_TOPICS[0];
+    }
+
+    /**
+     * ============================================================================
+     * 2. COMPLETE 841 IELTS VOCABULARY ITEMS (100% FROM Quiz_900_IELTS.docx)
+     * Format: [id, en, [optA, optB, optC, optD], ansIndex]
+     * ============================================================================
+     */
+    const RAW_841_ITEMS = [
+      [1,"Acid rain",["Mưa axit","Đính hôn","Khí hậu","Ruy băng"],0],
+      [2,"Air quality",["Chồn","Lính cứu hỏa","Chất lượng không khí","Không dây"],2],
+      [3,"Biodegradable",["Vốn","Thợ sửa ống nước","Taekwondo","Phân hủy sinh học"],3],
+      [4,"Biodiversity",["Người đi bộ","Doanh thu","Đa dạng sinh học","Làm thêm giờ"],2],
+      [5,"Carbon footprint",["Hoa diên vĩ","Dấu chân carbon","Tủ chứa thực phẩm","Trượt tuyết"],1],
+      [6,"Climate change",["Gió nhẹ","Biến đổi khí hậu","Cân bằng giữa công việc và cuộc sống","Bảo vệ"],1],
+      [7,"Conservation",["Bảo tồn","Thương gia, nhà buôn","Xe buýt","Voan cô dâu"],0],
+      [8,"Conservationist",["Tiếng cười","Váy cưới","Khán giả","Nhà bảo tồn"],3],
+      [9,"Deforestation",["Thư pháp","Phá rừng","Người chỉ huy dàn nhạc","Đồng nghiệp"],1],
+      [10,"Ecological footprint",["Phá rừng","Dấu chân sinh thái","Thuộc về hoa","Hoa cúc"],1],
+      [11,"Ecosystem",["Ruy băng","Hệ sinh thái","Sự thấu hiểu","Công việc"],1],
+      [12,"Endangered species",["Sách giáo khoa","Các loài đang bị đe dọa","Người đi bộ","Chiến tranh, chiến đấu"],1],
+      [13,"Environment",["Trường phái ấn tượng","Bài tập về nhà","Môi trường","Động vật hoang dã"],2],
+      [14,"Fossil fuels",["Calo","Đóng hộp","Nhiên liệu hóa thạch","Ghế sofa"],2],
+      [15,"Global warming",["Sự nóng lên toàn cầu","Lướt sóng","Ông bà","Biện pháp chữa trị"],0],
+      [16,"Greenhouse gases",["Sáng kiến, đổi mới","Khí nhà kính","Gia đình gồm nhiều thế hệ","Tấn công"],1],
+      [17,"Green technology",["Sáng kiến","Mạng lưới","Công nghệ xanh","Chất lượng không khí"],2],
+      [18,"Habitat",["Môi trường sống","Tầng ozon","Quán cà phê","Mạng nội bộ"],0],
+      [19,"Landfill",["Vẽ","Dân du mục","Trộm cắp","Khu chôn lấp rác thải"],3],
+      [20,"Marine pollution",["Ô nhiễm biển","Màn chiếu","Phá sản","Mùa mưa"],0],
+      [21,"Non-renewable resources",["Trượt tuyết","Tài nguyên cạn kiệt, không thể tái tạo","Phần mềm độc hại","Tiệm bánh"],1],
+      [22,"Ozone layer",["Mạng xã hội","Judo","Tầng ozon","Phương pháp điều trị"],2],
+      [23,"Pollution",["Ô nhiễm","Tĩnh vật","Con riêng","Cửa hàng thời trang"],0],
+      [24,"Recycling",["Tái chế","Phù dâu chính","Định vị","Món tráng miệng"],0],
+      [25,"Renewable",["Nhiếp ảnh gia","Sự thích nghi","Sự lây truyền","Có thể tái tạo"],3],
+      [26,"Renewable energy",["Sự quyết đoán","Năng lượng tái tạo","Gia đình","Xu hướng"],1],
+      [27,"Soil erosion",["Con riêng","Sự xói mòn đất","Trượt băng","Thỏa thuận, ưu đãi"],1],
+      [28,"Sustainable",["Kĩ thuật quay phim","Di sản","Bố","Bền vững"],3],
+      [29,"Water scarcity",["Thiếu hụt nguồn nước","Mối quan hệ họ hàng","Thợ làm tóc","Thư viện"],0],
+      [30,"Wildlife",["Cướp biển","Lắp Lego","Động vật hoang dã","Ca hát"],2],
+      [31,"Aunt",["Cô hoặc dì","Mệt mỏi","Người tiêu dùng","Xâm lược"],0],
+      [32,"Brother-in-law",["Anh rể hoặc em rể","Di vật, di tích","Vitamin","Hội trường giảng đường"],0],
+      [33,"Children",["Con cái","Ảo, không thực tế","Leo núi, đi bộ đường dài","Kế toán"],0],
+      [34,"Cousin",["Tuần trăng mật","Karate","Anh chị em họ","Người tổ chức đám cưới"],2],
+      [35,"Daughter",["Sự lây truyền","Thiết bị công nghệ","Con gái","Rắn"],2],
+      [36,"Extended family",["Mạng Internet","Hô hấp","Gia đình gồm nhiều thế hệ","Bóng bầu dục"],2],
+      [37,"Family",["Con cái","Chuyến đi thám hiểm","Sự đoàn kết, sự thống nhất","Gia đình"],3],
+      [38,"Father",["Bố","Hóa thạch","Văn bằng","Hoa diên vĩ"],0],
+      [39,"Foster parents",["Bố mẹ nuôi","Màn chiếu","Nhạc cụ","Phụ huynh"],0],
+      [40,"Grandchildren",["Cháu","Tĩnh vật","Cầu vồng","Gia đình"],0],
+      [41,"Grandfather",["Giáo viên","Ông","Nệm truyền thống Nhật Bản","Bóng bầu dục"],1],
+      [42,"Grandmother",["Phần mềm độc hại","Bà","Bảo tàng","Gió"],1],
+      [43,"Grandparents",["Ông bà","Hàng tồn kho","Hoa Lily","Món quà sinh nhật"],0],
+      [44,"Guardian",["Cay","Người giám hộ","Tắc nghẽn giao thông","Giám sát"],1],
+      [45,"In-laws",["Bố mẹ chồng hoặc bố mẹ vợ","Chủ nghĩa hiện đại","Hô hấp","Chương trình học"],0],
+      [46,"Mother",["Phần tiếp theo","Mẹ","Họa sĩ","Robot học"],1],
+      [47,"Nephew",["Cháu trai","Quản lý","Phụ huynh","Xu hướng"],0],
+      [48,"Niece",["Cháu gái","Tập yoga","Chị dâu hoặc em dâu","Làm việc"],0],
+      [49,"Nuclear family",["Gia đình hạt nhân, gia đình hai thế hệ","Xe trượt scooter","Có thể tái tạo","May ghép, chân vải"],0],
+      [50,"Orphan",["Lễ cưới","Bạn thân, đồng bọn","Gia đình gồm nhiều thế hệ","Trẻ mồ côi"],3],
+      [51,"Parents",["Sự nóng lên toàn cầu","Hô hấp","Miếng bánh","Phụ huynh"],3],
+      [52,"Siblings",["Kỷ luật bản thân","Sinh viên","Băng ghế","Anh chị em"],3],
+      [53,"Single parent",["Chợ trực tuyến","Phụ huynh đơn thân","Bóng rổ","Chú hoặc bác"],1],
+      [54,"Sister-in-law",["Chiết khấu","Chị dâu hoặc em dâu","Bài kiểm tra","Ngành học chính"],1],
+      [55,"Son",["Món hời","Con trai","Nhà thờ","Bóng bầu dục"],1],
+      [56,"Spouse",["Vợ hoặc chồng, bạn đời","Sự kỷ niệm","Bài kiểm tra","Nhẫn"],0],
+      [57,"Stepchildren",["Mưa phùn","Bạn thân, đồng bọn","Con riêng","Kháng sinh"],2],
+      [58,"Stepfather",["Cha dượng","Bức chân dung","Bắn cung","Thực tập"],0],
+      [59,"Stepmother",["Kĩ thuật sao chụp ảnh quang điện","Tiếng cười","Mưa axit","Mẹ kế"],3],
+      [60,"Uncle",["Đạo diễn","May ghép, chân vải","Chú hoặc bác","Phụ huynh"],2],
+      [61,"Blizzard",["Ho","Giao hàng","Bạn bè","Bão tuyết"],3],
+      [62,"Breeze",["Bóng bầu dục","Buffet","Cung điện","Gió nhẹ"],3],
+      [63,"Clear",["Tống tiền","Trời quang đãng","Tàu điện ngầm","Thời trang"],1],
+      [64,"Climate",["Tiếp viên hàng không","Bệnh tật","Văn học","Khí hậu"],3],
+      [65,"Cloud",["Biện pháp chữa trị","Mây","Người thân, họ hàng","Sự đoàn kết, sự thống nhất"],1],
+      [66,"Downpour",["Triển lãm, trưng bày","Mưa rào","Bài giảng","Hoa phong lữ"],1],
+      [67,"Drizzle",["Thời kỳ Phục hưng","Mưa phùn","Màn chiếu","Biến đổi khí hậu"],1],
+      [68,"Fog",["Hoa diên vĩ","Áo vest","Sương mù","Tình bạn"],2],
+      [69,"Forecast",["Tác phẩm nghệ thuật","Bạn biết, người quen","Dự báo","Thiết bị công nghệ"],2],
+      [70,"Hail",["Ghi âm","Đưa ra quyết định","Nhà báo","Mưa đá"],3],
+      [71,"Humidity",["Bán lẻ","Độ ẩm","Lướt sóng","Sự tin tưởng, lòng tin"],1],
+      [72,"Lightning",["Đến nơi","Chớp","Phương tiện giao thông","Đám cưới"],1],
+      [73,"Mist",["Thiếu hụt nguồn nước","Khám phá","Sương mù nhẹ","Cách ly"],2],
+      [74,"Monsoon",["Doanh nhân","Làm giả lời khai","Thỏ","Mùa mưa"],3],
+      [75,"Overcast",["Nhiếp ảnh","Triều đại, triều đình","Trời u ám","Cấu trúc, cách sắp xếp"],2],
+      [76,"Rain",["Biển báo giao thông","Mưa","Nền văn minh","Bảo tồn"],1],
+      [77,"Rainbow",["Giám sát","Tập luyện","Bài tập","Cầu vồng"],3],
+      [78,"Shower",["Làm việc nhóm","Học tập","Tủ chứa thực phẩm","Cơn mưa"],3],
+      [79,"Snow",["Bảng màu, bảng trộn màu","Tuyết","Nhà thiết kế","Nụ hoa"],1],
+      [80,"Storm",["Bàn đầu giường","Trang web","Buổi hòa nhạc","Bão"],3],
+      [81,"Sunny",["Lễ tốt nghiệp","Nắng","Sương mù nhẹ","Lòng trung thành"],1],
+      [82,"Sunrise",["Hoa mâm xôi","Ô nhiễm biển","Sự nhận nuôi","Bình minh"],3],
+      [83,"Sunset",["Hoàng hôn","Trí tuệ nhân tạo","Giai điệu","Bữa tiệc"],0],
+      [84,"Temperature",["Nhiệt độ","Thêu thùa","Điểm đến","Giao thông"],0],
+      [85,"Temperature drop",["Nhân viên bán hàng","Bác sĩ thú y","Giảm nhiệt độ","Gió"],2],
+      [86,"Thunderstorm",["Sấm sét","Sáng kiến","Lập trình","Phá rừng"],0],
+      [87,"Typhoon",["Du lịch tự túc","Tội phạm cổ cồn trắng (tài chính)","Âm thực","Bão lớn (ở châu Á)"],3],
+      [88,"Weather",["Thời tiết","Trả lại hàng","Vẹt","Hương vị"],0],
+      [89,"Wind",["Anh chị em họ","Gió","Tinh xảo, tuyệt vời","Hạn chót"],1],
+      [90,"Windy",["Tình bạn","Robot học","Chợ trực tuyến","Gió mạnh"],3],
+      [91,"Archery",["Máy thông khí","Nhân vật chính của tiệc sinh nhật (bạn nữ)","Bắn cung","Mã hóa"],2],
+      [92,"Athletics",["Siêu thị","Điền kinh","Sáng tạo","Gió"],1],
+      [93,"Badminton",["Bức đầu giường","Cầu lông","Sự thân mật","Luận văn"],1],
+      [94,"Basketball",["Tiền tệ","Hội trường giảng đường","Khúc côn cầu","Bóng rổ"],3],
+      [95,"Boxing",["Sự tưởng nhớ","Ít vận động","Quyền anh","Ngựa"],2],
+      [96,"Cricket",["Cuộc diễu hành","Bóng gậy/Cricket","Quyền anh","Kĩ thuật quay phim"],1],
+      [97,"Cycling",["Trận chiến","Nhân viên bán hàng","Màn chiếu","Đạp xe"],3],
+      [98,"Diving",["Bảng màu, bảng trộn màu","Lướt sóng","Lặn","Đào tạo"],2],
+      [99,"Fencing",["Năng lượng tái tạo","Nhân vật chính của tiệc sinh nhật (bạn nữ)","Đấu kiếm","Cánh hoa"],2],
+      [100,"Football",["Lời bài hát","Du lịch tự túc","Không dây","Bóng đá"],3],
+      [101,"Golf",["Lượng virus","Phá rừng","Bóng bay sinh nhật","Golf"],3],
+      [102,"Gymnastics",["Thể dục dụng cụ","Leo núi","Lắp Lego","Thằn lằn"],0],
+      [103,"Hockey",["Tiết kiệm","Khúc côn cầu","Chuyến tham quan ngắn ngày","Đế quốc"],1],
+      [104,"Judo",["Bóng rổ","Judo","Robot học","Ghế lười, ghế ngả"],1],
+      [105,"Karate",["Cốt truyện","Karate","Khí nhà kính","Nghệ sĩ"],1],
+      [106,"Martial arts",["Võ thuật","Tin tặc","Vi rút","Điểm thu hút"],0],
+      [107,"Rock climbing",["Chuột hamster","Gia phả học","Đợt bùng phát","Leo núi"],3],
+      [108,"Rowing",["Chèo thuyền","Chương trình học","Nướng bánh, làm bánh","Quyền anh"],0],
+      [109,"Rugby",["Chuột hamster","Dân du mục","Giảm nhiệt độ","Bóng bầu dục"],3],
+      [110,"Sailing",["Cửa hàng bán hàng giảm giá","Chơi đàn xylophone (mộc cầm)","Nhà báo","Đua thuyền"],3],
+      [111,"Skateboarding",["Hoa dâm bụt","Trượt ván","Y tá","Thời trang"],1],
+      [112,"Skiing",["Gia đình hạt nhân, gia đình hai thế hệ","Bóng chuyền","Trượt tuyết","Nhà biên kịch"],2],
+      [113,"Snowboarding",["Tàu hỏa","Lính cứu hỏa","Trượt ván tuyết","Tổ tiên"],2],
+      [114,"Surfing",["Bất ngờ","Thợ máy","Cha dượng","Lướt sóng"],3],
+      [115,"Swimming",["Nhân vật","Mưa phùn","Rắn","Bơi lội"],3],
+      [116,"Table tennis",["Phố","Điểm đến","Lễ tân","Bóng bàn"],3],
+      [117,"Taekwondo",["Taekwondo","Dân du mục","Chữ tượng hình","Dinh dưỡng"],0],
+      [118,"Tennis",["Đường","Chim vẹt yến phụng","Tennis","Nợ"],2],
+      [119,"Volleyball",["Bóng chuyền","Phòng học","Phòng trưng bày tác phẩm nghệ thuật","Leo núi"],0],
+      [120,"Wrestling",["Nhà văn","Nụ hoa","Vật","Lá cây"],2],
+      [121,"Accommodation",["Cá","Kịch bản","Chỗ ở","Thời kỳ Phục hưng"],2],
+      [122,"Adventure",["Bài tập về nhà","Sự hứng thú","Dòng thời gian","Cuộc phiêu lưu"],3],
+      [123,"Arrival",["Cung điện","Phí giao dịch","Đến nơi","Tủ kệ"],2],
+      [124,"Attractions",["Điểm thu hút","Hoa lan","Bóng bàn","Bảng màu, bảng trộn màu"],0],
+      [125,"Backpacking",["Làm đồ thủ công","Người đi làm hàng ngày","Máy thông khí","Du lịch tự túc"],3],
+      [126,"Cruise",["Quản lý","Ít vận động","Du thuyền","Nệm truyền thống Nhật Bản"],2],
+      [127,"Cuisine",["Vốn","Tội phạm cổ cồn trắng (tài chính)","Âm thực","Chiến tranh, chiến đấu"],2],
+      [128,"Culture",["Ông bà","Chẩn đoán bệnh","Hoa lan","Văn hóa"],3],
+      [129,"Currency",["Phân hủy sinh học","Tiền tệ","Cho thuê","Can thiệp vào nhân chứng"],1],
+      [130,"Departure",["Bóng rổ","Điều trị","Chủ nghĩa biểu hiện","Sự khởi hành"],3],
+      [131,"Destination",["Điểm đến","Ca hát","Sáng tạo","Làm việc"],0],
+      [132,"Exchange rate",["Định vị","Xác nhận đơn hàng","Tỷ giá hối đoái","Phố"],2],
+      [133,"Excursion",["Quầy trái cây","Dự báo","Chuyến tham quan ngắn ngày","Trốn thuế"],2],
+      [134,"Expedition",["Thuộc về hoa","Mạng lưới","Ghế sofa","Chuyến đi thám hiểm"],3],
+      [135,"Explore",["Bàn ăn","Chuột","Võ thuật","Khám phá"],3],
+      [136,"Guide",["Hướng dẫn viên","Thuật toán","Tính thanh khoản","Làm thêm giờ"],0],
+      [137,"Hiking",["Lời chúc sinh nhật","Sự xói mòn đất","Leo núi","Cholesterol, mỡ máu"],2],
+      [138,"Itinerary",["Lịch trình","Thư viện","Triệu chứng","Trượt tuyết"],0],
+      [139,"Journey",["Hành trình","Thực tập","Lợi suất","Nhiếp ảnh"],0],
+      [140,"Landmark",["Thư ký","Địa danh nổi tiếng","Phụ kiện","Chạm khắc gỗ"],1],
+      [141,"Local",["Địa phương","Vệ sinh","Phong tỏa","Phương tiện giao thông"],0],
+      [142,"Luggage",["Trượt tuyết","Hoa tulip","Hành lý","Phá hoại tài sản công cộng"],2],
+      [143,"Passport",["Mệt mỏi","Làn đường","Tủ kệ","Hộ chiếu"],3],
+      [144,"Rental",["Bảo đảm hài lòng của khách hàng","Nhịp điệu","Cho thuê","Sinh nhật"],2],
+      [145,"Sightseeing",["Tủ bên trong phòng ăn","Bóng bay sinh nhật","Khí hậu","Tham quan"],3],
+      [146,"Souvenir",["Quà lưu niệm","Chất lượng không khí","Cháu trai","Bài kiểm tra"],0],
+      [147,"Tourist",["Nhà hàng","Du khách","Lãi suất","Bóng chuyền"],1],
+      [148,"Trip",["Tự tin","Chuyến đi","Phong tục","Bóng bay sinh nhật"],1],
+      [149,"Visa",["Nhạc phim","Chèo thuyền","Visa","Điệp khúc"],2],
+      [150,"Album",["Bạn cùng lớp","Album","Hoàn tiền","Âm thực"],1],
+      [151,"Artist",["Cổ phiếu","Nghệ sĩ","Hạ thấp đường cong dịch","Phần mềm độc hại"],1],
+      [152,"Audience",["Đồng nghiệp","Khán giả","Bằng cấp","Chim hoàng yến"],1],
+      [153,"Band",["Giải thưởng","Triều đại, triều đình","Ban nhạc","Tác phẩm nghệ thuật"],2],
+      [154,"Beat",["Đi làm hàng ngày","Nhịp","Trường cao đẳng","Dân gian"],1],
+      [155,"Chorus",["Điệp khúc","Khí hậu","Văn học","Tỷ lệ tử vong"],0],
+      [156,"Concert",["Sấm sét","Chó","Nhịp điệu","Buổi hòa nhạc"],3],
+      [157,"Conductor",["Người chỉ huy dàn nhạc","Tắc nghẽn giao thông","Dễ bị tổn thương","Cuộc diễu hành"],0],
+      [158,"Duet",["Phí giao dịch","Bồi bàn","Ông bà","Hát song ca"],3],
+      [159,"Genre",["Thể loại","Nệm truyền thống Nhật Bản","Người đi bộ","Sự đoàn kết, sự thống nhất"],0],
+      [160,"Harmony",["Tập luyện","Hòa âm","Giọng hát","Tỷ lệ tử vong"],1],
+      [161,"Improvisation",["Thời trang","Ngựa","Sơn acrylic","Sáng tác tự do"],3],
+      [162,"Instrument",["Liên minh","Buôn lậu","Bơi lội","Nhạc cụ"],3],
+      [163,"Instrumental",["Lời cầu hôn","Cảnh sát","Nhạc hòa tấu","Ruy băng"],2],
+      [164,"Lyrics",["Hòa âm","Lịch trình","Bồi bàn","Lời bài hát"],3],
+      [165,"Melody",["Nhà tuyển dụng","Tin tặc","Tác phẩm nghệ thuật","Giai điệu"],3],
+      [166,"Orchestra",["Dàn nhạc","Bóng chuyền","Nhiên liệu hóa thạch","Sự nóng lên toàn cầu"],0],
+      [167,"Performance",["Chiến tranh, chiến đấu","Biểu diễn","Sự nhiễm trùng","Bà"],1],
+      [168,"Record",["Môi trường sống","Đào tạo","Giảm giá","Ghi âm"],3],
+      [169,"Rhythm",["Triệu chứng","Nhịp điệu","Chủ nghĩa biểu hiện","Đi bộ"],1],
+      [170,"Solo",["Đơn ca","Thể dục dụng cụ","Nền văn minh","Trường phái ấn tượng"],0],
+      [171,"Soloist",["Ca sĩ hát solo","Trung tâm thương mại","Kế toán","Giết người"],0],
+      [172,"Soundtrack",["Tỷ lệ tử vong","Chú hoặc bác","Siêu thị","Nhạc phim"],3],
+      [173,"Stage",["Nha sĩ","Tham quan","Sân khấu","Người thân, họ hàng"],2],
+      [174,"Symphony",["Hạnh phúc","Đợt bùng phát","Giao hưởng","Cửa hàng bách hóa"],2],
+      [175,"Tempo",["Giao dịch","Nhịp độ","Lợi nhuận","Bóng bầu dục"],1],
+      [176,"Tune",["Học tập","Giai điệu","Bàn ăn","Trộm cắp phương tiện giao thông"],1],
+      [177,"Vocal",["Giọng hát","Phong tục","Tội phạm mạng","Ngon"],0],
+      [178,"Actor",["Hoàn tiền","Giao hưởng","Nhạc kịch","Diễn viên nam"],3],
+      [179,"Actress",["Tuyết","Diễn viên nữ","Kháng sinh","Giải thưởng"],1],
+      [180,"Adaptation",["Máy thông khí","Chuyển thể","Đạp xe","Thợ máy"],1],
+      [181,"Award",["Mó mặn","Giải thưởng","Tượng đài","Dinh dưỡng"],1],
+      [182,"Box office",["Gia đình gồm nhiều thế hệ","Nguyên nhân, nguồn gốc","Nhảy zumba","Doanh thu vé"],3],
+      [183,"Cameo",["Vai diễn khách mời","Nền văn minh","Nhân viên","Học giả"],0],
+      [184,"Cast",["Dàn diễn viên","Hợp đồng","Người chỉ huy dàn nhạc","Điệp khúc"],0],
+      [185,"Character",["Chú hoặc bác","Ghi âm","Nhân vật","Tuổi"],2],
+      [186,"Cinematography",["Sự nóng lên toàn cầu","Doanh thu vé","Thương mại điện tử","Kĩ thuật quay phim"],3],
+      [187,"Costume",["Chuột lang","Chồn","Trang phục","Cầu lông"],2],
+      [188,"Critic",["Nhà phê bình","Khán giả","Tăng trưởng","Nhà khoa học"],0],
+      [189,"Dialogue",["Lễ tốt nghiệp","Mẹ","Sự trung thành","Đoạn hội thoại"],3],
+      [190,"Director",["Vai diễn khách mời","Đạo diễn","Phí giao dịch","Bảo vệ"],1],
+      [191,"Movie theater",["Nghệ nhân","Rạp chiếu phim","Sự tận tụy, cống hiến","Bạn bè"],1],
+      [192,"Plot",["Nghe trộm điện thoại","Vui vẻ","Mưa đá","Cốt truyện"],3],
+      [193,"Plot twist",["Tàn tích, đống đổ nát","Sự thay đổi bất ngờ trong cốt truyện","Lương","Bơi lội"],1],
+      [194,"Premiere",["Người tiêu dùng","Cha dượng","Buổi ra mắt phim","Sự tin tưởng, lòng tin"],2],
+      [195,"Prequel",["Nhịp tim","Phần trước","Bóng bầu dục","Các loài đang bị đe dọa"],1],
+      [196,"Producer",["Nhà sản xuất","Dự báo","Dã man, man rợ","Di vật, di tích"],0],
+      [197,"Review",["Định vị","Bãi đậu xe","Đánh giá","Phá sản"],2],
+      [198,"Scene",["Trường phái ấn tượng","Đồ trang trí lễ cưới","Can thiệp vào nhân chứng","Cảnh quay"],3],
+      [199,"Screen",["Tình yêu","Trường phái ấn tượng","Hoa hồng","Màn chiếu"],3],
+      [200,"Screenplay",["Trộm cắp hàng hóa trong cửa hàng","Kịch bản","Âm thực","Dữ liệu"],1],
+      [201,"Screenwriter",["Nhà biên kịch","Cá","Doanh nghiệp khởi nghiệp","Sự tận tụy, cống hiến"],0],
+      [202,"Sequel",["Phần tiếp theo","Chơi game","Kiệt tác","Áo vest"],0],
+      [203,"Visual effects",["Hiệu ứng hình ảnh","Ông","Nhà báo","Hoa lục bình"],0],
+      [204,"Appetizer",["Món khai vị","Đông lạnh","Sự tưởng nhớ","Đấu giá trực tuyến"],0],
+      [205,"Bakery",["Hóa đơn","Ô nhiễm","Phá hoại tài sản công cộng","Tiệm bánh"],3],
+      [206,"Buffet",["Đông lạnh","Dạo chơi, duyệt web","Buffet","Hợp đồng"],2],
+      [207,"Butcher",["Nhà bảo tồn","Phương tiện giao thông","Người bán thịt","Giáo dục"],2],
+      [208,"Café",["Vẹt","Quán cà phê","Nợ","Dự báo"],1],
+      [209,"Canned",["Thực tế ảo","Kĩ thuật quay phim","Đóng hộp","Quyền anh"],2],
+      [210,"Dairy",["Tủ chứa thực phẩm","Người làm chứng, tham dự đám cưới","Sữa và các sản phẩm từ sữa","Hạnh phúc"],2],
+      [211,"Delicious",["Sự khởi hành","Nghi lễ","Lịch trình","Ngon"],3],
+      [212,"Dessert",["Xe hơi","Sự khám phá","Hạnh phúc","Món tráng miệng"],3],
+      [213,"Fishmonger",["Kháng sinh","Cửa hàng bán cá","Sấm sét","Các loài đang bị đe dọa"],1],
+      [214,"Flavor",["Thể dục dụng cụ","Bán buôn","Hương vị","Bài tập"],2],
+      [215,"Fresh",["Màu nước","Lợi suất","Tươi","Sự xói mòn đất"],2],
+      [216,"Frozen",["Món hời","Đông lạnh","Đến nơi","Mối quan hệ tốt đẹp"],1],
+      [217,"Fruit stand",["Quầy trái cây","Hữu cơ","Truy vết tiếp xúc","Hàng tồn kho"],0],
+      [218,"Grocery store",["Cửa hàng tạp hóa","Chủ nghĩa hiện thực","Hôn nhân","Tủ đựng đồ"],0],
+      [219,"Healthy",["Đồ trang trí lễ cưới","Khỏe mạnh","Dấu chân sinh thái","Cháu"],1],
+      [220,"Ingredient",["Bồi bàn","Sinh nhật","Mẹ","Nguyên liệu"],3],
+      [221,"Main course",["Món chính","Tiếp viên hàng không","Cho thuê","Đoạn hội thoại"],0],
+      [222,"Market",["Độ ẩm","Nhảy zumba","Chợ","Mưa đá"],2],
+      [223,"Nutritious",["Ăn chay","Nhân vật chính của tiệc sinh nhật (bạn nam)","Thợ điện","Dinh dưỡng"],3],
+      [224,"Organic",["Miễn dịch cộng đồng","Nhân viên bán hàng","Xâm phạm","Hữu cơ"],3],
+      [225,"Recipe",["Hoa oải hương","Trả lại hàng","Tấn công","Công thức nấu ăn"],3],
+      [226,"Restaurant",["Sinh nhật","Nhà hàng","Dã man, man rợ","Giảm nhiệt độ"],1],
+      [227,"Savory",["Định cư","Bồi bàn","Phòng trưng bày tác phẩm nghệ thuật","Mó mặn"],3],
+      [228,"Spicy",["Cay","Đi bộ","Tình bạn","Phần mềm độc hại"],0],
+      [229,"Supermarket",["Đấu giá trực tuyến","Làn đường","Hương vị","Siêu thị"],3],
+      [230,"Sweet",["Ngọt","Chuột lang","Bóng chuyền","Đưa ra quyết định"],0],
+      [231,"Vegan",["Tình cảm, lòng yêu thương","Cuộc họp","Ăn chay không sử dụng sản phẩm động vật","Phiên dịch viên"],2],
+      [232,"Vegetarian",["Tiết kiệm","Ăn chay","Công thức nấu ăn","Người giám hộ"],1],
+      [233,"Accessory",["Bảo tồn","Chuyến đi","Trốn thuế","Phụ kiện"],3],
+      [234,"Bargain",["Bài kiểm tra","Món hời","Cánh hoa","Ho"],1],
+      [235,"Boutique",["Cửa hàng thời trang","Sự khám phá","Phong cách, kiểu dáng thời trang","Sức bền"],0],
+      [236,"Brand",["Chơi đàn ukulele","Doanh nhân","Tiết kiệm","Thương hiệu"],3],
+      [237,"Cashier",["Thu ngân","Mối quan hệ tốt đẹp","Giá trị","Cướp"],0],
+      [238,"Coupon",["Phiếu giảm giá","Chẩn đoán bệnh","Luận văn","Công thức nấu ăn"],0],
+      [239,"Deal",["Phố","Học tập","Nến sinh nhật","Thỏa thuận, ưu đãi"],3],
+      [240,"Department store",["Bạn cùng lớp","Cửa hàng bách hóa","Vợ hoặc chồng, bạn đời","Tập yoga"],1],
+      [241,"Designer",["Nhà thiết kế","Thực tập","Bánh sinh nhật","Đánh giá"],0],
+      [242,"Discount",["Nệm truyền thống Nhật Bản","Chiết khấu","Người tiêu dùng","Hạn chót"],1],
+      [243,"Exchange",["Đổi hàng","Khán giả","Người tiêu dùng","Khí nhà kính"],0],
+      [244,"Fashion",["Bình minh","Người thân, họ hàng","Thời trang","Sự quyết đoán"],2],
+      [245,"Fashionable",["Cay","Vẹt","Đạo diễn","Hợp thời trang, sành điệu"],3],
+      [246,"Fit",["Vừa vặn","Khúc côn cầu","Quản lý","Sáng tạo"],0],
+      [247,"Luxury",["Thời kỳ Phục hưng","Sang trọng","Xe hơi","Mô tả sản phẩm"],1],
+      [248,"Outlet",["Phong tỏa","Cửa hàng bán hàng giảm giá","Phương pháp điều trị","Thiết bị công nghệ"],1],
+      [249,"Promotion",["Khuyến mãi","Khí nhà kính","Võ thuật","Món chính"],0],
+      [250,"Quality",["Dã man, man rợ","Anh rể hoặc em rể","Chất lượng","Nha sĩ"],2],
+      [251,"Receipt",["Hóa đơn","Máy thông khí","Ngành học chính","Nắng"],0],
+      [252,"Refund",["Điền kinh","Hoàn tiền","Giám sát","Nhạc hòa tấu"],1],
+      [253,"Retail",["Bán lẻ","Bồi bàn","Tấn công","Dao gạt màu"],0],
+      [254,"Return",["Cuộc phiêu lưu","Cách ly","Trả lại hàng","Sự nghiệp"],2],
+      [255,"Sale",["Nhà văn","Giảm giá","Sự hứng thú","Đọc sách"],1],
+      [256,"Shopping cart",["Xe đẩy hàng","Đua thuyền","Ghế lười, ghế ngả","Đọc sách"],0],
+      [257,"Shopping mall",["Bức đầu giường","Trung tâm thương mại","Nhịp tim","Sinh nhật"],1],
+      [258,"Size",["Kích cỡ","Kỹ thuật số","Hành lý","Đường"],0],
+      [259,"Style",["Phong cách, kiểu dáng thời trang","Cuộc phiêu lưu","Khúc côn cầu","Màn chiếu"],0],
+      [260,"Trend",["Gia đình gồm nhiều thế hệ","Xu hướng","Phong tục","Voan cô dâu"],1],
+      [261,"Wholesale",["Bán buôn","Công nghệ xanh","Sự nhiễm trùng","Biến đổi khí hậu"],0],
+      [262,"Bicycle",["Làm việc","Vaccine","Xe đạp","Sự đoàn kết, sự thống nhất"],2],
+      [263,"Bridge",["Nhiên liệu hóa thạch","Bố mẹ chồng hoặc bố mẹ vợ","Cầu","Hoa diên vĩ"],2],
+      [264,"Bus",["Đường cao tốc","Xe buýt","Xe máy","Đạp xe"],1],
+      [265,"Car",["Ô nhiễm","Ảo, không thực tế","Tài nguyên cạn kiệt, không thể tái tạo","Xe hơi"],3],
+      [266,"Commute",["Đi làm hàng ngày","Đi bộ","Đính hôn","Quán cà phê"],0],
+      [267,"Commuter",["Người đi làm hàng ngày","Ô nhiễm biển","Hoa tulip","Sự hứng thú"],0],
+      [268,"Highway",["Đường cao tốc","Lây từ động vật sang người","Trừu tượng","Sự đồng cảm"],0],
+      [269,"Intersection",["Điểm thu hút","Thổi nến","Ngã tư","Hóa thạch"],2],
+      [270,"Lane",["Hoa anh túc","Mèo con","Làn đường","Nhà sản xuất"],2],
+      [271,"Motorcycle",["Xe máy","Thiết bị công nghệ","Trộm cắp danh tính","Bóng gậy/Cricket"],0],
+      [272,"Motorway",["Nhịp tim","Đường cao tốc","Ghế bành","Thuật toán"],1],
+      [273,"Navigation",["Trận chiến","Định vị","Cuộc diễu hành","Chính sách đổi trả"],1],
+      [274,"Parking",["Vui vẻ","Ngành học phụ","Bãi đậu xe","Lễ hội"],2],
+      [275,"Pedestrian",["Biểu diễn","Nhịp tim","Người đi bộ","Phong tục"],2],
+      [276,"Public transportation",["Thuộc về hoa","Tư duy phản biện","Tầng ozon","Phương tiện giao thông công cộng"],3],
+      [277,"Road",["Phụ huynh đơn thân","Đàm phán","Đường","Chồn"],2],
+      [278,"Roundabout",["Vòng xuyến","Hợp đồng","Độc hại","Tuần trăng mật"],0],
+      [279,"Scooter",["Xe tải","Bức chân dung","Xe trượt scooter","Đấu giá trực tuyến"],2],
+      [280,"Sidewalk",["Bạn biết, người quen","Via hè","Điền kinh","Thực tập"],1],
+      [281,"Speed limit",["Văn học","Giới hạn tốc độ","Tình hữu nghị","Giảm nhiệt độ"],1],
+      [282,"Street",["Đám cưới","Mạng xã hội","Bóng chuyền","Phố"],3],
+      [283,"Subway",["Sáng kiến, đổi mới","Người nuôi thú cưng","Tàu điện ngầm","Ghế đẩu, đôn"],2],
+      [284,"Taxi",["Bàn đặt đèn ngủ","Xâm phạm","Xác thực","Xe taxi"],3],
+      [285,"Traffic",["Trừu tượng","Trời u ám","Bài kiểm tra","Giao thông"],3],
+      [286,"Traffic jam",["Lãi suất","Thỏa thuận, ưu đãi","Tủ chứa thực phẩm","Tắc nghẽn giao thông"],3],
+      [287,"Traffic sign",["Chuyển thể","Nhóm","Biển báo giao thông","Sự quyết đoán"],2],
+      [288,"Train",["Bức chân dung","Thuật toán","Tàu hỏa","Hệ sinh thái"],2],
+      [289,"Truck",["Cơn mưa","Người đi làm hàng ngày","Gió nhẹ","Xe tải"],3],
+      [290,"Tunnel",["Bố mẹ nuôi","Xe đạp","Đường hầm","Ảo, không thực tế"],2],
+      [291,"Vehicle",["Thỏa thuận, ưu đãi","Phương tiện giao thông","Thể loại","Nhẫn"],1],
+      [292,"Adaptability",["Buôn lậu","Cố vấn học vụ","Sương mù","Sự thích nghi"],3],
+      [293,"Assertiveness",["Dữ liệu","Cung điện","Sự quyết đoán","Sự gần gũi"],2],
+      [294,"Communication",["Giao tiếp","Làm việc nhóm","Đến nơi","Ngân sách"],0],
+      [295,"Confidence",["Phục hồi","Triển lãm, trưng bày","Bài tập về nhà","Tự tin"],3],
+      [296,"Creativity",["Nơi làm việc","Nhiếp ảnh gia","Sáng tạo","Hành trình"],2],
+      [297,"Critical thinking",["Cảnh quay","Ghế sofa","Tư duy phản biện","Nhóm học tập"],2],
+      [298,"Decision-making",["Tiệm bánh","Đưa ra quyết định","Đại dịch","Dấu chân carbon"],1],
+      [299,"Empathy",["Mệt mỏi","Sự khám phá","Sự đồng cảm","Cắt bánh sinh nhật"],2],
+      [300,"Flexibility",["Sơn acrylic","Hộ chiếu","Sân khấu","Tính linh hoạt"],3],
+      [301,"Initiative",["Bó hoa cưới","Điệp khúc","Chim hoàng yến","Sáng kiến"],3],
+      [302,"Leadership",["Lãnh đạo","Nhà tuyển dụng","Cửa hàng bán cá","Người bán thịt"],0],
+      [303,"Negotiation",["Động vật hoang dã","Cầu","Đàm phán","Anh chị em họ"],2],
+      [304,"Networking",["Mẹ","Lễ tân","Con riêng","Mạng lưới quan hệ"],3],
+      [305,"Patience",["Hợp thời trang, sành điệu","Golf","Sự kiên nhẫn","Gia đình"],2],
+      [306,"Presentation",["Chuột hamster","Thuyết trình","Phương tiện giao thông","Chim hoàng yến"],1],
+      [307,"Problem-solving",["Ví điện tử","Tủ quần áo","Giao dịch","Giải quyết vấn đề"],3],
+      [308,"Resilience",["Nhóm","Ngành học chính","Bão tuyết","Sức bền"],3],
+      [309,"Self-discipline",["Thư viện","Sáng kiến, đổi mới","Kỷ luật bản thân","Tài sản"],2],
+      [310,"Teamwork",["Làm việc nhóm","Cơn mưa","Nến sinh nhật","Lặn"],0],
+      [311,"Time management",["Quầy trái cây","Sàn giao dịch chứng khoán","Quản lý thời gian","Vitamin"],2],
+      [312,"Adoption",["Nhện trùng","Sự nhận nuôi","Thiệp mời sinh nhật","Giáo dục"],1],
+      [313,"Bird",["Đường cao tốc","Vay","Chim","Mối liên hệ"],2],
+      [314,"Budgerigar",["Chữ tượng hình","Nhạc","Tình cảm, lòng yêu thương","Chim vẹt yến phụng"],3],
+      [315,"Canary",["Chim hoàng yến","Thợ sửa ống nước","Máy chủ mây","Cầu vồng"],0],
+      [316,"Cat",["Giao hàng","Cướp biển","Hoa lục bình","Mèo"],3],
+      [317,"Dog",["Vi khuẩn, mầm bệnh","Đa dạng sinh học","Làm đồ thủ công","Chó"],3],
+      [318,"Ferret",["Bà","Trang trí","Bóng bay sinh nhật","Chồn"],3],
+      [319,"Fish",["Thợ làm tóc","Chẩn đoán bệnh","Cá","Nghệ thuật phun sơn, việc viết, vẽ trái phép trên bề mặt công cộng"],2],
+      [320,"Gerbil",["Đọc sách","Thời kỳ Phục hưng","Gió mạnh","Chuột nhảy"],3],
+      [321,"Goldfish",["Nhẫn","Cá vàng","Cầu","Calo"],1],
+      [322,"Grooming",["Tủ đựng đồ","Khuyến mãi","Chăm sóc thú cưng","Đa dạng sinh học"],2],
+      [323,"Guinea pig",["Chuột lang","Tủ bên trong phòng ăn","Tủ lớn kết hợp tivi giải trí","Nhịp tim"],0],
+      [324,"Hamster",["Hệ sinh thái","Tác phẩm nghệ thuật","Nhà tuyển dụng","Chuột hamster"],3],
+      [325,"Hedgehog",["Biến thể Delta","Văn bằng","Nhím","Đặc trưng"],2],
+      [326,"Horse",["Ngựa","Hoa vạn thọ","Vi khuẩn, mầm bệnh","Làm việc"],0],
+      [327,"Kitten",["Luận văn","Mèo con","Thỏa thuận, ưu đãi","Phụ huynh đơn thân"],1],
+      [328,"Lizard",["Hoa vạn thọ","Vẽ","Thuộc về chế độ dinh dưỡng","Thằn lằn"],3],
+      [329,"Mouse",["Nhân vật","Chuột","Tính thanh khoản","Bạn bè"],1],
+      [330,"Parrot",["Thiệp sinh nhật","Quán cà phê","Vẹt","Làm việc"],2],
+      [331,"Pet",["Chăm sóc thú cưng","Ghế lười, ghế ngả","Thú cưng","Du thuyền"],2],
+      [332,"Pet owner",["Di sản","Sự liên quan, tầm quan trọng","Ngành học chính","Người nuôi thú cưng"],3],
+      [333,"Petting",["Vuốt ve","Nhà thiết kế","Khủng bố","Đánh giá"],0],
+      [334,"Puppy",["Trượt ván","Đàm phán","Chó con","Chính sách đổi trả"],2],
+      [335,"Rabbit",["An ninh mạng","Thỏ","Thực tập","Bức tranh, tấm vải"],1],
+      [336,"Snake",["Đóng hộp","Rắn","Tăng trưởng","Hoa phong lữ"],1],
+      [337,"Tarantula",["Hành lý","Cướp máy bay","Phụ kiện","Nhện trùng"],3],
+      [338,"Tortoise",["Biến đổi khí hậu","Nhím","Ô nhiễm","Rùa"],3],
+      [339,"Turtle",["Giết người","Đột biến","Rùa","Chủ nghĩa hiện đại"],2],
+      [340,"Anniversary",["Thể lực, thể trạng","Sự gần gũi","Kỷ niệm ngày cưới","Bóng rổ"],2],
+      [341,"Best man",["Phù rể chính","Đấu giá trực tuyến","Mệt mỏi","Lạm phát"],0],
+      [342,"Bouquet",["Bó hoa cưới","Kế toán","Bảng màu, bảng trộn màu","Sự tận tụy, cống hiến"],0],
+      [343,"Bride",["Nhạc kịch","Quan hệ hợp tác, đối tác","Cô dâu","Chồn"],2],
+      [344,"Bridesmaid",["Chớp","Người đi làm hàng ngày","Phù dâu","Sự kiên nhẫn"],2],
+      [345,"Celebrant",["Bảo tồn","Nghệ sĩ","Điêu khắc","Người chủ lễ"],3],
+      [346,"Ceremony",["Lễ cưới","Ngã tư","Cốt truyện","Thổi nến"],0],
+      [347,"Church",["Visa","Bố mẹ chồng hoặc bố mẹ vợ","Nhà thờ","Hoa mâm xôi"],2],
+      [348,"Decorations",["Sự khám phá","Đồ trang trí lễ cưới","Triết học","Dấu chân carbon"],1],
+      [349,"Engagement",["Ho","Hối lộ","Đính hôn","Đóng hộp"],2],
+      [350,"Groom",["Bão","Sự tận tụy, cống hiến","Vốn","Chú rể"],3],
+      [351,"Groomsman",["Leo núi","Phù rể","Cholesterol, mỡ máu","Thư pháp"],1],
+      [352,"Honeymoon",["Dân tộc","Nhà hàng","Chữ tượng hình","Tuần trăng mật"],3],
+      [353,"Love",["Bức đầu giường","Tình yêu","Phần trước","Bóng gậy/Cricket"],1],
+      [354,"Maid of honor",["Miếng bánh","Thể lực, thể trạng","Tàu điện ngầm","Phù dâu chính"],3],
+      [355,"Marriage",["Phù dâu","Hôn nhân","Mối quan hệ tốt đẹp","Du lịch tự túc"],1],
+      [356,"Proposal",["Thương gia, nhà buôn","Phóng hỏa","Lạm phát","Lời cầu hôn"],3],
+      [357,"Reception",["Hối lộ","Thiết bị công nghệ","Chuột nhảy","Tiệc cưới"],3],
+      [358,"Registry",["Tiệc cưới","Lính cứu hỏa","Danh sách quà cưới","Người bán thịt"],2],
+      [359,"Registry office",["Hóa đơn","Trộm cắp hàng hóa trong cửa hàng","Văn phòng đăng ký kết hôn","Nhện trùng"],2],
+      [360,"Ring",["Nhẫn","Khắc, ốp","Nấu ăn","Tủ quần áo"],0],
+      [361,"Toast",["Chúc mừng","Mối liên hệ","Mó mặn","Triệu chứng"],0],
+      [362,"Tuxedo",["Dinh dưỡng","Món tráng miệng","Áo vest","Chuột nhảy"],2],
+      [363,"Veil",["Voan cô dâu","Nhà thờ","Cố vấn học vụ","Kỳ thi"],0],
+      [364,"Vows",["Lời thề","Tập yoga","Mẹ","Bố mẹ nuôi"],0],
+      [365,"Wedding",["Phí giao dịch","Chú hoặc bác","Đầy sức sống","Đám cưới"],3],
+      [366,"Wedding cake",["Hương thơm","Bánh cưới","Anh rể hoặc em rể","Lừa đảo"],1],
+      [367,"Wedding dress",["Nhím","Váy cưới","Di tích","Đấu kiếm"],1],
+      [368,"Wedding planner",["Người tổ chức đám cưới","Vòng xuyến","Tội phạm mạng","Bố mẹ chồng hoặc bố mẹ vợ"],0],
+      [369,"Witness",["Người làm chứng, tham dự đám cưới","Vui vẻ","Dữ liệu","Calo"],0],
+      [370,"Age",["Cầu vồng","Tuổi","Đặc trưng","Sự thân mật"],1],
+      [371,"Balloons",["Bóng bay sinh nhật","Gió","Bảo vệ","Dấu chân carbon"],0],
+      [372,"Birthday",["Trẻ mồ côi","Sinh nhật","Bệnh tật","Thổi nến"],1],
+      [373,"Birthday boy",["Doanh nhân","Sự quyết đoán","Nhân vật chính của tiệc sinh nhật (bạn nam)","Chiến thắng, chiến công"],2],
+      [374,"Birthday card",["Môi trường sống","Thiệp sinh nhật","Xe hơi","Hợp thời trang, sành điệu"],1],
+      [375,"Birthday girl",["Hạ thấp đường cong dịch","Nhân vật chính của tiệc sinh nhật (bạn nữ)","Chợ trực tuyến","Đồ trang trí lễ cưới"],1],
+      [376,"Birthday wish",["Nhịp điệu","Tập luyện","Lời chúc sinh nhật","Tiếp viên hàng không"],2],
+      [377,"Blowing out candles",["Thổi nến","Chị dâu hoặc em dâu","Thỏa thuận, ưu đãi","Sự gần gũi"],0],
+      [378,"Cake",["Nhà hàng","Người bán lẻ","Trượt tuyết","Bánh sinh nhật"],3],
+      [379,"Cake cutting",["Xe buýt","Trượt tuyết","Cắt bánh sinh nhật","Nhân viên"],2],
+      [380,"Cake decoration",["Trang trí bánh sinh nhật","Kiến trúc sư","Phần mềm độc hại","Vitamin"],0],
+      [381,"Cake slice",["Hệ sinh thái","Rùa","Album","Miếng bánh"],3],
+      [382,"Candle",["Tình đồng đội","Sáng tác tự do","Nến sinh nhật","Chuyển thể"],2],
+      [383,"Celebration",["Cảnh quay","Đàm phán","Sự kỷ niệm","Người đi làm hàng ngày"],2],
+      [384,"Childhood",["Sinh nhật","Cha dượng","Cửa hàng bách hóa","Tuổi thơ"],3],
+      [385,"Excitement",["Sự hứng thú","Nụ hoa","Hội trường giảng đường","Làm thêm giờ"],0],
+      [386,"Friends",["Giết người","Bạn bè","Điền kinh","Điêu khắc"],1],
+      [387,"Fun",["Hoa cẩm tú cầu","Vui vẻ","Món quà sinh nhật","Bức đầu giường"],1],
+      [388,"Games",["Tình yêu","Phần trước","Trò chơi","Bền vững"],2],
+      [389,"Gifts",["Đại dịch","Bãi đậu xe","Chó","Quà tặng"],3],
+      [390,"Happiness",["Hạnh phúc","Via hè","Phố","Hướng dẫn viên"],0],
+      [391,"Invitation",["Thiệp mời sinh nhật","Đơn ca","Dữ liệu","Người tiêu dùng"],0],
+      [392,"Joy",["Tủ quần áo","Kiệt tác","Niềm vui","Đàm phán"],2],
+      [393,"Laughter",["Nụ hoa","Bức chân dung","Tiếng cười","Sấm sét"],2],
+      [394,"Music",["Đa dạng sinh học","Hoa vạn thọ","Nhạc","Câu cá"],2],
+      [395,"Party",["Chơi game","Lời bài hát","Sự liên quan, tầm quan trọng","Bữa tiệc"],3],
+      [396,"Present",["Món quà sinh nhật","Trừu tượng","Béo phì","Đạp xe"],0],
+      [397,"Streamers",["Ruy băng","Đàm phán","Sự nóng lên toàn cầu","Giao hàng"],0],
+      [398,"Surprise",["Chim","Bất ngờ","Độ ẩm","Chồn"],1],
+      [399,"Academic",["Diễn viên nam","Nở hoa","Học thuật","Trộm cắp hàng hóa trong cửa hàng"],2],
+      [400,"Academic advisor",["Sự thấu hiểu","Thuốc men","Cố vấn học vụ","Bình minh"],2],
+      [401,"Assignment",["Kỹ thuật số","Nét vẽ, nét cọ","Âm thực","Bài tập"],3],
+      [402,"Classmate",["Quản lý","Bạn cùng lớp","Cửa hàng bán cá","Hoa cúc ngũ sắc"],1],
+      [403,"Classroom",["Phòng học","Nhạc cụ","Mạng lưới quan hệ","Lời cầu hôn"],0],
+      [404,"College",["Trường cao đẳng","Di sản","Ho","Bằng cấp"],0],
+      [405,"Curriculum",["Chương trình học","Hô hấp","Luật sư","Phục hồi"],0],
+      [406,"Degree",["Mạng nội bộ","Hương thơm","Bằng cấp","Gia đình hạt nhân, gia đình hai thế hệ"],2],
+      [407,"Diploma",["Mẹ","Mèo con","Giao hàng","Văn bằng"],3],
+      [408,"Education",["Người làm chứng, tham dự đám cưới","Nền văn minh","Làm vườn","Giáo dục"],3],
+      [409,"Exam",["Mạng xã hội","Sự nhiễm trùng","Phụ huynh","Kỳ thi"],3],
+      [410,"Grade",["Mó mặn","Con trai","Cướp","Điểm số"],3],
+      [411,"Graduation",["Lễ tốt nghiệp","Tắc nghẽn giao thông","Biến đổi khí hậu","Biện pháp chữa trị"],0],
+      [412,"Homework",["Mối quan hệ họ hàng","Bài tập về nhà","Bạn bè","Độ ẩm"],1],
+      [413,"Lecture",["Bắn cung","Bài giảng","Trang phục","Xâm lược"],1],
+      [414,"Lecture hall",["Mối liên hệ","Hội trường giảng đường","Hoa nhài","Sinh nhật"],1],
+      [415,"Library",["Xếp giấy","Thư viện","Thỏa thuận, ưu đãi","Sáng kiến"],1],
+      [416,"Major",["Nhóm","Sự nhiễm trùng","Đóng hộp","Ngành học chính"],3],
+      [417,"Minor",["Ngành học phụ","Cháu trai","Dân gian","Việc làm"],0],
+      [418,"Professor",["Truy vết tiếp xúc","Ví điện tử","Đường cao tốc","Giáo sư"],3],
+      [419,"Research",["Biểu diễn","Thuốc men","Cửa hàng tạp hóa","Nghiên cứu"],3],
+      [420,"Scholar",["Học giả","Chứng mất ngủ","Cháu trai","Xác nhận đơn hàng"],0],
+      [421,"Seminar",["Hội thảo","Làm việc nhóm","Bố","Giải quyết vấn đề"],0],
+      [422,"Student",["Sinh viên","Ăn chay không sử dụng sản phẩm động vật","Đạp xe","Khu chôn lấp rác thải"],0],
+      [423,"Study",["Học tập","Lễ hội","Chuột hamster","Ô nhiễm biển"],0],
+      [424,"Study group",["Bóng bàn","Nhóm học tập","Biểu diễn","Niềm vui"],1],
+      [425,"Test",["Chú hoặc bác","Dã man, man rợ","Bài kiểm tra","Chiến thắng, chiến công"],2],
+      [426,"Textbook",["Sách giáo khoa","Mạng Internet","Miếng bánh","Quầy trái cây"],0],
+      [427,"Thesis",["Phù rể chính","Luận văn","Vẹt","Ca hát"],1],
+      [428,"University",["Bóng bàn","Mạng Internet","Rắn","Đại học"],3],
+      [429,"Boss",["Sếp","Cắt bánh sinh nhật","Sự thay đổi bất ngờ trong cốt truyện","Hoa phong lữ"],0],
+      [430,"Career",["Giao hưởng","Hoa phong lữ","Sự nghiệp","Xe đẩy hàng"],2],
+      [431,"Career development",["Sự thân mật","Phát triển sự nghiệp","Hương thơm","Hối lộ"],1],
+      [432,"Colleague",["Đồng nghiệp","Cổ tức","Chim hoàng yến","Bảng màu, bảng trộn màu"],0],
+      [433,"Contract",["Hợp đồng","Đợt dịch","Người chỉ huy dàn nhạc","Thần thoại"],0],
+      [434,"Corporation",["Tin tặc","Phụ huynh","Tổ chức","Bài giảng"],2],
+      [435,"Deadline",["Cửa hàng tạp hóa","Kỹ thuật tạo sáng tối trong hội họa","Chim","Hạn chót"],3],
+      [436,"Employee",["Tiệm bánh","Tổ tiên","Cảnh sát","Nhân viên"],3],
+      [437,"Employer",["Hội thảo","Nhà tuyển dụng","Cổ tức","Sáng tác tự do"],1],
+      [438,"Employment",["Việc làm","Xâm lược","Bơi lội","Hành lý"],0],
+      [439,"Entrepreneur",["Quầy trái cây","Khu chôn lấp rác thải","Chương trình học","Doanh nhân"],3],
+      [440,"Internship",["Bán buôn","Phù rể chính","Cholesterol, mỡ máu","Thực tập"],3],
+      [441,"Interview",["Chuột lang","Chất dinh dưỡng","Phỏng vấn","Đường cao tốc"],2],
+      [442,"Job",["Nơi làm việc","Mạng nội bộ","Thuộc về nghệ thuật, có tài nghệ","Công việc"],3],
+      [443,"Manager",["Mùa mưa","Văn hóa làm việc","Quản lý","Trường cao đẳng"],2],
+      [444,"Meeting",["Đông lạnh","Cuộc họp","Cướp giật","Kích cỡ"],1],
+      [445,"Office",["Lòng trung thành","Văn phòng","Sữa và các sản phẩm từ sữa","Nhà phê bình"],1],
+      [446,"Overtime",["Làm thêm giờ","Cảnh sát","Váy cưới","Thỏa thuận, ưu đãi"],0],
+      [447,"Project",["Làm đồ thủ công","Giường sofa","Thuốc men","Dự án"],3],
+      [448,"Resume",["Sơ yếu lý lịch, CV","Tiếng cười","Vòng xuyến","Sự nóng lên toàn cầu"],0],
+      [449,"Salary",["Niềm vui","Nhân vật chính của tiệc sinh nhật (bạn nữ)","Lương","Sự đa dạng"],2],
+      [450,"Team",["Sự nóng lên toàn cầu","Sự khởi hành","Nhóm","Thơ"],2],
+      [451,"Training",["Chim vẹt yến phụng","Học thuật","Đào tạo","Thiệp sinh nhật"],2],
+      [452,"Work",["Mã hóa","Làm việc","Hối lộ","Tự động hóa"],1],
+      [453,"Work-life balance",["Cân bằng giữa công việc và cuộc sống","Chăm sóc thú cưng","Ảo, không thực tế","Doanh nghiệp khởi nghiệp"],0],
+      [454,"Workplace",["Nơi làm việc","Dã man, man rợ","Sáng tác tự do","Ngã tư"],0],
+      [455,"Workplace culture",["Hô hấp","Văn hóa làm việc","Cuộc phiêu lưu","Phí giao dịch"],1],
+      [456,"Algorithm",["Thuật toán","Khám phá","Ví điện tử","Nha sĩ"],0],
+      [457,"Artificial intelligence (AI)",["Bảo tàng","Nhà báo","Via hè","Trí tuệ nhân tạo"],3],
+      [458,"Automation",["Thợ làm tóc","Tự động hóa","Đường","Thời tiết"],1],
+      [459,"Biometrics",["Tăng trưởng","Đường","Hóa thạch","Sinh trắc học"],3],
+      [460,"Cloud computing",["Máy thông khí","Máy chủ mây","Rủi ro","Dữ liệu"],1],
+      [461,"Cybersecurity",["An ninh mạng","Thú cưng","Phụ huynh","Du khách"],0],
+      [462,"Data",["Kiến trúc sư","Phòng trưng bày tác phẩm nghệ thuật","Thư ký","Dữ liệu"],3],
+      [463,"Database",["Xếp giấy","Cơ sở dữ liệu","Kỷ niệm ngày cưới","Sự hứng thú"],1],
+      [464,"Digital",["Dinh dưỡng","Mưa axit","Sữa và các sản phẩm từ sữa","Kỹ thuật số"],3],
+      [465,"E-commerce",["Thời kỳ Phục hưng","Cuộc phiêu lưu","Chủ nghĩa hiện đại","Thương mại điện tử"],3],
+      [466,"Encryption",["Hội trường giảng đường","Bức đầu giường","Vai diễn khách mời","Mã hóa"],3],
+      [467,"Gadget",["Trộm cắp phương tiện giao thông","Thiết bị công nghệ","Thiệp mời sinh nhật","Dễ sử dụng, thân thiện với người dùng"],1],
+      [468,"Hacker",["Tin tặc","Hương thơm","Miếng bánh","Phù dâu"],0],
+      [469,"Hardware",["Ho","Nhạc phim","Phần cứng","Ông bà"],2],
+      [470,"Innovation",["Sáng kiến, đổi mới","Hoa nở","Nhạc hòa tấu","Vi khuẩn, mầm bệnh"],0],
+      [471,"Internet",["Mạng Internet","Lãnh đạo","Mạng lưới quan hệ","Ngành học phụ"],0],
+      [472,"Intranet",["Ghế bập bênh","Điểm số","Mạng nội bộ","Hoa Lily"],2],
+      [473,"Machine learning",["Nhạc kịch","Khán giả","Học máy","Liên minh"],2],
+      [474,"Malware",["Phần mềm độc hại","Nhạc","Làm việc","Nền văn minh"],0],
+      [475,"Network",["Mạng lưới","Con riêng","Sang trọng","Hoa phong lữ"],0],
+      [476,"Programming",["Lập trình","Nhân vật","Gia đình hạt nhân, gia đình hai thế hệ","Hoa hồng"],0],
+      [477,"Robotics",["Mối liên hệ","Tình bạn","Cô dâu","Robot học"],3],
+      [478,"Social media",["Ngã tư","Quản lý","Mưa","Mạng xã hội"],3],
+      [479,"Software",["Phần mềm","Giãn cách xã hội","Hóa thạch","Chơi đàn ukulele"],0],
+      [480,"Startup",["Mùa mưa","Cá vàng","Kĩ thuật quay phim","Doanh nghiệp khởi nghiệp"],3],
+      [481,"Surveillance",["Gia đình gồm nhiều thế hệ","Thương mại điện tử","Giải quyết vấn đề","Giám sát"],3],
+      [482,"Technology",["Liên minh","Visa","Công nghệ","An ninh mạng"],2],
+      [483,"Virtual reality (VR)",["Sức bền","Tủ kệ","Sự thấu hiểu","Thực tế ảo"],3],
+      [484,"Website",["Trang web","Sách giáo khoa","Trời quang đãng","Bóng gậy/Cricket"],0],
+      [485,"Wireless",["Không dây","Thanh toán","Thêu thùa","Nhện trùng"],0],
+      [486,"Aroma",["Đợt bùng phát","Hương thơm","Nghệ thuật, hội họa","Thương gia, nhà buôn"],1],
+      [487,"Bloom",["Quyền anh","Anh chị em","Cung điện","Nở hoa"],3],
+      [488,"Blossom",["Giới hạn tốc độ","Hoa nở","Tình đồng đội","Quản lý thời gian"],1],
+      [489,"Bud",["Nụ hoa","Khí nhà kính","Lễ cưới","Đại dịch"],0],
+      [490,"Carnation",["Bão lớn (ở châu Á)","Hoa cẩm tú cầu","Khủng bố","Xe máy"],1],
+      [491,"Daffodil",["Món quà sinh nhật","Hoa thủy tiên","Đính hôn","Vui vẻ"],1],
+      [492,"Daisy",["Sự kết nối","Hoa cúc","Chị dâu hoặc em dâu","Cháu gái"],1],
+      [493,"Floral",["Thuộc về hoa","Giáo viên","Nhạc phim","Thời kỳ ủ bệnh"],0],
+      [494,"Foliage",["Chủ nghĩa hiện đại","Lá cây","Miếng bánh","Nhện trùng"],1],
+      [495,"Fragrance",["Mùi thơm","Bán lẻ","Hương thơm","Phù dâu chính"],2],
+      [496,"Gardenia",["Judo","Đồ trang trí lễ cưới","Hoa lục bình","Hoa nhài"],3],
+      [497,"Geranium",["Đạp xe","Dấu chân sinh thái","Tổ tiên","Hoa phong lữ"],3],
+      [498,"Hibiscus",["Niềm vui","Giao tiếp","Hoa dâm bụt","Trẻ mồ côi"],2],
+      [499,"Hyacinth",["Hoa lục bình","Lãnh đạo","Bánh cưới","Đại dịch"],0],
+      [500,"Iris",["Nhẫn","Tươi","Thể dục dụng cụ","Hoa diên vĩ"],3],
+      [501,"Lavender",["Can thiệp vào nhân chứng","Hoa oải hương","Sự thay đổi bất ngờ trong cốt truyện","Sang trọng"],1],
+      [502,"Lily",["Cửa hàng thời trang","Hoa Lily","Nhân vật chính của tiệc sinh nhật (bạn nam)","Sinh trắc học"],1],
+      [503,"Marigold",["Hoa vạn thọ","Định cư","Sự nhận nuôi","Hộ chiếu"],0],
+      [504,"Orchid",["Dịch bệnh","Thiệp mời sinh nhật","Bánh sinh nhật","Hoa lan"],3],
+      [505,"Pansy",["Lòng trung kiên","Chơi đàn xylophone (mộc cầm)","Bán buôn","Hoa mâm xôi"],3],
+      [506,"Petal",["Phong tục","May ghép, chân vải","Cánh hoa","Nền văn minh"],2],
+      [507,"Poppy",["Tình đoàn kết","Trượt ván tuyết","Học giả","Hoa anh túc"],3],
+      [508,"Rose",["Giả mạo, làm giả","Bão tuyết","Hoa hồng","Visa"],2],
+      [509,"Scent",["Chuột","Lượng virus","Tài nguyên cạn kiệt, không thể tái tạo","Hương thơm"],3],
+      [510,"Stamen",["Tiệm bánh","Nhụy hoa","Sách giáo khoa","Bằng cấp"],1],
+      [511,"Sunflower",["Hoa hướng dương","Khủng bố","Chương trình học","Hối lộ"],0],
+      [512,"Tulip",["Lời cầu hôn","Cố vấn học vụ","Sự thích nghi","Hoa tulip"],3],
+      [513,"Violet",["Tỷ lệ tử vong","Hoa violet","Bàn trang điểm","Ngã tư"],1],
+      [514,"Zinnia",["Nhịp điệu","Thanh toán","Hoa cúc ngũ sắc","Hợp thời trang, sành điệu"],2],
+      [515,"Ailment",["Bệnh tật","Chèo thuyền","Lời thề","Dịch bệnh"],0],
+      [516,"Antibiotic",["Chạm khắc gỗ","Khỏe mạnh","Kháng sinh","Hạnh phúc"],2],
+      [517,"Calorie",["Chim hoàng yến","Cô dâu","Calo","Món khai vị"],2],
+      [518,"Cholesterol",["Nhà khoa học","Mùa mưa","Cholesterol, mỡ máu","Giới hạn tốc độ"],2],
+      [519,"Diagnosis",["Chẩn đoán bệnh","Lây lan","Chợ","Nhà hàng"],0],
+      [520,"Dietary",["Kỷ luật bản thân","Thuộc về chế độ dinh dưỡng","Du thuyền","Mó mặn"],1],
+      [521,"Exercise",["Tập luyện","Giải quyết vấn đề","Bố","Ngã tư"],0],
+      [522,"Fatigue",["Ghi âm","Mối quan hệ tốt đẹp","Mệt mỏi","Con gái"],2],
+      [523,"Fitness",["Tuổi","Thể lực, thể trạng","Nướng bánh, làm bánh","Con gái"],1],
+      [524,"Germ",["Tủ lớn kết hợp tivi giải trí","Phụ huynh đơn thân","Vi khuẩn, mầm bệnh","Gió nhẹ"],2],
+      [525,"Hygiene",["Vệ sinh","An ninh mạng","Điểm đến","Tống tiền"],0],
+      [526,"Immunity",["Hoa nở","Hợp đồng","Sự miễn dịch","Nhân viên"],2],
+      [527,"Infection",["Nấu ăn","Chồn","Sự nhiễm trùng","Thuộc về hoa"],2],
+      [528,"Insomnia",["Mối quan hệ họ hàng","Chứng mất ngủ","Đầy sức sống","Thuộc về chế độ dinh dưỡng"],1],
+      [529,"Medication",["Bàn ăn","Tống tiền","Thuốc men","Tượng đài"],2],
+      [530,"Nutrient",["Chạm khắc gỗ","Chất dinh dưỡng","Môi trường sống","Trời quang đãng"],1],
+      [531,"Obesity",["Kịch bản","Vay","Vừa vặn","Béo phì"],3],
+      [532,"Pulse",["Nhà thờ","Nhịp tim","Nhà biên kịch","Tiết kiệm"],1],
+      [533,"Quarantine",["Bảo đảm hài lòng của khách hàng","Cách ly","Ăn trộm","Sự thay đổi bất ngờ trong cốt truyện"],1],
+      [534,"Recovery",["Biến đổi khí hậu","Phục hồi","Bánh cưới","Xu hướng"],1],
+      [535,"Remedy",["Phóng hỏa","Nghi lễ","Biện pháp chữa trị","Tuyết"],2],
+      [536,"Sedentary",["Dao gạt màu","Ít vận động","Lập trình","Sự giàu có"],1],
+      [537,"Symptom",["Doanh thu","Hoa phong lữ","Ăn chay không sử dụng sản phẩm động vật","Triệu chứng"],3],
+      [538,"Therapy",["Thanh toán","Nướng bánh, làm bánh","Nhím","Phương pháp điều trị"],3],
+      [539,"Toxic",["Bố","Độc hại","Mạng lưới quan hệ","Cảnh sát"],1],
+      [540,"Treatment",["Điều trị","Giảm nhiệt độ","Thiết bị công nghệ","Nệm truyền thống Nhật Bản"],0],
+      [541,"Vaccine",["Gia phả học","Vaccine","Ca sĩ hát solo","Người thân, họ hàng"],1],
+      [542,"Vitamin",["Trẻ mồ côi","Thỏ","Vitamin","Dã man, man rợ"],2],
+      [543,"Well-being",["Lễ cưới","Nhà hàng","Phân hủy sinh học","Sức khỏe tốt"],3],
+      [544,"Asymptomatic",["Diễn viên nữ","Cướp máy bay","Không có triệu chứng","Giai điệu"],2],
+      [545,"Contact tracing",["Truy vết tiếp xúc","Biến thể Delta","Khỏe mạnh","Trời quang đãng"],0],
+      [546,"Cough",["Cánh hoa","Lòng trung kiên","Địa danh nổi tiếng","Ho"],3],
+      [547,"Delta variant",["Cửa hàng bách hóa","Biến thể Delta","Đường cao tốc","Phù rể chính"],1],
+      [548,"Epidemic",["Thuật toán","Tự tin","Hoa cúc ngũ sắc","Dịch bệnh"],3],
+      [549,"Fatality rate",["Sự nghiệp","Tỷ lệ tử vong","Giao hưởng","Chợ"],1],
+      [550,"Flatten the curve",["Việc làm","Vai diễn khách mời","Khỏe mạnh","Hạ thấp đường cong dịch"],3],
+      [551,"Herd immunity",["Sơ yếu lý lịch, CV","Chiến thắng, chiến công","Miễn dịch cộng đồng","Sinh nhật"],2],
+      [552,"Incubation period",["Thời kỳ ủ bệnh","Luật sư","Hô hấp","Thằn lằn"],0],
+      [553,"Lockdown",["Cốt truyện","Dàn nhạc","Bạn thân, đồng bọn","Phong tỏa"],3],
+      [554,"Mortality",["Nhện trùng","Đường","Tỷ lệ tử vong","Karate"],2],
+      [555,"Mutation",["Đột biến","Lời chúc sinh nhật","Tuổi thơ","Visa"],0],
+      [556,"Outbreak",["Đợt bùng phát","Câu cá","Nhóm","Chiến tranh, chiến đấu"],0],
+      [557,"Pandemic",["Đại dịch","Nướng bánh, làm bánh","Du thuyền","Chú hoặc bác"],0],
+      [558,"Personal protective equipment (PPE)",["Lừa đảo","Trang thiết bị bảo hộ cá nhân","Tắc nghẽn giao thông","Phù rể chính"],1],
+      [559,"Respiratory",["Tin tặc","Hô hấp","Công thức nấu ăn","Vitamin"],1],
+      [560,"Social distancing",["Kỹ thuật số","Anh rể hoặc em rể","Giãn cách xã hội","Bức đầu giường"],2],
+      [561,"Spread",["Chợ","Món khai vị","Lây lan","Sinh nhật"],2],
+      [562,"Transmission",["Sự lây truyền","Cướp","Thương gia, nhà buôn","Nhảy zumba"],0],
+      [563,"Variant",["Sáng tác tự do","Chăm sóc thú cưng","Đổi hàng","Biến thể"],3],
+      [564,"Ventilator",["Thời kỳ Phục hưng","Máy thông khí","Bài kiểm tra","Bố"],1],
+      [565,"Viral load",["Lượng virus","Hoa Lily","Chơi đàn xylophone (mộc cầm)","Sự khám phá"],0],
+      [566,"Virus",["Tình bạn","Mùa mưa","Dịch vụ khách hàng","Vi rút"],3],
+      [567,"Vulnerable",["Mẹ kế","Dễ bị tổn thương","Lượng virus","Sự xói mòn đất"],1],
+      [568,"Wave",["Đợt dịch","Sàn giao dịch chứng khoán","Sấm sét","Phần tiếp theo"],0],
+      [569,"Zoonotic",["Anh chị em","Lây từ động vật sang người","Không có triệu chứng","Cá"],1],
+      [570,"Accountant",["Ảo, không thực tế","Đơn ca","Nhà phê bình","Kế toán"],3],
+      [571,"Architect",["Mưa rào","Biên niên sử, sử ký","Kiến trúc sư","Mèo"],2],
+      [572,"Barber",["Thuộc về chế độ dinh dưỡng","Thợ cắt tóc","Bão","Mưa đá"],1],
+      [573,"Chef",["Đầu bếp","Hoa anh túc","Nguyên liệu","Công nghệ"],0],
+      [574,"Dentist",["Nha sĩ","Tình anh em, tình huynh đệ","Hợp đồng","Cô hoặc dì"],0],
+      [575,"Electrician",["Thợ điện","Hoa violet","Bác sĩ thú y","Phóng hỏa"],0],
+      [576,"Engineer",["Kỹ sư","Tống tiền","Trả lại hàng","Quà lưu niệm"],0],
+      [577,"Firefighter",["Mạng nội bộ","Triệu chứng","Trang trí","Lính cứu hỏa"],3],
+      [578,"Flight attendant",["Tiếp viên hàng không","Doanh nhân","Thợ sửa ống nước","Trộm cắp hàng hóa trong cửa hàng"],0],
+      [579,"Hairdresser",["Lây từ động vật sang người","Đồ trang trí lễ cưới","Thợ làm tóc","Tình đoàn kết"],2],
+      [580,"Journalist",["Dịch bệnh","Sách giáo khoa","Sự tin tưởng, lòng tin","Nhà báo"],3],
+      [581,"Lawyer",["Luật sư","Nhân vật","Anh rể hoặc em rể","Tình anh em"],0],
+      [582,"Mechanic",["Phát triển sự nghiệp","Thợ máy","Mối liên hệ","Cửa hàng bán hàng giảm giá"],1],
+      [583,"Nurse",["Y tá","Con trai","Thuốc men","Hội thảo"],0],
+      [584,"Painter",["Danh mục đầu tư","Cuộc họp","Sự tin tưởng, lòng tin","Họa sĩ"],3],
+      [585,"Photographer",["Mã hóa","Nhiếp ảnh gia","Rình rập","Nhịp độ"],1],
+      [586,"Plumber",["Công trình nghệ thuật lắp đặt","Sự liên quan, tầm quan trọng","Giảm nhiệt độ","Thợ sửa ống nước"],3],
+      [587,"Policeman/Policewoman",["Chơi đàn ukulele","Sự khám phá","Cảnh sát","Thư viện"],2],
+      [588,"Receptionist",["Lễ tân","Đi làm hàng ngày","Bố mẹ chồng hoặc bố mẹ vợ","Phỏng vấn"],0],
+      [589,"Salesperson",["Chất lượng","Doanh thu vé","Tượng đài","Nhân viên bán hàng"],3],
+      [590,"Scientist",["Giãn cách xã hội","Nhà khoa học","Chú hoặc bác","Độ ẩm"],1],
+      [591,"Secretary",["Tuyết","Biến đổi khí hậu","Thư ký","Giám sát"],2],
+      [592,"Security guard",["Kỹ thuật số","Bảo vệ","Bằng cấp","Giảm nhiệt độ"],1],
+      [593,"Singer",["Nhịp tim","Điêu khắc","Hạn chót","Ca sĩ"],3],
+      [594,"Teacher",["Giáo viên","Thằn lằn","Bóng bầu dục","Miếng bánh"],0],
+      [595,"Translator",["Tuổi thơ","Doanh nhân","Trang phục","Phiên dịch viên"],3],
+      [596,"Veterinarian",["Thuộc về chế độ dinh dưỡng","Bác sĩ thú y","Nhà tuyển dụng","Lãnh đạo"],1],
+      [597,"Waiter/Waitress",["Luật sư","Phục hồi","Bồi bàn","Tươi"],2],
+      [598,"Writer",["Tuổi","Nhóm","Nhà văn","Sữa và các sản phẩm từ sữa"],2],
+      [599,"Arson",["Khí nhà kính","Phóng hỏa","Cửa hàng tạp hóa","Thực tập"],1],
+      [600,"Assault",["Tấn công","Chuyến tham quan ngắn ngày","Diễn viên nam","Võ thuật"],0],
+      [601,"Bribery",["Calo","Doanh thu","Hối lộ","Giọng hát"],2],
+      [602,"Burglary",["Đơn ca","Ăn trộm","Hô hấp","Lính cứu hỏa"],1],
+      [603,"Counterfeiting",["Giả mạo, làm giả","Quản lý","Món tráng miệng","Giám sát"],0],
+      [604,"Cybercrime",["Tội phạm mạng","Nhịp điệu","Hạn chót","Biến đổi khí hậu"],0],
+      [605,"Extortion",["Siêu thị","Cháu gái","Tống tiền","Cholesterol, mỡ máu"],2],
+      [606,"Forgery",["Phá hoại tài sản công cộng","Cách ly","Sơn acrylic","Giả mạo"],3],
+      [607,"Fraud",["Lừa đảo","Thỏ","Khí nhà kính","Công thức nấu ăn"],0],
+      [608,"Harassment",["Đổi hàng","Quấy rối","Giỏ hàng","Tình hữu nghị"],1],
+      [609,"Hijacking",["Tennis","Mưa đá","Biến đổi khí hậu","Cướp máy bay"],3],
+      [610,"Homicide",["Chiến thắng, chiến công","Giết người","Cơn mưa","Cá"],1],
+      [611,"Identity theft",["Trộm cắp danh tính","Đàm phán","Nơi làm việc","Nhiệt độ"],0],
+      [612,"Kidnapping",["Chủ nghĩa biểu hiện","Vương quốc, đất nước","Sự gần gũi","Bắt cóc"],3],
+      [613,"Mugging",["Golf","Cướp giật","Đường","Hợp thời trang, sành điệu"],1],
+      [614,"Perjury",["Vi rút","Ho","Làm giả lời khai","Sự xói mòn đất"],2],
+      [615,"Piracy",["Cướp biển","Vừa vặn","Mối quan hệ tốt đẹp","Đột biến"],0],
+      [616,"Robbery",["Cướp","Kiến trúc sư","Vay","Dòng thời gian"],0],
+      [617,"Shoplifting",["Trộm cắp hàng hóa trong cửa hàng","Nghệ thuật phun sơn, việc viết, vẽ trái phép trên bề mặt công cộng","Nợ","Lập trình"],0],
+      [618,"Smuggling",["Dễ sử dụng, thân thiện với người dùng","Buôn lậu","Tuổi thơ","Văn phòng đăng ký kết hôn"],1],
+      [619,"Stalking",["Luận văn","Rình rập","Cấu trúc, cách sắp xếp","Bài kiểm tra"],1],
+      [620,"Tax evasion",["Bảo tàng","Ngon","Sự nhiễm trùng","Trốn thuế"],3],
+      [621,"Terrorism",["Mô tả sản phẩm","Người nuôi thú cưng","Khủng bố","Nghe trộm điện thoại"],2],
+      [622,"Theft",["Trộm cắp","Nguyên nhân, nguồn gốc","Xâm phạm","Công việc"],0],
+      [623,"Trespassing",["Xâm phạm","Kệ sách","Xe hơi","Môi trường sống"],0],
+      [624,"Vandalism",["Đấu kiếm","Bạn bè","Phá hoại tài sản công cộng","Xâm lược"],2],
+      [625,"Vehicle theft",["Tiếp viên hàng không","Sự đoàn kết, sự thống nhất","Trộm cắp phương tiện giao thông","Dao gạt màu"],2],
+      [626,"White-collar crime",["Doanh thu vé","Tiền tệ","Chất dinh dưỡng","Tội phạm cổ cồn trắng (tài chính)"],3],
+      [627,"Wiretapping",["Nghe trộm điện thoại","Cửa hàng bán cá","Nhà sản xuất","Tài nguyên cạn kiệt, không thể tái tạo"],0],
+      [628,"Witness tampering",["Người bán thịt","Cung điện","Can thiệp vào nhân chứng","Mạng Internet"],2],
+      [629,"Ancestor",["Tổ tiên","Lợi nhuận","Dòng thời gian","Buffet"],0],
+      [630,"Artisan",["Nghệ nhân","Người chủ lễ","Võ thuật","Tàu hỏa"],0],
+      [631,"Calligraphy",["Kỳ thi","Phương tiện giao thông công cộng","Thư pháp","Băng ghế"],2],
+      [632,"Custom",["Sàn giao dịch chứng khoán","Phong tục","Vay","Trộm cắp danh tính"],1],
+      [633,"Diversity",["Hoa lục bình","Sự đa dạng","Chơi game","Bàn trang điểm"],1],
+      [634,"Ethnicity",["Dân tộc","Tỷ giá hối đoái","Hiệu ứng hình ảnh","Nhím"],0],
+      [635,"Festival",["Lễ hội","Bài tập","Sự tưởng nhớ","Miễn dịch cộng đồng"],0],
+      [636,"Folklore",["Phá sản","Chiến tranh, chiến đấu","Sân khấu","Dân gian"],3],
+      [637,"Heritage",["Chứng mất ngủ","Trung tâm thương mại","Đánh giá của khách hàng","Di sản"],3],
+      [638,"Iconic",["Cân bằng giữa công việc và cuộc sống","Tình đoàn kết","Thuộc về hoa","Đặc trưng"],3],
+      [639,"Legacy",["Giai điệu","Di sản","Mạng lưới","Ngành học phụ"],1],
+      [640,"Literature",["Lướt sóng","Đông lạnh","Văn học","Bàn gấp"],2],
+      [641,"Monument",["Bánh sinh nhật","Tượng đài","Năng lượng tái tạo","Tin tặc"],1],
+      [642,"Museum",["Cuộc phiêu lưu","Mối quan hệ họ hàng","Bảo tàng","Kỹ thuật số"],2],
+      [643,"Mythology",["Thần thoại","Hợp đồng","Giết người","Bảo vệ"],0],
+      [644,"Opera",["Nhạc kịch","Đổi hàng","Trừu tượng","Đường cao tốc"],0],
+      [645,"Ornament",["Tiền tệ","Bóng bầu dục","Chuyến đi","Trang trí"],3],
+      [646,"Parade",["Diễn viên nữ","Trang web","Cuộc diễu hành","Tài chính"],2],
+      [647,"Philosophy",["Leo núi","Người chỉ huy dàn nhạc","Buôn lậu","Triết học"],3],
+      [648,"Poetry",["Rùa","Thơ","Ô nhiễm biển","Ca sĩ"],1],
+      [649,"Relic",["Nắng","Di tích","Người tiêu dùng","Đánh giá của khách hàng"],1],
+      [650,"Ritual",["Không có triệu chứng","Làm việc","Nghi lễ","Phù dâu chính"],2],
+      [651,"Sculpture",["Phục hồi","Điêu khắc","Làm thêm giờ","Hành lý"],1],
+      [652,"Tradition",["Chương trình học","Đồng bộ bàn trang điểm và gương","Sự lây truyền","Truyền thống"],3],
+      [653,"Tribute",["Sự tưởng nhớ","Cắt bánh sinh nhật","Anh chị em","Tuổi thơ"],0],
+      [654,"Values",["Giá trị","Tuổi thơ","Cánh hoa","Thiệp sinh nhật"],0],
+      [655,"Asset",["Tài sản","Vaccine","Tấn công","Tội phạm mạng"],0],
+      [656,"Asset management",["Chúc mừng","Mạng xã hội","Robot học","Quản lý tài sản"],3],
+      [657,"Bankruptcy",["Hóa đơn","Công việc","Phá sản","Ghi âm"],2],
+      [658,"Budget",["Nhạc kịch","Chuột lang","Ngân sách","Tình đoàn kết"],2],
+      [659,"Capital",["Triệu chứng","Tinh xảo, tuyệt vời","Trường cao đẳng","Vốn"],3],
+      [660,"Credit",["Tín dụng","Điều trị","Giáo viên","Mưa"],0],
+      [661,"Debt",["Sách giáo khoa","Dễ sử dụng, thân thiện với người dùng","Bạn bè","Nợ"],3],
+      [662,"Dividend",["Mong mỏi, khao khát","Bóng đá","Tổ chức","Cổ tức"],3],
+      [663,"Finance",["Trượt ván tuyết","Lãnh đạo","Vệ sinh","Tài chính"],3],
+      [664,"Financial statement",["Báo cáo tài chính","Tình đồng đội","Diễn viên nam","Trẻ mồ côi"],0],
+      [665,"Growth",["Ngọt","Học máy","Nhạc kịch","Tăng trưởng"],3],
+      [666,"Inflation",["Ghế đôn, bàn đôn","Trang thiết bị bảo hộ cá nhân","Hoa dâm bụt","Lạm phát"],3],
+      [667,"Interest",["Dữ liệu","Kỷ luật bản thân","Mối quan hệ tốt đẹp","Lãi suất"],3],
+      [668,"Investment",["Đầu tư","Quấy rối","Hoa mâm xôi","Tự động hóa"],0],
+      [669,"Liquidity",["Người đi bộ","Phù dâu","Tính thanh khoản","Bà"],2],
+      [670,"Loan",["Vi rút","Dịch vụ khách hàng","Vay","Đồng bộ bàn trang điểm và gương"],2],
+      [671,"Portfolio",["Tư duy phản biện","Cung điện","Danh mục đầu tư","Trang trí"],2],
+      [672,"Profit",["Lợi nhuận","Xâm lược","Mẹ","Dự báo"],0],
+      [673,"Revenue",["Lính cứu hỏa","Doanh thu","Hương thơm","Tủ quần áo"],1],
+      [674,"Risk",["Ăn chay không sử dụng sản phẩm động vật","Lãnh đạo","Mẹ","Rủi ro"],3],
+      [675,"Savings",["Tiết kiệm","Chúc mừng","Sáng tạo","Chuột"],0],
+      [676,"Shares",["Vợ hoặc chồng, bạn đời","Quầy trái cây","Bóng rổ","Cổ phiếu"],3],
+      [677,"Stock exchange",["Sàn giao dịch chứng khoán","Tình hữu nghị","Nghệ thuật, hội họa","Trộm cắp"],0],
+      [678,"Tax",["Thuế","Con trai","Thanh toán","Biến thể"],0],
+      [679,"Transaction",["Cửa hàng bách hóa","Kỳ thi","Truy vết tiếp xúc","Giao dịch"],3],
+      [680,"Wealth",["Doanh nghiệp khởi nghiệp","Hương vị","Tự động hóa","Sự giàu có"],3],
+      [681,"Yield",["Vận chuyển","Mong mỏi, khao khát","Lương","Lợi suất"],3],
+      [682,"Authentication",["Xác thực","Lễ tân","Gió nhẹ","Karate"],0],
+      [683,"Browsing",["Thư viện","Ban nhạc","Dạo chơi, duyệt web","Điền kinh"],2],
+      [684,"Cart",["Đường cao tốc","Giảm nhiệt độ","Thực tế ảo","Giỏ hàng"],3],
+      [685,"Checkout",["Đường","Xâm lược","Nệm","Thanh toán"],3],
+      [686,"Consumer",["Trộm cắp phương tiện giao thông","Người tiêu dùng","Diễn viên nữ","Tái chế"],1],
+      [687,"Customer Review",["Nghệ thuật, hội họa","Lịch trình","Đánh giá của khách hàng","Xe hơi"],2],
+      [688,"Customer Service",["Dịch vụ khách hàng","Béo phì","Dao gạt màu","Sự đoàn kết, sự thống nhất"],0],
+      [689,"Delivery",["Cấu trúc, cách sắp xếp","Nấu ăn","Sương mù nhẹ","Giao hàng"],3],
+      [690,"Digital Wallet",["Thuốc men","Ví điện tử","Ca hát","Giao tiếp"],1],
+      [691,"Feedback",["Trả lại hàng","Thuật toán","Chẩn đoán bệnh","Phản hồi"],3],
+      [692,"Inventory",["Chủ nghĩa hiện thực","Sự khởi hành","Chuột lang","Hàng tồn kho"],3],
+      [693,"Merchant",["Địa phương","Phù rể","Thương gia, nhà buôn","Siêu thị"],2],
+      [694,"Online Auction",["Bạn cùng lớp","Độc hại","Hoa oải hương","Đấu giá trực tuyến"],3],
+      [695,"Online Marketplace",["Sáng kiến","Làm việc","Bảo đảm hài lòng của khách hàng","Chợ trực tuyến"],3],
+      [696,"Order Confirmation",["Thổi nến","Công nghệ","Xác nhận đơn hàng","Năng lượng tái tạo"],2],
+      [697,"Product Description",["Chợ trực tuyến","Bóng bầu dục","Mô tả sản phẩm","Biến thể"],2],
+      [698,"Retailer",["Xu hướng","Người bán lẻ","Nhiếp ảnh gia","Chó con"],1],
+      [699,"Return Policy",["Chính sách đổi trả","Hoa violet","Thiếu hụt nguồn nước","Tín dụng"],0],
+      [700,"Satisfaction Guarantee",["Tiết kiệm","Sàn giao dịch chứng khoán","Bảo đảm hài lòng của khách hàng","Trốn thuế"],2],
+      [701,"Secure Payment",["Công nghệ xanh","Tin tặc","Thanh toán bảo mật","Văn phòng"],2],
+      [702,"Shipping",["Hợp thời trang, sành điệu","Người chỉ huy dàn nhạc","Vận chuyển","Nghệ nhân"],2],
+      [703,"Transaction Fee",["Phí giao dịch","Đạp xe","Tủ đựng đồ","Golf"],0],
+      [704,"User-friendly",["Đổi hàng","Dễ sử dụng, thân thiện với người dùng","Hiệu ứng hình ảnh","Mưa"],1],
+      [705,"Virtual",["Ảo, không thực tế","Mẹ","Chim vẹt yến phụng","Chuột nhảy"],0],
+      [706,"Acquaintance",["Lòng trung thành","Hoa lan","Bạn biết, người quen","Tượng đài"],2],
+      [707,"Affection",["Chồn","Tiếng cười","Địa phương","Tình cảm, lòng yêu thương"],3],
+      [708,"Allegiance",["Đi làm hàng ngày","Ban nhạc","Lòng trung thành","Nhịp"],2],
+      [709,"Amity",["Doanh nhân","Tình hữu nghị","Cuộc phiêu lưu","Đóng hộp"],1],
+      [710,"Bond",["Sự kết nối","Trang trí bánh sinh nhật","Văn phòng","Cơn mưa"],0],
+      [711,"Brotherhood",["Hệ sinh thái","Trả lại hàng","Áo vest","Tình anh em"],3],
+      [712,"Camaraderie",["Địa phương","Hoa violet","Tình đồng đội","Giải quyết vấn đề"],2],
+      [713,"Chumminess",["Sự gần gũi","Vitamin","Tin tặc","Thuế"],0],
+      [714,"Companionship",["Tình anh em, tình huynh đệ","Phương tiện giao thông","Biểu diễn","Sự đồng hành"],3],
+      [715,"Connection",["Mối liên hệ","Bạn cùng lớp","Sự kiên nhẫn","Đầy sức sống"],0],
+      [716,"Devotion",["Bán lẻ","Quyền anh","Sự tận tụy, cống hiến","Hoa oải hương"],2],
+      [717,"Fellowship",["Bài giảng","Tình bạn","Hoa thủy tiên","Hoa oải hương"],1],
+      [718,"Fidelity",["Thời tiết","Chất lượng không khí","An ninh mạng","Lòng trung kiên"],3],
+      [719,"Fraternity",["Sương mù nhẹ","Tình anh em, tình huynh đệ","Chiến tranh, chiến đấu","Lặn"],1],
+      [720,"Friendliness",["Tình bạn","Mô tả sản phẩm","Biến đổi khí hậu","Đường hầm"],0],
+      [721,"Intimacy",["Cuộc họp","Di sản","Người đi làm hàng ngày","Sự thân mật"],3],
+      [722,"Kinfolk",["Cốt truyện","Người thân, họ hàng","Trường cao đẳng","Vitamin"],1],
+      [723,"Kinship",["Mối quan hệ họ hàng","Phù rể","Cô dâu","Con trai"],0],
+      [724,"Loyalty",["Đợt bùng phát","Vay","Cháu trai","Sự trung thành"],3],
+      [725,"Pals",["Thể lực, thể trạng","Tổ chức","Buôn lậu","Bạn thân, đồng bọn"],3],
+      [726,"Partnership",["Thời tiết","Tội phạm cổ cồn trắng (tài chính)","Quan hệ hợp tác, đối tác","Chiết khấu"],2],
+      [727,"Rapport",["Mối quan hệ tốt đẹp","Tennis","Chợ","Quan hệ hợp tác, đối tác"],0],
+      [728,"Relevance",["Phụ kiện","Ngon","Chỗ ở","Sự liên quan, tầm quan trọng"],3],
+      [729,"Solidarity",["Mùa mưa","Tình đoàn kết","Nền văn minh","Phòng trưng bày tác phẩm nghệ thuật"],1],
+      [730,"Support",["Sự ủng hộ, hỗ trợ","Cửa hàng thời trang","Nhịp","Sự tưởng nhớ"],0],
+      [731,"Sympathy",["Nguyên liệu","Đồng cảm","Xe trượt scooter","Giao dịch"],1],
+      [732,"Trust",["Mưa đá","Nhóm học tập","Sự tin tưởng, lòng tin","Nhà báo"],2],
+      [733,"Understanding",["Tự động hóa","Tội phạm cổ cồn trắng (tài chính)","Sự thấu hiểu","Cảnh quay"],2],
+      [734,"Unity",["Trộm cắp phương tiện giao thông","Sự đoàn kết, sự thống nhất","Tàu điện ngầm","Quan hệ hợp tác, đối tác"],1],
+      [735,"Ancient",["Ghế đẩu","Cổ đại, cổ xưa","Nở hoa","Võ thuật"],1],
+      [736,"Archaeology",["Truy vết tiếp xúc","Lắp Lego","Sự kết nối","Khảo cổ học"],3],
+      [737,"Artifact",["Di vật, di tích","Nhịp độ","Cổ tức","Con cái"],0],
+      [738,"Barbarian",["Dã man, man rợ","Cửa hàng bán hàng giảm giá","Chuột lang","Lời cầu hôn"],0],
+      [739,"Battle",["Giảm giá","Trận chiến","Nhóm","Đợt dịch"],1],
+      [740,"Chronicle",["Hành trình","Dự báo","Biên niên sử, sử ký","Chủ nghĩa hiện đại"],2],
+      [741,"Civilization",["Vệ sinh","Tủ quần áo","Can thiệp vào nhân chứng","Nền văn minh"],3],
+      [742,"Discovery",["Sự khám phá","Đoạn hội thoại","Giường sofa","Con gái"],0],
+      [743,"Dynasty",["Triều đại, triều đình","Chú rể","Sự miễn dịch","Tắc nghẽn giao thông"],0],
+      [744,"Empire",["Sự khởi hành","Đế quốc","Sự nhận nuôi","Tình anh em"],1],
+      [745,"Fossil",["Người giám hộ","Mạng nội bộ","Hóa thạch","Kỷ niệm ngày cưới"],2],
+      [746,"Genealogy",["Ghế đẩu","Gia phả học","Người chủ lễ","Xe tải"],1],
+      [747,"Hieroglyphics",["Ca hát","Chữ tượng hình","Trượt ván tuyết","Dự báo"],1],
+      [748,"Invasion",["Xâm lược","Giao hưởng","Chữ tượng hình","Bảng màu, bảng trộn màu"],0],
+      [749,"Kingdom",["Vương quốc, đất nước","Hoa tulip","Câu cá","Bàn trang điểm"],0],
+      [750,"Nomad",["Bắt cóc","Cơ sở dữ liệu","Dân du mục","Thỏ"],2],
+      [751,"Origin",["Bài tập về nhà","Sự khởi hành","Nguyên nhân, nguồn gốc","Sự thấu hiểu"],2],
+      [752,"Palace",["Mạng xã hội","Nha sĩ","Nụ hoa","Cung điện"],3],
+      [753,"Ruins",["Lướt sóng","Tham quan","Mùa mưa","Tàn tích, đống đổ nát"],3],
+      [754,"Settlement",["Thanh toán bảo mật","Lễ cưới","Giỏ hàng","Định cư"],3],
+      [755,"Timeline",["Hoa hướng dương","Dịch bệnh","Dòng thời gian","Ngã tư"],2],
+      [756,"Union",["Liên minh","Gia đình hạt nhân, gia đình hai thế hệ","Cướp máy bay","Mùi thơm"],0],
+      [757,"Victory",["Hôn nhân","Chiến thắng, chiến công","Cuộc họp","Sự đồng cảm"],1],
+      [758,"Warfare",["Chiến tranh, chiến đấu","Màu nước","Nhiên liệu hóa thạch","Chợ"],0],
+      [759,"Xerography",["Quyền anh","Kĩ thuật sao chụp ảnh quang điện","Mùi thơm","Điêu khắc"],1],
+      [760,"Yearning",["Mong mỏi, khao khát","Sự tận tụy, cống hiến","Quà lưu niệm","Sinh trắc học"],0],
+      [761,"Zealotry",["Giả mạo","Ảo, không thực tế","Lòng cuồng tín, quá khích","Tuần trăng mật"],2],
+      [762,"Art",["Nghiên cứu","Nghệ thuật, hội họa","Chồn","Sự kiên nhẫn"],1],
+      [763,"Baking",["Nướng bánh, làm bánh","Bài tập","Phương tiện giao thông","Dự báo"],0],
+      [764,"Cooking",["Bảo đảm hài lòng của khách hàng","Nấu ăn","Bão tuyết","Dấu chân sinh thái"],1],
+      [765,"Dancing",["Độ ẩm","Siêu thị","Phóng hỏa","Nhảy múa, khiêu vũ"],3],
+      [766,"DIY Crafts",["Gia đình gồm nhiều thế hệ","Mùi thơm","Thời kỳ Phục hưng","Làm đồ thủ công"],3],
+      [767,"Embroidery",["Thêu thùa","Dự báo","Hoa cúc","Cha dượng"],0],
+      [768,"Fishing",["Phá rừng","Chăm sóc thú cưng","Câu cá","Nhịp điệu"],2],
+      [769,"Gardening",["Đi làm hàng ngày","Thơ","Giãn cách xã hội","Làm vườn"],3],
+      [770,"Ice skating",["Hòa âm","Hội thảo","Trượt băng","Nơi làm việc"],2],
+      [771,"Jogging",["Nhẫn","Nghe trộm điện thoại","Đi bộ","Đám cưới"],2],
+      [772,"Knitting",["Đan len","Quyền anh","Biến thể","Lời bài hát"],0],
+      [773,"Lego Building",["Lắp Lego","Sự tưởng nhớ","Nhảy múa, khiêu vũ","Nến sinh nhật"],0],
+      [774,"Origami",["Sự nhận nuôi","Xếp giấy","Karate","Đóng hộp"],1],
+      [775,"Painting",["Hội trường giảng đường","Hướng dẫn viên","Vẽ","Hóa đơn"],2],
+      [776,"Photography",["Tống tiền","Năng lượng tái tạo","Nhiếp ảnh","Độ ẩm"],2],
+      [777,"Quilting",["Trí tuệ nhân tạo","Tập yoga","May ghép, chân vải","Mẹ kế"],2],
+      [778,"Reading",["Đọc sách","Chuyển thể","Đến nơi","Cholesterol, mỡ máu"],0],
+      [779,"Sculpting",["Sương mù","Thợ máy","Điêu khắc","Tình anh em"],2],
+      [780,"Singing",["Quản lý thời gian","Ca hát","Hoa dâm bụt","Sự thân mật"],1],
+      [781,"Trekking",["Chuyển thể","Địa phương","Leo núi, đi bộ đường dài","Hóa thạch"],2],
+      [782,"Ukulele playing",["Chơi đàn ukulele","Phần mềm","Ca sĩ hát solo","Vận chuyển"],0],
+      [783,"Video Gaming",["Học máy","Chơi game","Vai diễn khách mời","Giảm nhiệt độ"],1],
+      [784,"Woodworking",["Bữa tiệc","Trượt ván","Trượt ván tuyết","Chạm khắc gỗ"],3],
+      [785,"Xylophone Playing",["Mây","Tắc nghẽn giao thông","Kế toán","Chơi đàn xylophone (mộc cầm)"],3],
+      [786,"Yoga",["Sự miễn dịch","Phục hồi","Con riêng","Tập yoga"],3],
+      [787,"Zumba",["Nhảy zumba","Thương mại điện tử","Tình đoàn kết","Nơi làm việc"],0],
+      [788,"Accent chair",["Đánh giá của khách hàng","Nhà khoa học","Ghế tựa nghiêng","Tủ chứa thực phẩm"],2],
+      [789,"Armchair",["Calo","Ghế bành","Chó con","Ngành học chính"],1],
+      [790,"Benches",["Xe đạp","Dự báo","Kĩ thuật sao chụp ảnh quang điện","Băng ghế"],3],
+      [791,"Bookcase",["Nhiệt độ","Kệ sách","Hoa violet","Quà tặng"],1],
+      [792,"Cabinet",["Tủ đựng đồ","Chuyển thể","Cân bằng giữa công việc và cuộc sống","Mạng lưới quan hệ"],0],
+      [793,"Coffee table",["Ghế bành","Bàn trà","Tiệm bánh","Di vật, di tích"],1],
+      [794,"Couch",["Đầu bếp","Buôn lậu","Ghế sofa","Mong mỏi, khao khát"],2],
+      [795,"Cupboard",["Tủ kệ","Môi trường","Lịch trình","Thần thoại"],0],
+      [796,"Dining table",["Tiệm bánh","Biển báo giao thông","Làm đồ thủ công","Bàn ăn"],3],
+      [797,"Dresser",["Quà tặng","Tủ trang điểm","Thư ký","Sự trung thành"],1],
+      [798,"Entertainment center",["Tủ lớn kết hợp tivi giải trí","Học thuật","Vợ hoặc chồng, bạn đời","Món khai vị"],0],
+      [799,"Folding table",["Chuột lang","Nấu ăn","Nhịp tim","Bàn gấp"],3],
+      [800,"Footstool",["Ghế đôn, bàn đôn","Khí hậu","Giám sát","Mẹ kế"],0],
+      [801,"Futon",["Xe trượt scooter","Tác phẩm nghệ thuật","Nhiếp ảnh gia","Nệm truyền thống Nhật Bản"],3],
+      [802,"Headboard",["Thần thoại","Chim","Bức đầu giường","Chị dâu hoặc em dâu"],2],
+      [803,"Lamp table",["Chăm sóc thú cưng","Vuốt ve","Bàn đặt đèn ngủ","Ghế bập bênh"],2],
+      [804,"Mattress",["Quản lý","Nơi làm việc","Nệm","Cuộc diễu hành"],2],
+      [805,"Nightstand",["Đấu kiếm","Trượt ván tuyết","Bàn đầu giường","Vệ sinh"],2],
+      [806,"Ottoman",["Chuyển thể","Visa","Ghế đẩu, đôn","Thơ"],2],
+      [807,"Pantry",["Tủ chứa thực phẩm","Dự báo","Hoàn tiền","Tham quan"],0],
+      [808,"Recliner",["Ghế lười, ghế ngả","Công nghệ","Di tích","Nhịp điệu"],0],
+      [809,"Rocking chair",["Nhân vật","Ghế bập bênh","Hành trình","Ho"],1],
+      [810,"Sideboard",["Tủ bên trong phòng ăn","Nhà thờ","Máy chủ mây","Ghế đôn, bàn đôn"],0],
+      [811,"Sofa bed",["Lắp Lego","Đồng cảm","Giường sofa","Tư duy phản biện"],2],
+      [812,"Stool",["Đợt dịch","Ghế đẩu","Thợ máy","Tàn tích, đống đổ nát"],1],
+      [813,"Vanity",["Cấu trúc, cách sắp xếp","Nghi lễ","Cầu","Bàn trang điểm"],3],
+      [814,"Vanity unit",["Kỳ thi","Đồng bộ bàn trang điểm và gương","Thiệp sinh nhật","Tiệm bánh"],1],
+      [815,"Wardrobe",["Phụ huynh","Tủ quần áo","Gió mạnh","Bàn trang điểm"],1],
+      [816,"Abstract",["Tàu hỏa","Vừa vặn","Trừu tượng","Tinh xảo, tuyệt vời"],2],
+      [817,"Acrylic",["Tượng đài","Sự kiên nhẫn","Giết người","Sơn acrylic"],3],
+      [818,"Artistic",["Khủng bố","Hạn chót","Tắc nghẽn giao thông","Thuộc về nghệ thuật, có tài nghệ"],3],
+      [819,"Artwork",["Chứng mất ngủ","Giết người","Tác phẩm nghệ thuật","Trang web"],2],
+      [820,"Brushstroke",["Nét vẽ, nét cọ","Bài kiểm tra","Sự đa dạng","Đầy sức sống"],0],
+      [821,"Canvas",["Cổ phiếu","Bức tranh, tấm vải","Chợ","Nhà sản xuất"],1],
+      [822,"Chiaroscuro",["Nhạc kịch","Hoa nở","Xác nhận đơn hàng","Kỹ thuật tạo sáng tối trong hội họa"],3],
+      [823,"Composition",["Robot học","Chất dinh dưỡng","Cấu trúc, cách sắp xếp","Hướng dẫn viên"],2],
+      [824,"Engraving",["Phiếu giảm giá","Khắc, ốp","Nhạc","Đồ trang trí lễ cưới"],1],
+      [825,"Exhibit",["Sự quyết đoán","Triển lãm, trưng bày","Thần thoại","Nhụy hoa"],1],
+      [826,"Expressionism",["Quấy rối","Tình anh em","Đưa ra quyết định","Chủ nghĩa biểu hiện"],3],
+      [827,"Exquisite",["Tinh xảo, tuyệt vời","Thổi nến","Bóng bay sinh nhật","Trí tuệ nhân tạo"],0],
+      [828,"Gallery",["Phòng trưng bày tác phẩm nghệ thuật","Ghế đẩu, đôn","Chuyến đi","Hệ sinh thái"],0],
+      [829,"Graffiti",["Cô dâu","Phát triển sự nghiệp","Nghệ thuật phun sơn, việc viết, vẽ trái phép trên bề mặt công cộng","Gia đình hạt nhân, gia đình hai thế hệ"],2],
+      [830,"Impressionism",["Trường phái ấn tượng","Chủ nghĩa biểu hiện","Tình đoàn kết","Phá sản"],0],
+      [831,"Installation",["Công trình nghệ thuật lắp đặt","Tình anh em","Dễ sử dụng, thân thiện với người dùng","Chợ trực tuyến"],0],
+      [832,"Masterpiece",["Tình anh em, tình huynh đệ","Con cái","Tái chế","Kiệt tác"],3],
+      [833,"Modernism",["Làm thêm giờ","Nhạc cụ","Chủ nghĩa hiện đại","Truyền thống"],2],
+      [834,"Palette",["Bảng màu, bảng trộn màu","Bó hoa cưới","Mưa","Phụ huynh"],0],
+      [835,"Palette knife",["Đi bộ","Ho","Dao gạt màu","Sự kiên nhẫn"],2],
+      [836,"Portrait",["Võ thuật","Đồng bộ bàn trang điểm và gương","Bức chân dung","Anh chị em"],2],
+      [837,"Realism",["Chủ nghĩa hiện thực","Ruy băng","Trộm cắp danh tính","Thợ sửa ống nước"],0],
+      [838,"Renaissance",["Thời kỳ Phục hưng","Tình anh em, tình huynh đệ","Khắc, ốp","Tình yêu"],0],
+      [839,"Still life",["Tĩnh vật","Lòng trung thành","Phong tỏa","Bất ngờ"],0],
+      [840,"Vibrant",["Bảo tàng","Đầy sức sống","Học tập","Biển báo giao thông"],1],
+      [841,"Watercolor",["Màu nước","Sự xói mòn đất","Hoàng hôn","Tiệm bánh"],0]
+    ];
+
+    // Transform into full structured vocabulary objects
+    const VOCAB_ITEMS = RAW_841_ITEMS.map(([id, en, opts, ans]) => {
+      const topicObj = getTopicForId(id);
+      return {
+        id,
+        en,
+        opts,
+        ans,
+        vi: opts[ans],
+        topicId: topicObj.id,
+        topic: topicObj.name
+      };
+    });
+
+    /**
+     * ============================================================================
+     * 3. FULL 12 IELTS GRAMMAR CHAPTERS (BASIC TO BAND 8.0+)
+     * ============================================================================
+     */
+    const GRAMMAR_CHAPTERS = [
+      {
+        id: "ch1-word-forms",
+        level: "Cơ bản → Nâng cao",
+        title: "1. Từ Loại & Cấu Tạo Từ (Word Forms & Word Formation)",
+        summary: "Nền tảng thiết yếu cho IELTS Reading (Gap-filling) và Writing: Nhận diện chính xác Danh từ, Động từ, Tính từ, Trạng từ qua hậu tố học thuật.",
+        tableHeaders: ["Từ loại", "Hậu tố phổ biến", "Vị trí chuẩn trong câu", "Ví dụ học thuật IELTS"],
+        tableRows: [
+          ["Danh từ (Noun)", "-tion, -sion, -ment, -ity, -ness, -ance, -ence, -ism, -er/-or, -ist", "Chủ ngữ (S), Tân ngữ (O), sau Mạo từ (a/an/the), Tính từ sở hữu, Giới từ", "biodiversity, deforestation, conservationist, sustainability"],
+          ["Tính từ (Adjective)", "-able, -ible, -al, -ic, -ive, -ous, -ful, -less, -ent, -ant", "Trước Danh từ (Adj + N), sau Linking Verbs (be, become, seem, remain)", "biodegradable, sustainable, vulnerable, exquisite"],
+          ["Trạng từ (Adverb)", "Adj + -ly (significantly, drastically, exponentially)", "Bổ nghĩa cho Động từ, Tính từ, Trạng từ khác, hoặc đứng đầu câu trước dấu phẩy", "drastically reduced, environmentally friendly"],
+          ["Động từ (Verb)", "-ize/-ise, -ate, -en, -ify (industrialize, mitigate, strengthen)", "Đứng sau Chủ ngữ, chia thì và hòa hợp số ít/số nhiều theo Chủ ngữ", "mitigate climate change, allocate resources"]
+        ],
+        rules: [
+          "<strong>Phân biệt Tính từ đuôi -ing và -ed:</strong> <em>V-ing</em> miêu tả bản chất gây ra cảm giác (<em>an alarming trend</em> - một xu hướng đáng báo động); <em>V-ed</em> miêu tả trạng thái bị tác động (<em>concerned citizens</em> - những công dân lo ngại).",
+          "<strong>Tính từ ghép nâng điểm IELTS Writing (Compound Adjectives):</strong> <em>N + V-ing</em> (<em>time-consuming, energy-saving</em>); <em>Adv + V3/ed</em> (<em>densely-populated, well-educated</em>); <em>Number + N(số ít)</em> (<em>a five-year plan</em>)."
+        ],
+        examples: [
+          { en: "Governments must implement <strong>sustainable</strong> policies to curb <strong>deforestation</strong>.", vi: "Chính phủ phải thực thi các chính sách bền vững để kiềm chế nạn phá rừng." },
+          { en: "<strong>Significantly</strong>, renewable energy has become much more <strong>affordable</strong>.", vi: "Đáng chú ý là năng lượng tái tạo đã trở nên phải chăng hơn nhiều." }
+        ],
+        quiz: [
+          { q: "The rapid ______ of urban areas has placed immense pressure on public infrastructure.", opts: ["expand", "expansion", "expansive", "expansively"], ans: 1, exp: "Sau tính từ 'rapid' và trước giới từ 'of' cần một Danh từ → expansion." },
+          { q: "Exposure to ______ chemicals in the workplace can cause severe respiratory ailments.", opts: ["toxicity", "toxic", "toxically", "toxify"], ans: 1, exp: "Trước danh từ số nhiều 'chemicals' cần một Tính từ bổ nghĩa → toxic." }
+        ]
+      },
+      {
+        id: "ch2-tenses",
+        level: "Cơ bản → Trung cấp",
+        title: "2. 12 Thì & Sự Phối Hợp Thì (Tenses & Sequence of Tenses)",
+        summary: "Sử dụng chính xác các thì trong IELTS Writing Task 1 (mô tả biểu đồ quá khứ, hiện tại, dự báo tương lai) và Speaking.",
+        tableHeaders: ["Nhóm thì", "Công thức cốt lõi", "Ứng dụng thực tế trong IELTS", "Dấu hiệu nhận biết"],
+        tableRows: [
+          ["Hiện tại đơn & HTHT", "S + V(s/es) | S + have/has + V3/ed", "HTĐ: Sự thật hiển nhiên, biểu đồ không có năm. HTHT: Xu hướng từ quá khứ kéo dài đến nay.", "currently, nowadays, since, for, over the past decade"],
+          ["Quá khứ đơn & QKHT", "S + V2/ed | S + had + V3/ed", "QKĐ: Mô tả số liệu biểu đồ năm trong quá khứ (1990-2010). QKHT: Hành động xảy ra trước mốc quá khứ.", "in 2005, formerly, by the time + QKĐ, prior to"],
+          ["Tương lai đơn & TLHT", "S + will + V-inf | S + will have + V3/ed", "Mô tả dự báo (projections/forecasts) trong IELTS Writing Task 1 (by 2040).", "by 2035, is projected/expected to V"]
+        ],
+        rules: [
+          "<strong>Quy tắc phối hợp thì với mệnh đề thời gian:</strong> Không bao giờ chia thì tương lai (<em>will</em>) trong mệnh đề bắt đầu bằng <em>when, as soon as, once, before, after, until</em>. Dùng Hiện tại đơn hoặc Hiện tại hoàn thành để thay thế.",
+          "<strong>Thì Hiện tại hoàn thành tiếp diễn (have/has been + V-ing):</strong> Nhấn mạnh tính liên tục của một xu hướng đang diễn ra (<em>Global temperatures have been rising steadily</em>)."
+        ],
+        examples: [
+          { en: "Between 2000 and 2020, carbon emissions <strong>fluctuated</strong> before reaching a peak.", vi: "Từ năm 2000 đến 2020, lượng khí thải carbon dao động trước khi đạt đỉnh." },
+          { en: "By 2050, urban populations <strong>will have accounted</strong> for nearly 70% of the world's total.", vi: "Trước năm 2050, dân số đô thị sẽ chiếm gần 70% tổng dân số thế giới." }
+        ],
+        quiz: [
+          { q: "Over the past twenty years, global biodiversity ______ at an alarming rate.", opts: ["declined", "has declined", "will decline", "had declined"], ans: 1, exp: "'Over the past twenty years' diễn tả hành động kéo dài từ quá khứ đến hiện tại → Hiện tại hoàn thành (has declined)." },
+          { q: "Once the vaccine ______ clinical trials, it will be distributed globally.", opts: ["passes", "will pass", "passed", "had passed"], ans: 0, exp: "Mệnh đề sau liên từ thời gian 'Once' không dùng thì tương lai → dùng Hiện tại đơn (passes)." }
+        ]
+      },
+      {
+        id: "ch3-sv-agreement",
+        level: "Cơ bản → Trung cấp",
+        title: "3. Sự Hòa Hợp Chủ Ngữ - Động Từ (Subject-Verb Agreement)",
+        summary: "Tránh lỗi mất điểm ngữ pháp phổ biến nhất trong IELTS Writing khi viết câu dài có nhiều cụm giới từ hoặc mệnh đề phụ.",
+        tableHeaders: ["Cấu trúc chủ ngữ", "Quy tắc chia động từ", "Ví dụ chuẩn xác"],
+        tableRows: [
+          ["N1 + Giới từ (of, in, with, along with, as well as) + N2", "Chia động từ theo N1 (danh từ chính đứng đầu)", "The impact (N1) of fossil fuels (N2) is severe."],
+          ["V-ing / To-V / Mệnh đề danh ngữ làm Chủ ngữ", "Luôn chia động từ số ít", "Recycling plastic waste reduces landfill pollution."],
+          ["The number of + N(nhiều) vs A number of + N(nhiều)", "The number of + V(ít) | A number of + V(nhiều)", "The number of endangered species is increasing."],
+          ["Either S1 or S2 / Neither S1 nor S2 / Not only S1 but also S2", "Chia động từ theo chủ ngữ gần nhất (S2)", "Neither the government nor citizens are exempt."]
+        ],
+        rules: [
+          "<strong>Đại từ bất định (Everyone, Somebody, Anything, Nothing, Each, Every):</strong> Luôn đi với động từ số ít (<em>Every individual has a role to play in conservation</em>).",
+          "<strong>Danh từ không đếm được học thuật hay nhầm là số nhiều:</strong> <em>evidence, research, knowledge, equipment, furniture, information, pollution, traffic, luggage</em> → luôn chia động từ số ít."
+        ],
+        examples: [
+          { en: "Recent scientific <strong>research indicates</strong> that sedentary lifestyles increase obesity risks.", vi: "Nghiên cứu khoa học gần đây chỉ ra rằng lối sống ít vận động làm tăng nguy cơ béo phì." }
+        ],
+        quiz: [
+          { q: "The widespread adoption of electric vehicles, along with stricter emission laws, ______ air quality.", opts: ["improve", "improves", "are improving", "have improved"], ans: 1, exp: "Chủ ngữ chính là 'The widespread adoption' (số ít), cụm 'along with...' chỉ là thành phần phụ → improves." },
+          { q: "A number of innovative startups ______ developing biodegradable packaging.", opts: ["is", "was", "are", "has been"], ans: 2, exp: "'A number of + N số nhiều' (nhiều doanh nghiệp khởi nghiệp) đi với động từ số nhiều → are." }
+        ]
+      },
+      {
+        id: "ch4-passive-voice",
+        level: "Trung cấp",
+        title: "4. Câu Bị Động & Bị Động Khách Quan / Nhờ Vả",
+        summary: "Nâng cao tính khách quan, trang trọng trong IELTS Academic Writing Task 1 (mô tả quy trình - Process) và Task 2.",
+        tableHeaders: ["Dạng bị động", "Công thức", "Ví dụ chuẩn IELTS"],
+        tableRows: [
+          ["Bị động cơ bản", "S + Be (chia thì) + V3/ed", "Raw materials are transported to the factory."],
+          ["Bị động với Modal Verbs", "S + can/must/should/may + be + V3/ed", "Strict regulations must be enforced immediately."],
+          ["Bị động khách quan (Impersonal)", "It is believed/argued/estimated that S + V  ↔  S + is/are believed + to V / to have V3/ed", "It is widely believed that education drives economic growth."],
+          ["Bị động nhờ vả (Causative)", "Have / Get + something + V3/ed", "Many homeowners are having solar panels installed."]
+        ],
+        rules: [
+          "<strong>Nội động từ KHÔNG BAO GIỜ chia bị động:</strong> <em>occur, happen, arise, emerge, exist, remain, consist of, result in</em>. (Sai: <em>was occurred</em> → Đúng: <em>occurred</em>)."
+        ],
+        examples: [
+          { en: "Deforestation <strong>is widely regarded</strong> as a primary driver of biodiversity loss.", vi: "Phá rừng được coi rộng rãi là nguyên nhân chính gây mất đa dạng sinh học." }
+        ],
+        quiz: [
+          { q: "It ______ that renewable energy will surpass coal as the primary power source within a decade.", opts: ["estimates", "is estimated", "has estimated", "estimating"], ans: 1, exp: "Cấu trúc bị động khách quan: It is estimated that + mệnh đề." },
+          { q: "A sharp rise in inflation ______ following the global supply chain disruption.", opts: ["was occurred", "occurred", "is occurred", "has been occurred"], ans: 1, exp: "'occur' (xảy ra) là nội động từ nên không chia dạng bị động → occurred." }
+        ]
+      },
+      {
+        id: "ch5-conditionals",
+        level: "Trung cấp → Nâng cao",
+        title: "5. Câu Điều Kiện & Đảo Ngữ Điều Kiện (Conditionals)",
+        summary: "Công cụ lập luận giả thuyết sắc bén cho IELTS Writing Task 2 và Speaking Part 3.",
+        tableHeaders: ["Loại câu điều kiện", "Mệnh đề If", "Mệnh đề chính", "Đảo ngữ (Bỏ If)"],
+        tableRows: [
+          ["Loại 1 (Có thể xảy ra)", "If + S + V(s/es)", "S + will/can/may + V-inf", "Should + S + V-inf, S + will + V"],
+          ["Loại 2 (Không có thật hiện tại)", "If + S + V2/ed (were)", "S + would/could + V-inf", "Were + S + (to V), S + would + V"],
+          ["Loại 3 (Không có thật quá khứ)", "If + S + had + V3/ed", "S + would/could + have + V3/ed", "Had + S + V3/ed, S + would have V3"],
+          ["Hỗn hợp (Mix 3-2)", "If + S + had + V3/ed", "S + would + V-inf (hiện tại)", "Had + S + V3/ed, S + would + V-inf"]
+        ],
+        rules: [
+          "<strong>Liên từ điều kiện thay thế If:</strong> <em>Unless (= If... not)</em>, <em>Provided (that) / Providing (that) / As long as</em> (miễn là), <em>Otherwise</em> (nếu không thì)."
+        ],
+        examples: [
+          { en: "<strong>Were</strong> governments to subsidize public transit, traffic congestion <strong>would decline</strong>.", vi: "Nếu chính phủ trợ giá giao thông công cộng, tắc nghẽn giao thông sẽ giảm." }
+        ],
+        quiz: [
+          { q: "______ stricter cybersecurity measures been implemented earlier, the data breach could have been prevented.", opts: ["If", "Were", "Had", "Should"], ans: 2, exp: "Đảo ngữ câu điều kiện loại 3 (mệnh đề chính dùng 'could have been prevented') → Had + S + V3/ed." },
+          { q: "Ecosystems will continue to collapse ______ immediate conservation actions are taken.", opts: ["provided that", "unless", "as long as", "in case"], ans: 1, exp: "Nghĩa câu: Các hệ sinh thái sẽ tiếp tục sụp đổ TRỪ KHI (unless) các hành động bảo tồn được thực hiện ngay lập tức." }
+        ]
+      },
+      {
+        id: "ch6-relative-clauses",
+        level: "Trung cấp → Nâng cao",
+        title: "6. Mệnh Đề Quan Hệ & Rút Gọn Mệnh Đề (Relative Clauses)",
+        summary: "Kỹ thuật ghép câu phức (Complex Sentences) và rút gọn mệnh đề giúp tăng điểm tiêu chí Grammatical Range.",
+        tableHeaders: ["Đại từ / Trạng từ", "Chức năng & Cách dùng", "Ví dụ chuẩn"],
+        tableRows: [
+          ["Who / Whom", "Who (S/O chỉ người) | Whom (chỉ làm O cho người, đứng sau giới từ)", "The conservationist whom we interviewed..."],
+          ["Which / That", "Which (vật, cả mệnh đề trước sau dấu phẩy) | That (không dùng sau dấu phẩy/giới từ)", "Carbon emissions, which trap heat, are rising."],
+          ["Whose + N", "Chỉ sự sở hữu cho cả người và vật", "Countries whose economies rely on tourism..."],
+          ["Where / When / Why", "Where (= in/on/at which), When (= on/in which), Why (= for which)", "The era in which automation dominates..."]
+        ],
+        rules: [
+          "<strong>3 Quy tắc rút gọn mệnh đề quan hệ:</strong><br>1. Chủ động → <strong>V-ing</strong> (<em>People living in urban areas...</em>)<br>2. Bị động → <strong>V3/ed</strong> (<em>Products made from recycled materials...</em>)<br>3. Sau số thứ tự / so sánh nhất (<em>the first, the only, the best</em>) → <strong>To-V / To be V3/ed</strong>."
+        ],
+        examples: [
+          { en: "Individuals <strong>suffering</strong> from insomnia often experience chronic fatigue.", vi: "Những người mắc chứng mất ngủ thường xuyên bị mệt mỏi mãn tính." }
+        ],
+        quiz: [
+          { q: "Nations ______ economies depend heavily on fossil fuels face major transition challenges.", opts: ["who", "which", "whose", "whom"], ans: 2, exp: "Sau chỗ trống là danh từ 'economies' thuộc sở hữu của 'Nations' → dùng whose." },
+          { q: "The legislation ______ by parliament aims to curb cybercrime and identity theft.", opts: ["pass", "passing", "passed", "was passed"], ans: 2, exp: "Rút gọn mệnh đề quan hệ dạng bị động (which was passed → passed)." }
+        ]
+      },
+      {
+        id: "ch7-comparisons",
+        level: "Cơ bản → Trung cấp",
+        title: "7. Các Cấu Trúc So Sánh & So Sánh Kép (Comparisons)",
+        summary: "Cấu trúc xương sống để đối chiếu số liệu trong IELTS Writing Task 1 và bày tỏ quan điểm ở Task 2.",
+        tableHeaders: ["Dạng so sánh", "Công thức", "Ví dụ IELTS"],
+        tableRows: [
+          ["So sánh bằng / Bội số", "as + Adj/Adv + as  |  twice / three times as + many/much + N + as", "Solar output was twice as high as wind power."],
+          ["So sánh hơn & Nhấn mạnh", "much / far / significantly / marginally + Adj-er / more + Adj + than", "Air travel is significantly faster than rail."],
+          ["So sánh nhất", "the + Adj-est / the most + Adj + (in/of)", "It remains the most lucrative sector in the economy."],
+          ["So sánh kép (Càng... càng...)", "The + so sánh hơn + S1 + V1, the + so sánh hơn + S2 + V2", "The more urbanized a city becomes, the worse traffic gets."]
+        ],
+        rules: [
+          "<strong>Không dùng 'very' trước so sánh hơn:</strong> Hãy dùng <em>much, far, considerably, substantially</em> (mức độ lớn) hoặc <em>slightly, marginally</em> (mức độ nhỏ)."
+        ],
+        examples: [
+          { en: "<strong>The greater</strong> the investment in education, <strong>the higher</strong> the long-term economic yield.", vi: "Đầu tư vào giáo dục càng lớn, lợi suất kinh tế dài hạn càng cao." }
+        ],
+        quiz: [
+          { q: "Public transportation in Tokyo is ______ more punctual than in most other megacities.", opts: ["very", "far", "more", "so"], ans: 1, exp: "Dùng 'far' (hoặc much/considerably) để nhấn mạnh trước tính từ so sánh hơn 'more punctual'." }
+        ]
+      },
+      {
+        id: "ch8-gerunds-infinitives",
+        level: "Trung cấp",
+        title: "8. Danh Động Từ (V-ing) & Động Từ Nguyên Mẫu (To-V)",
+        summary: "Nắm chắc các động từ đi với V-ing, To-V và đặc biệt là các cụm 'giới từ to + V-ing' hay gặp trong bài thi.",
+        tableHeaders: ["Nhóm cấu trúc", "Danh sách từ vựng tiêu biểu", "Ví dụ"],
+        tableRows: [
+          ["V + V-ing", "avoid, consider, delay/postpone, deny, involve, practice, risk, suggest, recommend", "Governments should consider subsidizing green tech."],
+          ["V + To-V", "afford, agree, attempt, decide, fail, intend, manage, offer, promise, refuse, tend", "Many startups fail to secure sufficient capital."],
+          ["Giới từ 'to' + V-ing", "look forward to, be committed/dedicated to, be accustomed/used to, object to, contribute to", "Human activities contribute to accelerating global warming."]
+        ],
+        rules: [
+          "<strong>Phân biệt nghĩa khi dùng V-ing vs To-V:</strong> <em>stop + V-ing</em> (dừng hẳn việc đang làm) ≠ <em>stop + to V</em> (dừng lại để làm việc khác); <em>try + V-ing</em> (thử nghiệm) ≠ <em>try + to V</em> (nỗ lực)."
+        ],
+        examples: [
+          { en: "Communities must be dedicated to <strong>preserving</strong> their cultural heritage.", vi: "Các cộng đồng phải tận tâm với việc gìn giữ di sản văn hóa của họ." }
+        ],
+        quiz: [
+          { q: "Excessive consumption of processed food contributes to ______ the risk of obesity.", opts: ["increase", "increasing", "increased", "increases"], ans: 1, exp: "Cụm 'contribute to + V-ing' (góp phần làm tăng) → increasing." }
+        ]
+      },
+      {
+        id: "ch9-reported-speech",
+        level: "Trung cấp",
+        title: "9. Câu Tường Thuật Gián Tiếp (Reported Speech)",
+        summary: "Thuật lại ý kiến chuyên gia, kết quả khảo sát hoặc trích dẫn trong IELTS Reading & Writing.",
+        tableHeaders: ["Loại câu trực tiếp", "Cấu trúc gián tiếp", "Lưu ý biến đổi"],
+        tableRows: [
+          ["Câu trần thuật", "S + stated / claimed / argued / noted + (that) + S + V(lùi thì)", "Nếu động từ tường thuật ở hiện tại (states/argues), KHÔNG lùi thì."],
+          ["Câu hỏi Wh- / Yes-No", "S + asked / inquired + Wh-word / if / whether + S + V", "Đưa về trật tự câu khẳng định (S + V), bỏ trợ động từ do/does/did."],
+          ["Mệnh lệnh / Khuyên bảo", "S + urged / advised / instructed / warned + O + (not) to V", "Động từ tường thuật đi kèm tân ngữ chỉ người nghe."]
+        ],
+        rules: [
+          "<strong>Động từ tường thuật học thuật thay cho 'say':</strong> <em>assert, contend, emphasize, highlight, acknowledge, refute</em>."
+        ],
+        examples: [
+          { en: "The World Health Organization urged nations <strong>to strengthen</strong> pandemic preparedness.", vi: "Tổ chức Y tế Thế giới hối thúc các quốc gia tăng cường khả năng ứng phó đại dịch." }
+        ],
+        quiz: [
+          { q: "Scientists warned that coastal cities ______ severe flooding if sea levels continued to rise.", opts: ["will face", "would face", "face", "are facing"], ans: 1, exp: "Động từ tường thuật 'warned' ở quá khứ nên 'will face' lùi thì thành 'would face'." }
+        ]
+      },
+      {
+        id: "ch10-inversion",
+        level: "Nâng cao (Band 7.5 - 8.5+)",
+        title: "10. Đảo Ngữ Nâng Cao (Inversion) Ăn Điểm IELTS Writing",
+        summary: "Bí quyết tạo cấu trúc câu nhấn mạnh đầy uy lực để bứt phá điểm Grammatical Range & Accuracy.",
+        tableHeaders: ["Cấu trúc đảo ngữ", "Công thức", "Ví dụ chuẩn Band 8.0+"],
+        tableRows: [
+          ["Not only... but also...", "Not only + Trợ ĐT + S + V, but S + also + V", "Not only does recycling reduce waste, but it also saves energy."],
+          ["Trạng từ phủ định đầu câu", "Never / Rarely / Seldom / Little / Under no circumstances + Trợ ĐT + S + V", "Under no circumstances should wildlife habitats be destroyed."],
+          ["Only + Mệnh đề/Cụm từ", "Only by V-ing / Only when S + V + Trợ ĐT + S + V (Đảo ở vế sau)", "Only by adopting green technology can we achieve sustainability."],
+          ["So / Such... that...", "So + Adj + Be + S + that... | Such + Be + N + that...", "So severe was the drought that crops failed completely."]
+        ],
+        rules: [
+          "<strong>Lưu ý quan trọng:</strong> Khi đảo ngữ với <em>Only when / Only after / Only if</em>, ta KHÔNG đảo ngữ ở mệnh đề ngay sau <em>Only</em>, mà đảo trợ động từ ở <strong>mệnh đề chính phía sau</strong>."
+        ],
+        examples: [
+          { en: "<strong>Not only does</strong> physical exercise improve fitness, <strong>but</strong> it also alleviates stress.", vi: "Tập thể dục không chỉ cải thiện thể lực mà còn giảm căng thẳng." }
+        ],
+        quiz: [
+          { q: "Not only ______ biodiversity, but deforestation also accelerates soil erosion.", opts: ["it threatens", "does it threaten", "it does threaten", "threatens it"], ans: 1, exp: "'Not only' đứng đầu câu nên phải đảo trợ động từ 'does' lên trước chủ ngữ 'it' → does it threaten." }
+        ]
+      },
+      {
+        id: "ch11-subjunctive",
+        level: "Nâng cao (Band 7.5 - 8.5+)",
+        title: "11. Thức Giả Định (Subjunctive Mood)",
+        summary: "Cấu trúc mang tính trang trọng cao thường dùng để đưa ra khuyến nghị giải pháp trong kết bài IELTS Writing Task 2.",
+        tableHeaders: ["Nhóm từ kích hoạt", "Công thức chuẩn", "Ví dụ học thuật"],
+        tableRows: [
+          ["Động từ yêu cầu/đề xuất", "recommend, suggest, insist, demand, require, urge, propose + that + S + (should) + V-inf", "Experts recommend that every household reduce plastic usage."],
+          ["Tính từ cấp thiết", "It is essential / vital / crucial / imperative / mandatory + that + S + (should) + V-inf", "It is imperative that strict laws be enacted immediately."]
+        ],
+        rules: [
+          "<strong>Bẫy ngữ pháp:</strong> Động từ sau <em>that</em> luôn ở dạng <strong>nguyên mẫu không 'to' (V-inf)</strong> hoặc <strong>be + V3/ed</strong> (bị động), bất kể chủ ngữ là ngôi thứ 3 số ít hay động từ chính ở thì quá khứ."
+        ],
+        examples: [
+          { en: "It is crucial that healthcare <strong>be</strong> accessible to all vulnerable populations.", vi: "Điều cốt yếu là dịch vụ chăm sóc sức khỏe phải tiếp cận được với mọi nhóm dân số dễ bị tổn thương." }
+        ],
+        quiz: [
+          { q: "Environmentalists insist that the government ______ stricter penalties on illegal logging.", opts: ["imposes", "impose", "imposed", "imposing"], ans: 1, exp: "Thức giả định sau 'insist that': dùng động từ nguyên mẫu không 'to' (impose) bất kể chủ ngữ số ít 'the government'." }
+        ]
+      },
+      {
+        id: "ch12-conjunctions",
+        level: "Cơ bản → Nâng cao",
+        title: "12. Liên Từ & Mệnh Đề Trạng Ngữ (Linking Devices)",
+        summary: "Tối ưu điểm Coherence & Cohesion bằng cách sử dụng chính xác Liên từ (+ Mệnh đề), Giới từ (+ Cụm danh từ) và Trạng từ liên kết.",
+        tableHeaders: ["Mối quan hệ nghĩa", "Liên từ (+ S + V)", "Giới từ (+ N / V-ing)", "Trạng từ liên kết (Đầu câu / sau ;)"],
+        tableRows: [
+          ["Tương phản / Nhượng bộ", "Although, Even though, While, Whereas", "Despite, In spite of, Notwithstanding", "However, Nevertheless, Conversely, On the other hand"],
+          ["Nguyên nhân", "Because, Since, As, Given that", "Because of, Due to, Owing to, On account of", "—"],
+          ["Kết quả", "So... that..., Such... that...", "As a result of + N", "Therefore, Consequently, Thus, Hence, As a consequence"],
+          ["Bổ sung / Mục đích", "In order that, So that", "In addition to, Besides, In order to + V", "Furthermore, Moreover, Additionally"]
+        ],
+        rules: [
+          "<strong>Lỗi kinh điển cần tránh:</strong> Không dùng <em>Although... but...</em> hoặc <em>Because... so...</em> trong cùng một câu tiếng Anh. Không dùng <em>Despite of</em> (chỉ có <em>Despite</em> hoặc <em>In spite of</em>)."
+        ],
+        examples: [
+          { en: "<strong>Whereas</strong> some people favor globalization, others worry about the loss of cultural identity.", vi: "Trong khi một số người ủng hộ toàn cầu hóa, những người khác lại lo ngại về việc đánh mất bản sắc văn hóa." }
+        ],
+        quiz: [
+          { q: "______ rapid technological advancements, many traditional artisans struggle to preserve their crafts.", opts: ["Although", "Despite", "However", "Because"], ans: 1, exp: "Sau chỗ trống là cụm danh từ 'rapid technological advancements' (không có động từ chia thì) → dùng giới từ 'Despite'." }
+        ]
+      }
+    ];
+
+    /**
+     * ============================================================================
+     * 4. STATE MANAGEMENT & LOCALSTORAGE PERSISTENCE
+     * ============================================================================
+     */
+    const STORAGE_KEY = 'ielts_master_900_state_v1';
+
+    const defaultState = {
+      masteredIds: [],
+      starredIds: [],
+      wrongIds: [],
+      quizTotalAnswered: 0,
+      quizTotalCorrect: 0,
+      streak: 1,
+      lastStudyDate: new Date().toISOString().slice(0, 10),
+      darkMode: false
+    };
+
+    let state = { ...defaultState };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          state = { ...defaultState, ...JSON.parse(raw) };
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          state.darkMode = true;
+        }
+        updateStreak();
+      } catch (e) {
+        console.error('Load state error:', e);
+      }
+      applyTheme();
+    }
+
+    function updateStreak() {
+      const today = new Date().toISOString().slice(0, 10);
+      if (state.lastStudyDate === today) return;
+
+      const last = new Date(state.lastStudyDate);
+      const now = new Date(today);
+      const diffDays = Math.round((now - last) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        state.streak = (state.streak || 1) + 1;
+      } else if (diffDays > 1) {
+        state.streak = 1;
+      }
+      state.lastStudyDate = today;
+      saveState();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('Save state error:', e);
+      }
+      refreshHeaderStats();
+    }
+
+    function applyTheme() {
+      document.documentElement.classList.toggle('dark', Boolean(state.darkMode));
+    }
+
+    function refreshHeaderStats() {
+      document.getElementById('hdr-mastered').textContent = state.masteredIds.length;
+      const acc = state.quizTotalAnswered > 0
+        ? Math.round((state.quizTotalCorrect / state.quizTotalAnswered) * 100)
+        : 0;
+      document.getElementById('hdr-accuracy').textContent = `${acc}%`;
+      document.getElementById('hdr-streak').textContent = state.streak || 1;
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      const styles = {
+        info: 'bg-slate-900 dark:bg-slate-800 text-white border-slate-700',
+        success: 'bg-emerald-600 text-white border-emerald-500',
+        warning: 'bg-amber-600 text-white border-amber-500'
+      };
+      el.className = `pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg border text-xs sm:text-sm font-medium transition-all duration-300 opacity-0 translate-y-2 ${styles[type] || styles.info}`;
+      el.textContent = message;
+      container.appendChild(el);
+      requestAnimationFrame(() => el.classList.remove('opacity-0', 'translate-y-2'));
+      setTimeout(() => {
+        el.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => el.remove(), 300);
+      }, 2400);
+    }
+
+    /**
+     * ============================================================================
+     * 5. WEB SPEECH API (US / UK PRONUNCIATION)
+     * ============================================================================
+     */
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Trình duyệt của bạn không hỗ trợ phát âm.', 'warning');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      // Remove parenthetical acronyms like "(AI)" or "(VR)" for cleaner speech
+      const cleanText = text.replace(/\([^)]*\)/g, '').trim();
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      const lang = document.getElementById('voice-accent').value || 'en-GB';
+      utter.lang = lang;
+      utter.rate = 0.92;
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.lang.includes(lang)) || voices.find(v => v.lang.startsWith('en'));
+      if (match) utter.voice = match;
+      window.speechSynthesis.speak(utter);
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    /**
+     * ============================================================================
+     * 6. POPULATE 28 TOPIC DROPDOWNS
+     * ============================================================================
+     */
+    function populateTopicSelectors() {
+      const vocabTopicSel = document.getElementById('vocab-topic-filter');
+      const fcTopicSel = document.getElementById('fc-topic-select');
+      const quizOptgroup = document.getElementById('quiz-topic-optgroup');
+
+      IELTS_TOPICS.forEach(t => {
+        const count = t.end - t.start + 1;
+        const label = `${t.name} (${count} từ)`;
+
+        const o1 = document.createElement('option');
+        o1.value = String(t.id);
+        o1.textContent = label;
+        vocabTopicSel.appendChild(o1);
+
+        const o2 = document.createElement('option');
+        o2.value = String(t.id);
+        o2.textContent = label;
+        fcTopicSel.appendChild(o2);
+
+        const o3 = document.createElement('option');
+        o3.value = `topic-${t.id}`;
+        o3.textContent = label;
+        quizOptgroup.appendChild(o3);
+      });
+    }
+
+    /**
+     * ============================================================================
+     * 7. TAB 1: VOCABULARY HUB LOGIC
+     * ============================================================================
+     */
+    let filteredVocab = [...VOCAB_ITEMS];
+
+    function filterVocabulary() {
+      const q = document.getElementById('vocab-search').value.trim().toLowerCase();
+      const topicVal = document.getElementById('vocab-topic-filter').value;
+      const statusVal = document.getElementById('vocab-status-filter').value;
+
+      filteredVocab = VOCAB_ITEMS.filter(item => {
+        if (topicVal !== 'all' && String(item.topicId) !== topicVal) return false;
+
+        const isMastered = state.masteredIds.includes(item.id);
+        const isStarred = state.starredIds.includes(item.id);
+        const isWrong = state.wrongIds.includes(item.id);
+
+        if (statusVal === 'mastered' && !isMastered) return false;
+        if (statusVal === 'unmastered' && isMastered) return false;
+        if (statusVal === 'starred' && !isStarred) return false;
+        if (statusVal === 'wrong' && !isWrong) return false;
+
+        if (q) {
+          return (
+            item.en.toLowerCase().includes(q) ||
+            item.vi.toLowerCase().includes(q) ||
+            String(item.id) === q
+          );
+        }
+        return true;
+      });
+
+      document.getElementById('vocab-count-label').textContent = `Đang hiển thị ${filteredVocab.length} / 841 từ vựng`;
+
+      const bulkBtn = document.getElementById('bulk-master-btn');
+      if (topicVal !== 'all' && filteredVocab.length > 0) {
+        bulkBtn.classList.remove('hidden');
+      } else {
+        bulkBtn.classList.add('hidden');
+      }
+
+      renderVocabGrid();
+    }
+
+    function renderVocabGrid() {
+      const grid = document.getElementById('vocab-grid');
+      if (filteredVocab.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <p class="text-slate-500 text-sm">Không tìm thấy từ vựng IELTS nào khớp với bộ lọc hiện tại.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filteredVocab.map(item => {
+        const isMastered = state.masteredIds.includes(item.id);
+        const isStarred = state.starredIds.includes(item.id);
+        const isWrong = state.wrongIds.includes(item.id);
+
+        return `
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border ${isMastered ? 'border-emerald-300 dark:border-emerald-900/70 bg-emerald-50/20 dark:bg-emerald-950/10' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 truncate max-w-[190px]" title="${item.topic}">
+                  #${item.id} • ${item.topic}
+                </span>
+                <div class="flex items-center gap-1 shrink-0">
+                  ${isWrong ? '<span class="text-xs px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400" title="Hay làm sai">⚠</span>' : ''}
+                  <button onclick="toggleStarItem(${item.id})" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-base leading-none transition ${isStarred ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}" title="Đánh dấu sao">
+                    ★
+                  </button>
+                  <button onclick="speakText('${item.en.replace(/'/g, "\\'")}')" class="p-1.5 rounded-lg bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 transition text-xs font-bold" title="Nghe phát âm">
+                    🔊
+                  </button>
+                </div>
+              </div>
+
+              <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+                ${item.en}
+              </h3>
+              <p class="text-sm font-semibold text-brand-600 dark:text-brand-400">
+                ${item.vi}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400">Câu ${item.id}/841</span>
+              <button onclick="toggleMasterItem(${item.id})" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${isMastered ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-600'}">
+                ${isMastered ? '✓ Đã thuộc' : 'Đánh dấu thuộc'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.toggleStarItem = function(id) {
+      const idx = state.starredIds.indexOf(id);
+      if (idx > -1) {
+        state.starredIds.splice(idx, 1);
+      } else {
+        state.starredIds.push(id);
+        showToast('Đã đánh dấu sao từ vựng ★', 'info');
+      }
+      saveState();
+      renderVocabGrid();
+      renderFlashcard();
+    };
+
+    window.toggleMasterItem = function(id) {
+      const idx = state.masteredIds.indexOf(id);
+      if (idx > -1) {
+        state.masteredIds.splice(idx, 1);
+      } else {
+        state.masteredIds.push(id);
+        const wIdx = state.wrongIds.indexOf(id);
+        if (wIdx > -1) state.wrongIds.splice(wIdx, 1);
+        showToast('Đã đánh dấu thuộc từ vựng ✓', 'success');
+      }
+      saveState();
+      renderVocabGrid();
+      renderFlashcard();
+    };
+
+    /**
+     * ============================================================================
+     * 8. TAB 2: SMART 3D FLASHCARD MODULE
+     * ============================================================================
+     */
+    let fcDeck = [...VOCAB_ITEMS];
+    let fcIdx = 0;
+    let fcIsFlipped = false;
+
+    function buildFlashcardDeck() {
+      const topicVal = document.getElementById('fc-topic-select').value;
+      const statusVal = document.getElementById('fc-status-select').value;
+
+      fcDeck = VOCAB_ITEMS.filter(item => {
+        if (topicVal !== 'all' && String(item.topicId) !== topicVal) return false;
+        const isMastered = state.masteredIds.includes(item.id);
+        const isStarred = state.starredIds.includes(item.id);
+        const isWrong = state.wrongIds.includes(item.id);
+
+        if (statusVal === 'unmastered' && isMastered) return false;
+        if (statusVal === 'starred' && !isStarred) return false;
+        if (statusVal === 'wrong' && !isWrong) return false;
+        return true;
+      });
+
+      fcIdx = 0;
+      fcIsFlipped = false;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const inner = document.getElementById('fc-inner');
+      inner.classList.toggle('rotate-y-180', fcIsFlipped);
+
+      if (fcDeck.length === 0) {
+        document.getElementById('fc-counter').textContent = 'Thẻ 0 / 0';
+        document.getElementById('fc-en-word').textContent = 'Không có thẻ';
+        document.getElementById('fc-vi-meaning').textContent = 'Vui lòng chọn chủ đề/trạng thái khác';
+        return;
+      }
+
+      if (fcIdx >= fcDeck.length) fcIdx = 0;
+      if (fcIdx < 0) fcIdx = fcDeck.length - 1;
+
+      const card = fcDeck[fcIdx];
+      const isMastered = state.masteredIds.includes(card.id);
+      const isStarred = state.starredIds.includes(card.id);
+
+      document.getElementById('fc-counter').textContent = `Thẻ ${fcIdx + 1} / ${fcDeck.length}`;
+      document.getElementById('fc-topic-badge').textContent = card.topic;
+      document.getElementById('fc-id-label').textContent = `Câu #${card.id}`;
+      document.getElementById('fc-en-word').textContent = card.en;
+      document.getElementById('fc-en-small').textContent = card.en;
+      document.getElementById('fc-vi-meaning').textContent = card.vi;
+
+      const distractors = card.opts.filter((_, i) => i !== card.ans);
+      document.getElementById('fc-distractors-box').textContent = `3 nghĩa nhiễu tham khảo: ${distractors.join(' • ')}`;
+
+      const starBtn = document.getElementById('fc-star-btn');
+      starBtn.className = `p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-xl leading-none transition ${isStarred ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}`;
+
+      const pill = document.getElementById('fc-status-pill');
+      pill.textContent = isMastered ? '✓ Đã thuộc từ này' : 'Chưa thuộc';
+      pill.className = `px-3 py-1 rounded-full text-xs font-semibold ${isMastered ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`;
+
+      const masterBtn = document.getElementById('fc-master-btn');
+      masterBtn.textContent = isMastered ? '✓ Đã thuộc (Nhấn để bỏ)' : '✓ Đánh dấu Đã thuộc (Phím M)';
+
+      if (document.getElementById('fc-autoplay').checked && !fcIsFlipped) {
+        speakText(card.en);
+      }
+    }
+
+    /**
+     * ============================================================================
+     * 9. TAB 3: IELTS QUIZ ENGINE
+     * ============================================================================
+     */
+    let activeQuizList = [];
+    let qPointer = 0;
+    let qCorrectCount = 0;
+    let qWrongRecords = [];
+    let qLocked = false;
+    let qTimerId = null;
+    let qElapsedSec = 0;
+
+    function launchQuiz(customItems = null) {
+      let pool = [];
+      if (customItems) {
+        pool = [...customItems];
+      } else {
+        const scope = document.getElementById('quiz-scope-select').value;
+        const limitVal = document.getElementById('quiz-limit-select').value;
+
+        if (scope === 'random') {
+          pool = [...VOCAB_ITEMS];
+        } else if (scope === 'wrong') {
+          pool = VOCAB_ITEMS.filter(v => state.wrongIds.includes(v.id));
+        } else if (scope === 'starred') {
+          pool = VOCAB_ITEMS.filter(v => state.starredIds.includes(v.id));
+        } else if (scope === 'unmastered') {
+          pool = VOCAB_ITEMS.filter(v => !state.masteredIds.includes(v.id));
+        } else if (scope.startsWith('topic-')) {
+          const tId = Number(scope.replace('topic-', ''));
+          pool = VOCAB_ITEMS.filter(v => v.topicId === tId);
+        }
+
+        if (pool.length === 0) {
+          showToast('Không có từ vựng nào trong phạm vi đã chọn!', 'warning');
+          return;
+        }
+
+        if (!scope.startsWith('topic-')) {
+          pool.sort(() => Math.random() - 0.5);
+        }
+
+        if (limitVal !== 'all') {
+          pool = pool.slice(0, Number(limitVal));
+        }
+      }
+
+      const shuffleOpts = document.getElementById('quiz-shuffle-opts').checked;
+
+      activeQuizList = pool.map(item => {
+        const choices = item.opts.map((text, idx) => ({
+          text,
+          isRight: idx === item.ans
+        }));
+        if (shuffleOpts) {
+          choices.sort(() => Math.random() - 0.5);
+        }
+        return { ...item, choices };
+      });
+
+      qPointer = 0;
+      qCorrectCount = 0;
+      qWrongRecords = [];
+      qElapsedSec = 0;
+
+      document.getElementById('quiz-setup').classList.add('hidden');
+      document.getElementById('quiz-result').classList.add('hidden');
+      document.getElementById('quiz-arena').classList.remove('hidden');
+
+      clearInterval(qTimerId);
+      document.getElementById('quiz-clock').textContent = '00:00';
+      qTimerId = setInterval(() => {
+        qElapsedSec++;
+        const m = String(Math.floor(qElapsedSec / 60)).padStart(2, '0');
+        const s = String(qElapsedSec % 60).padStart(2, '0');
+        document.getElementById('quiz-clock').textContent = `${m}:${s}`;
+      }, 1000);
+
+      renderQuizStep();
+    }
+
+    function renderQuizStep() {
+      qLocked = false;
+      const item = activeQuizList[qPointer];
+      const total = activeQuizList.length;
+
+      document.getElementById('quiz-progress-label').textContent = `Câu ${qPointer + 1} / ${total}`;
+      document.getElementById('quiz-live-score').textContent = `Đúng: ${qCorrectCount}`;
+      document.getElementById('quiz-bar').style.width = `${((qPointer + 1) / total) * 100}%`;
+
+      document.getElementById('quiz-meta').textContent = `Câu #${item.id} • ${item.topic}`;
+      document.getElementById('quiz-question-word').textContent = item.en;
+
+      document.getElementById('quiz-feedback-box').classList.add('hidden');
+      document.getElementById('quiz-next-wrap').classList.add('hidden');
+
+      const letters = ['A', 'B', 'C', 'D'];
+      document.getElementById('quiz-options-box').innerHTML = item.choices.map((c, idx) => `
+        <button onclick="selectQuizChoice(${idx})" class="q-choice-btn text-left p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-slate-50 dark:bg-slate-800/60 transition flex items-center gap-3 font-medium">
+          <span class="w-8 h-8 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-sm shrink-0">
+            ${letters[idx]}
+          </span>
+          <span class="text-sm sm:text-base">${c.text}</span>
+        </button>
+      `).join('');
+
+      if (document.getElementById('quiz-autospeak').checked) {
+        speakText(item.en);
+      }
+    }
+
+    window.selectQuizChoice = function(chosenIdx) {
+      if (qLocked) return;
+      qLocked = true;
+
+      const item = activeQuizList[qPointer];
+      const btns = document.querySelectorAll('.q-choice-btn');
+      const picked = item.choices[chosenIdx];
+
+      btns.forEach((btn, idx) => {
+        btn.disabled = true;
+        const c = item.choices[idx];
+        if (c.isRight) {
+          btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-50', 'dark:bg-slate-800/60');
+          btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/50', 'text-emerald-800', 'dark:text-emerald-200');
+        } else if (idx === chosenIdx && !c.isRight) {
+          btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-50', 'dark:bg-slate-800/60');
+          btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/50', 'text-rose-800', 'dark:text-rose-200');
+        }
+      });
+
+      state.quizTotalAnswered++;
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.classList.remove('hidden');
+
+      if (picked.isRight) {
+        qCorrectCount++;
+        state.quizTotalCorrect++;
+        document.getElementById('quiz-live-score').textContent = `Đúng: ${qCorrectCount}`;
+        const wIdx = state.wrongIds.indexOf(item.id);
+        if (wIdx > -1) state.wrongIds.splice(wIdx, 1);
+
+        fbBox.className = 'mt-5 p-4 rounded-2xl text-sm border bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900 text-emerald-800 dark:text-emerald-200';
+        fbBox.innerHTML = `<strong>✓ Chính xác!</strong> <em>${item.en}</em> có nghĩa là <strong>"${item.vi}"</strong> (Chủ đề: ${item.topic}).`;
+      } else {
+        qWrongRecords.push(item);
+        if (!state.wrongIds.includes(item.id)) state.wrongIds.push(item.id);
+
+        fbBox.className = 'mt-5 p-4 rounded-2xl text-sm border bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200';
+        fbBox.innerHTML = `<strong>✕ Chưa đúng!</strong> Đáp án đúng của <em>${item.en}</em> là <strong>"${item.vi}"</strong> (Chủ đề: ${item.topic}).`;
+      }
+
+      saveState();
+
+      const nextBtn = document.getElementById('quiz-next-btn');
+      nextBtn.textContent = qPointer < activeQuizList.length - 1 ? 'Câu tiếp theo →' : 'Hoàn thành & Xem điểm 🎉';
+      document.getElementById('quiz-next-wrap').classList.remove('hidden');
+    };
+
+    function showQuizSummary() {
+      clearInterval(qTimerId);
+      document.getElementById('quiz-arena').classList.add('hidden');
+      document.getElementById('quiz-result').classList.remove('hidden');
+
+      const total = activeQuizList.length;
+      const wrong = total - qCorrectCount;
+      const pct = Math.round((qCorrectCount / total) * 100);
+
+      document.getElementById('res-correct').textContent = qCorrectCount;
+      document.getElementById('res-wrong').textContent = wrong;
+      document.getElementById('res-pct').textContent = `${pct}%`;
+
+      const m = String(Math.floor(qElapsedSec / 60)).padStart(2, '0');
+      const s = String(qElapsedSec % 60).padStart(2, '0');
+      document.getElementById('res-time').textContent = `Thời gian hoàn thành: ${m}:${s}`;
+      document.getElementById('res-emoji').textContent = pct >= 80 ? '🏆' : pct >= 50 ? '👏' : '📚';
+
+      const wrongSec = document.getElementById('res-wrong-section');
+      const wrongList = document.getElementById('res-wrong-list');
+      const retryBtn = document.getElementById('quiz-retry-wrong-btn');
+
+      if (qWrongRecords.length > 0) {
+        wrongSec.classList.remove('hidden');
+        retryBtn.classList.remove('hidden');
+        wrongList.innerHTML = qWrongRecords.map(w => `
+          <div class="flex items-center justify-between p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 text-sm">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">${w.en}</span>
+              <span class="text-slate-400 mx-2">→</span>
+              <span class="font-semibold text-emerald-600 dark:text-emerald-400">${w.vi}</span>
+            </div>
+            <button onclick="speakText('${w.en.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 text-xs font-semibold shadow-sm">🔊</button>
+          </div>
+        `).join('');
+      } else {
+        wrongSec.classList.add('hidden');
+        retryBtn.classList.add('hidden');
+      }
+    }
+
+    /**
+     * ============================================================================
+     * 10. TAB 4: FULL IELTS GRAMMAR RENDERER
+     * ============================================================================
+     */
+    let currentGrammarId = GRAMMAR_CHAPTERS[0].id;
+
+    function renderGrammarSidebar() {
+      const q = document.getElementById('grammar-search').value.trim().toLowerCase();
+      const list = document.getElementById('grammar-sidebar-list');
+
+      const filtered = GRAMMAR_CHAPTERS.filter(ch =>
+        ch.title.toLowerCase().includes(q) || ch.summary.toLowerCase().includes(q)
+      );
+
+      list.innerHTML = filtered.map(ch => {
+        const active = ch.id === currentGrammarId;
+        return `
+          <button onclick="openGrammarChapter('${ch.id}')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm transition ${active ? 'bg-brand-600 text-white font-semibold shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium'}">
+            <div class="truncate">${ch.title}</div>
+            <div class="text-[10px] mt-0.5 ${active ? 'text-brand-100' : 'text-slate-400'}">${ch.level}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.openGrammarChapter = function(id) {
+      currentGrammarId = id;
+      renderGrammarSidebar();
+      renderGrammarReader();
+    };
+
+    function renderGrammarReader() {
+      const ch = GRAMMAR_CHAPTERS.find(c => c.id === currentGrammarId) || GRAMMAR_CHAPTERS[0];
+      const reader = document.getElementById('grammar-reader');
+
+      const tableHtml = `
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700 mb-6">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                ${ch.tableHeaders.map(h => `<th class="p-3.5 font-bold border-b border-slate-200 dark:border-slate-700">${h}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              ${ch.tableRows.map(row => `
+                <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                  ${row.map((cell, cIdx) => `<td class="p-3.5 ${cIdx === 0 ? 'font-bold text-brand-700 dark:text-brand-300' : 'text-slate-700 dark:text-slate-300'}">${cell}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      const rulesHtml = `
+        <div class="mb-6 space-y-2.5">
+          <h3 class="font-bold text-base text-slate-900 dark:text-white">Quy tắc trọng tâm & Bẫy hay gặp:</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            ${ch.rules.map(r => `<li class="flex items-start gap-2"><span class="text-brand-600 font-bold">•</span><span>${r}</span></li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      const examplesHtml = `
+        <div class="bg-brand-50/60 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900 rounded-2xl p-4 sm:p-5 mb-8 space-y-3">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-brand-700 dark:text-brand-300">Ví dụ ứng dụng chuẩn IELTS:</div>
+          ${ch.examples.map(ex => `
+            <div>
+              <p class="text-sm font-semibold text-slate-900 dark:text-white">${ex.en}</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">→ ${ex.vi}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      const miniQuizHtml = `
+        <div class="pt-6 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-4">
+            ✍️ Mini-Quiz Thực Hành Chuyên Đề
+          </h3>
+          <div class="space-y-4">
+            ${ch.quiz.map((qObj, qIdx) => `
+              <div id="gmini-${ch.id}-${qIdx}" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white mb-3">Câu ${qIdx + 1}: ${qObj.q}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${qObj.opts.map((opt, oIdx) => `
+                    <button onclick="answerGrammarMini('${ch.id}', ${qIdx}, ${oIdx})" class="gm-btn text-left px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-brand-500 text-xs sm:text-sm font-medium transition">
+                      ${['A', 'B', 'C', 'D'][oIdx]}. ${opt}
+                    </button>
+                  `).join('')}
+                </div>
+                <div class="gm-exp hidden mt-3 p-3 rounded-xl text-xs bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-900">
+                  <strong>Giải thích chi tiết:</strong> ${qObj.exp}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      reader.innerHTML = `
+        <div class="mb-6 pb-5 border-b border-slate-100 dark:border-slate-800">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300 mb-2">
+            ${ch.level}
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">${ch.title}</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${ch.summary}</p>
+        </div>
+        ${tableHtml}
+        ${rulesHtml}
+        ${examplesHtml}
+        ${miniQuizHtml}
+      `;
+    }
+
+    window.answerGrammarMini = function(chId, qIdx, chosenIdx) {
+      const ch = GRAMMAR_CHAPTERS.find(c => c.id === chId);
+      const qObj = ch.quiz[qIdx];
+      const box = document.getElementById(`gmini-${chId}-${qIdx}`);
+      const btns = box.querySelectorAll('.gm-btn');
+
+      btns.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === qObj.ans) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/50', 'text-emerald-800', 'dark:text-emerald-200', 'font-bold');
+        } else if (idx === chosenIdx && idx !== qObj.ans) {
+          btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-900/50', 'text-rose-800', 'dark:text-rose-200');
+        }
+      });
+      box.querySelector('.gm-exp').classList.remove('hidden');
+    };
+
+    /**
+     * ============================================================================
+     * 11. TAB SWITCHING & EVENT BINDINGS
+     * ============================================================================
+     */
+    function switchTab(tabName) {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        const active = btn.dataset.tab === tabName;
+        if (active) {
+          btn.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        } else {
+          btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+      });
+
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      if (tabName === 'flashcard') {
+        renderFlashcard();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      populateTopicSelectors();
+      refreshHeaderStats();
+      filterVocabulary();
+      buildFlashcardDeck();
+      renderGrammarSidebar();
+      renderGrammarReader();
+
+      // Main Tab Switcher
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      // Theme Toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        state.darkMode = !state.darkMode;
+        applyTheme();
+        saveState();
+      });
+
+      // Tab 1 Filters
+      document.getElementById('vocab-search').addEventListener('input', filterVocabulary);
+      document.getElementById('vocab-topic-filter').addEventListener('change', filterVocabulary);
+      document.getElementById('vocab-status-filter').addEventListener('change', filterVocabulary);
+
+      document.getElementById('bulk-master-btn').addEventListener('click', () => {
+        let count = 0;
+        filteredVocab.forEach(item => {
+          if (!state.masteredIds.includes(item.id)) {
+            state.masteredIds.push(item.id);
+            count++;
+          }
+        });
+        saveState();
+        renderVocabGrid();
+        showToast(`Đã đánh dấu thuộc ${count} từ vựng!`, 'success');
+      });
+
+      document.getElementById('study-filtered-fc-btn').addEventListener('click', () => {
+        const topicVal = document.getElementById('vocab-topic-filter').value;
+        const statusVal = document.getElementById('vocab-status-filter').value;
+        document.getElementById('fc-topic-select').value = topicVal;
+        document.getElementById('fc-status-select').value = ['all', 'unmastered', 'starred', 'wrong'].includes(statusVal) ? statusVal : 'all';
+        buildFlashcardDeck();
+        switchTab('flashcard');
+      });
+
+      // Tab 2 Flashcard Events
+      document.getElementById('fc-topic-select').addEventListener('change', buildFlashcardDeck);
+      document.getElementById('fc-status-select').addEventListener('change', buildFlashcardDeck);
+
+      const fcStage = document.getElementById('fc-stage');
+      fcStage.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        fcIsFlipped = !fcIsFlipped;
+        renderFlashcard();
+      });
+
+      // Mobile Swipe Support on Flashcard
+      let touchStartX = 0;
+      fcStage.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      fcStage.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(dx) > 50) {
+          if (dx < 0) fcIdx++;
+          else fcIdx--;
+          fcIsFlipped = false;
+          renderFlashcard();
+        }
+      }, { passive: true });
+
+      document.getElementById('fc-flip-btn').addEventListener('click', () => {
+        fcIsFlipped = !fcIsFlipped;
+        renderFlashcard();
+      });
+      document.getElementById('fc-prev-btn').addEventListener('click', () => {
+        fcIdx--;
+        fcIsFlipped = false;
+        renderFlashcard();
+      });
+      document.getElementById('fc-next-btn').addEventListener('click', () => {
+        fcIdx++;
+        fcIsFlipped = false;
+        renderFlashcard();
+      });
+      document.getElementById('fc-shuffle-btn').addEventListener('click', () => {
+        fcDeck.sort(() => Math.random() - 0.5);
+        fcIdx = 0;
+        fcIsFlipped = false;
+        renderFlashcard();
+        showToast('Đã trộn ngẫu nhiên bộ thẻ!', 'info');
+      });
+
+      document.getElementById('fc-speak-front-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (fcDeck[fcIdx]) speakText(fcDeck[fcIdx].en);
+      });
+      document.getElementById('fc-speak-back-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (fcDeck[fcIdx]) speakText(fcDeck[fcIdx].en);
+      });
+      document.getElementById('fc-star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (fcDeck[fcIdx]) toggleStarItem(fcDeck[fcIdx].id);
+      });
+      document.getElementById('fc-master-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (fcDeck[fcIdx]) toggleMasterItem(fcDeck[fcIdx].id);
+      });
+
+      // Keyboard shortcuts for Flashcard (Space, Arrows, A, S, M)
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('tab-flashcard').classList.contains('hidden')) return;
+        if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          fcIsFlipped = !fcIsFlipped;
+          renderFlashcard();
+        } else if (e.code === 'ArrowRight') {
+          fcIdx++;
+          fcIsFlipped = false;
+          renderFlashcard();
+        } else if (e.code === 'ArrowLeft') {
+          fcIdx--;
+          fcIsFlipped = false;
+          renderFlashcard();
+        } else if (e.key.toLowerCase() === 'a') {
+          if (fcDeck[fcIdx]) speakText(fcDeck[fcIdx].en);
+        } else if (e.key.toLowerCase() === 's') {
+          if (fcDeck[fcIdx]) toggleStarItem(fcDeck[fcIdx].id);
+        } else if (e.key.toLowerCase() === 'm') {
+          if (fcDeck[fcIdx]) toggleMasterItem(fcDeck[fcIdx].id);
+        }
+      });
+
+      // Tab 3 Quiz Events
+      document.getElementById('quiz-start-btn').addEventListener('click', () => launchQuiz());
+      document.getElementById('quiz-speak-btn').addEventListener('click', () => {
+        if (activeQuizList[qPointer]) speakText(activeQuizList[qPointer].en);
+      });
+      document.getElementById('quiz-next-btn').addEventListener('click', () => {
+        if (qPointer < activeQuizList.length - 1) {
+          qPointer++;
+          renderQuizStep();
+        } else {
+          showQuizSummary();
+        }
+      });
+      document.getElementById('quiz-quit-btn').addEventListener('click', () => {
+        clearInterval(qTimerId);
+        document.getElementById('quiz-arena').classList.add('hidden');
+        document.getElementById('quiz-setup').classList.remove('hidden');
+      });
+      document.getElementById('quiz-new-btn').addEventListener('click', () => {
+        document.getElementById('quiz-result').classList.add('hidden');
+        document.getElementById('quiz-setup').classList.remove('hidden');
+      });
+      document.getElementById('quiz-retry-wrong-btn').addEventListener('click', () => {
+        if (qWrongRecords.length > 0) launchQuiz(qWrongRecords);
+      });
+
+      // Tab 4 Grammar Search
+      document.getElementById('grammar-search').addEventListener('input', renderGrammarSidebar);
+
+      // Export & Import JSON Progress
+      document.getElementById('export-btn').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ielts-master-900-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Đã xuất file sao lưu tiến độ JSON!', 'success');
+      });
+
+      document.getElementById('import-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (Array.isArray(data.masteredIds)) {
+              state = { ...defaultState, ...data };
+              saveState();
+              applyTheme();
+              filterVocabulary();
+              buildFlashcardDeck();
+              showToast('Khôi phục tiến độ thành công!', 'success');
+            } else {
+              showToast('File JSON không hợp lệ!', 'warning');
+            }
+          } catch {
+            showToast('Không thể đọc file JSON!', 'warning');
+          }
+        };
+        reader.readAsText(file);
+      });
+    });
+  </script>
+</body>
+</html>

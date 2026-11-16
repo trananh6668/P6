@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEIC Master 600 & Full Ngữ Pháp Tiếng Anh</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom Styles for 3D Flashcards & Smooth Scrollbars */
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .flashcard-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.6);
+    }
+    .glass-header {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 glass-header bg-white/85 dark:bg-slate-900/85 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-indigo-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-brand-500/20">
+            600
+          </div>
+          <div>
+            <h1 class="font-bold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white leading-tight">
+              TOEIC Master <span class="text-brand-600 dark:text-brand-400">600</span>
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Từ vựng chuẩn & Full Ngữ pháp Tiếng Anh</p>
+          </div>
+        </div>
+
+        <!-- Quick Stats & Dark Mode Toggle -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="hidden md:flex items-center gap-4 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-medium">
+            <span class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Đã thuộc: <strong id="header-mastered-count">0</strong>/600
+            </span>
+            <span class="text-slate-300 dark:text-slate-600">|</span>
+            <span class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+              ★ Đánh dấu: <strong id="header-starred-count">0</strong>
+            </span>
+          </div>
+
+          <!-- Voice Accent Selector -->
+          <select id="voice-accent" aria-label="Giọng đọc" class="text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="en-US">🇺🇸 US</option>
+            <option value="en-GB">🇬🇧 UK</option>
+          </select>
+
+          <!-- Dark Mode Toggle -->
+          <button id="theme-toggle" title="Đổi giao diện Sáng/Tối" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <svg id="icon-sun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="icon-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Tab Bar -->
+      <nav class="flex gap-1 sm:gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar" aria-label="Tabs">
+        <button data-tab="vocab" class="main-tab-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition bg-brand-600 text-white shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Kho 600 Từ & Flashcard
+        </button>
+        <button data-tab="quiz" class="main-tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          Luyện Tập Trắc Nghiệm
+        </button>
+        <button data-tab="grammar" class="main-tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          Full Ngữ Pháp Tiếng Anh
+        </button>
+        <button data-tab="stats" class="main-tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          Thống Kê & Tiến Độ
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ==========================================
+         TAB 1: KHO 600 TỪ VỰNG & FLASHCARDS
+         ========================================== -->
+    <section id="tab-vocab" class="tab-content animate-fade-in">
+      <!-- Filter & Search Controls -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+          <!-- Search Input -->
+          <div class="md:col-span-4 relative">
+            <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="vocab-search" placeholder="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+          </div>
+
+          <!-- Topic / Lesson Filter (1-50) -->
+          <div class="md:col-span-4">
+            <select id="vocab-lesson-filter" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">📚 Tất cả 50 Chủ đề (600 từ)</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="md:col-span-2">
+            <select id="vocab-status-filter" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="unmastered">Chưa thuộc</option>
+              <option value="mastered">Đã thuộc ✓</option>
+              <option value="starred">Đánh dấu sao ★</option>
+              <option value="wrong">Hay làm sai ⚠</option>
+            </select>
+          </div>
+
+          <!-- View Mode Switcher -->
+          <div class="md:col-span-2 flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            <button id="view-list-btn" class="flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold bg-white dark:bg-slate-700 text-brand-600 dark:text-white shadow-sm transition">
+              Danh sách
+            </button>
+            <button id="view-flashcard-btn" class="flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 transition">
+              Flashcard
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary bar -->
+        <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+          <span id="vocab-result-count">Đang hiển thị 600 từ vựng</span>
+          <div class="flex items-center gap-3">
+            <button id="mark-lesson-mastered-btn" class="text-emerald-600 dark:text-emerald-400 hover:underline font-medium hidden">
+              ✓ Đánh dấu đã thuộc tất cả từ đang lọc
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIST VIEW CONTAINER -->
+      <div id="vocab-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Cards injected by JS -->
+      </div>
+
+      <!-- FLASHCARD 3D VIEW CONTAINER -->
+      <div id="vocab-flashcard-container" class="hidden max-w-2xl mx-auto">
+        <div class="flex items-center justify-between mb-4 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <span id="fc-counter">Thẻ 1 / 600</span>
+          <div class="flex items-center gap-2">
+            <button id="fc-shuffle-btn" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-xs font-semibold transition">
+              🔀 Trộn thẻ
+            </button>
+            <label class="flex items-center gap-1.5 text-xs cursor-pointer bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl">
+              <input type="checkbox" id="fc-autoplay" checked class="rounded text-brand-600 focus:ring-brand-500" />
+              Tự phát âm
+            </label>
+          </div>
+        </div>
+
+        <!-- 3D Card -->
+        <div id="flashcard-stage" class="perspective-1000 w-full h-80 sm:h-96 cursor-pointer select-none">
+          <div id="flashcard-inner" class="flashcard-inner relative w-full h-full transform-style-3d">
+            <!-- Front Face -->
+            <div class="backface-hidden absolute inset-0 bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-200 dark:border-slate-800 shadow-xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span id="fc-badge-lesson" class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300">
+                  Bài 1: Contracts
+                </span>
+                <div class="flex items-center gap-2">
+                  <button id="fc-star-btn" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition" title="Đánh dấu sao">
+                    ★
+                  </button>
+                  <button id="fc-speak-btn" class="p-2.5 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 transition" title="Nghe phát âm (Phím S)">
+                    🔊
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center my-auto">
+                <span id="fc-word-index" class="text-xs font-mono text-slate-400 block mb-2">#1</span>
+                <h2 id="fc-word-text" class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                  abide by
+                </h2>
+                <p class="mt-4 text-xs text-slate-400">Nhấn vào thẻ hoặc phím <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">Space</kbd> để lật xem nghĩa</p>
+              </div>
+
+              <div class="flex justify-center">
+                <span id="fc-mastered-pill" class="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-500">
+                  Chưa thuộc
+                </span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-brand-600 to-indigo-700 text-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold uppercase tracking-wider opacity-80">Nghĩa tiếng Việt</span>
+                <button id="fc-speak-back-btn" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white transition">
+                  🔊 Nghe lại
+                </button>
+              </div>
+
+              <div class="text-center my-auto">
+                <p id="fc-word-en-small" class="text-lg font-medium opacity-85 mb-2">abide by</p>
+                <h3 id="fc-meaning-text" class="text-3xl sm:text-4xl font-extrabold leading-snug">
+                  tuân theo
+                </h3>
+                <div id="fc-distractors" class="mt-5 text-xs opacity-80 bg-black/15 rounded-2xl p-3 max-w-md mx-auto">
+                  Các nghĩa nhiễu trong đề: yêu cầu, rõ ràng, cá nhân
+                </div>
+              </div>
+
+              <div class="flex justify-center gap-3">
+                <button id="fc-toggle-master-btn" class="px-5 py-2.5 rounded-xl bg-white text-brand-700 font-bold text-sm shadow hover:bg-brand-50 transition">
+                  ✓ Đánh dấu Đã thuộc
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Navigation Buttons -->
+        <div class="flex items-center justify-between gap-4 mt-6">
+          <button id="fc-prev-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition">
+            ← Từ trước
+          </button>
+          <button id="fc-flip-btn" class="py-3 px-6 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md shadow-brand-500/20 transition">
+            Lật thẻ
+          </button>
+          <button id="fc-next-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition">
+            Từ tiếp theo →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 2: LUYỆN TẬP TRẮC NGHIỆM (QUIZ)
+         ========================================== -->
+    <section id="tab-quiz" class="tab-content hidden animate-fade-in">
+      <!-- Quiz Setup Panel -->
+      <div id="quiz-setup-panel" class="max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="text-center mb-6">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-400 mb-2">
+            BỘ ĐỀ GỐC 600 CÂU TOEIC
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Luyện Tập Trắc Nghiệm Từ Vựng</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Sử dụng chính xác 600 câu hỏi và bộ 4 đáp án A, B, C, D từ tài liệu của bạn</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">1. Chọn phạm vi câu hỏi</label>
+            <select id="quiz-scope" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="random">🎲 Ngẫu nhiên trong toàn bộ 600 từ</option>
+              <option value="starred">★ Chỉ các từ đã Đánh dấu sao</option>
+              <option value="wrong">⚠️ Chỉ các từ hay làm sai</option>
+              <option value="unmastered">📖 Chỉ các từ Chưa thuộc</option>
+              <optgroup label="Theo từng Bài học (12 câu/bài)" id="quiz-lesson-optgroup"></optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">2. Số lượng câu hỏi</label>
+            <select id="quiz-count" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <option value="12">12 câu (1 bài chuẩn)</option>
+              <option value="20" selected>20 câu (Luyện nhanh)</option>
+              <option value="50">50 câu (Thử thách)</option>
+              <option value="100">100 câu (Tổng ôn)</option>
+              <option value="all">Tất cả câu trong phạm vi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 mb-8 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl">
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" id="quiz-shuffle-options" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500" />
+            <span>Đảo thứ tự đáp án A, B, C, D</span>
+          </label>
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" id="quiz-auto-speak" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500" />
+            <span>Tự động đọc từ vựng khi sang câu mới</span>
+          </label>
+        </div>
+
+        <button id="start-quiz-btn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-bold text-base shadow-lg shadow-brand-500/25 transition transform active:scale-[0.99]">
+          🚀 Bắt Đầu Làm Bài Ngay
+        </button>
+      </div>
+
+      <!-- Active Quiz Arena -->
+      <div id="quiz-active-panel" class="hidden max-w-3xl mx-auto">
+        <!-- Top Progress Bar -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 mb-4 flex items-center justify-between gap-4">
+          <button id="quit-quiz-btn" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 hover:text-rose-600 transition">
+            ✕ Thoát
+          </button>
+          <div class="flex-1">
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span id="quiz-progress-text">Câu 1 / 20</span>
+              <span id="quiz-score-live" class="text-emerald-600 dark:text-emerald-400">Đúng: 0</span>
+            </div>
+            <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div id="quiz-progress-bar" class="h-full bg-brand-600 transition-all duration-300" style="width: 5%"></div>
+            </div>
+          </div>
+          <div class="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800" id="quiz-timer">
+            00:00
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <span id="quiz-q-meta" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              Câu gốc #1 • Bài 1: Contracts
+            </span>
+            <button id="quiz-speak-btn" class="px-3 py-1.5 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 text-xs font-semibold hover:bg-brand-100 transition">
+              🔊 Nghe phát âm
+            </button>
+          </div>
+
+          <div class="text-center py-6 sm:py-8">
+            <p class="text-xs uppercase tracking-wider text-slate-400 mb-2">Chọn nghĩa tiếng Việt đúng của từ:</p>
+            <h3 id="quiz-q-word" class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
+              abide by
+            </h3>
+          </div>
+
+          <!-- Options Grid -->
+          <div id="quiz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            <!-- Options injected dynamically -->
+          </div>
+
+          <!-- Next Button -->
+          <div id="quiz-next-area" class="mt-6 hidden flex justify-end">
+            <button id="quiz-next-btn" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow transition">
+              Câu tiếp theo →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Result Summary -->
+      <div id="quiz-result-panel" class="hidden max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="text-center mb-6">
+          <div id="quiz-result-emoji" class="text-5xl mb-3">🎉</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Hoàn Thành Bài Luyện Tập!</h2>
+          <p id="quiz-result-subtitle" class="text-sm text-slate-500 mt-1">Thời gian hoàn thành: 01:24</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 mb-6 text-center">
+          <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900">
+            <div id="res-correct" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
+            <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300 mt-1">Câu đúng</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900">
+            <div id="res-wrong" class="text-2xl sm:text-3xl font-extrabold text-rose-600 dark:text-rose-400">0</div>
+            <div class="text-xs font-medium text-rose-700 dark:text-rose-300 mt-1">Câu sai</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900">
+            <div id="res-accuracy" class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">0%</div>
+            <div class="text-xs font-medium text-brand-700 dark:text-brand-300 mt-1">Độ chính xác</div>
+          </div>
+        </div>
+
+        <div id="res-wrong-list-container" class="mb-6 hidden">
+          <h4 class="font-bold text-sm text-rose-600 dark:text-rose-400 mb-3">Danh sách các từ trả lời sai cần ôn lại:</h4>
+          <div id="res-wrong-list" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <button id="retry-wrong-btn" class="hidden flex-1 py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm transition">
+            🔄 Làm lại các câu sai
+          </button>
+          <button id="back-to-quiz-setup-btn" class="flex-1 py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition">
+            Làm bài kiểm tra mới
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 3: TỔNG HỢP FULL NGỮ PHÁP TIẾNG ANH
+         ========================================== -->
+    <section id="tab-grammar" class="tab-content hidden animate-fade-in">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Grammar Sidebar Navigation -->
+        <aside class="lg:w-80 shrink-0">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm lg:sticky lg:top-32">
+            <div class="mb-3">
+              <h2 class="font-extrabold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                <span>📘</span> Chuyên Đề Ngữ Pháp
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">Hệ thống đầy đủ từ Cơ bản → Nâng cao</p>
+            </div>
+            <div class="relative mb-3">
+              <input type="text" id="grammar-search" placeholder="Tìm chủ điểm ngữ pháp..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500" />
+            </div>
+            <nav id="grammar-nav-list" class="space-y-1 max-h-[60vh] overflow-y-auto pr-1">
+              <!-- Grammar topics injected by JS -->
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Grammar Content Reader -->
+        <div class="flex-1 min-w-0">
+          <div id="grammar-content-area" class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <!-- Detailed grammar lesson rendered here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 4: THỐNG KÊ & TIẾN ĐỘ HỌC TẬP
+         ========================================== -->
+    <section id="tab-stats" class="tab-content hidden animate-fade-in">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Overview Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Đã thuộc</div>
+            <div class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1" id="stat-mastered">0</div>
+            <div class="text-xs text-slate-400 mt-1">trên tổng 600 từ</div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Đánh dấu sao</div>
+            <div class="text-3xl font-extrabold text-amber-500 mt-1" id="stat-starred">0</div>
+            <div class="text-xs text-slate-400 mt-1">từ vựng trọng tâm</div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Từ hay sai</div>
+            <div class="text-3xl font-extrabold text-rose-500 mt-1" id="stat-wrong">0</div>
+            <div class="text-xs text-slate-400 mt-1">cần ôn luyện thêm</div>
+          </div>
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Bài Quiz đã làm</div>
+            <div class="text-3xl font-extrabold text-brand-600 dark:text-brand-400 mt-1" id="stat-quizzes">0</div>
+            <div class="text-xs text-slate-400 mt-1">lượt hoàn thành</div>
+          </div>
+        </div>
+
+        <!-- Progress Bar across 50 Lessons -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-base">Tiến độ chinh phục 600 từ TOEIC</h3>
+            <span id="stat-percent" class="text-sm font-extrabold text-brand-600 dark:text-brand-400">0%</span>
+          </div>
+          <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mb-6">
+            <div id="stat-progress-bar" class="h-full bg-gradient-to-r from-brand-600 to-emerald-500 transition-all duration-500" style="width: 0%"></div>
+          </div>
+
+          <h4 class="font-bold text-sm mb-3 text-slate-700 dark:text-slate-300">Chi tiết theo 50 Chủ đề (Nhấn vào bài để học ngay):</h4>
+          <div id="lesson-progress-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 max-h-80 overflow-y-auto pr-1">
+            <!-- 50 lesson progress chips -->
+          </div>
+        </div>
+
+        <!-- Backup & Reset Controls -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h4 class="font-bold text-sm">Quản lý dữ liệu học tập</h4>
+            <p class="text-xs text-slate-500 mt-0.5">Tiến độ được lưu tự động trên trình duyệt. Bạn có thể sao lưu hoặc đặt lại.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="export-data-btn" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold transition">
+              ⬇ Xuất file JSON
+            </button>
+            <label class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold cursor-pointer transition">
+              ⬆ Nhập file JSON
+              <input type="file" id="import-data-input" accept=".json" class="hidden" />
+            </label>
+            <button id="reset-data-btn" class="px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 hover:bg-rose-100 text-xs font-semibold transition">
+              🗑 Xóa tiến độ
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Custom Modal for Reset Confirmation (No alert/confirm used) -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 bg-black/50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl">
+      <h3 class="font-bold text-lg text-slate-900 dark:text-white">Xác nhận đặt lại tiến độ?</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Toàn bộ danh sách từ đã thuộc, đánh dấu sao và lịch sử làm bài sẽ bị xóa vĩnh viễn.</p>
+      <div class="flex justify-end gap-2 mt-6">
+        <button id="modal-cancel-btn" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-semibold">Hủy</button>
+        <button id="modal-confirm-btn" class="px-4 py-2 rounded-xl bg-rose-600 text-white text-sm font-semibold">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * 1. FULL 600 TOEIC VOCABULARY DATA (100% FROM USER'S Quiz_600_TOEIC.docx)
+     * Format: [id, word, [optA, optB, optC, optD], correctIndex (0=A,1=B,2=C,3=D)]
+     * ============================================================================
+     */
+    const LESSON_TITLES = [
+      "Bài 1: Contracts (Hợp đồng)",
+      "Bài 2: Marketing (Tiếp thị)",
+      "Bài 3: Warranties (Bảo hành)",
+      "Bài 4: Business Planning (Kế hoạch kinh doanh)",
+      "Bài 5: Conferences (Hội nghị)",
+      "Bài 6: Computers (Máy tính)",
+      "Bài 7: Office Technology (Công nghệ văn phòng)",
+      "Bài 8: Office Procedures (Thủ tục văn phòng)",
+      "Bài 9: Electronics (Thiết bị điện tử)",
+      "Bài 10: Correspondence (Thư tín thương mại)",
+      "Bài 11: Job Advertising & Recruiting (Tuyển dụng)",
+      "Bài 12: Applying & Interviewing (Ứng tuyển & Phỏng vấn)",
+      "Bài 13: Hiring & Training (Thuê mướn & Đào tạo)",
+      "Bài 14: Salaries & Benefits (Lương & Phúc lợi)",
+      "Bài 15: Promotions, Pensions & Awards (Thăng tiến & Khen thưởng)",
+      "Bài 16: Shopping (Mua sắm)",
+      "Bài 17: Core TOEIC A (Chấp nhận & Thích nghi)",
+      "Bài 18: Core TOEIC A (Quản trị & Lợi thế)",
+      "Bài 19: Core TOEIC A (Thỏa thuận & Phân tích)",
+      "Bài 20: Core TOEIC A (Dự đoán & Phê duyệt)",
+      "Bài 21: Core TOEIC A (Sắp xếp & Đánh giá)",
+      "Bài 22: Core TOEIC A (Giả định & Thái độ)",
+      "Bài 23: Core TOEIC A-B (Thẩm quyền & Cân bằng)",
+      "Bài 24: Core TOEIC B (Hóa đơn & Ngân sách)",
+      "Bài 25: Core TOEIC C (Chiến dịch & Trường hợp)",
+      "Bài 26: Core TOEIC C (Thử thách & Lựa chọn)",
+      "Bài 27: Core TOEIC C (Khách hàng & Kết hợp)",
+      "Bài 28: Core TOEIC C (Công ty & Tuân thủ)",
+      "Bài 29: Core TOEIC C (Mối quan tâm & Xung đột)",
+      "Bài 30: Core TOEIC C (Xây dựng & Nội dung)",
+      "Bài 31: Core TOEIC C (Kiểm soát & Chi phí)",
+      "Bài 32: Core TOEIC C-D (Tạo ra & Thiệt hại)",
+      "Bài 33: Core TOEIC D (Thỏa thuận & Quyết định)",
+      "Bài 34: Core TOEIC D (Định nghĩa & Nhu cầu)",
+      "Bài 35: Core TOEIC D (Miêu tả & Khó khăn)",
+      "Bài 36: Core TOEIC D-E (Khám phá & Tài liệu)",
+      "Bài 37: Core TOEIC E (Nhiệm vụ & Yếu tố)",
+      "Bài 38: Core TOEIC E (Khuyến khích & Môi trường)",
+      "Bài 39: Core TOEIC E (Ngang bằng & Cần thiết)",
+      "Bài 40: Core TOEIC E-F (Ví dụ & Chi phí)",
+      "Bài 41: Core TOEIC F (Cơ sở vật chất & Quen thuộc)",
+      "Bài 42: Core TOEIC F (Đặc điểm & Công ty)",
+      "Bài 43: Core TOEIC F-G (Lực lượng & Mục tiêu)",
+      "Bài 44: Core TOEIC G-H (Phát triển & Sức khỏe)",
+      "Bài 45: Core TOEIC H-I (Hy vọng & Tác động)",
+      "Bài 46: Core TOEIC I (Cải thiện & Công nghiệp)",
+      "Bài 47: Core TOEIC I (Ảnh hưởng & Thanh tra)",
+      "Bài 48: Core TOEIC I-J (Cơ quan & Phỏng vấn)",
+      "Bài 49: Core TOEIC J-L (Công việc & Pháp lý)",
+      "Bài 50: Core TOEIC L-R (Tổng hợp mở rộng)"
+    ];
+
+    const RAW_600_DATA = [
+      [1,"abide by",["yêu cầu","rõ ràng","cá nhân","tuân theo"],3],
+      [2,"agreement",["hợp đồng","cung cấp","vị trí","cân bằng"],0],
+      [3,"assurance",["sự đảm bảo","thu nhận","dự đoán","thành tích"],0],
+      [4,"cancellation",["địa phương","sự hủy bỏ","tán thành","tham khảo"],1],
+      [5,"determine",["năng suất","xác định","quản lý","nhận thức về"],1],
+      [6,"engage",["tồn tại","tham gia","sự ủng hộ","kinh tế"],1],
+      [7,"establish",["thành lập","môi trường","tái diễn","tiến bộ"],0],
+      [8,"obligate",["thỏa thuận","hồ sơ","cố gắng","bắt buộc"],3],
+      [9,"party",["thỏa thuận","bên, đảng","hiển thị","ban đầu"],1],
+      [10,"provision",["thẩm quyền","điều khoản","phơi bày","cao"],1],
+      [11,"resolve",["yếu tố","giải quyết","chủ tịch","phản ánh"],1],
+      [12,"specific",["cụ thể","tiến hành","tiền lương","thuê mướn"],0],
+      [13,"attract",["cải thiện","công nghiệp","đánh giá","thu hút"],3],
+      [14,"compare",["so sánh","nặng","vấn đề","xây dựng"],0],
+      [15,"competition",["cạnh tranh","ngân sách","nguyên nhân","chi tiết"],0],
+      [16,"consume",["tiêu thụ","giải quyết","phụ thuộc","tài liệu"],0],
+      [17,"convince",["thuyết phục","tiền","mối quan tâm","xác nhận"],0],
+      [18,"currently",["hiện tại","cơ sở vật chất","yếu tố","sự hủy bỏ"],0],
+      [19,"fad",["từ bỏ","đánh giá","mốt nhất thời","lỗi"],2],
+      [20,"inspiration",["liên tục","chung","đại lý","cảm hứng"],3],
+      [21,"market",["thị trường","mức độ","con số","thay thế"],0],
+      [22,"persuasion",["thuê mướn","sự thuyết phục","nghi ngờ","nhà cung cấp"],1],
+      [23,"productive",["nhu cầu","hợp pháp","năng suất","trí nhớ"],2],
+      [24,"satisfaction",["tham gia","tương thích","sự hài lòng","trực tiếp"],2],
+      [25,"characteristic",["thay đổi","địa phương","đặc điểm","thay vì"],2],
+      [26,"consequence",["hợp đồng","hậu quả","tiếp tục","sự quan tâm"],1],
+      [27,"consider",["xem xét","thuyết phục","kết quả","ước tính"],0],
+      [28,"cover",["trang","bao gồm","thành lập","tiến bộ"],1],
+      [29,"expiration",["ngân sách","vốn","hết hạn","bắt buộc"],2],
+      [30,"frequently",["thường xuyên","tăng","đánh giá","đồng ý"],0],
+      [31,"imply",["chăm sóc","lĩnh vực","liên quan","ngụ ý"],3],
+      [32,"promise",["hình thức","chịu đựng","lời hứa","vận hành"],2],
+      [33,"protect",["ngụ ý","công ty","bảo vệ","văn hóa"],2],
+      [34,"reputation",["danh tiếng","hành vi","tranh luận","bảng"],0],
+      [35,"require",["đọc","yêu cầu","từ chối","bắt kịp"],1],
+      [36,"variety",["sự đa dạng","so sánh","truy cập","miêu tả"],0],
+      [37,"address",["chủ sở hữu","chính xác","địa chỉ, giải quyết","giai đoạn"],2],
+      [38,"avoid",["đánh giá cao","quá trình","tránh","chi phí"],2],
+      [39,"demonstrate",["mở rộng","cá nhân","chứng minh","chuẩn bị"],2],
+      [40,"develop",["phát triển","cảm hứng","chủ yếu","tổ chức"],0],
+      [41,"evaluate",["giới hạn","đánh giá cao","đánh giá","chú ý"],2],
+      [42,"gather",["thu thập","lực lượng","đường dây","hiệp hội"],0],
+      [43,"offer",["điểm","cung cấp","bản chất","chìa khóa"],1],
+      [44,"primarily",["ứng viên","dữ liệu","phức tạp","chủ yếu"],3],
+      [45,"risk",["thành viên","rủi ro","thuyết phục","vấn đề"],1],
+      [46,"strategy",["quỹ","khuyến khích","chiến lược","phù hợp"],2],
+      [47,"strong",["ví dụ","mạnh mẽ","đến","chính xác"],1],
+      [48,"substitution",["trực tiếp","sự thay thế","loại bỏ","thêm"],1],
+      [49,"accommodate",["hiển thị","đáp ứng","tâm trí","phản ánh"],1],
+      [50,"arrangement",["ảnh hưởng","xây dựng","sự sắp xếp","thanh toán"],2],
+      [51,"association",["đạt được","thiệt hại","hiệp hội","nhìn lướt qua"],2],
+      [52,"attend",["chiến lược","lực lượng","trống","tham dự"],3],
+      [53,"get in touch",["quyền lực","sự công nhận","liên lạc","thiệt hại"],2],
+      [54,"hold",["củng cố","cảnh báo","tên","cầm, tổ chức"],3],
+      [55,"location",["nhỏ","thanh toán","bên, đảng","vị trí"],3],
+      [56,"overcrowded",["tương thích","tập hợp","sự quan tâm","đông đúc"],3],
+      [57,"register",["đăng ký","thường xuyên","gần đây","xin lỗi"],0],
+      [58,"select",["cựu","dẫn dắt","chứa đựng","chọn"],3],
+      [59,"session",["sửa chữa","phiên họp","trễ","bình thường"],1],
+      [60,"take part in",["tham gia","thu thập","yếu tố","phức tạp"],0],
+      [61,"access",["đạt được","truy cập","đánh giá","lịch trình"],1],
+      [62,"allocate",["phân bổ","thu nhận","công nghiệp","quan trọng"],0],
+      [63,"compatible",["tương thích","chính thức","luật","nắm bắt tình hình"],0],
+      [64,"delete",["tranh luận","trống","xóa","tồn tại"],2],
+      [65,"display",["thành tựu","hiển thị","hiện tại","lớn"],1],
+      [66,"duplicate",["nhân bản","yếu tố","nỗ lực","hợp đồng"],0],
+      [67,"failure",["di chuyển","sự phát triển","thất bại","sửa chữa"],2],
+      [68,"figure out",["lịch trình","tìm ra","công bằng","thu hút"],1],
+      [69,"ignore",["phớt lờ","tham gia","bổ nhiệm","cầm, tổ chức"],0],
+      [70,"search",["sự thoải mái","sức khỏe","nhanh","tìm kiếm"],3],
+      [71,"shut down",["tắt máy","quản lý","hình thức","trễ"],0],
+      [72,"warning",["nội bộ","cảnh báo","đối tác","xứng đáng"],1],
+      [73,"affordable",["nhắc nhở","công nghiệp","đánh dấu","có thể chi trả"],3],
+      [74,"as needed",["chung","khi cần thiết","tôn trọng","cá nhân"],1],
+      [75,"capacity",["thiếu","sức chứa","nhận","đăng ký"],1],
+      [76,"durable",["quốc gia","bền vững","mạng lưới","điểm"],1],
+      [77,"in charge",["phụ trách","rủi ro","sự thoải mái","nặng"],0],
+      [78,"initiative",["tiền lương","phân bổ","sáng kiến","lĩnh vực"],2],
+      [79,"physically",["nhảy","đối tượng","tháng","về mặt thể chất"],3],
+      [80,"provider",["năng suất","nhà cung cấp","bình thường","lỗi"],1],
+      [81,"recur",["tái diễn","giá cả","đóng góp","bổ nhiệm"],0],
+      [82,"reduction",["chọn","sự giảm bớt","chính thức","tái diễn"],1],
+      [83,"stay on top of",["khi cần thiết","nắm bắt tình hình","đạt được","quản lý"],1],
+      [84,"stock",["chính sách","kho hàng","hiệu ứng","phân công"],1],
+      [85,"appreciate",["người hướng dẫn","thay vì","nhà máy","đánh giá cao"],3],
+      [86,"bring in",["nguồn gốc","chính thức","thu nhận","mạng lưới"],2],
+      [87,"casually",["kiểm tra","chất lượng","văn phòng","bình thường"],3],
+      [88,"code",["sự khác biệt","nhận dạng","mã","liên hệ"],2],
+      [89,"expose",["yếu tố","hiện tại","phơi bày","sẵn sàng"],2],
+      [90,"glimpse",["nhìn lướt qua","phức tạp","công ty","phát triển"],0],
+      [91,"made of",["bằng miệng","đọc","làm bằng","chuyên gia"],2],
+      [92,"out of",["thuận tiện","hết","khách hàng","giấu"],1],
+      [93,"outdated",["phát sinh","bền vững","chiến dịch","lỗi thời"],3],
+      [94,"practice",["kết hợp","nguyên nhân","thực hành","ban đầu"],2],
+      [95,"reinforce",["tồn tại","mạng lưới","củng cố","tác giả"],2],
+      [96,"verbally",["bằng miệng","chi phí","hàng hóa","thành tích"],0],
+      [97,"disk",["đĩa","ví dụ","giúp đỡ","bên trong"],0],
+      [98,"facilitate",["tạo điều kiện","nợ","thanh tra","mạng lưới"],0],
+      [99,"network",["dự định","cam kết","mạng lưới","sự cống hiến"],2],
+      [100,"popularity",["sự phổ biến","lực lượng","nộp","duy trì"],0],
+      [101,"process",["cân bằng","quá trình","sự công nhận","tạo ra"],1],
+      [102,"replace",["cao","hóa đơn","thay thế","xác định"],2],
+      [103,"revolution",["cuộc cách mạng","nhìn lướt qua","giá cả","đặc điểm"],0],
+      [104,"sharp",["sắc bén","phân tích","nguồn gốc","phức tạp"],0],
+      [105,"skill",["kỹ năng","tài chính","danh sách","quen thuộc"],0],
+      [106,"software",["quen thuộc","phần mềm","thanh toán","sự hủy bỏ"],1],
+      [107,"store",["nặng","lưu trữ","thuê","khăng khăng"],1],
+      [108,"technically",["về mặt kỹ thuật","khó khăn","vấn đề","bảo vệ"],0],
+      [109,"assemble",["kinh nghiệm","lắp ráp","duy trì","thị trường"],1],
+      [110,"beforehand",["trước","thăng tiến","tổ chức","lựa chọn"],0],
+      [111,"complication",["tuân thủ","ngụ ý","xu hướng","sự phức tạp"],3],
+      [112,"courier",["rủi ro","người đưa thư","bệnh tật","người đứng đầu"],1],
+      [113,"express",["nỗ lực","bày tỏ","sự hài lòng","sẵn sàng"],1],
+      [114,"fold",["liên tục","tài sản","gấp","vấn đề"],2],
+      [115,"layout",["thị trường","mục tiêu","tham gia","bố cục"],3],
+      [116,"mention",["quản lý","sản phẩm","cố gắng","đề cập"],3],
+      [117,"petition",["nhận ra","ứng viên","kiến nghị","công nghiệp"],2],
+      [118,"proof",["bằng chứng","bày tỏ","người","cơ hội"],0],
+      [119,"revise",["quyết định","chỉnh sửa","giải quyết","đóng góp"],1],
+      [120,"abundant",["mạng lưới","dồi dào","người đưa thư","khuyến khích"],1],
+      [121,"accomplishment",["thành tựu","lý lịch","sắc bén","dài"],0],
+      [122,"bring together",["bao gồm","nhìn lướt qua","vượt qua","tập hợp"],3],
+      [123,"candidate",["sự thuyết phục","nhắc nhở","xảy ra","ứng viên"],3],
+      [124,"come up with",["khác","tham khảo","phần","nghĩ ra"],3],
+      [125,"commensurate",["phức tạp","tương xứng","tham khảo","chủ yếu"],1],
+      [126,"match",["xây dựng","phù hợp","nghĩ ra","khán giả"],1],
+      [127,"profile",["nhanh","quốc gia","đến","hồ sơ"],3],
+      [128,"qualifications",["phân tích","tự nhiên","bằng cấp","hồ sơ"],2],
+      [129,"recruit",["tuyển dụng","trợ cấp","quá trình","chất lượng"],0],
+      [130,"submit",["giả định","thành phần","bao gồm","nộp"],3],
+      [131,"time-consuming",["dồi dào","tốn thời gian","mức độ","cho phép"],1],
+      [132,"ability",["cá nhân","khả năng","trí nhớ","mạng lưới"],1],
+      [133,"apply",["tập hợp","đặc điểm","áp dụng","sự công nhận"],2],
+      [134,"background",["loại bỏ","lý lịch","bệnh tật","yếu ớt"],1],
+      [135,"be ready for",["hướng dẫn","sẵn sàng cho","chính sách","đúng tiến độ"],1],
+      [136,"call in",["cân bằng","mục tiêu","gọi đến","địa phương"],2],
+      [137,"confidence",["thành viên","sự tự tin","khán giả","đánh giá"],1],
+      [138,"constantly",["mã","chính sách","liên tục","niềm tin"],2],
+      [139,"expert",["tạo điều kiện","chuyên gia","phiên họp","cơ hội"],1],
+      [140,"follow up",["theo dõi","trình bày","kỹ năng","chỉ ra"],0],
+      [141,"hesitant",["thủ tục","vị trí","ghi chú","do dự"],3],
+      [142,"present",["trình bày","nhận","mặc cả","tạo ra"],0],
+      [143,"weakly",["trễ","nhận thức","tranh luận","yếu ớt"],3],
+      [144,"conduct",["giấy","tiền lương","tiến hành","tích cực"],2],
+      [145,"generate",["tạo ra","nợ","khám phá","sẵn sàng"],0],
+      [146,"hire",["mục tiêu","trì hoãn","thành công","thuê"],3],
+      [147,"keep up with",["khán giả","bắt kịp","sự phát triển","dự án"],1],
+      [148,"look up to",["đại lý","tôn trọng","ở giữa","hàng năm"],1],
+      [149,"mentor",["ảnh hưởng","người hướng dẫn","đánh giá","bắt kịp"],1],
+      [150,"on track",["chứng minh","đúng tiến độ","cạnh tranh","bỏ lỡ"],1],
+      [151,"reject",["số lượng","tiền","từ chối","kiểm tra"],2],
+      [152,"set up",["thiết lập","tìm ra","liên quan","mục tiêu"],0],
+      [153,"success",["gặp gỡ","công ty","phỏng vấn","thành công"],3],
+      [154,"training",["cá nhân","đào tạo","chủ yếu","tham gia"],1],
+      [155,"update",["nhận ra","cập nhật","trợ cấp","thái độ"],1],
+      [156,"basis",["tạo ra","thành phần","thành tích","cơ sở"],3],
+      [157,"be aware of",["đính kèm","thật","nhận thức về","vẽ"],2],
+      [158,"benefit",["thẩm quyền","nguồn gốc","lợi ích","đồng ý"],2],
+      [159,"compensate",["dồi dào","bồi thường","đến","liên quan"],1],
+      [160,"delicately",["giảm sút","nhận","tế nhị","đạt được"],2],
+      [161,"eligible",["từ chối","lợi ích","đủ điều kiện","món hàng"],2],
+      [162,"flexibly",["linh hoạt","định nghĩa","nộp","mở rộng"],0],
+      [163,"negotiate",["đàm phán","thành tích","sản xuất","hành vi"],0],
+      [164,"raise",["tiến bộ","tăng","giới thiệu","kết hợp"],1],
+      [165,"retire",["nhận dạng","sửa chữa","nghỉ hưu","hồ sơ"],2],
+      [166,"vested",["văn hóa","rõ ràng","được giao quyền","mục tiêu"],2],
+      [167,"wage",["tiền lương","hình ảnh","thử thách","mục đích"],0],
+      [168,"achievement",["sự phức tạp","bưu kiện","thành tích","có thể chi trả"],2],
+      [169,"contribute",["dài","phần mềm","đóng góp","tuân theo"],2],
+      [170,"dedication",["hành vi","vẽ","cuộc cách mạng","sự cống hiến"],3],
+      [171,"look forward to",["bằng cấp","sự phức tạp","mong đợi","tỷ lệ"],2],
+      [172,"look to",["trông cậy vào","lĩnh vực","đính kèm","giới thiệu"],0],
+      [173,"loyal",["cho phép","chuẩn bị","trung thành","quá trình"],2],
+      [174,"merit",["khuyến khích","xứng đáng","mất","củng cố"],1],
+      [175,"obvious",["dự án","chính xác","rõ ràng","khu vực"],2],
+      [176,"promote",["cơ sở vật chất","thăng tiến","giao hàng","tập hợp"],1],
+      [177,"recognition",["phân công","nhu cầu","tin nhắn","sự công nhận"],3],
+      [178,"value",["chỉ ra","giá trị","trốn thoát","người"],1],
+      [179,"bargain",["trình bày","nhu cầu","mặc cả","quá trình"],2],
+      [180,"bear",["xóa","phổ biến","chịu đựng","thông báo"],2],
+      [181,"behavior",["hành vi","dự định","địa phương","bồi thường"],0],
+      [182,"checkout",["lỗi thời","thanh toán","lịch trình","môi trường"],1],
+      [183,"comfort",["tích cực","sự thoải mái","hàng hóa","kỹ năng"],1],
+      [184,"expand",["mở rộng","thông báo","ý kiến","tồn tại"],0],
+      [185,"explore",["nghe","khám phá","trốn thoát","khu vực"],1],
+      [186,"item",["sự công nhận","yếu tố","chủ yếu","món hàng"],3],
+      [187,"mandatory",["tiến bộ","bắt buộc","thiệt hại","dẫn dắt"],1],
+      [188,"merchandise",["riêng tư","hàng hóa","cố gắng","sửa chữa"],1],
+      [189,"strictly",["khuyến khích","nghiêm ngặt","mặc cả","lịch trình"],1],
+      [190,"trend",["định nghĩa","điểm","thêm vào","xu hướng"],3],
+      [191,"accept",["chấp nhận","chỉnh sửa","học","mở rộng"],0],
+      [192,"accident",["tai nạn","mặc cả","trình bày","hàng hóa"],0],
+      [193,"accurate",["cụ thể","bổ nhiệm","tiếp tục","chính xác"],3],
+      [194,"achieve",["khó khăn","kết quả","đạt được","hiệu ứng"],2],
+      [195,"active",["tích cực","sự công nhận","hóa đơn","thiết bị"],0],
+      [196,"adapt",["sản phẩm","nhà máy","xác nhận","thích nghi"],3],
+      [197,"add",["thêm vào","loại bỏ","nghi ngờ","nhanh"],0],
+      [198,"adequate",["giải quyết","đầy đủ","chương trình","thường xuyên"],1],
+      [199,"adjust",["hết","tạo ra","điều chỉnh","tắt máy"],2],
+      [200,"administer",["sửa chữa","cơ sở","quản lý","mong đợi"],2],
+      [201,"advance",["quý","tiến bộ","công chúng","thuê"],1],
+      [202,"advantage",["tác động","gần đây","xứng đáng","lợi thế"],3],
+      [203,"advice",["mô hình","linh hoạt","tác động","lời khuyên"],3],
+      [204,"affair",["cụ thể","đầu tư","thu thập","vấn đề"],3],
+      [205,"affect",["niềm tin","ảnh hưởng","câu hỏi","bên ngoài"],1],
+      [206,"agency",["mở rộng","làm bằng","đại lý","thiết kế"],2],
+      [207,"agenda",["bắt buộc","học","lịch trình","nhà máy"],2],
+      [208,"agree",["tên","hình ảnh","đồng ý","quen thuộc"],2],
+      [209,"aim",["vị trí","mặc cả","phân tích","mục tiêu"],3],
+      [210,"allow",["cập nhật","đảm bảo","máy móc","cho phép"],3],
+      [211,"alter",["quan trọng","liên tục","trường hợp","thay đổi"],3],
+      [212,"amount",["tháng","thuyết phục","số lượng","trang trọng"],2],
+      [213,"analysis",["ghi chú","phân tích","bình thường","giải quyết"],1],
+      [214,"announce",["nắm bắt tình hình","hình ảnh","lớn","thông báo"],3],
+      [215,"annual",["bằng cấp","hóa đơn","hàng năm","cơ hội"],2],
+      [216,"anticipate",["dự đoán","hồ sơ","thỏa thuận","nội dung"],0],
+      [217,"anxious",["nhận","tự nhiên","lo lắng","nhận thức"],2],
+      [218,"apologize",["hy vọng","xảy ra","nhân bản","xin lỗi"],3],
+      [219,"apparent",["tin nhắn","thiệt hại","xác định","rõ ràng"],3],
+      [220,"appeal",["hậu quả","thay vì","kêu gọi","quý"],2],
+      [221,"appear",["khán giả","xuất hiện","cơ hội","vấn đề"],1],
+      [222,"appoint",["khi cần thiết","nhận thức","bổ nhiệm","dự án"],2],
+      [223,"approach",["tiếp cận","đề xuất","sự đảm bảo","dự đoán"],0],
+      [224,"approve",["tán thành","đánh giá cao","vấn đề","quốc gia"],0],
+      [225,"argue",["tâm trí","bỏ lỡ","lỗi","tranh luận"],3],
+      [226,"arise",["chính thức","giai đoạn","mốt nhất thời","phát sinh"],3],
+      [227,"arrange",["phí","đọc","sai lầm","sắp xếp"],3],
+      [228,"arrive",["đến","sẵn sàng cho","khuyến khích","lựa chọn"],0],
+      [229,"article",["trao đổi","xây dựng","con số","bài báo"],3],
+      [230,"aspect",["giấy","tích cực","khía cạnh","lịch trình"],2],
+      [231,"assess",["chương trình","hợp đồng","đánh giá","thẩm quyền"],2],
+      [232,"assign",["khám phá","phân công","quan trọng","thanh toán"],1],
+      [233,"assist",["hỗ trợ","biểu diễn","hàng năm","ý kiến"],0],
+      [234,"assume",["đối tác","giả định","chuyển tiếp","phản ánh"],1],
+      [235,"attach",["cao","bồi thường","nhận","đính kèm"],3],
+      [236,"attempt",["hết hạn","thành lập","cố gắng","chứng minh"],2],
+      [237,"attitude",["thái độ","mong đợi","chi phí","ban đầu"],0],
+      [238,"audience",["tích cực","trực tiếp","bắt kịp","khán giả"],3],
+      [239,"author",["phát hiện","tác giả","phỏng vấn","đổ lỗi"],1],
+      [240,"authority",["đào tạo","theo dõi","thẩm quyền","chắc chắn"],2],
+      [241,"available",["nhận thức về","xác định","thu nhập","có sẵn"],3],
+      [242,"aware",["nhận thức","cơ bản","bình thường","thay thế"],0],
+      [243,"balance",["tuân theo","cân bằng","hết","kinh tế"],1],
+      [244,"basic",["cơ bản","hồ sơ","tham gia","thẩm quyền"],0],
+      [245,"belief",["yêu cầu","rõ ràng","niềm tin","đáp ứng"],2],
+      [246,"belong",["vấn đề","trực tiếp","thuộc về","môi trường"],2],
+      [247,"bill",["chính xác","hóa đơn","thuê","quỹ"],1],
+      [248,"blame",["đổ lỗi","tranh luận","ngân sách","đồng ý"],0],
+      [249,"blank",["phân bổ","ngân sách","trống","định nghĩa"],2],
+      [250,"board",["thực hiện","cố gắng","bảng","địa chỉ, giải quyết"],2],
+      [251,"budget",["giữ","ngân sách","quyền lực","mong muốn"],1],
+      [252,"build",["xây dựng","phức tạp","bài báo","hợp đồng"],0],
+      [253,"campaign",["chiến dịch","trí nhớ","về mặt thể chất","chăm sóc"],0],
+      [254,"cancel",["tiến bộ","hủy bỏ","sự hài lòng","tuyển dụng"],1],
+      [255,"capital",["nhà cung cấp","vốn","cảnh báo","trống rỗng"],1],
+      [256,"care",["chăm sóc","thiếu","bài báo","hiệu ứng"],0],
+      [257,"career",["sự nghiệp","chủ tịch","báo chí","xác định"],0],
+      [258,"case",["phân bổ","tán thành","trường hợp","ngân sách"],2],
+      [259,"cause",["chính xác","có sẵn","danh sách","nguyên nhân"],3],
+      [260,"certain",["bảo vệ","lợi thế","người đứng đầu","chắc chắn"],3],
+      [261,"challenge",["tập hợp","thử thách","sự kiện","thảo luận"],1],
+      [262,"charge",["ngụ ý","phí","hình thức","lịch trình"],1],
+      [263,"check",["hồ sơ","hậu quả","kiểm tra","sự khác biệt"],2],
+      [264,"chief",["đĩa","người đứng đầu","đổ lỗi","ngang bằng"],1],
+      [265,"choice",["lựa chọn","phát hành","khách hàng","người đứng đầu"],0],
+      [266,"claim",["nhà máy","yêu cầu","hợp đồng","hậu quả"],1],
+      [267,"clear",["rõ ràng","thiết lập","đẩy","sáng kiến"],0],
+      [268,"client",["tế nhị","viên chức","khách hàng","ngụ ý"],2],
+      [269,"close",["ở giữa","xây dựng","đóng","máy móc"],2],
+      [270,"collect",["tham gia","cơ bản","lo lắng","thu thập"],3],
+      [271,"combine",["kết hợp","máy móc","giao tiếp","khám phá"],0],
+      [272,"commit",["khía cạnh","cam kết","dồi dào","thay đổi"],1],
+      [273,"committee",["bao gồm","nhiệm vụ","ủy ban","chuyển tiếp"],2],
+      [274,"common",["mở rộng","xung đột","xác nhận","chung"],3],
+      [275,"communicate",["kiểm soát","giao tiếp","kiểm tra","chứng minh"],1],
+      [276,"company",["khám phá","rõ ràng","ghi chú","công ty"],3],
+      [277,"complete",["khăng khăng","hoàn thành","đến","cung cấp"],1],
+      [278,"complex",["dự án","tán thành","phức tạp","chi tiết"],2],
+      [279,"comply",["nguồn gốc","tuân thủ","ảnh hưởng","kiểm tra"],1],
+      [280,"component",["thành phần","nhà máy","đáp ứng","kiếm được"],0],
+      [281,"concept",["khái niệm","ban đầu","phát hiện","sự phổ biến"],0],
+      [282,"concern",["mối quan tâm","khác","tên","tranh luận"],0],
+      [283,"condition",["yên tĩnh","điều kiện","luật","cơ bản"],1],
+      [284,"confirm",["xác nhận","củng cố","đóng","sai lầm"],0],
+      [285,"conflict",["thành công","thay thế","xung đột","đảm bảo"],2],
+      [286,"connect",["kết nối","bồi thường","phần mềm","nguồn gốc"],0],
+      [287,"consist",["phổ biến","khách hàng","sắp xếp","bao gồm"],3],
+      [288,"constant",["thái độ","quá khứ","liên tục","giữ"],2],
+      [289,"construct",["truy cập","trợ cấp","hỗ trợ","xây dựng"],3],
+      [290,"consult",["tham khảo","đổ lỗi","đóng","chủ yếu"],0],
+      [291,"contact",["có thể chi trả","liên hệ","cảm hứng","tháng"],1],
+      [292,"contain",["cơ quan","loại bỏ","nhận thức về","chứa đựng"],3],
+      [293,"content",["kết hợp","nghe","nội dung","ý kiến"],2],
+      [294,"continue",["tiếp tục","tên","di chuyển","khuyến khích"],0],
+      [295,"contract",["cung cấp","sự phát triển","xảy ra","hợp đồng"],3],
+      [296,"control",["kiểm soát","yên tĩnh","thiết lập","bày tỏ"],0],
+      [297,"convenient",["chỉ ra","thuận tiện","số lượng","sự quan tâm"],1],
+      [298,"corporate",["công ty","chuyển tiếp","lợi nhuận","tán thành"],0],
+      [299,"correct",["đóng","thái độ","ví dụ","chính xác"],3],
+      [300,"cost",["phân bổ","chi phí","lợi ích","bên ngoài"],1],
+      [301,"create",["giả định","tin tức","tạo ra","vào"],2],
+      [302,"credit",["đánh giá","trợ cấp","tín dụng","bên, đảng"],2],
+      [303,"crucial",["tài chính","thanh toán","rủi ro","quan trọng"],3],
+      [304,"culture",["văn hóa","nhà máy","hy vọng","quá khứ"],0],
+      [305,"current",["đo lường","hiện tại","dồi dào","đáp ứng"],1],
+      [306,"customer",["phát triển","đề xuất","cố gắng","khách hàng"],3],
+      [307,"damage",["mặc cả","thiệt hại","sự sắp xếp","lời hứa"],1],
+      [308,"data",["trang trọng","cảm hứng","dữ liệu","nghỉ hưu"],2],
+      [309,"deal",["thỏa thuận","trống","bảng","lĩnh vực"],0],
+      [310,"debate",["mô hình","tranh luận","tháng","chơi"],1],
+      [311,"debt",["nợ","kiểm tra","ủy ban","thuê"],0],
+      [312,"decision",["bổ nhiệm","trường hợp","quyết định","thích nghi"],2],
+      [313,"decline",["mong đợi","bản chất","cụ thể","giảm sút"],3],
+      [314,"decrease",["đạt được","mẫu","bệnh tật","giảm"],3],
+      [315,"define",["hợp đồng","định nghĩa","phản ánh","phân tích"],1],
+      [316,"delay",["bố cục","đánh giá","thanh tra","trì hoãn"],3],
+      [317,"deliver",["hướng dẫn","có sẵn","giao hàng","đạt được"],2],
+      [318,"demand",["tạo điều kiện","giới hạn","phần","nhu cầu"],3],
+      [319,"deny",["từ chối","đề cập","dài","hỗ trợ"],0],
+      [320,"depend",["phụ thuộc","người","ở giữa","nhận ra"],0],
+      [321,"describe",["đánh giá","miêu tả","sản xuất","mở rộng"],1],
+      [322,"design",["gần đây","thiết kế","hợp đồng","trường hợp"],1],
+      [323,"desire",["người đưa thư","thuyết phục","khách hàng","mong muốn"],3],
+      [324,"detail",["chi tiết","cao","dự định","bắt buộc"],0],
+      [325,"detect",["tai nạn","phát hiện","phiên họp","áp dụng"],1],
+      [326,"difference",["sự khác biệt","lỗi","điểm","mở rộng"],0],
+      [327,"difficult",["nhu cầu","tín dụng","khó khăn","cơn đau"],2],
+      [328,"direct",["trực tiếp","giả định","liên quan","khó khăn"],0],
+      [329,"discover",["khám phá","xu hướng","gặp gỡ","cựu"],0],
+      [330,"discuss",["thảo luận","cần thiết","tôn trọng","sửa chữa"],0],
+      [331,"disease",["giả định","thích hợp","đúng tiến độ","bệnh tật"],3],
+      [332,"document",["quyền lực","tài liệu","văn phòng","sự giảm bớt"],1],
+      [333,"doubt",["chứa đựng","ban đầu","nghi ngờ","thiệt hại"],2],
+      [334,"draft",["khía cạnh","bản nháp","sức chứa","gần đây"],1],
+      [335,"draw",["tham khảo","chính xác","chủ yếu","vẽ"],3],
+      [336,"drop",["phát hiện","rơi","giới thiệu","từ chối"],1],
+      [337,"duty",["có thể chi trả","thuộc về","nhiệm vụ","tăng"],2],
+      [338,"earn",["kiếm được","gọi đến","nguồn gốc","sai lầm"],0],
+      [339,"economy",["tương lai","đào tạo","kinh tế","đại lý"],2],
+      [340,"effect",["đại lý","nhỏ","hiệu ứng","tránh"],2],
+      [341,"effort",["kết hợp","nỗ lực","lỗi","khách hàng"],1],
+      [342,"element",["duy trì","hóa đơn","phơi bày","yếu tố"],3],
+      [343,"employ",["tiến hành","thuê mướn","bình thường","bắt kịp"],1],
+      [344,"empty",["nhóm","sự giảm bớt","sự phổ biến","trống rỗng"],3],
+      [345,"encourage",["khuyến khích","phát triển","sẵn sàng","phương pháp"],0],
+      [346,"energy",["năng lượng","chỉ ra","khái niệm","cung cấp"],0],
+      [347,"ensure",["phản ánh","đảm bảo","thường xuyên","hiện tại"],1],
+      [348,"enter",["đĩa","vào","ước tính","giúp đỡ"],1],
+      [349,"environment",["môi trường","mở rộng","cung cấp","nhu cầu"],0],
+      [350,"equal",["thêm","ngang bằng","lịch sử","trước"],1],
+      [351,"equipment",["từ chối","sản xuất","chương trình","thiết bị"],3],
+      [352,"error",["tiêu thụ","khả năng","thăng tiến","lỗi"],3],
+      [353,"escape",["đối tác","chấn thương","đóng","trốn thoát"],3],
+      [354,"essential",["nhận dạng","xảy ra","cần thiết","áp dụng"],2],
+      [355,"estimate",["chất lượng","mạnh mẽ","trang","ước tính"],3],
+      [356,"event",["tài chính","nắm bắt tình hình","giải quyết","sự kiện"],3],
+      [357,"exact",["cuộc cách mạng","lựa chọn","chính xác","có lẽ"],2],
+      [358,"examine",["mặc cả","kiểm tra","thử thách","hình ảnh"],1],
+      [359,"example",["tạo ra","ví dụ","địa phương","bên ngoài"],1],
+      [360,"exchange",["cho phép","danh sách","tham gia","trao đổi"],3],
+      [361,"exist",["tìm kiếm","khách hàng","khu vực","tồn tại"],3],
+      [362,"expect",["tài chính","phơi bày","mong đợi","khăng khăng"],2],
+      [363,"expense",["cơ bản","tích cực","đầu ra","chi phí"],3],
+      [364,"experience",["thuê","chi tiết","bảo vệ","kinh nghiệm"],3],
+      [365,"explain",["món hàng","giải thích","tài liệu","liên tục"],1],
+      [366,"extend",["nhanh","cảm hứng","mở rộng","hiển thị"],2],
+      [367,"extra",["thêm","phớt lờ","thất bại","tốn thời gian"],0],
+      [368,"facility",["dẫn dắt","bằng miệng","sự giảm bớt","cơ sở vật chất"],3],
+      [369,"factor",["yếu tố","sức khỏe","kiếm được","phân bổ"],0],
+      [370,"fail",["công bằng","thất bại","đoán","thuê"],1],
+      [371,"fair",["nhận ra","công bằng","đầu tư","quý"],1],
+      [372,"familiar",["giấy","thích nghi","quen thuộc","khán giả"],2],
+      [373,"fault",["do dự","tranh luận","lỗi","ngân sách"],2],
+      [374,"favor",["cơ quan","sự ủng hộ","phụ trách","được giao quyền"],1],
+      [375,"feature",["mong đợi","đặc điểm","thiếu","sự hài lòng"],1],
+      [376,"fee",["phí","xứng đáng","hiển thị","thường xuyên"],0],
+      [377,"field",["lĩnh vực","do dự","cho phép","năng suất"],0],
+      [378,"file",["cạnh tranh","hồ sơ","lực lượng","thành tựu"],1],
+      [379,"finance",["tài chính","ý tưởng","đối tác","cần thiết"],0],
+      [380,"firm",["dài","công ty","phát sinh","bằng cấp"],1],
+      [381,"fix",["sửa chữa","thích nghi","câu hỏi","bắt buộc"],0],
+      [382,"focus",["tập trung","mẫu","cơ bản","chính xác"],0],
+      [383,"force",["tham dự","lực lượng","giao hàng","chỉ ra"],1],
+      [384,"form",["sắp xếp","hình thức","chi tiết","thất bại"],1],
+      [385,"formal",["quản lý","trang trọng","sản xuất","di chuyển"],1],
+      [386,"former",["mẫu","sự ủng hộ","cựu","trì hoãn"],2],
+      [387,"forward",["chuyển tiếp","bên trong","phần","chủ yếu"],0],
+      [388,"frequent",["bày tỏ","sự thoải mái","thường xuyên","hồ sơ"],2],
+      [389,"fund",["theo dõi","nợ","quỹ","khách hàng"],2],
+      [390,"future",["kết hợp","lý lịch","trang trọng","tương lai"],3],
+      [391,"gain",["ảnh hưởng","phù hợp","đạt được","công bằng"],2],
+      [392,"general",["thủ tục","chung","dài","tương thích"],1],
+      [393,"goal",["mục tiêu","mong muốn","cơ hội","thị trường"],0],
+      [394,"grant",["chính","sẵn sàng","hiệp hội","trợ cấp"],3],
+      [395,"group",["bắt buộc","nhóm","môi trường","mảnh"],1],
+      [396,"growth",["sự phát triển","thái độ","tham gia","công việc"],0],
+      [397,"guess",["sự thoải mái","đến","phân bổ","đoán"],3],
+      [398,"guide",["hướng dẫn","thanh toán","cài đặt","hợp pháp"],0],
+      [399,"handle",["hiện tại","xử lý","quan trọng","liên quan"],1],
+      [400,"happen",["xảy ra","nghĩ ra","nhanh","thay vì"],0],
+      [401,"health",["năng lượng","sự ủng hộ","xứng đáng","sức khỏe"],3],
+      [402,"heavy",["nặng","mục đích","yêu cầu","năng lượng"],0],
+      [403,"help",["giúp đỡ","nỗ lực","thường xuyên","quá trình"],0],
+      [404,"hide",["cung cấp","rõ ràng","giấu","chơi"],2],
+      [405,"high",["bình thường","thuyết phục","chính sách","cao"],3],
+      [406,"history",["hậu quả","đánh giá","lịch sử","phơi bày"],2],
+      [407,"hope",["phơi bày","trang trọng","hy vọng","phổ biến"],2],
+      [408,"idea",["gần đây","ý tưởng","gấp","tránh"],1],
+      [409,"identify",["quen thuộc","phức tạp","nhận dạng","dẫn dắt"],2],
+      [410,"image",["vào","mối quan tâm","sự phức tạp","hình ảnh"],3],
+      [411,"impact",["quá khứ","tiến bộ","thường xuyên","tác động"],3],
+      [412,"implement",["thực hiện","nhà máy","thật","thảo luận"],0],
+      [413,"important",["chuyển tiếp","quan trọng","vào","phát hiện"],1],
+      [414,"improve",["cải thiện","cơ sở","mở rộng","tiến hành"],0],
+      [415,"include",["bao gồm","thuê","thất bại","bản chất"],0],
+      [416,"income",["thu nhập","nhà máy","nhắc nhở","giấu"],0],
+      [417,"increase",["nhận","công bằng","ví dụ","tăng"],3],
+      [418,"indicate",["rơi","chắc chắn","tham gia","chỉ ra"],3],
+      [419,"individual",["tin tức","cá nhân","thu hút","ví dụ"],1],
+      [420,"industry",["sự phổ biến","công nghiệp","cân bằng","khán giả"],1],
+      [421,"influence",["ảnh hưởng","chắc chắn","duy trì","sẵn sàng cho"],0],
+      [422,"inform",["thông báo","nhận","mặc cả","mở rộng"],0],
+      [423,"initial",["danh sách","kế hoạch","lỗi","ban đầu"],3],
+      [424,"injury",["chấn thương","thỏa thuận","cần thiết","công nghiệp"],0],
+      [425,"inside",["viên chức","dài","ví dụ","bên trong"],3],
+      [426,"insist",["khăng khăng","kiểm tra","thu thập","phí"],0],
+      [427,"inspect",["trước","hiệu ứng","tham khảo","thanh tra"],3],
+      [428,"install",["niềm tin","cài đặt","thành phần","rời đi"],1],
+      [429,"instance",["tương xứng","công bằng","ví dụ","sản xuất"],2],
+      [430,"instead",["sức chứa","thay vì","linh hoạt","vượt qua"],1],
+      [431,"institution",["cơ quan","trông cậy vào","phát sinh","hết"],0],
+      [432,"intend",["dự định","đánh giá","công ty","tán thành"],0],
+      [433,"interest",["người đưa thư","bản chất","sự quan tâm","sự thuyết phục"],2],
+      [434,"internal",["nội bộ","mảnh","giữ","sự sắp xếp"],0],
+      [435,"interview",["thiệt hại","bắt buộc","phỏng vấn","chung"],2],
+      [436,"introduce",["văn phòng","phản ánh","mục tiêu","giới thiệu"],3],
+      [437,"invest",["sự đảm bảo","sự phức tạp","rõ ràng","đầu tư"],3],
+      [438,"involve",["phản ánh","liên quan","yên tĩnh","phớt lờ"],1],
+      [439,"issue",["cuộc cách mạng","tồn tại","hình ảnh","vấn đề"],3],
+      [440,"job",["buổi sáng","hình thức","thực hiện","công việc"],3],
+      [441,"join",["cảm hứng","tham gia","sai lầm","áp dụng"],1],
+      [442,"judge",["liên quan","đánh giá","mong muốn","công việc"],1],
+      [443,"jump",["nhảy","chuyên gia","nhìn lướt qua","lý do"],0],
+      [444,"keep",["nhanh","ý tưởng","bắt kịp","giữ"],3],
+      [445,"key",["công ty","lo lắng","chìa khóa","cho phép"],2],
+      [446,"lack",["chung","thiếu","hợp đồng","tai nạn"],1],
+      [447,"large",["tiếp cận","tranh luận","ngang bằng","lớn"],3],
+      [448,"late",["công chúng","thiệt hại","chung","trễ"],3],
+      [449,"law",["phù hợp","trốn thoát","luật","khi cần thiết"],2],
+      [450,"lead",["cần thiết","dẫn dắt","mối quan tâm","nhận ra"],1],
+      [451,"learn",["hình thức","quyền lực","thanh tra","học"],3],
+      [452,"leave",["bỏ lỡ","rời đi","ước tính","câu hỏi"],1],
+      [453,"legal",["nhận ra","tiêu thụ","hợp pháp","phiên họp"],2],
+      [454,"level",["giới hạn","mức độ","phỏng vấn","đánh giá cao"],1],
+      [455,"limit",["bao gồm","sự nghiệp","môi trường","giới hạn"],3],
+      [456,"line",["công việc","đường dây","sức khỏe","lỗi"],1],
+      [457,"list",["phần","danh sách","nhiệm vụ","thăng tiến"],1],
+      [458,"listen",["thuê","lựa chọn","nghe","thay thế"],2],
+      [459,"local",["địa phương","đính kèm","điều chỉnh","hợp pháp"],0],
+      [460,"long",["công ty","dài","vận hành","xử lý"],1],
+      [461,"lose",["nhà cung cấp","thực hiện","mất","nhận dạng"],2],
+      [462,"machine",["máy móc","phí","số lượng","đường dây"],0],
+      [463,"main",["xung đột","giữ","chính","sự công nhận"],2],
+      [464,"maintain",["kho hàng","duy trì","hiệu ứng","ngân sách"],1],
+      [465,"major",["mối quan tâm","sẵn sàng cho","chủ yếu","luật"],2],
+      [466,"manage",["lĩnh vực","trống rỗng","quản lý","luật"],2],
+      [467,"manager",["bên, đảng","người quản lý","thật","ví dụ"],1],
+      [468,"manufacture",["lựa chọn","sản xuất","khái niệm","hồ sơ"],1],
+      [469,"mark",["tuyển dụng","đánh dấu","sự phát triển","hồ sơ"],1],
+      [470,"matter",["vấn đề","tuân thủ","xóa","giao hàng"],0],
+      [471,"measure",["lực lượng","trước","đo lường","chủ yếu"],2],
+      [472,"meet",["số lượng","cơ sở vật chất","gặp gỡ","đông đúc"],2],
+      [473,"member",["bày tỏ","cao","hình thức","thành viên"],3],
+      [474,"memory",["khác","trí nhớ","tỷ lệ","cho phép"],1],
+      [475,"message",["trang","tin nhắn","hy vọng","thử thách"],1],
+      [476,"method",["phương pháp","sự phổ biến","thay vì","bao gồm"],0],
+      [477,"middle",["phụ trách","ở giữa","lắp ráp","hỗ trợ"],1],
+      [478,"mind",["tâm trí","bưu kiện","sự đa dạng","đúng tiến độ"],0],
+      [479,"minor",["nhỏ","yếu tố","đoán","nhận"],0],
+      [480,"miss",["đề xuất","giai đoạn","bỏ lỡ","ý kiến"],2],
+      [481,"mistake",["ví dụ","sự thay thế","thiết kế","sai lầm"],3],
+      [482,"model",["mô hình","gần đây","số lượng","xung đột"],0],
+      [483,"money",["tiền","đầu ra","tương lai","thích nghi"],0],
+      [484,"month",["tháng","danh sách","phớt lờ","thanh toán"],0],
+      [485,"morning",["buổi sáng","vị trí","chung","cân bằng"],0],
+      [486,"move",["thật","xác định","di chuyển","khó khăn"],2],
+      [487,"name",["tên","cải thiện","người hướng dẫn","quá khứ"],0],
+      [488,"nation",["bồi thường","trễ","quốc gia","rời đi"],2],
+      [489,"natural",["thỏa thuận","bày tỏ","tự nhiên","hậu quả"],2],
+      [490,"nature",["trống","bản chất","trước","chính xác"],1],
+      [491,"necessary",["đánh giá","cần thiết","thỏa thuận","xử lý"],1],
+      [492,"need",["tuân theo","lịch trình","hết","nhu cầu"],3],
+      [493,"news",["từ bỏ","trợ cấp","vị trí","tin tức"],3],
+      [494,"normal",["xác định","thanh toán","phụ thuộc","bình thường"],3],
+      [495,"note",["ghi chú","tháng","đặc điểm","thiết kế"],0],
+      [496,"notice",["phân công","chú ý","mất","đồng ý"],1],
+      [497,"number",["đĩa","thời kỳ","hy vọng","con số"],3],
+      [498,"object",["tín dụng","được giao quyền","ảnh hưởng","đối tượng"],3],
+      [499,"obtain",["đạt được","ở giữa","rõ ràng","trực tiếp"],0],
+      [500,"occur",["bằng chứng","quá khứ","xảy ra","giúp đỡ"],2],
+      [501,"office",["mảnh","linh hoạt","cân bằng","văn phòng"],3],
+      [502,"officer",["lý lịch","viên chức","phụ thuộc","bắt buộc"],1],
+      [503,"official",["chính thức","khái niệm","giả định","lý lịch"],0],
+      [504,"operate",["vận hành","lỗi thời","thường xuyên","rõ ràng"],0],
+      [505,"opinion",["ý kiến","chứa đựng","thu hút","tiền"],0],
+      [506,"opportunity",["chính thức","cơ hội","hỗ trợ","loại bỏ"],1],
+      [507,"option",["tổ chức","đính kèm","quá khứ","lựa chọn"],3],
+      [508,"order",["chịu đựng","nhận ra","điều khoản","đặt hàng"],3],
+      [509,"organization",["thăng tiến","tổ chức","đóng góp","ý kiến"],1],
+      [510,"origin",["được giao quyền","phân bổ","nhớ","nguồn gốc"],3],
+      [511,"original",["ban đầu","bình thường","bản chất","phương pháp"],0],
+      [512,"other",["khác","lắp ráp","đánh giá cao","chương trình"],0],
+      [513,"outcome",["đọc","kết quả","bằng miệng","cam kết"],1],
+      [514,"output",["đầu ra","quá trình","thẩm quyền","thành lập"],0],
+      [515,"outside",["bên ngoài","lý do","thông báo","niềm tin"],0],
+      [516,"owner",["thảo luận","khuyến khích","tích cực","chủ sở hữu"],3],
+      [517,"page",["tránh","trình bày","trang","đến"],2],
+      [518,"pain",["chứng minh","kiểm tra","cơn đau","sự khác biệt"],2],
+      [519,"paper",["giúp đỡ","đĩa","giấy","chỉnh sửa"],2],
+      [520,"part",["nắm bắt tình hình","phần","đóng","mốt nhất thời"],1],
+      [521,"participate",["tham gia","sức khỏe","bao gồm","từ chối"],0],
+      [522,"particular",["tham gia","chính xác","cụ thể","sự khác biệt"],2],
+      [523,"partner",["kế hoạch","giải thích","đối tác","chủ yếu"],2],
+      [524,"pass",["xu hướng","vượt qua","sự đa dạng","tâm trí"],1],
+      [525,"past",["kho hàng","tăng","tai nạn","quá khứ"],3],
+      [526,"pattern",["mẫu","món hàng","truy cập","hiển thị"],0],
+      [527,"pay",["thanh toán","kiểm tra","giai đoạn","địa chỉ, giải quyết"],0],
+      [528,"people",["tin tức","người","di chuyển","yếu tố"],1],
+      [529,"perform",["biểu diễn","đặt hàng","phiên họp","trễ"],0],
+      [530,"perhaps",["tán thành","sự thay thế","có lẽ","tốn thời gian"],2],
+      [531,"period",["kết nối","thay vì","cải thiện","thời kỳ"],3],
+      [532,"permit",["tự nhiên","nhu cầu","cho phép","đặc điểm"],2],
+      [533,"person",["nhận dạng","cá nhân","tăng","ví dụ"],1],
+      [534,"personal",["cá nhân","tạo ra","chi phí","chất lượng"],0],
+      [535,"phase",["đặc điểm","giai đoạn","trình bày","thảo luận"],1],
+      [536,"piece",["chịu đựng","ghi chú","mảnh","cải thiện"],2],
+      [537,"place",["nơi chốn","thủ tục","lo lắng","đánh giá cao"],0],
+      [538,"plan",["đoán","xóa","quý","kế hoạch"],3],
+      [539,"plant",["hàng năm","cảnh báo","nhà máy","quá trình"],2],
+      [540,"play",["thường xuyên","tăng","chơi","đính kèm"],2],
+      [541,"point",["yên tĩnh","ý kiến","về mặt kỹ thuật","điểm"],3],
+      [542,"policy",["chính sách","sự phức tạp","phần","thích hợp"],0],
+      [543,"popular",["tác động","thanh toán","phổ biến","tìm kiếm"],2],
+      [544,"position",["vị trí","quốc gia","chính thức","năng suất"],0],
+      [545,"positive",["nghi ngờ","tích cực","phỏng vấn","tuân thủ"],1],
+      [546,"possible",["vị trí","chi phí","mảnh","có thể"],3],
+      [547,"post",["sự giảm bớt","bưu kiện","máy móc","rõ ràng"],1],
+      [548,"power",["quyền lực","nguyên nhân","sửa chữa","đánh giá"],0],
+      [549,"prepare",["điểm","chính thức","chuẩn bị","sự phát triển"],2],
+      [550,"president",["nhận dạng","nội dung","chủ tịch","liên lạc"],2],
+      [551,"press",["tập trung","bệnh tật","trực tiếp","báo chí"],3],
+      [552,"price",["giá cả","phơi bày","thời kỳ","phù hợp"],0],
+      [553,"primary",["cầm, tổ chức","cơ sở vật chất","linh hoạt","chủ yếu"],3],
+      [554,"private",["cụ thể","sự tự tin","chú ý","riêng tư"],3],
+      [555,"probably",["tắt máy","nặng","nghỉ hưu","có lẽ"],3],
+      [556,"problem",["cơ quan","xem xét","vấn đề","tranh luận"],2],
+      [557,"procedure",["thông báo","thủ tục","sự hài lòng","nghe"],1],
+      [558,"produce",["sản xuất","chính xác","khu vực","sự đảm bảo"],0],
+      [559,"product",["sản phẩm","tài sản","câu hỏi","cạnh tranh"],0],
+      [560,"profit",["trường hợp","lợi nhuận","món hàng","sản xuất"],1],
+      [561,"program",["hợp pháp","nguồn gốc","theo dõi","chương trình"],3],
+      [562,"project",["hiệp hội","dự án","rời đi","hủy bỏ"],1],
+      [563,"proper",["vận hành","trống rỗng","hàng năm","thích hợp"],3],
+      [564,"property",["sự cống hiến","tài sản","tập hợp","thông báo"],1],
+      [565,"proposal",["đề xuất","giúp đỡ","đạt được","công việc"],0],
+      [566,"prove",["chứng minh","giấu","thực hành","nhận dạng"],0],
+      [567,"provide",["đánh giá cao","cung cấp","khó khăn","gọi đến"],1],
+      [568,"public",["gấp","định nghĩa","công chúng","thành lập"],2],
+      [569,"purpose",["mục đích","tự nhiên","thêm vào","đầu ra"],0],
+      [570,"push",["chọn","làm bằng","phí","đẩy"],3],
+      [571,"quality",["sự thuyết phục","hình thức","chất lượng","thêm vào"],2],
+      [572,"quarter",["luật","tìm ra","quý","đẩy"],2],
+      [573,"question",["thành tựu","tin nhắn","câu hỏi","bằng cấp"],2],
+      [574,"quick",["tháng","sản phẩm","nhanh","liên quan"],2],
+      [575,"quiet",["yên tĩnh","quá khứ","bồi thường","đăng ký"],0],
+      [576,"quit",["lưu trữ","chơi","loại bỏ","từ bỏ"],3],
+      [577,"rate",["bản chất","tuân thủ","hình thức","tỷ lệ"],3],
+      [578,"reach",["đạt được","xác định","người","củng cố"],0],
+      [579,"read",["đọc","mối quan tâm","phân bổ","giả định"],0],
+      [580,"ready",["liên tục","lý lịch","sẵn sàng","thích nghi"],2],
+      [581,"real",["cạnh tranh","chi phí","đặt hàng","thật"],3],
+      [582,"realize",["mẫu","hoàn thành","nhận ra","chương trình"],2],
+      [583,"reason",["quản lý","khám phá","xử lý","lý do"],3],
+      [584,"receive",["rõ ràng","thăng tiến","cần thiết","nhận"],3],
+      [585,"recent",["nội bộ","sức khỏe","gần đây","kinh nghiệm"],2],
+      [586,"recognize",["sai lầm","nhận ra","tương thích","tên"],1],
+      [587,"record",["liên hệ","hồ sơ","nhắc nhở","ảnh hưởng"],1],
+      [588,"reduce",["tương lai","hy vọng","chính xác","giảm"],3],
+      [589,"refer",["tham khảo","quá trình","khám phá","ý tưởng"],0],
+      [590,"reflect",["chứng minh","phản ánh","thuyết phục","kỹ năng"],1],
+      [591,"region",["thăng tiến","chi phí","chuẩn bị","khu vực"],3],
+      [592,"regular",["ngụ ý","thường xuyên","trang","vị trí"],1],
+      [593,"relate",["cụ thể","liên quan","sự thoải mái","cần thiết"],1],
+      [594,"release",["phát hành","chủ yếu","chương trình","đề cập"],0],
+      [595,"remain",["buổi sáng","quý","nợ","còn lại"],3],
+      [596,"remember",["nhớ","tiếp cận","có thể chi trả","tài liệu"],0],
+      [597,"remind",["nhắc nhở","hồ sơ","riêng tư","quyết định"],0],
+      [598,"remove",["cơ bản","loại bỏ","chiến dịch","mạnh mẽ"],1],
+      [599,"rent",["cho phép","bản chất","nghe","thuê"],3],
+      [600,"repair",["sửa chữa","kinh nghiệm","phát triển","vốn"],0]
+    ];
+
+    // Map raw items into rich objects with lesson assignment (12 words per lesson = 50 lessons)
+    const VOCAB_DATA = RAW_600_DATA.map(([id, word, options, correctIdx]) => {
+      const lessonIdx = Math.min(Math.floor((id - 1) / 12), 49);
+      return {
+        id,
+        word,
+        options,
+        correctIdx,
+        meaning: options[correctIdx],
+        lessonId: lessonIdx + 1,
+        lessonTitle: LESSON_TITLES[lessonIdx]
+      };
+    });
+
+    /**
+     * ============================================================================
+     * 2. COMPREHENSIVE ENGLISH GRAMMAR DATA (BASIC TO ADVANCED)
+     * ============================================================================
+     */
+    const GRAMMAR_TOPICS = [
+      {
+        id: "parts-of-speech",
+        level: "Cơ bản → Nâng cao",
+        title: "1. Từ Loại (Parts of Speech) & Vị Trí Trong Câu",
+        summary: "Nền tảng cốt lõi chiếm 30-40% số câu hỏi TOEIC Part 5 & Part 6: Nhận diện Danh từ, Động từ, Tính từ, Trạng từ qua hậu tố và vị trí.",
+        sections: [
+          {
+            heading: "A. Danh từ (Noun - N)",
+            formula: "Vị trí: Làm Chủ ngữ (đầu câu) | Sau Tính từ (Adj + N) | Sau Mạo từ (a/an/the + N) | Sau Tính từ sở hữu (my/his/their/company's + N) | Sau Giới từ (in/on/at/of/for + N) | Sau Lượng từ (many/some/each/every + N)",
+            points: [
+              "<strong>Hậu tố nhận biết Danh từ chỉ vật/sự việc:</strong> -tion/-sion (<em>information, decision</em>), -ment (<em>agreement, development</em>), -ness (<em>happiness</em>), -ity/-ty (<em>ability, quality</em>), -ance/-ence (<em>assurance, confidence</em>), -ship (<em>leadership</em>), -hood (<em>neighborhood</em>), -ism (<em>criticism</em>).",
+              "<strong>Hậu tố nhận biết Danh từ chỉ người:</strong> -er/-or (<em>manager, director</em>), -ee (<em>employee, trainee</em> - người được/bị tác động), -ist (<em>specialist</em>), -ant/-ent (<em>applicant, consultant</em>), -ian (<em>technician</em>).",
+              "<strong>Bẫy TOEIC hay gặp (Cụm danh từ - Compound Nouns):</strong> Hai danh từ đứng cạnh nhau tạo thành cụm danh từ (N1 bổ nghĩa cho N2, N1 luôn ở dạng số ít). VD: <em>safety regulations, customer satisfaction, sales representative, performance evaluation</em>."
+            ],
+            examples: [
+              { en: "The company requires all <strong>applicants</strong> to submit their resumes.", vi: "Công ty yêu cầu tất cả các ứng viên nộp sơ yếu lý lịch." },
+              { en: "Customer <strong>satisfaction</strong> is our top priority.", vi: "Sự hài lòng của khách hàng là ưu tiên hàng đầu của chúng tôi." }
+            ]
+          },
+          {
+            heading: "B. Tính từ (Adjective - Adj)",
+            formula: "Vị trí: Trước Danh từ (Adj + N) | Sau động từ nối Linking Verbs (be, become, seem, look, feel, remain, stay + Adj) | Cấu trúc: make/keep/find + O + Adj",
+            points: [
+              "<strong>Hậu tố nhận biết Tính từ:</strong> -ful (<em>successful, careful</em>), -less (<em>careless</em>), -ous (<em>famous, various</em>), -able/-ible (<em>affordable, compatible, eligible</em>), -ive (<em>productive, effective</em>), -al (<em>annual, formal, financial</em>), -ic (<em>specific, economic</em>), -ent/-ant (<em>confident, abundant</em>).",
+              "<strong>Tính từ phân từ (V-ing vs V-ed):</strong> <strong>V-ing</strong> miêu tả bản chất/tính chất của sự vật, sự việc (<em>interesting, time-consuming</em>). <strong>V-ed</strong> miêu tả cảm xúc/trạng thái của con người bị tác động (<em>interested, satisfied, overcrowded</em>).",
+              "<strong>Lưu ý bẫy đuôi -ly nhưng là Tính từ:</strong> <em>friendly, lovely, lonely, costly, timely, daily, weekly, monthly, yearly</em>."
+            ],
+            examples: [
+              { en: "We offer <strong>affordable</strong> prices for all <strong>eligible</strong> employees.", vi: "Chúng tôi cung cấp mức giá phải chăng cho tất cả nhân viên đủ điều kiện." },
+              { en: "Please keep the work area <strong>clean</strong> and organized.", vi: "Vui lòng giữ khu vực làm việc sạch sẽ và ngăn nắp." }
+            ]
+          },
+          {
+            heading: "C. Trạng từ (Adverb - Adv)",
+            formula: "Công thức tạo Adv: Adj + -ly (quick → quickly). Vị trí: Bổ nghĩa cho Động từ (V + Adv / Adv + V), Tính từ (Adv + Adj), Trạng từ khác (Adv + Adv), hoặc cả câu (đứng đầu câu, trước dấu phẩy).",
+            points: [
+              "<strong>Trạng từ bất quy tắc:</strong> good → <em>well</em>, fast → <em>fast</em>, hard → <em>hard</em> (chăm chỉ; còn <em>hardly</em> nghĩa là 'hầu như không'), late → <em>late</em> (trễ; còn <em>lately</em> = 'gần đây').",
+              "<strong>Vị trí trong cụm động từ:</strong> Trợ động từ + <strong>Adv</strong> + Động từ chính (VD: <em>has <strong>recently</strong> announced</em>, <em>will <strong>carefully</strong> review</em>)."
+            ],
+            examples: [
+              { en: "The new software operates <strong>efficiently</strong> and saves time.", vi: "Phần mềm mới vận hành một cách hiệu quả và tiết kiệm thời gian." },
+              { en: "<strong>Unusually</strong> high demand caused a delay in delivery.", vi: "Nhu cầu cao bất thường đã gây ra sự chậm trễ trong giao hàng." }
+            ]
+          },
+          {
+            heading: "D. Đại từ (Pronouns) & Hạn định từ (Determiners)",
+            formula: "Đại từ nhân xưng (I/He/They) + V | V/Giới từ + Đại từ tân ngữ (me/him/them) | Tính từ sở hữu (my/his/their) + N | Đại từ sở hữu (mine/his/theirs) = Tính từ sở hữu + N",
+            points: [
+              "<strong>Đại từ phản thân (myself, himself, themselves, itself):</strong> Dùng khi chủ ngữ và tân ngữ là một, hoặc đứng cuối câu/sau chủ ngữ để nhấn mạnh nghĩa 'tự mình' (<em>by oneself = on one's own</em>).",
+              "<strong>Phân biệt Lượng từ:</strong> <em>Many / A few / Few</em> + N đếm được số nhiều; <em>Much / A little / Little</em> + N không đếm được; <em>Each / Every / Another</em> + N đếm được số ít; <em>Other</em> + N số nhiều / không đếm được."
+            ],
+            examples: [
+              { en: "The manager <strong>himself</strong> inspected the factory.", vi: "Chính bản thân người quản lý đã thanh tra nhà máy." },
+              { en: "Each <strong>participant</strong> will receive a certificate.", vi: "Mỗi người tham gia sẽ nhận được một giấy chứng nhận." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The marketing team worked ______ to meet the strict deadline.", opts: ["diligent", "diligently", "diligence", "diligentness"], ans: 1, exp: "Cần một Trạng từ (diligently) để bổ nghĩa cho động từ thường 'worked'." },
+          { q: "All ______ must submit their application forms before Friday.", opts: ["apply", "applicable", "applicants", "applications"], ans: 2, exp: "Sau 'All' cần danh từ số nhiều chỉ người thực hiện hành động nộp đơn → applicants." },
+          { q: "The new accounting software is fully ______ with our existing system.", opts: ["compatible", "compatibility", "compatibly", "compatibilities"], ans: 0, exp: "Sau động từ to-be 'is' và trạng từ 'fully' cần một Tính từ → compatible." }
+        ]
+      },
+      {
+        id: "12-tenses",
+        level: "Cơ bản",
+        title: "2. Hệ Thống 12 Thì Trong Tiếng Anh & Phối Hợp Thì",
+        summary: "Bảng công thức chuẩn xác, dấu hiệu nhận biết và quy tắc phối hợp thì khi nối mệnh đề thời gian (when, while, before, after, by the time).",
+        sections: [
+          {
+            heading: "A. Nhóm Thì Hiện Tại (Present Tenses)",
+            formula: "1. Hiện tại đơn: S + V(s/es) / am-is-are\n2. Hiện tại tiếp diễn: S + am/is/are + V-ing\n3. Hiện tại hoàn thành: S + have/has + V3/ed\n4. Hiện tại hoàn thành tiếp diễn: S + have/has + been + V-ing",
+            points: [
+              "<strong>Hiện tại đơn:</strong> Diễn tả sự thật hiển nhiên, thói quen, lịch trình cố định (tàu, xe, hội nghị). Dấu hiệu: <em>always, usually, frequently, regularly, every day, once a month</em>.",
+              "<strong>Hiện tại tiếp diễn:</strong> Hành động đang xảy ra lúc nói hoặc kế hoạch chắc chắn trong tương lai gần. Dấu hiệu: <em>now, right now, at the moment, currently</em>.",
+              "<strong>Hiện tại hoàn thành:</strong> Hành động bắt đầu trong quá khứ kéo dài đến hiện tại, hoặc vừa mới xảy ra, hoặc kinh nghiệm. Dấu hiệu: <em>since + mốc TG, for + khoảng TG, already, yet, just, recently, lately, so far, over the past few years</em>."
+            ],
+            examples: [
+              { en: "Our company <strong>has expanded</strong> its operations to three Asian countries since 2022.", vi: "Công ty chúng tôi đã mở rộng hoạt động sang ba quốc gia châu Á từ năm 2022." },
+              { en: "The annual conference <strong>starts</strong> at 9:00 AM tomorrow.", vi: "Hội nghị thường niên bắt đầu lúc 9 giờ sáng mai (lịch trình cố định)." }
+            ]
+          },
+          {
+            heading: "B. Nhóm Thì Quá Khứ (Past Tenses)",
+            formula: "5. Quá khứ đơn: S + V2/ed / was-were\n6. Quá khứ tiếp diễn: S + was/were + V-ing\n7. Quá khứ hoàn thành: S + had + V3/ed\n8. Quá khứ hoàn thành tiếp diễn: S + had + been + V-ing",
+            points: [
+              "<strong>Quá khứ đơn:</strong> Hành động đã xảy ra và chấm dứt hoàn toàn tại một thời điểm xác định trong quá khứ. Dấu hiệu: <em>yesterday, last week, ago, in 2020, formerly</em>.",
+              "<strong>Quá khứ tiếp diễn:</strong> Hành động đang xảy ra tại một thời điểm cụ thể trong quá khứ, hoặc đang xảy ra (QKTD) thì hành động khác xen vào (QKĐ).",
+              "<strong>Quá khứ hoàn thành:</strong> Hành động xảy ra <strong>trước</strong> một hành động khác hoặc một thời điểm trong quá khứ (thường đi với <em>before, after, by the time</em>)."
+            ],
+            examples: [
+              { en: "By the time the client arrived, we <strong>had already prepared</strong> the contract.", vi: "Vào lúc khách hàng đến, chúng tôi đã chuẩn bị xong hợp đồng rồi." },
+              { en: "While the technician <strong>was repairing</strong> the machine, the power went out.", vi: "Trong khi kỹ thuật viên đang sửa máy thì mất điện." }
+            ]
+          },
+          {
+            heading: "C. Nhóm Thì Tương Lai (Future Tenses)",
+            formula: "9. Tương lai đơn: S + will + V-inf\n10. Tương lai tiếp diễn: S + will + be + V-ing\n11. Tương lai hoàn thành: S + will + have + V3/ed\n12. Tương lai hoàn thành tiếp diễn: S + will + have + been + V-ing",
+            points: [
+              "<strong>Tương lai đơn:</strong> Quyết định tức thời lúc nói, dự đoán không có căn cứ chắc chắn, lời hứa/đề nghị. Dấu hiệu: <em>tomorrow, next month, soon, in the future</em>.",
+              "<strong>Tương lai hoàn thành:</strong> Hành động sẽ hoàn tất <strong>trước</strong> một thời điểm hoặc một hành động khác trong tương lai. Dấu hiệu: <em>by + mốc thời gian tương lai (by next Friday, by the end of this year)</em>."
+            ],
+            examples: [
+              { en: "By the end of next month, the team <strong>will have completed</strong> the project.", vi: "Trước cuối tháng sau, cả nhóm sẽ hoàn thành xong dự án." }
+            ]
+          },
+          {
+            heading: "D. Quy Tắc Vàng Phối Hợp Thì (Sequence of Tenses)",
+            formula: "Mệnh đề trạng ngữ chỉ thời gian (When, As soon as, Until, Before, After, Once) KHÔNG BAO GIỜ chia thì Tương lai (will). Dùng Hiện tại đơn / Hiện tại hoàn thành để thay thế!",
+            points: [
+              "<strong>Tương lai + Liên từ thời gian + Hiện tại đơn / HTHT:</strong> <em>We will notify you as soon as the shipment <strong>arrives</strong>.</em> (Không dùng 'will arrive').",
+              "<strong>Quá khứ hoàn thành + before / by the time + Quá khứ đơn.</strong>",
+              "<strong>Quá khứ đơn + after + Quá khứ hoàn thành.</strong>"
+            ],
+            examples: [
+              { en: "Please review the document before you <strong>sign</strong> it.", vi: "Vui lòng xem lại tài liệu trước khi bạn ký nó." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "By the time the CEO retires next year, he ______ the company for 30 years.", opts: ["will lead", "will have led", "led", "has led"], ans: 1, exp: "Có 'By the time + hiện tại (mang nghĩa tương lai next year)' → chia Tương lai hoàn thành (will have led)." },
+          { q: "We will send you the confirmation email as soon as your payment ______.", opts: ["is processed", "will be processed", "was processed", "had processed"], ans: 0, exp: "Mệnh đề sau 'as soon as' không dùng thì tương lai → dùng Hiện tại đơn bị động (is processed)." },
+          { q: "Over the past decade, online shopping ______ increasingly popular.", opts: ["becomes", "became", "has become", "will become"], ans: 2, exp: "Cụm 'Over the past decade' (trong suốt thập kỷ qua) là dấu hiệu kinh điển của Hiện tại hoàn thành." }
+        ]
+      },
+      {
+        id: "subject-verb-agreement",
+        level: "Cơ bản → Trung cấp",
+        title: "3. Sự Hòa Hợp Chủ Ngữ - Động Từ (S-V Agreement)",
+        summary: "12 quy tắc bắt buộc để không bao giờ chia sai động từ số ít hay số nhiều trước các chủ ngữ phức tạp.",
+        sections: [
+          {
+            heading: "A. Các Trường Hợp Luôn Chia Động Từ Số Ít",
+            formula: "V-ing / To-V (làm chủ ngữ) + V(số ít) | Đại từ bất định (Everyone, Somebody, Anything, Nothing, Each, Every) + V(số ít)",
+            points: [
+              "<strong>Danh động từ / Động từ nguyên mẫu làm chủ ngữ:</strong> <em>Developing new strategies <strong>is</strong> essential for growth.</em>",
+              "<strong>Đại từ bất định:</strong> <em>Everyone, someone, anyone, no one, everything, something, anything, nothing, each, every</em> luôn đi với động từ số ít.",
+              "<strong>Danh từ kết thúc bằng -s nhưng mang nghĩa số ít:</strong> Tên môn học (<em>economics, mathematics, physics</em>), bệnh tật (<em>diabetes</em>), tin tức (<em>news</em>), quốc gia (<em>the United States, the Philippines</em>).",
+              "<strong>Đơn vị đo lường (Tiền bạc, Thời gian, Khoảng cách, Trọng lượng):</strong> <em>Ten thousand dollars <strong>is</strong> a large budget. Five years <strong>is</strong> a long time.</em>"
+            ],
+            examples: [
+              { en: "<strong>Every</strong> employee in the department <strong>is</strong> required to attend the training.", vi: "Mỗi nhân viên trong phòng ban đều được yêu cầu tham dự buổi đào tạo." },
+              { en: "The <strong>news</strong> about the merger <strong>was</strong> announced yesterday.", vi: "Tin tức về vụ sáp nhập đã được thông báo ngày hôm qua." }
+            ]
+          },
+          {
+            heading: "B. Quy Tắc Chủ Ngữ Có Cụm Giới Từ & Liên Từ Đặc Biệt",
+            formula: "N1 + Giới từ (of, in, with, along with, as well as, together with) + N2 → Chia động từ theo N1!\nEither S1 or S2 / Neither S1 nor S2 / Not only S1 but also S2 → Chia động từ theo S2 (chủ ngữ gần nhất)!",
+            points: [
+              "<strong>Bẫy cụm giới từ xen giữa:</strong> <em>The quality (N1) of these imported products (N2) <strong>is</strong> very high.</em> (Động từ chia theo 'The quality' → số ít).",
+              "<strong>Phân biệt The number of vs A number of:</strong><br>• <strong>The number of + N(số nhiều) + V(số ít)</strong> (Con số những...)<br>• <strong>A number of + N(số nhiều) + V(số nhiều)</strong> (Nhiều...)",
+              "<strong>Danh từ tập hợp (staff, committee, team, audience, board):</strong> Nếu chỉ cả tập thể như một đơn vị thống nhất → chia số ít; nếu nhấn mạnh từng cá nhân riêng lẻ → chia số nhiều."
+            ],
+            examples: [
+              { en: "The manager, along with his assistants, <strong>is</strong> attending the conference.", vi: "Người quản lý, cùng với các trợ lý của ông ấy, đang tham dự hội nghị." },
+              { en: "<strong>A number of</strong> candidates <strong>have</strong> applied for the position.", vi: "Nhiều ứng viên đã nộp đơn cho vị trí này." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The director, together with several senior engineers, ______ inspecting the site.", opts: ["are", "is", "were", "have been"], ans: 1, exp: "Cụm 'together with...' là thành phần phụ, động từ chia theo chủ ngữ chính 'The director' (số ít) → is." },
+          { q: "Neither the suppliers nor the manufacturer ______ responsible for the shipping delay.", opts: ["are", "were", "is", "have been"], ans: 2, exp: "Cấu trúc Neither S1 nor S2 chia động từ theo S2 gần nhất là 'the manufacturer' (số ít) → is." },
+          { q: "The number of complaints received this month ______ significantly.", opts: ["has decreased", "have decreased", "are decreasing", "decrease"], ans: 0, exp: "'The number of + N số nhiều' luôn đi với động từ số ít → has decreased." }
+        ]
+      },
+      {
+        id: "passive-voice",
+        level: "Cơ bản → Nâng cao",
+        title: "4. Thể Bị Động (Passive Voice) & Các Dạng Bị Động Đặc Biệt",
+        summary: "Nắm vững công thức biến đổi chủ động sang bị động qua các thì và cấu trúc bị động nâng cao thường gặp trong văn bản thương mại.",
+        sections: [
+          {
+            heading: "A. Công Thức Bị Động Cốt Lõi",
+            formula: "Công thức tổng quát: S + Be (chia theo thì) + V3/ed + (by O)\n• Hiện tại đơn: am/is/are + V3/ed\n• Quá khứ đơn: was/were + V3/ed\n• Tiếp diễn: am/is/are/was/were + being + V3/ed\n• Hoàn thành: have/has/had + been + V3/ed\n• Động từ khuyết thiếu: can/will/must/should + be + V3/ed",
+            points: [
+              "<strong>Mẹo nhận diện nhanh Bị động trong TOEIC:</strong> Sau chỗ trống cần điền động từ mà <strong>KHÔNG có tân ngữ (O)</strong> đứng ngay sau (thường là giới từ <em>in, on, at, by, to, for</em> hoặc dấu chấm câu) → 95% chia <strong>Bị động</strong>!",
+              "<strong>Nội động từ (Intransitive Verbs) KHÔNG BAO GIỜ chia bị động:</strong> <em>occur, happen, arise, appear, disappear, arrive, exist, remain, consist of, belong to</em>."
+            ],
+            examples: [
+              { en: "All orders <strong>are processed</strong> within 24 hours.", vi: "Tất cả đơn hàng được xử lý trong vòng 24 giờ." },
+              { en: "A serious error <strong>occurred</strong> during the update. (Không dùng 'was occurred')", vi: "Một lỗi nghiêm trọng đã xảy ra trong quá trình cập nhật." }
+            ]
+          },
+          {
+            heading: "B. Các Cấu Trúc Bị Động Đặc Biệt (Nâng Cao)",
+            formula: "1. Thể nhờ vả (Causative): Have/Get + something + V3/ed (Nhờ ai làm gì)\n2. Động từ tường thuật: It is said/believed/expected that S + V  ↔  S + is/are said/expected + to V / to have V3/ed\n3. Bị động của V-ing / To-V: being + V3/ed  |  to be + V3/ed",
+            points: [
+              "<strong>Chủ động vs Bị động thể nhờ vả:</strong><br>• Chủ động: <em>have + sb + <strong>V-inf</strong></em>  |  <em>get + sb + <strong>to V</strong></em><br>• Bị động: <em>have / get + sth + <strong>V3/ed</strong></em> (VD: <em>We had the equipment repaired.</em>)",
+              "<strong>Need + V-ing = Need + to be + V3/ed</strong> (Mang nghĩa bị động: cần được làm gì)."
+            ],
+            examples: [
+              { en: "The company will <strong>have the new software installed</strong> tomorrow.", vi: "Công ty sẽ cho cài đặt phần mềm mới vào ngày mai." },
+              { en: "The outdated computers need <strong>replacing</strong> (= need <strong>to be replaced</strong>).", vi: "Những chiếc máy tính lỗi thời cần được thay thế." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The annual financial report must ______ to the board of directors by Friday.", opts: ["submit", "be submitted", "submitting", "have submitted"], ans: 1, exp: "Chủ ngữ là vật (report) + sau chỗ trống là giới từ 'to' (không có tân ngữ) → chia bị động: must be submitted." },
+          { q: "We should get the air conditioning system ______ before summer begins.", opts: ["inspect", "to inspect", "inspected", "inspecting"], ans: 2, exp: "Cấu trúc bị động nhờ vả: get + something (the air conditioning system) + V3/ed (inspected)." },
+          { q: "A technical problem ______ while the data was being transferred.", opts: ["was arisen", "arose", "is arisen", "has been arisen"], ans: 1, exp: "'arise' (phát sinh) là nội động từ nên không bao giờ chia thể bị động → dùng quá khứ đơn chủ động 'arose'." }
+        ]
+      },
+      {
+        id: "conditionals-wish",
+        level: "Trung cấp → Nâng cao",
+        title: "5. Câu Điều Kiện (Conditionals), Đảo Ngữ & Câu Ước",
+        summary: "Toàn bộ 4 loại câu điều kiện chuẩn, câu điều kiện hỗn hợp (Mix), đảo ngữ câu điều kiện và cấu trúc Wish / As if.",
+        sections: [
+          {
+            heading: "A. 4 Loại Câu Điều Kiện Cơ Bản & Hỗn Hợp",
+            formula: "• Loại 0 (Sự thật hiển nhiên): If + S + V(s/es), S + V(s/es)\n• Loại 1 (Có thể xảy ra ở hiện tại/tương lai): If + S + V(s/es), S + will/can/may + V-inf\n• Loại 2 (Không có thật ở hiện tại): If + S + V2/ed (were), S + would/could + V-inf\n• Loại 3 (Không có thật ở quá khứ): If + S + had + V3/ed, S + would/could + have + V3/ed\n• Hỗn hợp (Mix 3-2): If + S + had + V3/ed (quá khứ), S + would + V-inf (hiện tại)",
+            points: [
+              "<strong>Lưu ý Loại 2:</strong> Động từ <em>to be</em> luôn dùng <strong>were</strong> cho tất cả các ngôi trong văn phong chuẩn (<em>If I were you...</em>).",
+              "<strong>Từ đồng nghĩa với If:</strong> <em>Unless = If... not</em> (Trừ khi), <em>Provided (that) / Providing (that) / As long as / On condition that</em> (Miễn là), <em>In case</em> (Phòng khi)."
+            ],
+            examples: [
+              { en: "If you <strong>register</strong> before May 10, you <strong>will receive</strong> a 20% discount.", vi: "Nếu bạn đăng ký trước ngày 10/5, bạn sẽ nhận được giảm giá 20%." },
+              { en: "If we <strong>had invested</strong> in that technology earlier, we <strong>would be</strong> market leaders now.", vi: "Nếu chúng ta đầu tư vào công nghệ đó sớm hơn (quá khứ), thì bây giờ chúng ta đã là người dẫn đầu thị trường rồi (hiện tại)." }
+            ]
+          },
+          {
+            heading: "B. Đảo Ngữ Câu Điều Kiện (Cực Kỳ Quan Trọng Trong TOEIC)",
+            formula: "• Đảo ngữ Loại 1: Should + S + (not) + V-inf, S + will/can + V-inf\n• Đảo ngữ Loại 2: Were + S + (to V / Adj / N), S + would/could + V-inf\n• Đảo ngữ Loại 3: Had + S + (not) + V3/ed, S + would/could + have + V3/ed",
+            points: [
+              "Khi đảo ngữ câu điều kiện, ta bỏ <strong>If</strong> và đưa <strong>Should / Were / Had</strong> lên đầu câu. Lưu ý: Trong đảo ngữ phủ định, <strong>not</strong> luôn đứng sau chủ ngữ (<em>Had we not checked...</em>, không dùng <em>Hadn't we</em>)."
+            ],
+            examples: [
+              { en: "<strong>Should</strong> you have any questions, please do not hesitate to contact us.", vi: "Nếu bạn có bất kỳ câu hỏi nào, xin đừng ngần ngại liên hệ với chúng tôi." },
+              { en: "<strong>Had</strong> the team followed the procedure, the accident would not have happened.", vi: "Nếu nhóm tuân thủ quy trình, tai nạn đã không xảy ra." }
+            ]
+          },
+          {
+            heading: "C. Cấu Trúc Câu Ước (Wish / If only) & Giả Định (As if)",
+            formula: "• Ước ở tương lai: S + wish(es) + S + would/could + V-inf\n• Ước ở hiện tại: S + wish(es) + S + V2/ed (were)\n• Ước ở quá khứ: S + wish(es) + S + had + V3/ed",
+            points: [
+              "Cấu trúc <strong>As if / As though</strong> (như thể là) cũng lùi một thì tương tự câu ước nếu mệnh đề sau là giả định không có thật."
+            ],
+            examples: [
+              { en: "I wish our office <strong>were</strong> closer to the train station.", vi: "Tôi ước gì văn phòng của chúng ta gần ga tàu hơn." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "______ you require further assistance, please call our customer service desk.", opts: ["Should", "Were", "Had", "Unless"], ans: 0, exp: "Đảo ngữ câu điều kiện loại 1: Should + S (you) + V-inf (require)..." },
+          { q: "If the shipment ______ on time yesterday, we could have fulfilled the client's order.", opts: ["arrived", "had arrived", "would arrive", "arrives"], ans: 1, exp: "Mệnh đề chính dùng 'could have fulfilled' → Câu điều kiện loại 3 → mệnh đề If chia Quá khứ hoàn thành (had arrived)." },
+          { q: "We cannot process your refund ______ you provide the original receipt.", opts: ["provided that", "as long as", "unless", "in case"], ans: 2, exp: "Nghĩa câu: Chúng tôi không thể hoàn tiền TRỪ KHI (unless) bạn cung cấp hóa đơn gốc." }
+        ]
+      },
+      {
+        id: "relative-clauses",
+        level: "Trung cấp → Nâng cao",
+        title: "6. Mệnh Đề Quan Hệ (Relative Clauses) & Rút Gọn",
+        summary: "Cách dùng Who, Whom, Which, That, Whose, Where, When và kỹ thuật rút gọn mệnh đề quan hệ giúp câu văn súc tích.",
+        sections: [
+          {
+            heading: "A. Đại Từ & Trạng Từ Quan Hệ",
+            formula: "• Who: Thay thế cho Người (làm S hoặc O)\n• Whom: Thay thế cho Người (chỉ làm O, có thể đứng sau giới từ: to whom, with whom)\n• Which: Thay thế cho Vật/Sự việc (làm S hoặc O)\n• That: Thay thế cho cả Người và Vật (KHÔNG dùng sau dấu phẩy và KHÔNG dùng sau giới từ)\n• Whose + N: Chỉ sự sở hữu (của người hoặc vật)\n• Where (= in/on/at which): Nơi chốn | When (= in/on/at which): Thời gian | Why (= for which): Lý do",
+            points: [
+              "<strong>Mẹo chọn nhanh trong trắc nghiệm:</strong><br>• N(người) + ____ + V → chọn <strong>who / that</strong>.<br>• N(người) + ____ + S + V → chọn <strong>whom / who / that</strong>.<br>• N + ____ + N + V → chọn <strong>whose</strong> (VD: <em>a company <strong>whose</strong> reputation is strong</em>).",
+              "<strong>Which thay thế cho cả mệnh đề phía trước:</strong> Đứng sau dấu phẩy, động từ theo sau chia số ít (<em>The project was delayed, <strong>which</strong> disappointed the client.</em>)."
+            ],
+            examples: [
+              { en: "The candidate <strong>whom</strong> we interviewed yesterday has extensive experience.", vi: "Ứng viên mà chúng tôi phỏng vấn hôm qua có kinh nghiệm sâu rộng." },
+              { en: "We are looking for a supplier <strong>whose</strong> products are durable and affordable.", vi: "Chúng tôi đang tìm một nhà cung cấp có sản phẩm bền và giá phải chăng." }
+            ]
+          },
+          {
+            heading: "B. Rút Gọn Mệnh Đề Quan Hệ (Reduced Relative Clauses)",
+            formula: "1. Nghĩa Chủ động → Bỏ đại từ quan hệ, đưa động từ về dạng V-ing\n2. Nghĩa Bị động → Bỏ đại từ quan hệ và to-be, giữ lại V3/ed\n3. Sau số thứ tự (the first, the second, the last, the only, so sánh nhất) → Dùng To-V (chủ động) hoặc To be V3/ed (bị động)",
+            points: [
+              "Đây là điểm ngữ pháp xuất hiện liên tục trong mọi đề thi TOEIC. Hãy kiểm tra xem câu đã có động từ chính chưa; nếu đã có động từ chính thì động từ trong mệnh đề phụ phải rút gọn về <strong>V-ing</strong> hoặc <strong>V3/ed</strong>."
+            ],
+            examples: [
+              { en: "Employees <strong>attending</strong> (= who attend) the seminar must register beforehand.", vi: "Nhân viên tham dự hội thảo phải đăng ký trước." },
+              { en: "The items <strong>listed</strong> (= which are listed) on the invoice have been delivered.", vi: "Các món hàng được liệt kê trên hóa đơn đã được giao." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The firm is seeking a financial advisor ______ expertise can help reduce operational costs.", opts: ["who", "whom", "whose", "which"], ans: 2, exp: "Sau chỗ trống là danh từ 'expertise' thuộc sở hữu của 'financial advisor' → dùng whose." },
+          { q: "All proposals ______ after the deadline will not be considered.", opts: ["submit", "submitting", "submitted", "are submitted"], ans: 2, exp: "Câu đã có động từ chính 'will not be considered'. Mệnh đề quan hệ mang nghĩa bị động (được nộp) rút gọn thành V3/ed → submitted." },
+          { q: "The conference room in ______ the meeting will be held is on the third floor.", opts: ["where", "which", "that", "whose"], ans: 1, exp: "Sau giới từ 'in' chỉ vật/nơi chốn ta dùng 'which' (in which = where). Không dùng 'that' hay 'where' sau giới từ." }
+        ]
+      },
+      {
+        id: "comparisons",
+        level: "Cơ bản → Trung cấp",
+        title: "7. Các Cấp Độ So Sánh (Comparisons) & Nhấn Mạnh",
+        summary: "So sánh bằng, so sánh hơn, so sánh nhất, so sánh kép (Càng... càng...) và các từ nhấn mạnh so sánh.",
+        sections: [
+          {
+            heading: "A. Công Thức 3 Cấp Độ So Sánh Chuẩn",
+            formula: "• So sánh bằng: S1 + V + as + Adj/Adv + as + S2 (Phủ định: not so/as ... as)\n• So sánh hơn: Tính từ/Trạng từ ngắn + -er + than  |  more/less + Adj/Adv dài + than\n• So sánh nhất: the + Adj/Adv ngắn + -est  |  the most/least + Adj/Adv dài",
+            points: [
+              "<strong>Từ nhấn mạnh trước So sánh hơn:</strong> <em>much, far, a lot, significantly, considerably, slightly, a bit</em> + So sánh hơn (VD: <em><strong>much more</strong> productive</em> - Tuyệt đối KHÔNG dùng <em>very</em> trước so sánh hơn!).",
+              "<strong>Bất quy tắc cần nhớ:</strong> good/well → <em>better → the best</em>; bad/badly → <em>worse → the worst</em>; many/much → <em>more → the most</em>; little → <em>less → the least</em>; far → <em>farther/further → the farthest/furthest</em>."
+            ],
+            examples: [
+              { en: "The new model is <strong>significantly more efficient</strong> than the previous version.", vi: "Mẫu mới hiệu quả hơn đáng kể so với phiên bản trước." }
+            ]
+          },
+          {
+            heading: "B. So Sánh Kép (Double Comparatives)",
+            formula: "Càng... càng...: The + so sánh hơn + S1 + V1, the + so sánh hơn + S2 + V2",
+            points: [
+              "Cả hai vế đều bắt đầu bằng <strong>The + hình thức so sánh hơn</strong>."
+            ],
+            examples: [
+              { en: "<strong>The earlier</strong> you book the flight, <strong>the cheaper</strong> the ticket will be.", vi: "Bạn đặt chuyến bay càng sớm, giá vé sẽ càng rẻ." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "Our new manufacturing process is ______ faster than the old one.", opts: ["very", "much", "more", "so"], ans: 1, exp: "Trước tính từ so sánh hơn 'faster', ta dùng 'much / far / a lot' để nhấn mạnh mức độ." },
+          { q: "The ______ the market research is, the better our business strategy will be.", opts: ["thorough", "more thorough", "most thorough", "thoroughly"], ans: 1, exp: "Cấu trúc so sánh kép: The + so sánh hơn (more thorough)..., the better..." }
+        ]
+      },
+      {
+        id: "gerunds-infinitives",
+        level: "Trung cấp",
+        title: "8. Danh Động Từ (V-ing) & Động Từ Nguyên Mẫu (To-V)",
+        summary: "Danh sách các động từ theo sau bởi V-ing, To-V, cấu trúc cụm từ đi với giới từ 'to + V-ing' hay gây nhầm lẫn.",
+        sections: [
+          {
+            heading: "A. Động Từ Theo Sau Bởi V-ing vs To-V",
+            formula: "• V + V-ing: avoid, consider, enjoy, finish, mind, postpone/delay, recommend, suggest, deny, admit, involve, practice, risk, keep\n• V + To-V: agree, decide, expect, hope, intend, manage, offer, plan, prepare, promise, refuse, fail, afford, attempt, tend",
+            points: [
+              "<strong>Cấu trúc 'to' là GIỚI TỪ nên theo sau bởi V-ing / N (Rất hay thi!):</strong><br>• <em>look forward to + V-ing</em> (mong đợi)<br>• <em>be committed / dedicated / devoted to + V-ing</em> (cống hiến, cam kết)<br>• <em>be accustomed / used to + V-ing</em> (quen với)<br>• <em>object to + V-ing</em> (phản đối)<br>• <em>contribute to + V-ing</em> (đóng góp vào)",
+              "<strong>Động từ đi với cả To-V và V-ing nhưng KHÁC NGHĨA:</strong><br>• <em>remember / forget + To-V</em> (nhớ/quên phải làm việc gì - chưa làm) vs <em>+ V-ing</em> (nhớ/quên đã làm việc gì rồi).<br>• <em>stop + To-V</em> (dừng lại để làm việc khác) vs <em>+ V-ing</em> (dừng hẳn việc đang làm).<br>• <em>try + To-V</em> (cố gắng làm gì) vs <em>+ V-ing</em> (thử làm gì)."
+            ],
+            examples: [
+              { en: "We <strong>look forward to hearing</strong> from you soon.", vi: "Chúng tôi mong sớm nhận được hồi âm từ bạn." },
+              { en: "To <strong>avoid making</strong> errors, please double-check all figures.", vi: "Để tránh mắc lỗi, vui lòng kiểm tra kỹ tất cả các số liệu." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "Our entire team is committed to ______ the highest quality service to our clients.", opts: ["provide", "providing", "provided", "provision"], ans: 1, exp: "Cụm 'be committed to + V-ing' (cam kết làm gì) → providing." },
+          { q: "The committee decided ______ the annual meeting until next month.", opts: ["postpone", "postponing", "to postpone", "postponed"], ans: 2, exp: "Sau động từ 'decide' dùng nguyên mẫu có to (decide to V) → to postpone." }
+        ]
+      },
+      {
+        id: "reported-speech",
+        level: "Trung cấp",
+        title: "9. Câu Gián Tiếp (Reported Speech)",
+        summary: "Quy tắc lùi thì, chuyển đổi đại từ, trạng từ chỉ thời gian/nơi chốn trong câu trần thuật, câu hỏi và câu mệnh lệnh.",
+        sections: [
+          {
+            heading: "A. Quy Tắc Lùi Thì & Đổi Trạng Từ",
+            formula: "Hiện tại đơn → Quá khứ đơn | Hiện tại tiếp diễn → Quá khứ tiếp diễn | Hiện tại hoàn thành → Quá khứ hoàn thành | Quá khứ đơn → Quá khứ hoàn thành | Will → Would | Can → Could | Must → Had to",
+            points: [
+              "<strong>Đổi trạng từ thời gian & nơi chốn:</strong> now → <em>then</em>; today → <em>that day</em>; yesterday → <em>the day before / the previous day</em>; tomorrow → <em>the next day / the following day</em>; here → <em>there</em>; this → <em>that</em>.",
+              "<strong>Câu hỏi gián tiếp:</strong> KHÔNG đảo ngữ trong mệnh đề gián tiếp (<em>He asked me where the office <strong>was</strong></em> - Không dùng <em>where was the office</em>). Với câu hỏi Yes/No thì dùng <strong>if / whether</strong>.",
+              "<strong>Câu mệnh lệnh / yêu cầu gián tiếp:</strong> <em>tell / ask / advise / remind / instruct + O + <strong>(not) to V</strong></em>."
+            ],
+            examples: [
+              { en: "The supervisor reminded us <strong>to turn off</strong> all machines before leaving.", vi: "Người giám sát nhắc nhở chúng tôi tắt tất cả máy móc trước khi ra về." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The client asked when the updated contract ______ ready for signature.", opts: ["will be", "would be", "is", "has been"], ans: 1, exp: "Động từ tường thuật 'asked' ở quá khứ nên 'will be' lùi thì thành 'would be'." }
+        ]
+      },
+      {
+        id: "inversion-cleft",
+        level: "Nâng cao",
+        title: "10. Đảo Ngữ (Inversion) & Cấu Trúc Nhấn Mạnh",
+        summary: "Chinh phục ngữ pháp nâng cao band 800-990 TOEIC & IELTS: Đảo ngữ với trạng từ phủ định, Only, So/Such và Câu chẻ.",
+        sections: [
+          {
+            heading: "A. Đảo Ngữ Với Trạng Từ Phủ Định & Giới Hạn",
+            formula: "Trạng từ phủ định + Trợ động từ (do/does/did/have/had/will/can/be) + S + V(chính)",
+            points: [
+              "<strong>Các trạng từ phủ định đứng đầu câu gây đảo ngữ:</strong> <em>Never, Seldom, Rarely, Hardly ever, Little, Nowhere, At no time, Under no circumstances, In no way</em>.",
+              "<strong>Cấu trúc 'Vừa mới... thì...':</strong><br>• <em>Hardly / Scarcely + had + S + V3/ed + <strong>when</strong> + S + V2/ed</em><br>• <em>No sooner + had + S + V3/ed + <strong>than</strong> + S + V2/ed</em>",
+              "<strong>Not only... but also...:</strong> <em>Not only + Trợ động từ + S + V, but S + also + V.</em>",
+              "<strong>Đảo ngữ với ONLY (Chỉ đảo ngữ ở mệnh đề chính phía sau):</strong> <em>Only after / Only when / Only if / Only by + Mệnh đề/V-ing + <strong>Trợ động từ + S + V</strong></em>."
+            ],
+            examples: [
+              { en: "<strong>Under no circumstances should</strong> confidential data be shared with outside parties.", vi: "Trong bất kỳ hoàn cảnh nào dữ liệu bảo mật cũng không được chia sẻ với các bên bên ngoài." },
+              { en: "<strong>Not only did</strong> the company increase sales, <strong>but</strong> it also reduced expenses.", vi: "Công ty không chỉ tăng doanh số mà còn giảm được chi phí." }
+            ]
+          },
+          {
+            heading: "B. Câu Chẻ Nhấn Mạnh (Cleft Sentences)",
+            formula: "It is / was + Thành phần cần nhấn mạnh (S / O / Adv) + that / who + Phần còn lại của câu",
+            points: [
+              "Dùng để nhấn mạnh chính xác đối tượng, thời gian hoặc địa điểm thực hiện hành động."
+            ],
+            examples: [
+              { en: "<strong>It was</strong> the marketing director <strong>who</strong> came up with the brilliant campaign.", vi: "Chính giám đốc tiếp thị là người đã nghĩ ra chiến dịch xuất sắc đó." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "Seldom ______ such a high level of dedication from a newly hired employee.", opts: ["we have seen", "have we seen", "we saw", "did we saw"], ans: 1, exp: "Trạng từ phủ định 'Seldom' đứng đầu câu nên phải đảo trợ động từ 'have' lên trước chủ ngữ 'we' → have we seen." },
+          { q: "Only after the inspection was completed ______ allowed to resume operations.", opts: ["the factory was", "was the factory", "the factory has", "did the factory"], ans: 1, exp: "'Only after + mệnh đề' đứng đầu câu gây đảo ngữ ở mệnh đề chính phía sau → was the factory." }
+        ]
+      },
+      {
+        id: "subjunctive-mood",
+        level: "Nâng cao",
+        title: "11. Thức Giả Định (Subjunctive Mood)",
+        summary: "Cấu trúc giả định bắt buộc dùng động từ nguyên mẫu không 'to' (V-inf) bất kể chủ ngữ số ít hay thì quá khứ.",
+        sections: [
+          {
+            heading: "A. Công Thức Thức Giả Định Chuẩn",
+            formula: "• Động từ giả định: suggest, recommend, insist, demand, require, request, propose, urge + that + S + (should) + V-inf (nguyên mẫu)\n• Tính từ giả định: It is essential / important / necessary / vital / crucial / mandatory / urgent + that + S + (should) + V-inf",
+            points: [
+              "<strong>Điểm bẫy cực hay thi:</strong> Dù chủ ngữ phía sau là ngôi thứ 3 số ít (<em>he, she, the manager, every employee</em>) và động từ chính ở quá khứ, động từ sau <em>that</em> vẫn giữ nguyên mẫu <strong>V-inf</strong> (hoặc <strong>be + V3/ed</strong> nếu bị động, <strong>not + V-inf</strong> nếu phủ định)."
+            ],
+            examples: [
+              { en: "The policy requires that every visitor <strong>wear</strong> (không thêm 's') a security badge.", vi: "Chính sách yêu cầu mọi khách đến thăm phải đeo thẻ an ninh." },
+              { en: "It is essential that the report <strong>be submitted</strong> before noon.", vi: "Điều thiết yếu là báo cáo phải được nộp trước buổi trưa." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "The board of directors recommended that the branch office ______ relocated downtown.", opts: ["is", "was", "be", "being"], ans: 2, exp: "Thức giả định sau 'recommended that': S + (should) + V-inf. Ở thể bị động là 'be relocated'." }
+        ]
+      },
+      {
+        id: "conjunctions-clauses",
+        level: "Cơ bản → Nâng cao",
+        title: "12. Liên Từ & Mệnh Đề Trạng Ngữ (Conjunctions)",
+        summary: "Phân biệt rạch ròi Liên từ (+ Mệnh đề S + V) và Giới từ (+ Cụm danh từ / V-ing) qua 4 nhóm nghĩa chính.",
+        sections: [
+          {
+            heading: "A. Bảng Phân Biệt Liên Từ vs Giới Từ",
+            formula: "• Liên từ (Conjunctions) + S + V\n• Giới từ (Prepositions) + Noun Phrase / V-ing\n• Trạng từ liên kết (Conjunctive Adverbs): Đứng giữa 2 câu (sau dấu chấm hoặc chấm phẩy, trước dấu phẩy)",
+            points: [
+              "<strong>1. Nhóm Nhượng bộ (Mặc dù):</strong><br>• + S + V: <em>Although, Though, Even though, While, Whereas</em><br>• + N/V-ing: <em>Despite, In spite of</em><br>• Trạng từ liên kết: <em>However, Nevertheless, Nonetheless, On the other hand</em>",
+              "<strong>2. Nhóm Nguyên nhân (Bởi vì):</strong><br>• + S + V: <em>Because, Since, As, Now that</em><br>• + N/V-ing: <em>Because of, Due to, Owing to, On account of, As a result of</em>",
+              "<strong>3. Nhóm Kết quả (Vì vậy / Quá... đến nỗi mà):</strong><br>• Trạng từ liên kết: <em>Therefore, Consequently, As a result, Thus, Hence</em><br>• Cấu trúc: <em>so + Adj/Adv + that + S + V</em>  |  <em>such + (a/an) + Adj + N + that + S + V</em>",
+              "<strong>4. Nhóm Mục đích (Để mà):</strong><br>• + S + V: <em>so that, in order that</em><br>• + V-inf: <em>to, in order to, so as to</em>"
+            ],
+            examples: [
+              { en: "<strong>Despite</strong> the heavy rain, all attendees arrived on time.", vi: "Mặc dù trời mưa lớn, tất cả người tham dự đều đến đúng giờ." },
+              { en: "The flight was delayed <strong>due to</strong> inclement weather.", vi: "Chuyến bay bị hoãn do thời tiết xấu." }
+            ]
+          }
+        ],
+        quiz: [
+          { q: "______ the high cost of raw materials, the company managed to maintain its profit margin.", opts: ["Although", "Despite", "Because", "However"], ans: 1, exp: "Sau chỗ trống là cụm danh từ 'the high cost of raw materials' (không có động từ chia thì) và mang nghĩa tương phản → dùng giới từ 'Despite'." },
+          { q: "Sales increased by 15% in the third quarter; ______, we plan to hire additional staff.", opts: ["because", "despite", "therefore", "although"], ans: 2, exp: "Đứng sau dấu chấm phẩy và trước dấu phẩy để nối 2 mệnh đề chỉ kết quả → dùng trạng từ liên kết 'therefore'." }
+        ]
+      }
+    ];
+
+    /**
+     * ============================================================================
+     * 3. APPLICATION STATE & LOCALSTORAGE PERSISTENCE
+     * ============================================================================
+     */
+    const STORAGE_KEY = 'toeic_master_600_progress_v1';
+
+    const defaultState = {
+      masteredIds: [],   // array of vocab IDs
+      starredIds: [],    // array of vocab IDs
+      wrongIds: [],      // array of vocab IDs answered wrong in quiz
+      quizzesCompleted: 0,
+      darkMode: false
+    };
+
+    let appState = { ...defaultState };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          appState = { ...defaultState, ...parsed };
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          appState.darkMode = true;
+        }
+      } catch (e) {
+        console.error('Failed to load state:', e);
+      }
+      applyTheme();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+      updateGlobalCounters();
+    }
+
+    function applyTheme() {
+      const htmlEl = document.documentElement;
+      if (appState.darkMode) {
+        htmlEl.classList.add('dark');
+      } else {
+        htmlEl.classList.remove('dark');
+      }
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        info: 'bg-slate-900 dark:bg-slate-800 text-white border-slate-700',
+        success: 'bg-emerald-600 text-white border-emerald-500',
+        warning: 'bg-amber-600 text-white border-amber-500'
+      };
+      toast.className = `pointer-events-auto px-4 py-2.5 rounded-xl shadow-lg border text-xs sm:text-sm font-medium transition-all duration-300 transform translate-y-2 opacity-0 ${colors[type] || colors.info}`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 2400);
+    }
+
+    /**
+     * ============================================================================
+     * 4. SPEECH SYNTHESIS (NATIVE ENGLISH PRONUNCIATION)
+     * ============================================================================
+     */
+    function speakWord(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Trình duyệt không hỗ trợ phát âm tự động.', 'warning');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const accent = document.getElementById('voice-accent').value || 'en-US';
+      utterance.lang = accent;
+      utterance.rate = 0.92;
+      const voices = window.speechSynthesis.getVoices();
+      const matchedVoice = voices.find(v => v.lang.includes(accent)) || voices.find(v => v.lang.startsWith('en'));
+      if (matchedVoice) utterance.voice = matchedVoice;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    /**
+     * ============================================================================
+     * 5. VOCABULARY & FLASHCARD MODULE
+     * ============================================================================
+     */
+    let filteredVocab = [...VOCAB_DATA];
+    let currentViewMode = 'list'; // 'list' | 'flashcard'
+    let fcIndex = 0;
+    let fcFlipped = false;
+
+    function initLessonDropdowns() {
+      const lessonFilter = document.getElementById('vocab-lesson-filter');
+      const quizOptgroup = document.getElementById('quiz-lesson-optgroup');
+
+      LESSON_TITLES.forEach((title, idx) => {
+        const lessonNum = idx + 1;
+        const opt1 = document.createElement('option');
+        opt1.value = String(lessonNum);
+        opt1.textContent = title;
+        lessonFilter.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = `lesson-${lessonNum}`;
+        opt2.textContent = title;
+        quizOptgroup.appendChild(opt2);
+      });
+    }
+
+    function applyVocabFilters() {
+      const query = document.getElementById('vocab-search').value.trim().toLowerCase();
+      const lessonVal = document.getElementById('vocab-lesson-filter').value;
+      const statusVal = document.getElementById('vocab-status-filter').value;
+
+      filteredVocab = VOCAB_DATA.filter(item => {
+        if (lessonVal !== 'all' && String(item.lessonId) !== lessonVal) return false;
+
+        const isMastered = appState.masteredIds.includes(item.id);
+        const isStarred = appState.starredIds.includes(item.id);
+        const isWrong = appState.wrongIds.includes(item.id);
+
+        if (statusVal === 'mastered' && !isMastered) return false;
+        if (statusVal === 'unmastered' && isMastered) return false;
+        if (statusVal === 'starred' && !isStarred) return false;
+        if (statusVal === 'wrong' && !isWrong) return false;
+
+        if (query) {
+          const matchEn = item.word.toLowerCase().includes(query);
+          const matchVi = item.meaning.toLowerCase().includes(query);
+          const matchId = String(item.id) === query;
+          return matchEn || matchVi || matchId;
+        }
+        return true;
+      });
+
+      document.getElementById('vocab-result-count').textContent = `Đang hiển thị ${filteredVocab.length} / 600 từ vựng`;
+      const bulkBtn = document.getElementById('mark-lesson-mastered-btn');
+      if (filteredVocab.length > 0 && filteredVocab.length <= 60) {
+        bulkBtn.classList.remove('hidden');
+      } else {
+        bulkBtn.classList.add('hidden');
+      }
+
+      fcIndex = 0;
+      fcFlipped = false;
+      renderVocabView();
+    }
+
+    function renderVocabView() {
+      if (currentViewMode === 'list') {
+        document.getElementById('vocab-list-container').classList.remove('hidden');
+        document.getElementById('vocab-flashcard-container').classList.add('hidden');
+        renderVocabList();
+      } else {
+        document.getElementById('vocab-list-container').classList.add('hidden');
+        document.getElementById('vocab-flashcard-container').classList.remove('hidden');
+        renderFlashcard();
+      }
+    }
+
+    function renderVocabList() {
+      const container = document.getElementById('vocab-list-container');
+      if (filteredVocab.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <p class="text-slate-500 text-sm">Không tìm thấy từ vựng nào phù hợp với bộ lọc hiện tại.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredVocab.map(item => {
+        const isMastered = appState.masteredIds.includes(item.id);
+        const isStarred = appState.starredIds.includes(item.id);
+        const isWrong = appState.wrongIds.includes(item.id);
+
+        return `
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border ${isMastered ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/10' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 truncate max-w-[180px]" title="${item.lessonTitle}">
+                  #${item.id} • Bài ${item.lessonId}
+                </span>
+                <div class="flex items-center gap-1">
+                  ${isWrong ? '<span class="text-xs px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400" title="Hay làm sai">⚠</span>' : ''}
+                  <button onclick="toggleStar(${item.id})" class="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition text-base leading-none ${isStarred ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}" title="Đánh dấu sao">
+                    ★
+                  </button>
+                  <button onclick="speakWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-lg bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 transition text-xs font-bold" title="Nghe phát âm">
+                    🔊
+                  </button>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+                ${item.word}
+              </h3>
+              <p class="text-sm font-semibold text-brand-600 dark:text-brand-400">
+                ${item.meaning}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 truncate max-w-[160px]">${item.lessonTitle.split(':')[1] || ''}</span>
+              <button onclick="toggleMaster(${item.id})" class="px-3 py-1 rounded-xl text-xs font-semibold transition ${isMastered ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-600'}">
+                ${isMastered ? '✓ Đã thuộc' : 'Đánh dấu thuộc'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderFlashcard() {
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.toggle('rotate-y-180', fcFlipped);
+
+      if (filteredVocab.length === 0) {
+        document.getElementById('fc-counter').textContent = '0 / 0';
+        document.getElementById('fc-word-text').textContent = 'Không có thẻ';
+        document.getElementById('fc-meaning-text').textContent = 'Vui lòng đổi bộ lọc';
+        return;
+      }
+
+      if (fcIndex >= filteredVocab.length) fcIndex = 0;
+      if (fcIndex < 0) fcIndex = filteredVocab.length - 1;
+
+      const item = filteredVocab[fcIndex];
+      const isMastered = appState.masteredIds.includes(item.id);
+      const isStarred = appState.starredIds.includes(item.id);
+
+      document.getElementById('fc-counter').textContent = `Thẻ ${fcIndex + 1} / ${filteredVocab.length}`;
+      document.getElementById('fc-badge-lesson').textContent = item.lessonTitle;
+      document.getElementById('fc-word-index').textContent = `#${item.id}`;
+      document.getElementById('fc-word-text').textContent = item.word;
+      document.getElementById('fc-word-en-small').textContent = item.word;
+      document.getElementById('fc-meaning-text').textContent = item.meaning;
+
+      const distractors = item.options.filter((_, idx) => idx !== item.correctIdx);
+      document.getElementById('fc-distractors').textContent = `Đáp án nhiễu trong đề: ${distractors.join(' • ')}`;
+
+      const starBtn = document.getElementById('fc-star-btn');
+      starBtn.className = `p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-xl transition ${isStarred ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'}`;
+
+      const pill = document.getElementById('fc-mastered-pill');
+      pill.textContent = isMastered ? '✓ Đã thuộc từ này' : 'Chưa thuộc';
+      pill.className = `px-3 py-1 rounded-full text-xs font-semibold ${isMastered ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`;
+
+      const toggleBtn = document.getElementById('fc-toggle-master-btn');
+      toggleBtn.textContent = isMastered ? '✓ Đã thuộc (Nhấn để bỏ)' : '✓ Đánh dấu Đã thuộc';
+
+      if (document.getElementById('fc-autoplay').checked && !fcFlipped) {
+        speakWord(item.word);
+      }
+    }
+
+    window.toggleStar = function(id) {
+      const idx = appState.starredIds.indexOf(id);
+      if (idx > -1) {
+        appState.starredIds.splice(idx, 1);
+      } else {
+        appState.starredIds.push(id);
+        showToast('Đã thêm vào danh sách đánh dấu sao ★', 'info');
+      }
+      saveState();
+      renderVocabView();
+    };
+
+    window.toggleMaster = function(id) {
+      const idx = appState.masteredIds.indexOf(id);
+      if (idx > -1) {
+        appState.masteredIds.splice(idx, 1);
+      } else {
+        appState.masteredIds.push(id);
+        // Remove from wrong list if mastered
+        const wIdx = appState.wrongIds.indexOf(id);
+        if (wIdx > -1) appState.wrongIds.splice(wIdx, 1);
+        showToast('Chúc mừng! Đã đánh dấu thuộc từ vựng ✓', 'success');
+      }
+      saveState();
+      renderVocabView();
+    };
+
+    /**
+     * ============================================================================
+     * 6. QUIZ ENGINE (USING EXACT 600 TOEIC QUESTIONS & OPTIONS)
+     * ============================================================================
+     */
+    let quizQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let quizWrongItems = [];
+    let quizAnswered = false;
+    let quizTimerInterval = null;
+    let quizSeconds = 0;
+
+    function startQuiz(customPool = null) {
+      let pool = [];
+      if (customPool) {
+        pool = [...customPool];
+      } else {
+        const scope = document.getElementById('quiz-scope').value;
+        const countVal = document.getElementById('quiz-count').value;
+
+        if (scope === 'random') {
+          pool = [...VOCAB_DATA];
+        } else if (scope === 'starred') {
+          pool = VOCAB_DATA.filter(v => appState.starredIds.includes(v.id));
+        } else if (scope === 'wrong') {
+          pool = VOCAB_DATA.filter(v => appState.wrongIds.includes(v.id));
+        } else if (scope === 'unmastered') {
+          pool = VOCAB_DATA.filter(v => !appState.masteredIds.includes(v.id));
+        } else if (scope.startsWith('lesson-')) {
+          const lId = Number(scope.replace('lesson-', ''));
+          pool = VOCAB_DATA.filter(v => v.lessonId === lId);
+        }
+
+        if (pool.length === 0) {
+          showToast('Không có từ vựng nào trong phạm vi bạn đã chọn!', 'warning');
+          return;
+        }
+
+        // Shuffle pool unless specific lesson
+        if (!scope.startsWith('lesson-')) {
+          pool.sort(() => Math.random() - 0.5);
+        }
+
+        if (countVal !== 'all') {
+          const limit = Number(countVal);
+          pool = pool.slice(0, limit);
+        }
+      }
+
+      const shuffleOpts = document.getElementById('quiz-shuffle-options').checked;
+
+      quizQuestions = pool.map(item => {
+        const mappedOptions = item.options.map((text, idx) => ({
+          text,
+          isCorrect: idx === item.correctIdx
+        }));
+        if (shuffleOpts) {
+          mappedOptions.sort(() => Math.random() - 0.5);
+        }
+        return {
+          ...item,
+          shuffledOptions: mappedOptions
+        };
+      });
+
+      currentQIdx = 0;
+      quizScore = 0;
+      quizWrongItems = [];
+      quizSeconds = 0;
+
+      document.getElementById('quiz-setup-panel').classList.add('hidden');
+      document.getElementById('quiz-result-panel').classList.add('hidden');
+      document.getElementById('quiz-active-panel').classList.remove('hidden');
+
+      startQuizTimer();
+      renderQuizQuestion();
+    }
+
+    function startQuizTimer() {
+      clearInterval(quizTimerInterval);
+      const timerEl = document.getElementById('quiz-timer');
+      timerEl.textContent = '00:00';
+      quizTimerInterval = setInterval(() => {
+        quizSeconds++;
+        const mins = String(Math.floor(quizSeconds / 60)).padStart(2, '0');
+        const secs = String(quizSeconds % 60).padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function renderQuizQuestion() {
+      quizAnswered = false;
+      const q = quizQuestions[currentQIdx];
+      const total = quizQuestions.length;
+
+      document.getElementById('quiz-progress-text').textContent = `Câu ${currentQIdx + 1} / ${total}`;
+      document.getElementById('quiz-score-live').textContent = `Đúng: ${quizScore}`;
+      document.getElementById('quiz-progress-bar').style.width = `${((currentQIdx + 1) / total) * 100}%`;
+
+      document.getElementById('quiz-q-meta').textContent = `Câu gốc #${q.id} • ${q.lessonTitle}`;
+      document.getElementById('quiz-q-word').textContent = q.word;
+      document.getElementById('quiz-next-area').classList.add('hidden');
+
+      const labels = ['A', 'B', 'C', 'D'];
+      const grid = document.getElementById('quiz-options-grid');
+      grid.innerHTML = q.shuffledOptions.map((opt, idx) => `
+        <button onclick="handleQuizOptionClick(${idx})" class="quiz-opt-btn text-left p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-500 bg-slate-50 dark:bg-slate-800/60 transition flex items-center gap-3 font-medium">
+          <span class="w-8 h-8 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-sm shrink-0">
+            ${labels[idx]}
+          </span>
+          <span class="text-sm sm:text-base">${opt.text}</span>
+        </button>
+      `).join('');
+
+      if (document.getElementById('quiz-auto-speak').checked) {
+        speakWord(q.word);
+      }
+    }
+
+    window.handleQuizOptionClick = function(selectedIdx) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = quizQuestions[currentQIdx];
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      const selectedOpt = q.shuffledOptions[selectedIdx];
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        const opt = q.shuffledOptions[idx];
+        if (opt.isCorrect) {
+          btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-50', 'dark:bg-slate-800/60');
+          btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/50', 'text-emerald-800', 'dark:text-emerald-200');
+        } else if (idx === selectedIdx && !opt.isCorrect) {
+          btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'bg-slate-50', 'dark:bg-slate-800/60');
+          btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/50', 'text-rose-800', 'dark:text-rose-200');
+        }
+      });
+
+      if (selectedOpt.isCorrect) {
+        quizScore++;
+        document.getElementById('quiz-score-live').textContent = `Đúng: ${quizScore}`;
+        // Auto remove from wrongIds if answered right
+        const wIdx = appState.wrongIds.indexOf(q.id);
+        if (wIdx > -1) appState.wrongIds.splice(wIdx, 1);
+      } else {
+        quizWrongItems.push(q);
+        if (!appState.wrongIds.includes(q.id)) {
+          appState.wrongIds.push(q.id);
+        }
+      }
+      saveState();
+
+      const nextBtn = document.getElementById('quiz-next-btn');
+      nextBtn.textContent = currentQIdx < quizQuestions.length - 1 ? 'Câu tiếp theo →' : 'Xem kết quả 🎉';
+      document.getElementById('quiz-next-area').classList.remove('hidden');
+    };
+
+    function finishQuiz() {
+      clearInterval(quizTimerInterval);
+      appState.quizzesCompleted++;
+      saveState();
+
+      document.getElementById('quiz-active-panel').classList.add('hidden');
+      document.getElementById('quiz-result-panel').classList.remove('hidden');
+
+      const total = quizQuestions.length;
+      const wrongCount = total - quizScore;
+      const accuracy = Math.round((quizScore / total) * 100);
+
+      document.getElementById('res-correct').textContent = quizScore;
+      document.getElementById('res-wrong').textContent = wrongCount;
+      document.getElementById('res-accuracy').textContent = `${accuracy}%`;
+
+      const mins = String(Math.floor(quizSeconds / 60)).padStart(2, '0');
+      const secs = String(quizSeconds % 60).padStart(2, '0');
+      document.getElementById('quiz-result-subtitle').textContent = `Thời gian hoàn thành: ${mins}:${secs}`;
+      document.getElementById('quiz-result-emoji').textContent = accuracy >= 80 ? '🏆' : accuracy >= 50 ? '👍' : '💪';
+
+      const wrongContainer = document.getElementById('res-wrong-list-container');
+      const wrongList = document.getElementById('res-wrong-list');
+      const retryBtn = document.getElementById('retry-wrong-btn');
+
+      if (quizWrongItems.length > 0) {
+        wrongContainer.classList.remove('hidden');
+        retryBtn.classList.remove('hidden');
+        wrongList.innerHTML = quizWrongItems.map(item => `
+          <div class="flex items-center justify-between p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 text-sm">
+            <div>
+              <span class="font-bold text-slate-900 dark:text-white">${item.word}</span>
+              <span class="text-slate-400 mx-2">→</span>
+              <span class="font-semibold text-emerald-600 dark:text-emerald-400">${item.meaning}</span>
+            </div>
+            <button onclick="speakWord('${item.word.replace(/'/g, "\\'")}')" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 text-xs font-semibold shadow-sm">🔊</button>
+          </div>
+        `).join('');
+      } else {
+        wrongContainer.classList.add('hidden');
+        retryBtn.classList.add('hidden');
+      }
+    }
+
+    /**
+     * ============================================================================
+     * 7. GRAMMAR MODULE (12 FULL CHAPTERS FROM BASIC TO ADVANCED)
+     * ============================================================================
+     */
+    let activeGrammarId = GRAMMAR_TOPICS[0].id;
+
+    function renderGrammarSidebar() {
+      const search = document.getElementById('grammar-search').value.trim().toLowerCase();
+      const navList = document.getElementById('grammar-nav-list');
+
+      const filtered = GRAMMAR_TOPICS.filter(t =>
+        t.title.toLowerCase().includes(search) ||
+        t.summary.toLowerCase().includes(search)
+      );
+
+      navList.innerHTML = filtered.map(topic => {
+        const isActive = topic.id === activeGrammarId;
+        return `
+          <button onclick="selectGrammarTopic('${topic.id}')" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition ${isActive ? 'bg-brand-600 text-white font-semibold shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}">
+            <div class="truncate">${topic.title}</div>
+            <div class="text-[10px] mt-0.5 ${isActive ? 'text-brand-100' : 'text-slate-400'}">${topic.level}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.selectGrammarTopic = function(id) {
+      activeGrammarId = id;
+      renderGrammarSidebar();
+      renderGrammarContent();
+    };
+
+    function renderGrammarContent() {
+      const topic = GRAMMAR_TOPICS.find(t => t.id === activeGrammarId) || GRAMMAR_TOPICS[0];
+      const area = document.getElementById('grammar-content-area');
+
+      const sectionsHtml = topic.sections.map(sec => `
+        <div class="mb-8 last:mb-0">
+          <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-6 rounded-full bg-brand-600 inline-block"></span>
+            ${sec.heading}
+          </h3>
+
+          <div class="bg-brand-50/70 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900 rounded-2xl p-4 mb-4 font-mono text-xs sm:text-sm text-brand-900 dark:text-brand-200 whitespace-pre-line leading-relaxed">
+            ${sec.formula}
+          </div>
+
+          <ul class="space-y-2.5 text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+            ${sec.points.map(p => `<li class="flex items-start gap-2"><span class="text-brand-600 font-bold mt-0.5">•</span><span>${p}</span></li>`).join('')}
+          </ul>
+
+          <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 space-y-2.5 border border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Ví dụ minh họa:</div>
+            ${sec.examples.map(ex => `
+              <div class="text-sm">
+                <p class="font-medium text-slate-900 dark:text-white">${ex.en}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">→ ${ex.vi}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      const miniQuizHtml = topic.quiz && topic.quiz.length ? `
+        <div class="mt-10 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
+          <h4 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <span>✍️</span> Mini Quiz Kiểm Tra Nhanh Chuyên Đề Này
+          </h4>
+          <div class="space-y-4">
+            ${topic.quiz.map((qItem, qIdx) => `
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700" id="gq-${topic.id}-${qIdx}">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white mb-3">Câu ${qIdx + 1}: ${qItem.q}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${qItem.opts.map((opt, oIdx) => `
+                    <button onclick="checkGrammarMiniQuiz('${topic.id}', ${qIdx}, ${oIdx})" class="gq-btn text-left px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-brand-500 text-xs sm:text-sm font-medium transition">
+                      ${['A', 'B', 'C', 'D'][oIdx]}. ${opt}
+                    </button>
+                  `).join('')}
+                </div>
+                <div class="gq-exp hidden mt-3 p-3 rounded-xl text-xs bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-900">
+                  <strong>Giải thích:</strong> ${qItem.exp}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      area.innerHTML = `
+        <div class="mb-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 mb-2">
+            Cấp độ: ${topic.level}
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">${topic.title}</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${topic.summary}</p>
+        </div>
+        ${sectionsHtml}
+        ${miniQuizHtml}
+      `;
+    }
+
+    window.checkGrammarMiniQuiz = function(topicId, qIdx, chosenIdx) {
+      const topic = GRAMMAR_TOPICS.find(t => t.id === topicId);
+      const qObj = topic.quiz[qIdx];
+      const box = document.getElementById(`gq-${topicId}-${qIdx}`);
+      const btns = box.querySelectorAll('.gq-btn');
+
+      btns.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === qObj.ans) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-900/50', 'text-emerald-800', 'dark:text-emerald-200', 'font-bold');
+        } else if (idx === chosenIdx && idx !== qObj.ans) {
+          btn.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-900/50', 'text-rose-800', 'dark:text-rose-200');
+        }
+      });
+
+      box.querySelector('.gq-exp').classList.remove('hidden');
+    };
+
+    /**
+     * ============================================================================
+     * 8. STATISTICS & PROGRESS DASHBOARD
+     * ============================================================================
+     */
+    function updateGlobalCounters() {
+      const mCount = appState.masteredIds.length;
+      const sCount = appState.starredIds.length;
+      const wCount = appState.wrongIds.length;
+      const qCount = appState.quizzesCompleted;
+      const pct = Math.round((mCount / 600) * 100);
+
+      document.getElementById('header-mastered-count').textContent = mCount;
+      document.getElementById('header-starred-count').textContent = sCount;
+
+      document.getElementById('stat-mastered').textContent = mCount;
+      document.getElementById('stat-starred').textContent = sCount;
+      document.getElementById('stat-wrong').textContent = wCount;
+      document.getElementById('stat-quizzes').textContent = qCount;
+      document.getElementById('stat-percent').textContent = `${pct}%`;
+      document.getElementById('stat-progress-bar').style.width = `${pct}%`;
+
+      renderLessonProgressGrid();
+    }
+
+    function renderLessonProgressGrid() {
+      const grid = document.getElementById('lesson-progress-grid');
+      grid.innerHTML = LESSON_TITLES.map((title, idx) => {
+        const lessonNum = idx + 1;
+        const lessonWords = VOCAB_DATA.filter(v => v.lessonId === lessonNum);
+        const done = lessonWords.filter(v => appState.masteredIds.includes(v.id)).length;
+        const isComplete = done === lessonWords.length;
+
+        return `
+          <button onclick="jumpToLesson(${lessonNum})" class="p-2.5 rounded-xl border text-left transition ${isComplete ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800' : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-brand-500'}">
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span>Bài ${lessonNum}</span>
+              <span class="${isComplete ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}">${done}/12</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mt-1.5">
+              <div class="h-full ${isComplete ? 'bg-emerald-500' : 'bg-brand-500'}" style="width: ${(done / 12) * 100}%"></div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.jumpToLesson = function(lessonNum) {
+      switchMainTab('vocab');
+      document.getElementById('vocab-lesson-filter').value = String(lessonNum);
+      document.getElementById('vocab-status-filter').value = 'all';
+      document.getElementById('vocab-search').value = '';
+      applyVocabFilters();
+    };
+
+    /**
+     * ============================================================================
+     * 9. NAVIGATION & EVENT LISTENERS
+     * ============================================================================
+     */
+    function switchMainTab(tabName) {
+      document.querySelectorAll('.main-tab-btn').forEach(btn => {
+        const isTarget = btn.dataset.tab === tabName;
+        if (isTarget) {
+          btn.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        } else {
+          btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+      });
+
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      if (tabName === 'stats') updateGlobalCounters();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initLessonDropdowns();
+      applyVocabFilters();
+      renderGrammarSidebar();
+      renderGrammarContent();
+      updateGlobalCounters();
+
+      // Main Tabs
+      document.querySelectorAll('.main-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchMainTab(btn.dataset.tab));
+      });
+
+      // Dark Mode Toggle
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        appState.darkMode = !appState.darkMode;
+        applyTheme();
+        saveState();
+      });
+
+      // Vocab Filters
+      document.getElementById('vocab-search').addEventListener('input', applyVocabFilters);
+      document.getElementById('vocab-lesson-filter').addEventListener('change', applyVocabFilters);
+      document.getElementById('vocab-status-filter').addEventListener('change', applyVocabFilters);
+
+      // Bulk Mark Mastered
+      document.getElementById('mark-lesson-mastered-btn').addEventListener('click', () => {
+        let added = 0;
+        filteredVocab.forEach(v => {
+          if (!appState.masteredIds.includes(v.id)) {
+            appState.masteredIds.push(v.id);
+            added++;
+          }
+        });
+        saveState();
+        renderVocabView();
+        showToast(`Đã đánh dấu thuộc ${added} từ vựng!`, 'success');
+      });
+
+      // View Mode Switcher (List vs Flashcard)
+      const listBtn = document.getElementById('view-list-btn');
+      const fcBtn = document.getElementById('view-flashcard-btn');
+
+      listBtn.addEventListener('click', () => {
+        currentViewMode = 'list';
+        listBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold bg-white dark:bg-slate-700 text-brand-600 dark:text-white shadow-sm transition';
+        fcBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 transition';
+        renderVocabView();
+      });
+
+      fcBtn.addEventListener('click', () => {
+        currentViewMode = 'flashcard';
+        fcBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold bg-white dark:bg-slate-700 text-brand-600 dark:text-white shadow-sm transition';
+        listBtn.className = 'flex-1 py-1.5 px-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 transition';
+        renderVocabView();
+      });
+
+      // Flashcard Interactions
+      document.getElementById('flashcard-stage').addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        fcFlipped = !fcFlipped;
+        renderFlashcard();
+      });
+
+      document.getElementById('fc-flip-btn').addEventListener('click', () => {
+        fcFlipped = !fcFlipped;
+        renderFlashcard();
+      });
+
+      document.getElementById('fc-prev-btn').addEventListener('click', () => {
+        fcIndex--;
+        fcFlipped = false;
+        renderFlashcard();
+      });
+
+      document.getElementById('fc-next-btn').addEventListener('click', () => {
+        fcIndex++;
+        fcFlipped = false;
+        renderFlashcard();
+      });
+
+      document.getElementById('fc-shuffle-btn').addEventListener('click', () => {
+        filteredVocab.sort(() => Math.random() - 0.5);
+        fcIndex = 0;
+        fcFlipped = false;
+        renderFlashcard();
+        showToast('Đã trộn ngẫu nhiên bộ thẻ!', 'info');
+      });
+
+      document.getElementById('fc-speak-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (filteredVocab[fcIndex]) speakWord(filteredVocab[fcIndex].word);
+      });
+
+      document.getElementById('fc-speak-back-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (filteredVocab[fcIndex]) speakWord(filteredVocab[fcIndex].word);
+      });
+
+      document.getElementById('fc-star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (filteredVocab[fcIndex]) toggleStar(filteredVocab[fcIndex].id);
+      });
+
+      document.getElementById('fc-toggle-master-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (filteredVocab[fcIndex]) toggleMaster(filteredVocab[fcIndex].id);
+      });
+
+      // Keyboard Shortcuts for Flashcard
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('tab-vocab').classList.contains('hidden')) return;
+        if (currentViewMode !== 'flashcard') return;
+        if (document.activeElement.tagName === 'INPUT') return;
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          fcFlipped = !fcFlipped;
+          renderFlashcard();
+        } else if (e.code === 'ArrowRight') {
+          fcIndex++;
+          fcFlipped = false;
+          renderFlashcard();
+        } else if (e.code === 'ArrowLeft') {
+          fcIndex--;
+          fcFlipped = false;
+          renderFlashcard();
+        } else if (e.key.toLowerCase() === 's') {
+          if (filteredVocab[fcIndex]) speakWord(filteredVocab[fcIndex].word);
+        }
+      });
+
+      // Quiz Events
+      document.getElementById('start-quiz-btn').addEventListener('click', () => startQuiz());
+      document.getElementById('quiz-speak-btn').addEventListener('click', () => {
+        if (quizQuestions[currentQIdx]) speakWord(quizQuestions[currentQIdx].word);
+      });
+
+      document.getElementById('quiz-next-btn').addEventListener('click', () => {
+        if (currentQIdx < quizQuestions.length - 1) {
+          currentQIdx++;
+          renderQuizQuestion();
+        } else {
+          finishQuiz();
+        }
+      });
+
+      document.getElementById('quit-quiz-btn').addEventListener('click', () => {
+        clearInterval(quizTimerInterval);
+        document.getElementById('quiz-active-panel').classList.add('hidden');
+        document.getElementById('quiz-setup-panel').classList.remove('hidden');
+      });
+
+      document.getElementById('back-to-quiz-setup-btn').addEventListener('click', () => {
+        document.getElementById('quiz-result-panel').classList.add('hidden');
+        document.getElementById('quiz-setup-panel').classList.remove('hidden');
+      });
+
+      document.getElementById('retry-wrong-btn').addEventListener('click', () => {
+        if (quizWrongItems.length > 0) {
+          startQuiz(quizWrongItems);
+        }
+      });
+
+      // Grammar Search
+      document.getElementById('grammar-search').addEventListener('input', renderGrammarSidebar);
+
+      // Export / Import / Reset Progress
+      document.getElementById('export-data-btn').addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `toeic-master-600-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Đã xuất file sao lưu tiến độ!', 'success');
+      });
+
+      document.getElementById('import-data-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const imported = JSON.parse(ev.target.result);
+            if (Array.isArray(imported.masteredIds)) {
+              appState = { ...defaultState, ...imported };
+              saveState();
+              applyTheme();
+              applyVocabFilters();
+              showToast('Khôi phục tiến độ học tập thành công!', 'success');
+            } else {
+              showToast('File JSON không đúng định dạng!', 'warning');
+            }
+          } catch {
+            showToast('Lỗi đọc file JSON!', 'warning');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      const confirmModal = document.getElementById('confirm-modal');
+      document.getElementById('reset-data-btn').addEventListener('click', () => {
+        confirmModal.classList.remove('hidden');
+        confirmModal.classList.add('flex');
+      });
+      document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+      });
+      document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+        appState = { ...defaultState, darkMode: appState.darkMode };
+        saveState();
+        applyVocabFilters();
+        confirmModal.classList.add('hidden');
+        confirmModal.classList.remove('flex');
+        showToast('Đã đặt lại toàn bộ tiến độ học tập.', 'info');
+      });
+    });
+  </script>
+</body>
+</html>
