@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Sổ giỗ gia đình</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +14,7 @@
             color: #261c17;
             font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
         }
         .header-crimson {
             background-color: #9b2226;
@@ -28,31 +29,101 @@
             background-color: rgba(31, 22, 18, 0.55);
             backdrop-filter: blur(2px);
         }
+
+        /* Tối ưu bảng thành dạng thẻ gọn gàng trên thiết bị di động (< 768px) */
+        @media (max-width: 767px) {
+            .gio-table,
+            .gio-table tbody,
+            .gio-table tr,
+            .gio-table td {
+                display: block;
+                width: 100%;
+            }
+            .gio-table thead {
+                display: none;
+            }
+            .gio-table tbody tr {
+                position: relative;
+                padding: 0.95rem 1rem;
+                border-bottom: 1px solid #dfd3c6;
+                background-color: #fcf9f4;
+            }
+            .gio-table tbody tr:last-child {
+                border-bottom: none;
+            }
+            .gio-table tbody td {
+                padding: 0 !important;
+                border: none !important;
+            }
+            /* Hàng trên cùng của thẻ: Ngày âm bên trái + Đếm ngược bên phải */
+            .gio-table td.col-lunar {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                min-height: 2.1rem;
+                padding-right: 9.25rem !important;
+                margin-bottom: 0.35rem;
+            }
+            .gio-table td.col-countdown {
+                position: absolute;
+                top: 0.9rem;
+                right: 1rem;
+                width: auto !important;
+            }
+            .gio-table td.col-person {
+                margin-bottom: 0.45rem;
+            }
+            .gio-table td.col-next {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                gap: 0.5rem;
+                background-color: #f6eee4;
+                padding: 0.45rem 0.65rem !important;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            .gio-table td.col-next::before {
+                content: "Lần tới:";
+                font-size: 0.75rem;
+                color: #6e6259;
+                font-weight: 500;
+            }
+            .gio-table td.col-note {
+                margin-bottom: 0.65rem;
+            }
+            .gio-table td.col-actions {
+                display: flex;
+                justify-content: flex-end;
+                padding-top: 0.55rem !important;
+                border-top: 1px dashed #e5d8c8 !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen pb-16">
 
     <!-- THÔNG BÁO TOAST NHỎ GỌN -->
-    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:bottom-5 sm:right-5 z-50 flex flex-col items-center sm:items-end gap-2 pointer-events-none"></div>
 
 <!-- HEADER ĐỎ TRẦM TRUYỀN THỐNG -->
     <header class="header-crimson text-white shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-5 space-y-2">
-            <!-- Hàng 1: Tiêu đề bên trái + 3 nút đẩy lên cao bên phải -->
-            <div class="flex flex-wrap items-center justify-between gap-2.5">
-                <div class="flex items-center gap-2.5">
-                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white/15 text-amber-200 font-bold text-lg">祠</span>
-                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Sổ giỗ gia đình</h1>
+        <div class="max-w-5xl mx-auto px-3.5 sm:px-6 py-3.5 sm:py-5 space-y-2">
+            <!-- Hàng 1: Tiêu đề bên trái + 2 nút bên phải -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2 sm:gap-2.5">
+                    <span class="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/15 text-amber-200 font-bold text-base sm:text-lg shrink-0">祠</span>
+                    <h1 class="text-xl sm:text-3xl font-bold tracking-tight">Sổ giỗ gia đình</h1>
                 </div>
 
                 <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                    <a href="#converterSection" class="px-2.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-medium transition flex items-center gap-1 whitespace-nowrap">
+                    <a href="#converterSection" class="px-2.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 active:bg-white/30 text-white text-xs font-medium transition flex items-center gap-1 whitespace-nowrap">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                         <span>Đổi lịch Âm — Dương</span>
                     </a>
-                    <button onclick="exportCleanHtmlFile()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition flex items-center gap-1 whitespace-nowrap cursor-pointer">
+                    <button onclick="exportCleanHtmlFile()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-semibold shadow-xs transition flex items-center gap-1 whitespace-nowrap cursor-pointer">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                         </svg>
@@ -62,25 +133,25 @@
             </div>
 
             <!-- Hàng 2: Dòng Hôm nay trải full chiều ngang -->
-            <p id="todayBanner" class="text-xs sm:text-sm text-red-100/95 font-medium">
+            <p id="todayBanner" class="text-xs sm:text-sm text-red-100/95 font-medium leading-relaxed">
                 <!-- Hiển thị ngày hôm nay Âm & Dương + Can Chi -->
             </p>
         </div>
     </header>
 
     <!-- NỘI DUNG CHÍNH -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-7">
+    <main class="max-w-5xl mx-auto px-3.5 sm:px-6 pt-5 sm:pt-6 space-y-6 sm:space-y-7">
 
         <!-- 1. KHUNG NHẮC LỊCH SẮP TỚI GẦN NHẤT (2 NGÀY GIỖ KẾ TIẾP) -->
         <section aria-label="Lịch giỗ sắp tới gần nhất">
-            <div class="flex items-center justify-between mb-3">
+            <div class="flex flex-wrap items-center justify-between gap-1 mb-3">
                 <div class="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#9b2226] flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#9b2226] animate-pulse"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#9b2226] animate-pulse shrink-0"></span>
                     <span>Sắp tới gần nhất</span>
                 </div>
-                <span class="text-xs text-[#6e6259]">Tự động tính sang năm mới khi qua ngày giỗ</span>
+                <span class="text-[11px] sm:text-xs text-[#6e6259]">Tự động tính sang năm mới khi qua ngày giỗ</span>
             </div>
-            <div id="nextUpcomingContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div id="nextUpcomingContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
                 <!-- Render tự động 2 ngày giỗ gần nhất -->
             </div>
         </section>
@@ -97,25 +168,25 @@
 
                 <!-- Chuyển chế độ sắp xếp & Thêm mới -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <div class="inline-flex rounded-lg bg-[#ebe1d4] p-1 border border-[#dfd2c2]">
-                        <button id="btnSortUpcoming" onclick="setSortMode('UPCOMING')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer">
+                    <div class="inline-flex flex-1 sm:flex-initial rounded-lg bg-[#ebe1d4] p-1 border border-[#dfd2c2]">
+                        <button id="btnSortUpcoming" onclick="setSortMode('UPCOMING')" class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer whitespace-nowrap">
                             Xếp theo ngày sắp tới
                         </button>
-                        <button id="btnSortLunar" onclick="setSortMode('LUNAR')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer">
+                        <button id="btnSortLunar" onclick="setSortMode('LUNAR')" class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer whitespace-nowrap">
                             Xếp theo tháng âm
                         </button>
                     </div>
 
-                    <button onclick="openAnniversaryModal()" class="px-3.5 py-2 rounded-lg bg-[#9b2226] hover:bg-[#821b1e] text-white text-xs sm:text-sm font-semibold transition flex items-center gap-1 cursor-pointer">
+                    <button onclick="openAnniversaryModal()" class="w-full sm:w-auto justify-center px-3.5 py-2 rounded-lg bg-[#9b2226] hover:bg-[#821b1e] active:bg-[#6f1619] text-white text-xs sm:text-sm font-semibold transition flex items-center gap-1 cursor-pointer">
                         <span>+ Thêm lịch giỗ</span>
                     </button>
                 </div>
             </div>
 
-            <!-- BẢNG DANH SÁCH LỊCH GIỖ -->
+            <!-- BẢNG DANH SÁCH LỊCH GIỖ (Tự động chuyển thẻ dọc trên di động) -->
             <div class="bg-[#fcf9f4] rounded-xl border border-[#dfd3c6] overflow-hidden shadow-xs">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                <div>
+                    <table class="gio-table w-full text-left border-collapse">
                         <thead>
                             <tr class="table-header-bg text-[#8c3227] text-xs sm:text-sm font-semibold">
                                 <th class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap">Ngày âm</th>
@@ -134,36 +205,36 @@
             </div>
 
             <!-- Chân bảng: Gợi ý & Khôi phục mặc định -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs text-[#7c6f65]">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs text-[#7c6f65] leading-relaxed">
                 <span>* Mẹo: Bấm trực tiếp vào ô <strong>"Ghi chú sự kiện"</strong> hoặc nút <strong>"Sửa"</strong> trên từng dòng để cập nhật giờ cúng, lễ vật, người chuẩn bị.</span>
-                <button onclick="openResetConfirmModal()" class="text-[#9b2226] hover:underline font-medium self-start sm:self-auto cursor-pointer">
+                <button onclick="openResetConfirmModal()" class="text-[#9b2226] hover:underline font-medium self-start sm:self-auto cursor-pointer py-1">
                     Khôi phục 10 lịch giỗ gốc
                 </button>
             </div>
         </section>
 
         <!-- 3. CÔNG CỤ QUY ĐỔI LỊCH ÂM — DƯƠNG 2 CHIỀU -->
-        <section id="converterSection" class="bg-[#fcf9f4] rounded-xl border border-[#dfd3c6] p-4 sm:p-6 shadow-xs space-y-5">
+        <section id="converterSection" class="bg-[#fcf9f4] rounded-xl border border-[#dfd3c6] p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5d8c8] pb-3.5">
                 <div>
                     <h3 class="text-base sm:text-lg font-bold text-[#1f1612] flex items-center gap-2">
                         <span class="text-[#9b2226]">⇄</span>
                         <span>Quy đổi lịch Âm — Dương 2 chiều</span>
                     </h3>
-                    <p class="text-xs text-[#6e6259] mt-0.5">
+                    <p class="text-xs text-[#6e6259] mt-0.5 leading-relaxed">
                         Tra cứu nhanh ngày giỗ các năm sau (2027, 2028, 2030...) hoặc đổi ngày bất kỳ theo chuẩn GMT+7
                     </p>
                 </div>
-                <button onclick="resetConverterToToday()" class="text-xs font-semibold text-[#9b2226] hover:bg-[#efe1d8] px-3 py-1.5 rounded-lg transition self-start sm:self-auto cursor-pointer">
+                <button onclick="resetConverterToToday()" class="text-xs font-semibold text-[#9b2226] bg-[#efe1d8]/60 hover:bg-[#efe1d8] px-3 py-1.5 rounded-lg transition self-start sm:self-auto cursor-pointer">
                     Đặt về hôm nay
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <!-- CHIỀU 1: ĐỔI DƯƠNG LỊCH -> ÂM LỊCH -->
-                <div class="bg-[#fdfaf6] rounded-xl p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
+                <div class="bg-[#fdfaf6] rounded-xl p-3.5 sm:p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between gap-2">
                             <span class="text-xs font-bold uppercase tracking-wider text-[#8c3227] bg-[#efe1d8] px-2.5 py-1 rounded-md">
                                 Dương lịch ➔ Âm lịch
                             </span>
@@ -173,15 +244,15 @@
                         <div class="grid grid-cols-3 gap-2">
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Ngày Dương</label>
-                                <select id="solDayInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                                <select id="solDayInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
                             </div>
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Tháng Dương</label>
-                                <select id="solMonthInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                                <select id="solMonthInput" onchange="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
                             </div>
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Năm Dương</label>
-                                <input id="solYearInput" type="number" min="1900" max="2100" oninput="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
+                                <input id="solYearInput" type="number" inputmode="numeric" min="1900" max="2100" oninput="handleSolarToLunarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
                             </div>
                         </div>
 
@@ -191,15 +262,15 @@
                         </div>
                     </div>
 
-                    <button onclick="createGioFromConverter('SOLAR')" class="w-full py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white text-xs font-semibold transition cursor-pointer">
+                    <button onclick="createGioFromConverter('SOLAR')" class="w-full py-2.5 sm:py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white active:bg-[#821b1e] active:text-white text-xs font-semibold transition cursor-pointer">
                         + Lấy ngày Âm này tạo lịch giỗ mới
                     </button>
                 </div>
 
                 <!-- CHIỀU 2: ĐỔI ÂM LỊCH -> DƯƠNG LỊCH -->
-                <div class="bg-[#fdfaf6] rounded-xl p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
+                <div class="bg-[#fdfaf6] rounded-xl p-3.5 sm:p-4 border border-[#e5d8c8] flex flex-col justify-between space-y-4">
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between gap-2">
                             <span class="text-xs font-bold uppercase tracking-wider text-[#8c3227] bg-[#efe1d8] px-2.5 py-1 rounded-md">
                                 Âm lịch ➔ Dương lịch
                             </span>
@@ -209,15 +280,15 @@
                         <div class="grid grid-cols-3 gap-2">
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Ngày Âm</label>
-                                <select id="lunDayInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                                <select id="lunDayInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
                             </div>
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Tháng Âm</label>
-                                <select id="lunMonthInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                                <select id="lunMonthInput" onchange="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
                             </div>
                             <div>
                                 <label class="block text-xs text-[#6e6259] mb-1">Năm Âm</label>
-                                <input id="lunYearInput" type="number" min="1900" max="2100" oninput="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2.5 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
+                                <input id="lunYearInput" type="number" inputmode="numeric" min="1900" max="2100" oninput="handleLunarToSolarChange()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-2 sm:px-2.5 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]" />
                             </div>
                         </div>
 
@@ -227,7 +298,7 @@
                         </div>
                     </div>
 
-                    <button onclick="createGioFromConverter('LUNAR')" class="w-full py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white text-xs font-semibold transition cursor-pointer">
+                    <button onclick="createGioFromConverter('LUNAR')" class="w-full py-2.5 sm:py-2 px-3 rounded-lg border border-[#9b2226] text-[#9b2226] hover:bg-[#9b2226] hover:text-white active:bg-[#821b1e] active:text-white text-xs font-semibold transition cursor-pointer">
                         + Lấy ngày Âm này tạo lịch giỗ mới
                     </button>
                 </div>
@@ -237,50 +308,52 @@
     </main>
 
     <!-- MODAL THÊM / SỬA LỊCH GIỖ & GHI CHÚ SỰ KIỆN -->
-    <div id="anniversaryModal" class="fixed inset-0 z-40 hidden items-center justify-center p-4 modal-backdrop">
-        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-lg w-full overflow-hidden">
-            <div class="header-crimson text-white px-5 py-4 flex items-center justify-between">
-                <h3 id="modalTitle" class="text-base sm:text-lg font-bold">Thêm lịch giỗ mới</h3>
-                <button onclick="closeAnniversaryModal()" class="text-white/80 hover:text-white p-1 rounded-lg cursor-pointer">
+    <div id="anniversaryModal" class="fixed inset-0 z-40 hidden items-center justify-center p-3 sm:p-4 modal-backdrop">
+        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="header-crimson text-white px-4 sm:px-5 py-3.5 sm:py-4 flex items-center justify-between shrink-0">
+                <h3 id="modalTitle" class="text-base sm:text-lg font-bold truncate pr-2">Thêm lịch giỗ mới</h3>
+                <button onclick="closeAnniversaryModal()" class="text-white/80 hover:text-white p-1.5 rounded-lg cursor-pointer shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
 
-            <form id="anniversaryForm" onsubmit="handleSaveAnniversary(event)" class="p-5 space-y-4">
+            <form id="anniversaryForm" onsubmit="handleSaveAnniversary(event)" class="p-4 sm:p-5 space-y-4 overflow-y-auto">
                 <input type="hidden" id="formGioId" />
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-[#52453c] mb-1">Người đã khuất <span class="text-[#9b2226]">*</span></label>
-                        <input id="formDisplayName" type="text" required placeholder="VD: Cụ Kiểm, Ông Hàm (Ông nội)..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]" />
+                        <input id="formDisplayName" type="text" required placeholder="VD: Cụ Kiểm, Ông Hàm (Ông nội)..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-base sm:text-sm focus:outline-none focus:border-[#9b2226]" />
                     </div>
 
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-[#52453c] mb-1">Họ tên đầy đủ / Vai vế phả hệ</label>
-                        <input id="formSubName" type="text" placeholder="VD: Cụ Nguyễn Thị Kiểm — Cụ nội" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]" />
+                        <input id="formSubName" type="text" placeholder="VD: Cụ Nguyễn Thị Kiểm — Cụ nội" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-base sm:text-sm focus:outline-none focus:border-[#9b2226]" />
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Ngày Âm lịch <span class="text-[#9b2226]">*</span></label>
-                        <select id="formLunarDay" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
-                    </div>
+                    <div class="grid grid-cols-2 sm:col-span-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-[#52453c] mb-1">Ngày Âm lịch <span class="text-[#9b2226]">*</span></label>
+                            <select id="formLunarDay" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                        </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-[#52453c] mb-1">Tháng Âm lịch <span class="text-[#9b2226]">*</span></label>
-                        <select id="formLunarMonth" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                        <div>
+                            <label class="block text-xs font-semibold text-[#52453c] mb-1">Tháng Âm lịch <span class="text-[#9b2226]">*</span></label>
+                            <select id="formLunarMonth" onchange="updateModalSolarPreview()" class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-base sm:text-sm font-medium focus:outline-none focus:border-[#9b2226]"></select>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Nhẩm nhanh ngày Dương lịch lần tới ngay trong form -->
-                <div id="modalSolarPreview" class="bg-[#f4ebe0] rounded-lg px-3.5 py-2.5 border border-[#dfd2c2] text-xs text-[#52453c] flex items-center justify-between">
+                <div id="modalSolarPreview" class="bg-[#f4ebe0] rounded-lg px-3.5 py-2.5 border border-[#dfd2c2] text-xs text-[#52453c] flex flex-wrap items-center justify-between gap-1">
                     <!-- Tự động hiển thị ngày Dương lịch lần tới -->
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-[#52453c] mb-1">Ghi chú sự kiện (Lễ vật, giờ cúng, địa điểm, người phụ trách...)</label>
-                    <textarea id="formNote" rows="3" placeholder="VD: Cúng trưa 11h00 tại nhà thờ họ, chuẩn bị gà luộc, xôi gấc, hoa tươi..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-sm focus:outline-none focus:border-[#9b2226]"></textarea>
+                    <textarea id="formNote" rows="3" placeholder="VD: Cúng trưa 11h00 tại nhà thờ họ, chuẩn bị gà luộc, xôi gấc, hoa tươi..." class="w-full rounded-lg border border-[#d5c6b6] bg-white px-3 py-2 text-base sm:text-sm focus:outline-none focus:border-[#9b2226]"></textarea>
                 </div>
 
                 <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-[#e5d8c8]">
@@ -296,8 +369,8 @@
     </div>
 
     <!-- MODAL XÁC NHẬN XÓA / KHÔI PHỤC (THAY CHO CONFIRM MẶC ĐỊNH) -->
-    <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
-        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-sm w-full p-5 space-y-4">
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 modal-backdrop">
+        <div class="bg-[#fcf9f4] rounded-2xl border border-[#dfd3c6] shadow-xl max-w-sm w-full p-4 sm:p-5 space-y-4">
             <h4 id="confirmTitle" class="text-base font-bold text-[#1f1612]">Xác nhận</h4>
             <p id="confirmMessage" class="text-sm text-[#52453c] leading-relaxed"></p>
             <div class="flex items-center justify-end gap-2.5 pt-2">
@@ -670,7 +743,7 @@
         function showToast(message) {
             const container = document.getElementById("toastContainer");
             const toast = document.createElement("div");
-            toast.className = "bg-[#261c17] text-[#fdf8f2] px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-medium border border-[#52453c] transition-all duration-300";
+            toast.className = "bg-[#261c17] text-[#fdf8f2] px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-medium border border-[#52453c] transition-all duration-300 max-w-full text-center sm:text-left";
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(() => {
@@ -698,23 +771,23 @@
         function renderTableCountdownBadge(days) {
             if (days === 0) {
                 return `
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
+                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-300 animate-ping"></span>
                         <span>HÔM NAY</span>
                     </div>
                 `;
             }
             if (days === 1) {
                 return `
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-300">
+                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-300 animate-ping"></span>
                         <span>NGÀY MAI</span>
                     </div>
                 `;
             }
             if (days <= 7) {
                 return `
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-200">
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[#b91c1c] text-white font-extrabold text-xs sm:text-sm shadow-sm ring-2 ring-red-200">
                         <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
                         <span>Còn ${days} ngày</span>
                     </div>
@@ -722,14 +795,14 @@
             }
             if (days <= 60) {
                 return `
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#d97706] text-white font-extrabold text-xs sm:text-sm shadow-xs ring-2 ring-amber-200">
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[#d97706] text-white font-extrabold text-xs sm:text-sm shadow-xs ring-2 ring-amber-200">
                         <span class="w-2 h-2 rounded-full bg-amber-100 animate-pulse"></span>
                         <span>Còn ${days} ngày</span>
                     </div>
                 `;
             }
             return `
-                <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#f7e8df] border border-[#d8b29c] text-[#8c2327] font-bold text-xs sm:text-sm">
+                <div class="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[#f7e8df] border border-[#d8b29c] text-[#8c2327] font-bold text-xs sm:text-sm">
                     <span>⏳ Còn ${days} ngày</span>
                 </div>
             `;
@@ -739,34 +812,34 @@
         function renderHeroCountdownBox(days) {
             if (days === 0 || days === 1) {
                 return `
-                    <div class="px-3.5 py-2.5 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-4 ring-red-200 shrink-0 min-w-[96px]">
+                    <div class="px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-4 ring-red-200 shrink-0 min-w-[84px] sm:min-w-[96px]">
                         <div class="text-[10px] font-bold uppercase tracking-wider text-amber-200">Sắp diễn ra</div>
-                        <div class="text-base sm:text-lg font-extrabold leading-tight mt-0.5">${days === 0 ? 'HÔM NAY' : 'NGÀY MAI'}</div>
+                        <div class="text-sm sm:text-lg font-extrabold leading-tight mt-0.5">${days === 0 ? 'HÔM NAY' : 'NGÀY MAI'}</div>
                     </div>
                 `;
             }
             if (days <= 7) {
                 return `
-                    <div class="px-3.5 py-2 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-2 ring-red-200 shrink-0 min-w-[92px]">
+                    <div class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#b91c1c] text-white text-center shadow-md ring-2 ring-red-200 shrink-0 min-w-[82px] sm:min-w-[92px]">
                         <div class="text-[10px] font-semibold uppercase tracking-wider text-red-100">Đếm ngược</div>
-                        <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5 text-amber-200">${days}</div>
+                        <div class="text-lg sm:text-2xl font-extrabold leading-none my-0.5 text-amber-200">${days}</div>
                         <div class="text-[11px] font-bold">ngày nữa</div>
                     </div>
                 `;
             }
             if (days <= 60) {
                 return `
-                    <div class="px-3.5 py-2 rounded-xl bg-[#d97706] text-white text-center shadow-sm ring-2 ring-amber-200 shrink-0 min-w-[92px]">
+                    <div class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#d97706] text-white text-center shadow-sm ring-2 ring-amber-200 shrink-0 min-w-[82px] sm:min-w-[92px]">
                         <div class="text-[10px] font-semibold uppercase tracking-wider text-amber-100">Còn lại</div>
-                        <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
+                        <div class="text-lg sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
                         <div class="text-[11px] font-bold">ngày nữa</div>
                     </div>
                 `;
             }
             return `
-                <div class="px-3.5 py-2 rounded-xl bg-[#efe1d8] border border-[#cfa993] text-[#9b2226] text-center shrink-0 min-w-[92px]">
+                <div class="px-3 sm:px-3.5 py-2 rounded-xl bg-[#efe1d8] border border-[#cfa993] text-[#9b2226] text-center shrink-0 min-w-[82px] sm:min-w-[92px]">
                     <div class="text-[10px] font-semibold uppercase tracking-wider text-[#7c5343]">Còn lại</div>
-                    <div class="text-xl sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
+                    <div class="text-lg sm:text-2xl font-extrabold leading-none my-0.5">${days}</div>
                     <div class="text-[11px] font-bold">ngày nữa</div>
                 </div>
             `;
@@ -778,17 +851,17 @@
             const btnLunar = document.getElementById("btnSortLunar");
 
             if (mode === "UPCOMING") {
-                btnUpcoming.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer";
-                btnLunar.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer";
+                btnUpcoming.className = "flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer whitespace-nowrap";
+                btnLunar.className = "flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer whitespace-nowrap";
             } else {
-                btnLunar.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer";
-                btnUpcoming.className = "px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer";
+                btnLunar.className = "flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition bg-[#9b2226] text-white shadow-xs cursor-pointer whitespace-nowrap";
+                btnUpcoming.className = "flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition text-[#52453c] hover:text-[#1f1612] cursor-pointer whitespace-nowrap";
             }
             renderPage();
         }
 
         /**************************************************************************
-         * 3. RENDER TRANG CHÍNH (HEADER, 3 LỊCH SẮP TỚI, BẢNG LỊCH GIỖ)
+         * 3. RENDER TRANG CHÍNH (HEADER, 2 LỊCH SẮP TỚI, BẢNG LỊCH GIỖ)
          **************************************************************************/
         function renderPage() {
             const now = new Date();
@@ -845,13 +918,13 @@
                     const isSoon = item.next.diffDays <= 60 || idx === 0;
                     return `
                         <div class="bg-[#fcf9f4] rounded-xl p-4 sm:p-5 border-2 ${isSoon ? 'border-[#9b2226]' : 'border-[#dfd3c6]'} shadow-xs flex flex-col justify-between gap-3">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="space-y-1">
+                            <div class="flex items-start justify-between gap-2.5 sm:gap-3">
+                                <div class="space-y-1 min-w-0">
                                     <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#efe1d8] text-[#9b2226] text-xs font-extrabold">
                                         <span>Ngày âm: ${item.lunarDay}/${item.lunarMonth} ÂL</span>
                                     </div>
-                                    <h3 class="text-lg sm:text-xl font-bold text-[#1f1612] leading-snug">${escapeHtml(item.displayName)}</h3>
-                                    ${item.subName ? `<p class="text-xs text-[#6e6259]">${escapeHtml(item.subName)}</p>` : ''}
+                                    <h3 class="text-base sm:text-xl font-bold text-[#1f1612] leading-snug">${escapeHtml(item.displayName)}</h3>
+                                    ${item.subName ? `<p class="text-xs text-[#6e6259] leading-relaxed">${escapeHtml(item.subName)}</p>` : ''}
                                     <div class="pt-1 text-xs sm:text-sm text-[#5c5047]">
                                         Lần tới: <strong class="text-[#1f1612] font-bold">${item.next.formattedNext}</strong>
                                     </div>
@@ -859,9 +932,9 @@
                                 ${renderHeroCountdownBox(item.next.diffDays)}
                             </div>
 
-                            ${item.note ? `<div class="text-xs text-[#7a4b2a] bg-[#f5ebe0] rounded-lg px-3 py-2 border border-[#e5d5c3]">📝 ${escapeHtml(item.note)}</div>` : ''}
+                            ${item.note ? `<div class="text-xs text-[#7a4b2a] bg-[#f5ebe0] rounded-lg px-3 py-2 border border-[#e5d5c3] leading-relaxed">📝 ${escapeHtml(item.note)}</div>` : ''}
 
-                            <div class="pt-2 border-t border-[#ece1d4] flex items-center justify-between text-xs">
+                            <div class="pt-2 border-t border-[#ece1d4] flex flex-wrap items-center justify-between gap-2 text-xs">
                                 <span class="text-[#7c6f65]">Năm ÂL kỳ tới: <strong>${getCanChiYear(item.next.lunarYear)} (${item.next.lunarYear})</strong></span>
                                 <button onclick="openAnniversaryModal('${item.id}', 'note')" class="text-[#9b2226] font-semibold hover:underline shrink-0 cursor-pointer">
                                     + Sửa / Ghi chú sự kiện
@@ -893,46 +966,46 @@
                 return `
                     <tr class="row-divider last:border-b-0 hover:bg-[#f6eee4]/70 transition">
                         <!-- 1. Ngày âm -->
-                        <td class="py-3.5 px-3.5 sm:px-4 font-bold text-[#9b2226] whitespace-nowrap align-middle text-base sm:text-lg">
-                            ${item.lunarDay}/${item.lunarMonth}
+                        <td class="col-lunar py-3.5 px-3.5 sm:px-4 font-bold text-[#9b2226] whitespace-nowrap align-middle text-base sm:text-lg">
+                            <span>${item.lunarDay}/${item.lunarMonth} <span class="md:hidden text-xs font-semibold">ÂL</span></span>
                             ${item.next.adjustedFrom30To29 ? `<span class="block text-[10px] font-normal text-[#8c3227]">(Cúng 29 ÂL)</span>` : ''}
                         </td>
 
                         <!-- 2. Người đã khuất -->
-                        <td class="py-3.5 px-3.5 sm:px-4 align-middle">
-                            <div class="font-bold text-[#1f1612] text-sm sm:text-base">${escapeHtml(item.displayName)}</div>
-                            ${item.subName ? `<div class="text-xs text-[#6e6259] mt-0.5">${escapeHtml(item.subName)}</div>` : ''}
+                        <td class="col-person py-3.5 px-3.5 sm:px-4 align-middle">
+                            <div class="font-bold text-[#1f1612] text-base md:text-base">${escapeHtml(item.displayName)}</div>
+                            ${item.subName ? `<div class="text-xs text-[#6e6259] mt-0.5 leading-relaxed">${escapeHtml(item.subName)}</div>` : ''}
                         </td>
 
                         <!-- 3. Lần tới (Dương lịch) -->
-                        <td class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
-                            <div class="font-bold text-[#1f1612] text-sm sm:text-base">${item.next.formattedNext}</div>
+                        <td class="col-next py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
+                            <div class="font-bold text-[#1f1612] text-xs sm:text-base">${item.next.formattedNext}</div>
                             <div class="text-[11px] text-[#7c6f65]">Năm ${getCanChiYear(item.next.lunarYear)}</div>
                         </td>
 
                         <!-- 4. Đếm ngày còn lại (HIGHLIGHT NỔI BẬT) -->
-                        <td class="py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
+                        <td class="col-countdown py-3.5 px-3.5 sm:px-4 whitespace-nowrap align-middle">
                             ${renderTableCountdownBadge(days)}
                         </td>
 
                         <!-- 5. Ghi chú sự kiện -->
-                        <td class="py-3.5 px-3.5 sm:px-4 align-middle text-xs sm:text-sm">
+                        <td class="col-note py-3.5 px-3.5 sm:px-4 align-middle text-xs sm:text-sm">
                             <div onclick="openAnniversaryModal('${item.id}', 'note')" class="cursor-pointer group rounded-lg p-1.5 -m-1.5 hover:bg-[#efe6d8] transition" title="Bấm để thêm/sửa ghi chú sự kiện">
                                 ${
                                     item.note
-                                        ? `<div class="text-[#3d2f28] whitespace-pre-line leading-relaxed font-medium">${escapeHtml(item.note)}</div>`
-                                        : `<span class="text-xs text-[#8c7e72] group-hover:text-[#9b2226] italic">+ Thêm ghi chú...</span>`
+                                        ? `<div class="text-[#3d2f28] whitespace-pre-line leading-relaxed font-medium">📝 ${escapeHtml(item.note)}</div>`
+                                        : `<span class="text-xs text-[#8c7e72] group-hover:text-[#9b2226] italic">+ Thêm ghi chú sự kiện...</span>`
                                 }
                             </div>
                         </td>
 
                         <!-- 6. Thao tác: Sửa / Xóa -->
-                        <td class="py-3.5 px-3.5 sm:px-4 align-middle text-right whitespace-nowrap">
-                            <div class="inline-flex items-center gap-1.5">
-                                <button onclick="openAnniversaryModal('${item.id}')" class="px-2.5 py-1.5 rounded-md bg-[#efe1d8] hover:bg-[#e3cec0] text-[#8c3227] text-xs font-semibold transition cursor-pointer">
+                        <td class="col-actions py-3.5 px-3.5 sm:px-4 align-middle text-right whitespace-nowrap">
+                            <div class="inline-flex items-center gap-2 sm:gap-1.5">
+                                <button onclick="openAnniversaryModal('${item.id}')" class="px-3 sm:px-2.5 py-1.5 rounded-md bg-[#efe1d8] hover:bg-[#e3cec0] text-[#8c3227] text-xs font-semibold transition cursor-pointer">
                                     Sửa
                                 </button>
-                                <button onclick="openDeleteConfirmModal('${item.id}')" class="px-2.5 py-1.5 rounded-md bg-[#f5e6e6] hover:bg-[#ebd0d0] text-[#9b2226] text-xs font-semibold transition cursor-pointer">
+                                <button onclick="openDeleteConfirmModal('${item.id}')" class="px-3 sm:px-2.5 py-1.5 rounded-md bg-[#f5e6e6] hover:bg-[#ebd0d0] text-[#9b2226] text-xs font-semibold transition cursor-pointer">
                                     Xóa
                                 </button>
                             </div>
@@ -1201,7 +1274,7 @@
                 <div class="text-xs text-[#261c17] font-medium">
                     Dương lịch: ${dow}, ${sDay}/${sMonth}/${sYear}
                 </div>
-                <div class="text-[11px] text-[#6e6259] pt-0.5">
+                <div class="text-[11px] text-[#6e6259] pt-0.5 leading-relaxed">
                     Can Chi: Ngày <strong>${ccDay}</strong> · Tháng <strong>${ccMonth}</strong> · Năm <strong>${ccYear}</strong>
                 </div>
             `;
@@ -1236,7 +1309,7 @@
                         ? `<div class="text-xs text-[#9b2226] font-medium">* Tháng ${lMonth}/${lYear} ÂL là tháng thiếu (29 ngày), tự động tính vào ngày 29/${lMonth} ÂL.</div>`
                         : `<div class="text-xs text-[#52453c]">Âm lịch: Ngày ${lDay}/${lMonth}/${lYear} (${ccYear})</div>`
                 }
-                <div class="text-[11px] text-[#6e6259] pt-0.5">
+                <div class="text-[11px] text-[#6e6259] pt-0.5 leading-relaxed">
                     Can Chi: Ngày <strong>${ccDay}</strong> · Tháng <strong>${ccMonth}</strong> · Năm <strong>${ccYear}</strong>
                 </div>
             `;
