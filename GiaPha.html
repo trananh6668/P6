@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Phả Đồ Dòng Họ</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -53,12 +53,20 @@
             --parchment: #FDF8E7;
         }
 
-        body {
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
             background-color: #FDF8E7;
             color: #2B1B17;
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow: hidden;
             user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior: none;
         }
 
         /* Họa tiết giấy tuyên chỉ cổ truyền kèm hoa văn chìm */
@@ -67,6 +75,7 @@
             background-image: 
                 radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.09) 0%, rgba(139, 0, 0, 0.03) 65%, rgba(92, 64, 51, 0.08) 100%),
                 url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23B8860B' stroke-width='0.6' stroke-opacity='0.14'%3E%3Ccircle cx='60' cy='60' r='44'/%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3Cpath d='M60 16v88M16 60h88M29 29l62 62M91 29L29 91'/%3E%3Crect x='46' y='46' width='28' height='28' transform='rotate(45 60 60)'/%3E%3C/g%3E%3C/svg%3E");
+            touch-action: none;
         }
 
         /* Khung viền góc cổ truyền (Hồi văn góc) */
@@ -74,9 +83,11 @@
             position: relative;
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
         }
-        .traditional-card:hover {
-            transform: translateY(-3px);
-            z-index: 30 !important;
+        @media (hover: hover) {
+            .traditional-card:hover {
+                transform: translateY(-3px);
+                z-index: 30 !important;
+            }
         }
 
         .corner-ornament {
@@ -166,8 +177,8 @@
 
         /* Thanh cuộn đẹp */
         ::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
             background: #F5E9C8;
@@ -218,77 +229,65 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col select-none">
+<body class="h-[100dvh] w-screen flex flex-col select-none">
 
     <!-- ==================== THANH CÔNG CỤ TRÊN CÙNG (TOP NAVBAR) ==================== -->
-    <header class="ui-chrome bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep text-imperial-cream border-b-2 border-imperial-gold shadow-lg z-40 px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
+    <header class="ui-chrome bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep text-imperial-cream border-b-2 border-imperial-gold shadow-lg z-40 px-2.5 sm:px-6 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-2">
         <!-- Logo & Tên Ứng Dụng -->
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-imperial-gold/20 border-2 border-imperial-gold flex items-center justify-center shadow-inner">
-                <span class="font-serif font-black text-imperial-gold text-xl">族</span>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-imperial-gold/20 border-2 border-imperial-gold flex items-center justify-center shadow-inner shrink-0">
+                <span class="font-serif font-black text-imperial-gold text-base sm:text-xl">族</span>
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 class="font-serif font-bold text-base sm:text-lg tracking-wide text-imperial-pale">ĐẠI VIỆT GIA PHẢ</h1>
+                    <h1 class="font-serif font-bold text-sm sm:text-lg tracking-wide text-imperial-pale leading-tight">ĐẠI VIỆT GIA PHẢ</h1>
                     <span class="hidden md:inline-block text-[11px] uppercase tracking-widest bg-imperial-gold/20 text-imperial-gold border border-imperial-gold/50 px-2 py-0.5 rounded-full">Phả Đồ Cổ Truyền</span>
                 </div>
-                <p class="text-xs text-imperial-cream/80 hidden sm:block">Uống nước nhớ nguồn • Chim có tổ, người có tông</p>
+                <p class="text-[11px] sm:text-xs text-imperial-cream/80 hidden sm:block">Uống nước nhớ nguồn • Chim có tổ, người có tông</p>
             </div>
         </div>
 
-        <!-- Thanh Tìm Kiếm & Lọc Đời -->
-        <div class="flex items-center gap-2 flex-1 max-w-md mx-2">
-            <div class="relative flex-1">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-imperial-gold/80 text-xs"></i>
-                <input id="searchInput" type="text" placeholder="Tìm họ tên, tên tự, mộ phần..." class="w-full pl-8 pr-7 py-1.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream placeholder-imperial-cream/50 focus:outline-none focus:border-imperial-gold">
-                <button id="clearSearchBtn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-imperial-cream/60 hover:text-white text-xs">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <select id="generationFilter" class="py-1.5 px-2.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream focus:outline-none focus:border-imperial-gold cursor-pointer"></select>
-        </div>
-
-        <!-- Cụm Nút Chức Năng Chính -->
-        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-            <button onclick="openClanInfoModal()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Sửa bức trướng &amp; thông tin dòng họ">
+        <!-- Cụm Nút Chức Năng Chính (Nằm ngang hàng với Logo trên Mobile) -->
+        <div class="flex items-center gap-1 sm:gap-2 order-2 sm:order-3">
+            <button onclick="openClanInfoModal()" class="px-2 sm:px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Sửa bức trướng &amp; thông tin dòng họ">
                 <i class="fa-solid fa-scroll text-imperial-gold"></i>
                 <span class="hidden lg:inline">Bức Trướng</span>
             </button>
 
-            <button onclick="openAnniversaryModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-imperial-gold text-imperial-pale text-xs font-semibold flex items-center gap-1.5 transition shadow-sm" title="Tra cứu Sổ Giỗ Họ Âm lịch">
+            <button onclick="openAnniversaryModal()" class="px-2 sm:px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-imperial-gold text-imperial-pale text-xs font-semibold flex items-center gap-1 sm:gap-1.5 transition shadow-sm" title="Tra cứu Sổ Giỗ Họ Âm lịch">
                 <i class="fa-solid fa-fire-flame-curved text-amber-300"></i>
-                <span>Sổ Giỗ Họ</span>
+                <span class="hidden xs:inline sm:inline">Sổ Giỗ</span>
+                <span class="hidden md:inline">Họ</span>
                 <span id="anniversaryCountBadge" class="bg-imperial-gold text-crimson-deep font-bold px-1.5 py-0.2 rounded-full text-[10px]">7</span>
             </button>
 
-            <button onclick="toggleCouplets()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Ẩn/Hiện Câu Đối hai bên">
+            <button onclick="toggleCouplets()" class="hidden lg:flex px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium items-center gap-1.5 transition" title="Ẩn/Hiện Câu Đối hai bên">
                 <i class="fa-solid fa-columns text-imperial-gold"></i>
                 <span class="hidden xl:inline">Câu Đối</span>
             </button>
 
-            <button onclick="togglePresentationMode()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Chế độ Bản In / Trình chiếu">
+            <button onclick="togglePresentationMode()" class="px-2 sm:px-2.5 py-1.5 rounded-lg bg-imperial-gold/15 hover:bg-imperial-gold/30 border border-imperial-gold/60 text-imperial-pale text-xs font-medium flex items-center gap-1.5 transition" title="Chế độ Bản In / Trình chiếu">
                 <i class="fa-solid fa-print text-imperial-gold"></i>
                 <span class="hidden md:inline">Bản In</span>
             </button>
 
             <!-- Dropdown Xuất / Nhập Dữ Liệu -->
             <div class="relative">
-                <button onclick="toggleDataMenu()" class="px-2.5 py-1.5 rounded-lg bg-imperial-gold text-crimson-deep hover:bg-imperial-pale font-bold text-xs flex items-center gap-1.5 transition shadow">
+                <button onclick="toggleDataMenu()" class="px-2 sm:px-2.5 py-1.5 rounded-lg bg-imperial-gold text-crimson-deep hover:bg-imperial-pale font-bold text-xs flex items-center gap-1 sm:gap-1.5 transition shadow">
                     <i class="fa-solid fa-database"></i>
                     <span class="hidden sm:inline">Dữ Liệu</span>
                     <i class="fa-solid fa-chevron-down text-[10px]"></i>					
                 </button>
                 <div id="dataDropdownMenu" class="absolute right-0 mt-2 w-56 rounded-xl bg-imperial-cream border-2 border-crimson shadow-2xl py-1.5 text-ink z-50 hidden">
-					<button onclick="exportCleanHTML()" class="w-full px-4 py-2 text-left text-xs font-bold text-emerald-800 hover:bg-imperial-parchment flex items-center gap-2.5 border-b border-imperial-gold/40">
+					<button onclick="exportCleanHTML()" class="w-full px-4 py-2.5 text-left text-xs font-bold text-emerald-800 hover:bg-imperial-parchment flex items-center gap-2.5 border-b border-imperial-gold/40">
                         <i class="fa-solid fa-file-code text-emerald-700 w-4"></i>
                         <span>Lưu file HTML</span>
                     </button>				
-                    <button onclick="exportFamilyJSON()" class="w-full px-4 py-2 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5">
+                    <button onclick="exportFamilyJSON()" class="w-full px-4 py-2.5 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5">
                         <i class="fa-solid fa-file-export text-crimson w-4"></i>
                         <span>Xuất file Gia Phả (.JSON)</span>
                     </button>
-                    <label class="w-full px-4 py-2 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5 cursor-pointer">
+                    <label class="w-full px-4 py-2.5 text-left text-xs font-medium hover:bg-imperial-parchment flex items-center gap-2.5 cursor-pointer">
                         <i class="fa-solid fa-file-import text-amber-700 w-4"></i>
                         <span>Nhập file Gia Phả (.JSON)</span>
                         <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importFamilyJSON(event)">
@@ -296,15 +295,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- Thanh Tìm Kiếm & Lọc Đời (Xuống hàng 2 gọn gàng trên Mobile) -->
+        <div class="flex items-center gap-1.5 sm:gap-2 w-full sm:w-auto sm:flex-1 sm:max-w-md sm:mx-2 order-3 sm:order-2">
+            <div class="relative flex-1 min-w-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-imperial-gold/80 text-xs"></i>
+                <input id="searchInput" type="text" placeholder="Tìm họ tên, tên tự, mộ phần..." class="w-full pl-7 sm:pl-8 pr-7 py-1.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream placeholder-imperial-cream/50 focus:outline-none focus:border-imperial-gold">
+                <button id="clearSearchBtn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-imperial-cream/60 hover:text-white text-xs p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <select id="generationFilter" class="py-1.5 px-2 sm:px-2.5 text-xs sm:text-sm rounded-lg bg-crimson-dark/90 border border-imperial-gold/60 text-imperial-cream focus:outline-none focus:border-imperial-gold cursor-pointer max-w-[135px] sm:max-w-none shrink-0"></select>
+        </div>
     </header>
 
     <!-- Nút Thoát Chế Độ Bản In / Trình Chiếu -->
-    <div class="exit-presentation-btn hidden fixed top-4 right-4 z-50 items-center gap-2">
-        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-2 hover:bg-crimson-dark">
-            <i class="fa-solid fa-print"></i> In Phả Đồ Ngay
+    <div class="exit-presentation-btn hidden fixed top-3 right-3 sm:top-4 sm:right-4 z-50 items-center gap-2">
+        <button onclick="window.print()" class="px-3 sm:px-4 py-2 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-1.5 sm:gap-2 hover:bg-crimson-dark">
+            <i class="fa-solid fa-print"></i> In Phả Đồ
         </button>
-        <button onclick="togglePresentationMode()" class="px-4 py-2 rounded-xl bg-ink text-white border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-2 hover:bg-black">
-            <i class="fa-solid fa-xmark"></i> Thoát Chế Độ Trình Chiếu
+        <button onclick="togglePresentationMode()" class="px-3 sm:px-4 py-2 rounded-xl bg-ink text-white border-2 border-imperial-gold shadow-xl font-bold text-xs flex items-center gap-1.5 sm:gap-2 hover:bg-black">
+            <i class="fa-solid fa-xmark"></i> Thoát
         </button>
     </div>
 
@@ -328,16 +340,23 @@
             </div>
         </aside>
 
-        <!-- Bảng Chú Giải & Thống Kê Nhanh (Góc Dưới Trái) -->
-        <div class="ui-chrome fixed bottom-4 left-4 z-30 flex flex-col gap-2 max-w-xs">
-            <div class="bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-3 shadow-xl text-xs">
+        <!-- Bảng Chú Giải & Thống Kê Nhanh (Góc Dưới Trái - Có nút thu gọn trên Mobile) -->
+        <div class="ui-chrome fixed bottom-3 left-2.5 sm:bottom-4 sm:left-4 z-30 flex flex-col gap-1.5 max-w-[230px] sm:max-w-xs">
+            <button id="mobileStatsToggleBtn" onclick="toggleStatsPanel()" class="sm:hidden self-start bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl px-2.5 py-1.5 shadow-lg text-xs font-serif font-bold text-crimson flex items-center gap-1.5">
+                <i class="fa-solid fa-chart-pie text-imperial-bronze"></i>
+                <span>Thống kê</span>
+                <span id="statGenerationsBadgeMobile" class="bg-crimson text-imperial-pale px-1.5 py-0.2 rounded text-[10px]">5 Đời</span>
+                <i id="statsChevronIcon" class="fa-solid fa-chevron-up text-[10px] ml-0.5"></i>
+            </button>
+
+            <div id="statsPanelBody" class="hidden sm:block bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-2.5 sm:p-3 shadow-xl text-xs">
                 <div class="font-serif font-bold text-crimson border-b border-imperial-gold/50 pb-1.5 mb-2 flex items-center justify-between">
                     <span><i class="fa-solid fa-chart-pie mr-1.5 text-imperial-bronze"></i>THỐNG KÊ DÒNG TỘC</span>
                     <span id="statGenerations" class="bg-crimson text-imperial-pale px-2 py-0.5 rounded text-[10px] font-bold">5 Đời</span>
                 </div>
-                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] mb-2.5">
+                <div class="grid grid-cols-2 gap-x-3 sm:gap-x-4 gap-y-1 text-[11px] mb-2">
                     <div class="flex justify-between">
-                        <span class="text-ink-muted">Tổng thành viên:</span>
+                        <span class="text-ink-muted">Thành viên:</span>
                         <strong id="statTotalMembers" class="text-ink">23</strong>
                     </div>
                     <div class="flex justify-between">
@@ -345,7 +364,7 @@
                         <strong id="statMaleCount" class="text-crimson">10</strong>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-ink-muted">Nữ (Con gái):</span>
+                        <span class="text-ink-muted">Nữ:</span>
                         <strong id="statFemaleCount" class="text-amber-800">13</strong>
                     </div>
                     <div class="flex justify-between">
@@ -354,34 +373,34 @@
                     </div>
                 </div>
                 <!-- Chú giải màu sắc -->
-                <div class="pt-2 border-t border-imperial-gold/40 flex flex-wrap items-center gap-3 text-[11px]">
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-sm bg-imperial-cream border-2 border-crimson inline-block"></span>
-                        <span class="font-medium">Đinh (Nam)</span>
+                <div class="pt-1.5 border-t border-imperial-gold/40 flex flex-wrap items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px]">
+                    <span class="flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-imperial-cream border-2 border-crimson inline-block"></span>
+                        <span class="font-medium">Đinh</span>
                     </span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-sm bg-imperial-cream border-2 border-imperial-bronze inline-block"></span>
+                    <span class="flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm bg-imperial-cream border-2 border-imperial-bronze inline-block"></span>
                         <span class="font-medium">Nữ</span>
                     </span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-crimson inline-block"></span>
-                        <span class="font-medium">Có ngày Giỗ ÂL</span>
+                    <span class="flex items-center gap-1">
+                        <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-crimson inline-block"></span>
+                        <span class="font-medium">Giỗ ÂL</span>
                     </span>
                 </div>
             </div>
         </div>
 
         <!-- Bộ Điều Khiển Phóng To / Thu Nhỏ (Góc Dưới Phải) -->
-        <div class="ui-chrome fixed bottom-4 right-4 z-30 flex items-center gap-1.5 bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-1.5 shadow-xl">
-            <button onclick="zoomTree(-0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Thu nhỏ">
+        <div class="ui-chrome fixed bottom-3 right-2.5 sm:bottom-4 sm:right-4 z-30 flex items-center gap-1 sm:gap-1.5 bg-imperial-cream/95 backdrop-blur border-2 border-imperial-bronze rounded-xl p-1 sm:p-1.5 shadow-xl">
+            <button onclick="zoomTree(-0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment active:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Thu nhỏ">
                 <i class="fa-solid fa-magnifying-glass-minus"></i>
             </button>
-            <span id="zoomLevelText" class="text-xs font-bold text-ink px-2 min-w-[52px] text-center">58%</span>
-            <button onclick="zoomTree(0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Phóng to">
+            <span id="zoomLevelText" class="text-[11px] sm:text-xs font-bold text-ink px-1 sm:px-2 min-w-[42px] sm:min-w-[52px] text-center">58%</span>
+            <button onclick="zoomTree(0.12)" class="w-8 h-8 rounded-lg hover:bg-imperial-parchment active:bg-imperial-parchment text-crimson flex items-center justify-center transition" title="Phóng to">
                 <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
             <div class="h-5 w-[1px] bg-imperial-gold/50 mx-0.5"></div>
-            <button onclick="centerAndFitTree()" class="px-2.5 h-8 rounded-lg bg-crimson text-imperial-pale hover:bg-crimson-dark text-xs font-semibold flex items-center gap-1.5 transition" title="Căn giữa toàn bộ Phả Đồ">
+            <button onclick="centerAndFitTree()" class="px-2 sm:px-2.5 h-8 rounded-lg bg-crimson text-imperial-pale hover:bg-crimson-dark active:bg-crimson-dark text-xs font-semibold flex items-center gap-1.5 transition" title="Căn giữa toàn bộ Phả Đồ">
                 <i class="fa-solid fa-expand"></i>
                 <span class="hidden sm:inline">Toàn cảnh</span>
             </button>
@@ -392,7 +411,7 @@
             
             <!-- 1. BỨC TRƯỚNG / CUỐN THƯ ĐẦU PHẢ ĐỒ -->
             <div id="clanScrollHeader" class="w-full pt-10 pb-8 flex flex-col items-center justify-center" style="display: block; width: 5024px;">
-			<div onclick="openClanInfoModal()" class="scroll-banner rounded-xl px-10 sm:px-16 py-6 max-w-4xl text-center cursor-pointer group transition hover:scale-[1.01]" style="margin-left: 2114px;">
+			<div onclick="openClanInfoModal()" class="scroll-banner rounded-xl px-8 sm:px-16 py-5 sm:py-6 max-w-4xl text-center cursor-pointer group transition hover:scale-[1.01]" style="margin-left: 2114px;">
                     <div class="scroll-roller-left"></div>
                     <div class="scroll-roller-right"></div>
 
@@ -437,26 +456,26 @@
     </main>
 
     <!-- ==================== MODAL 1: THÊM / SỬA THÀNH VIÊN ==================== -->
-    <div id="memberModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-3 sm:p-4 overflow-y-auto hidden">
-        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden my-8">
+    <div id="memberModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto hidden">
+        <div class="bg-imperial-cream border-2 sm:border-4 border-crimson rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden my-2 sm:my-8">
             <!-- Header Modal -->
-            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-user-pen text-imperial-gold text-lg"></i>
-                    <h3 id="memberModalTitle" class="font-serif font-bold text-lg text-imperial-pale">Chỉnh Sửa: Trần Đăng Hàm</h3>
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-4 sm:px-6 py-3 sm:py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <i class="fa-solid fa-user-pen text-imperial-gold text-base sm:text-lg shrink-0"></i>
+                    <h3 id="memberModalTitle" class="font-serif font-bold text-base sm:text-lg text-imperial-pale truncate">Chỉnh Sửa: Trần Đăng Hàm</h3>
                 </div>
-                <button onclick="closeMemberModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                <button onclick="closeMemberModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <!-- Form Nội Dung -->
-            <form id="memberForm" onsubmit="saveMemberForm(event)" class="p-5 sm:p-6 max-h-[82vh] overflow-y-auto space-y-5 text-xs sm:text-sm">
+            <form id="memberForm" onsubmit="saveMemberForm(event)" class="p-3.5 sm:p-6 max-h-[82dvh] overflow-y-auto space-y-4 sm:space-y-5 text-xs sm:text-sm">
                 <input type="hidden" id="formMemberId" value="mem_2">
                 <input type="hidden" id="formParentId" value="mem_1">
 
                 <!-- Thông báo cha/mẹ khi thêm con -->
-                <div id="parentContextBanner" class="bg-amber-100/90 border border-imperial-bronze rounded-xl px-4 py-2.5 text-ink flex items-center justify-between hidden">
+                <div id="parentContextBanner" class="bg-amber-100/90 border border-imperial-bronze rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-ink flex flex-wrap items-center justify-between gap-2 hidden">
                     <div>
                         <span class="text-ink-muted">Đang thêm con nối dõi cho:</span>
                         <strong id="parentContextName" class="ml-1 text-crimson font-serif">Vũ Tiến Đạt</strong>
@@ -465,11 +484,11 @@
                 </div>
 
                 <!-- Nhóm 1: Danh tính & Thế thứ -->
-                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
-                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-imperial-gold/60 space-y-3 sm:space-y-3.5">
+                    <h4 class="font-serif font-bold text-crimson text-xs sm:text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
                         <i class="fa-solid fa-id-card text-imperial-bronze"></i> 1. Danh Tính &amp; Thế Thứ Trong Họ
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-3.5">
                         <div class="sm:col-span-2">
                             <label class="block font-semibold text-ink mb-1">Họ và Tên thường gọi <span class="text-crimson">*</span></label>
                             <input type="text" id="inputFullName" required="" placeholder="VD: Nguyễn Đình Phúc" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-semibold">
@@ -487,7 +506,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
                         <div>
                             <label class="block font-semibold text-ink mb-1">Vai vế (Trưởng / Thứ / Đích tôn)</label>
                             <input type="text" id="inputRoleTitle" list="roleTitleSuggestions" placeholder="VD: Thủy Tổ, Trưởng Nam, Thứ Nam..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson">
@@ -515,11 +534,11 @@
                 </div>
 
                 <!-- Nhóm 2: Sinh Thời, Ngày Giỗ Âm Lịch & Mộ Phần -->
-                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3.5">
-                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-imperial-gold/60 space-y-3 sm:space-y-3.5">
+                    <h4 class="font-serif font-bold text-crimson text-xs sm:text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
                         <i class="fa-solid fa-fire-flame-curved text-imperial-bronze"></i> 2. Sinh Thời, Ngày Giỗ Âm Lịch &amp; Mộ Phần
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5">
                         <div>
                             <label class="block font-semibold text-ink mb-1">Tình trạng</label>
                             <select id="inputIsAlive" onchange="toggleDeceasedFields()" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson font-medium">
@@ -537,7 +556,7 @@
                         </div>
                     </div>
 
-                    <div id="deceasedDetailsRow" class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" style="display: grid;">
+                    <div id="deceasedDetailsRow" class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5" style="display: grid;">
                         <div>
                             <label class="block font-semibold text-crimson mb-1">Ngày Giỗ Âm Lịch (Ngày / Tháng)</label>
                             <div class="flex gap-1.5">
@@ -567,10 +586,10 @@
                 </div>
 
                 <!-- Nhóm 3: Thông tin Phối Ngẫu (Vợ / Chồng: Chính thất, Thứ thất, Hiền nội, Phò mã) -->
-                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-3">
-                    <div class="flex items-center justify-between border-b border-imperial-gold/40 pb-1.5">
-                        <h4 class="font-serif font-bold text-crimson text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-ring text-imperial-bronze"></i> 3. Thông Tin Phối Ngẫu (Chính Thất / Thứ Thất / Hiền Nội / Chồng)
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-imperial-gold/60 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-imperial-gold/40 pb-1.5">
+                        <h4 class="font-serif font-bold text-crimson text-xs sm:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-ring text-imperial-bronze"></i> 3. Thông Tin Phối Ngẫu (Vợ / Chồng)
                         </h4>
                         <button type="button" onclick="addSpouseRow()" class="px-2.5 py-1 rounded-lg bg-crimson text-imperial-pale text-xs font-semibold hover:bg-crimson-dark flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> Thêm Phối Ngẫu
@@ -580,19 +599,19 @@
                 </div>
 
                 <!-- Nhóm 4: Tiểu Sử & Công Đức -->
-                <div class="bg-white/80 p-4 rounded-xl border border-imperial-gold/60 space-y-2">
-                    <h4 class="font-serif font-bold text-crimson text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
+                <div class="bg-white/80 p-3 sm:p-4 rounded-xl border border-imperial-gold/60 space-y-2">
+                    <h4 class="font-serif font-bold text-crimson text-xs sm:text-sm border-b border-imperial-gold/40 pb-1.5 flex items-center gap-2">
                         <i class="fa-solid fa-book-open text-imperial-bronze"></i> 4. Tiểu Sử, Hành Trạng &amp; Công Đức Với Dòng Họ
                     </h4>
                     <textarea id="inputBio" rows="3" placeholder="Ghi chép công đức khai cơ lập nghiệp, khoa bảng, nghề nghiệp, lời dặn dò con cháu..." class="w-full px-3 py-2 rounded-lg border border-imperial-bronze/60 bg-white focus:outline-none focus:border-crimson"></textarea>
                 </div>
 
                 <!-- Nút Lưu / Hủy -->
-                <div class="flex items-center justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeMemberModal()" class="px-5 py-2.5 rounded-xl border border-ink/30 text-ink font-semibold hover:bg-black/5">
+                <div class="flex items-center justify-end gap-2.5 sm:gap-3 pt-2">
+                    <button type="button" onclick="closeMemberModal()" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-ink/30 text-ink font-semibold hover:bg-black/5">
                         Hủy bỏ
                     </button>
-                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold shadow-lg flex items-center gap-2">
+                    <button type="submit" class="px-5 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold shadow-lg flex items-center gap-2">
                         <i class="fa-solid fa-floppy-disk"></i> Lưu Vào Gia Phả
                     </button>
                 </div>
@@ -601,45 +620,45 @@
     </div>
 
     <!-- ==================== MODAL 2: XEM CHI TIẾT PHẢ KÝ CÁ NHÂN ==================== -->
-    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-3 sm:p-4 hidden">
-        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden">
-            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-imperial-cream border-2 sm:border-4 border-crimson rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-4 sm:px-6 py-3 sm:py-4 border-b-2 border-imperial-gold flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <span class="text-imperial-gold text-xl">❖</span>
-                    <h3 class="font-serif font-bold text-lg text-imperial-pale">TRANG PHẢ KÝ THÀNH VIÊN</h3>
+                    <span class="text-imperial-gold text-lg sm:text-xl">❖</span>
+                    <h3 class="font-serif font-bold text-base sm:text-lg text-imperial-pale">TRANG PHẢ KÝ THÀNH VIÊN</h3>
                 </div>
                 <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div id="detailModalContent" class="p-6 max-h-[80vh] overflow-y-auto space-y-4"></div>
+            <div id="detailModalContent" class="p-4 sm:p-6 max-h-[82dvh] overflow-y-auto space-y-4"></div>
         </div>
     </div>
 
     <!-- ==================== MODAL 3: SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM ==================== -->
-    <div id="anniversaryModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-3 sm:p-4 hidden">
-        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden">
-            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-fire-flame-curved text-imperial-gold text-xl"></i>
-                    <div>
-                        <h3 class="font-serif font-bold text-lg text-imperial-pale">SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM</h3>
-                        <p class="text-xs text-imperial-cream/80">Tra cứu ngày húy kỵ các bậc Tiên Tổ từ Tháng Giêng đến Tháng Chạp</p>
+    <div id="anniversaryModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-imperial-cream border-2 sm:border-4 border-crimson rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-4 sm:px-6 py-3 sm:py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <i class="fa-solid fa-fire-flame-curved text-imperial-gold text-lg sm:text-xl shrink-0"></i>
+                    <div class="min-w-0">
+                        <h3 class="font-serif font-bold text-sm sm:text-lg text-imperial-pale truncate">SỔ GIỖ HỌ ÂM LỊCH QUANH NĂM</h3>
+                        <p class="text-[11px] sm:text-xs text-imperial-cream/80 truncate">Tra cứu ngày húy kỵ các bậc Tiên Tổ</p>
                     </div>
                 </div>
-                <button onclick="closeAnniversaryModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
+                <button onclick="closeAnniversaryModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="p-5 sm:p-6 max-h-[80vh] overflow-y-auto space-y-4">
+            <div class="p-3.5 sm:p-6 max-h-[82dvh] overflow-y-auto space-y-4">
                 <!-- Bộ lọc tháng Âm lịch -->
-                <div class="flex flex-wrap items-center justify-between gap-2 bg-imperial-parchment/80 p-3 rounded-xl border border-imperial-bronze/50">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-imperial-parchment/80 p-2.5 sm:p-3 rounded-xl border border-imperial-bronze/50">
                     <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-crimson">
                         <i class="fa-regular fa-calendar-check"></i>
                         <span>Lọc theo tháng Âm lịch:</span>
                     </div>
-                    <select id="lunarMonthFilter" onchange="renderAnniversaryTable()" class="px-3 py-1.5 rounded-lg bg-white border border-crimson text-ink text-xs sm:text-sm font-semibold focus:outline-none">
+                    <select id="lunarMonthFilter" onchange="renderAnniversaryTable()" class="w-full sm:w-auto px-3 py-1.5 rounded-lg bg-white border border-crimson text-ink text-xs sm:text-sm font-semibold focus:outline-none">
                         <option value="all">Tất cả 12 tháng Âm lịch</option>
                         <option value="1">Tháng Giêng (Tháng 1 ÂL)</option>
                         <option value="2">Tháng Hai (Tháng 2 ÂL)</option>
@@ -663,23 +682,23 @@
     </div>
 
     <!-- ==================== MODAL 4: CHỈNH SỬA BỨC TRƯỚNG & THÔNG TIN DÒNG HỌ ==================== -->
-    <div id="clanInfoModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-3 sm:p-4 hidden">
-        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden">
-            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-6 py-4 border-b-2 border-imperial-gold flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-scroll text-imperial-gold text-lg"></i>
-                    <h3 class="font-serif font-bold text-lg text-imperial-pale">Thông Tin Bức Trướng &amp; Dòng Họ</h3>
+    <div id="clanInfoModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-imperial-cream border-2 sm:border-4 border-crimson rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-crimson-deep via-crimson to-crimson-deep px-4 sm:px-6 py-3 sm:py-4 border-b-2 border-imperial-gold flex items-center justify-between">
+                <div class="flex items-center gap-2 sm:gap-2.5">
+                    <i class="fa-solid fa-scroll text-imperial-gold text-base sm:text-lg"></i>
+                    <h3 class="font-serif font-bold text-base sm:text-lg text-imperial-pale">Thông Tin Bức Trướng &amp; Dòng Họ</h3>
                 </div>
                 <button onclick="closeClanInfoModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-imperial-pale flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form onsubmit="saveClanInfo(event)" class="p-6 space-y-4 text-xs sm:text-sm">
+            <form onsubmit="saveClanInfo(event)" class="p-4 sm:p-6 max-h-[82dvh] overflow-y-auto space-y-3.5 sm:space-y-4 text-xs sm:text-sm">
                 <div>
                     <label class="block font-semibold text-ink mb-1">Tiêu đề chính Bức Trướng <span class="text-crimson">*</span></label>
                     <input type="text" id="clanTitleInput" required="" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white font-serif font-bold text-crimson">
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
                     <div>
                         <label class="block font-semibold text-ink mb-1">Chi / Ngành / Phái</label>
                         <input type="text" id="clanBranchInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
@@ -697,7 +716,7 @@
                     <label class="block font-semibold text-ink mb-1">Hoành phi / Gia huấn dưới Bức Trướng</label>
                     <input type="text" id="clanMottoInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white italic">
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
                     <div>
                         <label class="block font-semibold text-ink mb-1">Vế câu đối Trái</label>
                         <input type="text" id="clanCoupletLeftInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
@@ -707,7 +726,7 @@
                         <input type="text" id="clanCoupletRightInput" class="w-full px-3 py-2 rounded-lg border border-imperial-bronze bg-white">
                     </div>
                 </div>
-                <div class="flex justify-end gap-3 pt-3">
+                <div class="flex justify-end gap-2.5 sm:gap-3 pt-2 sm:pt-3">
                     <button type="button" onclick="closeClanInfoModal()" class="px-4 py-2 rounded-xl border border-ink/30 text-ink font-semibold">Hủy</button>
                     <button type="submit" class="px-5 py-2 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold font-bold shadow">Lưu Thay Đổi</button>
                 </div>
@@ -716,18 +735,18 @@
     </div>
 
     <!-- ==================== MODAL 5: HỘP THOẠI XÁC NHẬN & THÔNG BÁO (KHÔNG DÙNG ALERT/CONFIRM) ==================== -->
-    <div id="confirmDialogModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-4 hidden">
-        <div class="bg-imperial-cream border-4 border-crimson rounded-2xl max-w-md w-full shadow-2xl overflow-hidden p-6 text-center space-y-4">
+    <div id="confirmDialogModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-3 sm:p-4 hidden">
+        <div class="bg-imperial-cream border-2 sm:border-4 border-crimson rounded-2xl max-w-md w-full shadow-2xl overflow-hidden p-5 sm:p-6 text-center space-y-4">
             <div class="w-12 h-12 rounded-full bg-crimson/10 border-2 border-crimson text-crimson flex items-center justify-center mx-auto text-xl">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <h4 id="confirmDialogTitle" class="font-serif font-bold text-lg text-crimson">Xác Nhận Xóa Thành Viên</h4>
-            <p id="confirmDialogMessage" class="text-sm text-ink-muted leading-relaxed">Bạn có chắc chắn muốn xóa thành viên "Nguyễn Đình Dũng" khỏi Phả Đồ không?</p>
+            <h4 id="confirmDialogTitle" class="font-serif font-bold text-base sm:text-lg text-crimson">Xác Nhận Xóa Thành Viên</h4>
+            <p id="confirmDialogMessage" class="text-xs sm:text-sm text-ink-muted leading-relaxed">Bạn có chắc chắn muốn xóa thành viên "Nguyễn Đình Dũng" khỏi Phả Đồ không?</p>
             <div class="flex items-center justify-center gap-3 pt-2">
-                <button onclick="closeConfirmDialog()" class="px-5 py-2 rounded-xl border border-ink/30 text-ink font-semibold text-xs sm:text-sm hover:bg-black/5">
+                <button onclick="closeConfirmDialog()" class="px-4 sm:px-5 py-2 rounded-xl border border-ink/30 text-ink font-semibold text-xs sm:text-sm hover:bg-black/5">
                     Hủy bỏ
                 </button>
-                <button id="confirmDialogActionBtn" class="px-5 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold text-xs sm:text-sm shadow">
+                <button id="confirmDialogActionBtn" class="px-4 sm:px-5 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border-2 border-imperial-gold font-bold text-xs sm:text-sm shadow">
                     Đồng ý
                 </button>
             </div>
@@ -735,9 +754,9 @@
     </div>
 
     <!-- Toast Thông Báo Nhanh -->
-    <div id="toastMessage" class="fixed top-16 right-5 z-50 items-center gap-2.5 bg-crimson-deep text-imperial-pale border-2 border-imperial-gold px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-semibold hidden">
-        <i class="fa-solid fa-circle-check text-imperial-gold text-base"></i>
-        <span id="toastText">Đã cập nhật thông tin "Trần Đăng Hàm"</span>
+    <div id="toastMessage" class="fixed top-24 sm:top-16 left-3 right-3 sm:left-auto sm:right-5 z-50 items-center justify-center sm:justify-start gap-2.5 bg-crimson-deep text-imperial-pale border-2 border-imperial-gold px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-semibold hidden">
+        <i class="fa-solid fa-circle-check text-imperial-gold text-base shrink-0"></i>
+        <span id="toastText" class="truncate">Đã cập nhật thông tin "Trần Đăng Hàm"</span>
     </div>
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
@@ -1404,6 +1423,21 @@ function saveData() {
             }, 3000);
         }
 
+        // Thu gọn / Mở rộng bảng Thống kê trên Mobile
+        function toggleStatsPanel() {
+            const body = document.getElementById('statsPanelBody');
+            const icon = document.getElementById('statsChevronIcon');
+            if (!body) return;
+            const isHidden = body.classList.contains('hidden');
+            if (isHidden) {
+                body.classList.remove('hidden');
+                icon?.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            } else {
+                body.classList.add('hidden');
+                icon?.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            }
+        }
+
         // Render thông tin Bức Trướng
         function renderClanBanner() {
             const info = familyData.clanInfo;
@@ -1639,20 +1673,20 @@ function saveData() {
 
                     ${spousesHtml}
 
-                    <div class="card-actions mt-2.5 pt-2 border-t border-imperial-gold/50 flex items-center justify-between gap-1 opacity-95 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="openAddChildModal('${m.id}')" class="flex-1 py-1 px-1.5 rounded bg-crimson text-imperial-pale hover:bg-crimson-dark text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm con nối dõi">
+                    <div class="card-actions mt-2.5 pt-2 border-t border-imperial-gold/50 flex items-center justify-between gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="openAddChildModal('${m.id}')" class="flex-1 py-1.5 sm:py-1 px-1.5 rounded bg-crimson text-imperial-pale hover:bg-crimson-dark text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm con nối dõi">
                             <i class="fa-solid fa-user-plus"></i> <span>+Con</span>
                         </button>
-                        <button onclick="openAddSpouseQuickModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-700 text-white hover:bg-amber-800 text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm Vợ / Chồng (Phối ngẫu)">
+                        <button onclick="openAddSpouseQuickModal('${m.id}')" class="py-1.5 sm:py-1 px-1.5 rounded bg-amber-700 text-white hover:bg-amber-800 text-[10px] font-bold flex items-center justify-center gap-1 shadow-sm" title="Thêm Vợ / Chồng (Phối ngẫu)">
                             <i class="fa-solid fa-ring"></i> <span>+Vợ/Chồng</span>
                         </button>
-                        <button onclick="openDetailModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-900 border border-imperial-bronze/40 text-[10px] font-bold" title="Xem Phả Ký & Tiểu sử">
+                        <button onclick="openDetailModal('${m.id}')" class="py-1.5 sm:py-1 px-2 sm:px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-900 border border-imperial-bronze/40 text-[10px] font-bold" title="Xem Phả Ký & Tiểu sử">
                             <i class="fa-solid fa-book-open"></i>
                         </button>
-                        <button onclick="openEditMemberModal('${m.id}')" class="py-1 px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-crimson border border-imperial-bronze/40 text-[10px] font-bold" title="Sửa thông tin">
+                        <button onclick="openEditMemberModal('${m.id}')" class="py-1.5 sm:py-1 px-2 sm:px-1.5 rounded bg-amber-100 hover:bg-amber-200 text-crimson border border-imperial-bronze/40 text-[10px] font-bold" title="Sửa thông tin">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                        <button onclick="confirmDeleteMember('${m.id}')" class="py-1 px-1.5 rounded bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 text-[10px] font-bold" title="Xóa thành viên">
+                        <button onclick="confirmDeleteMember('${m.id}')" class="py-1.5 sm:py-1 px-2 sm:px-1.5 rounded bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 text-[10px] font-bold" title="Xóa thành viên">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -1837,6 +1871,8 @@ function saveData() {
             });
 
             document.getElementById('statGenerations').textContent = `${maxGen} Đời`;
+            const mobileGenBadge = document.getElementById('statGenerationsBadgeMobile');
+            if (mobileGenBadge) mobileGenBadge.textContent = `${maxGen} Đời`;
             document.getElementById('statTotalMembers').textContent = total;
             document.getElementById('statMaleCount').textContent = males;
             document.getElementById('statFemaleCount').textContent = females;
@@ -1870,7 +1906,8 @@ function saveData() {
             const cy = centerClientY !== undefined ? centerClientY - rect.top : rect.height / 2;
 
             const oldScale = panState.scale;
-            const newScale = Math.min(1.8, Math.max(0.32, +(oldScale + delta).toFixed(2)));
+            const minScale = window.innerWidth < 640 ? 0.22 : 0.32;
+            const newScale = Math.min(1.8, Math.max(minScale, +(oldScale + delta).toFixed(2)));
             if (newScale === oldScale) return;
 
             panState.x = cx - ((cx - panState.x) * newScale) / oldScale;
@@ -1886,10 +1923,12 @@ function saveData() {
             const vHeight = viewport.clientHeight;
             const contentWidth = wrapper.offsetWidth || 1200;
             const contentHeight = (wrapper.offsetHeight || 900) + 230;
+            const isMobile = vWidth < 640;
 
-            const scaleX = (vWidth - 60) / contentWidth;
-            const scaleY = (vHeight - 60) / contentHeight;
-            const bestScale = Math.min(1, Math.max(0.42, Math.min(scaleX, scaleY)));
+            const scaleX = (vWidth - (isMobile ? 24 : 60)) / contentWidth;
+            const scaleY = (vHeight - (isMobile ? 40 : 60)) / contentHeight;
+            const minScale = isMobile ? 0.25 : 0.42;
+            const bestScale = Math.min(1, Math.max(minScale, Math.min(scaleX, scaleY)));
 
             panState.scale = +bestScale.toFixed(2);
             panState.x = Math.round((vWidth - contentWidth * panState.scale) / 2);
@@ -1903,7 +1942,7 @@ function saveData() {
             const viewport = document.getElementById('viewportContainer');
             const headerHeight = document.getElementById('clanScrollHeader')?.offsetHeight || 200;
 
-            panState.scale = 1;
+            panState.scale = viewport.clientWidth < 640 ? 0.85 : 1;
             const targetCenterX = pos.centerX;
             const targetCenterY = headerHeight + pos.y + 110;
 
@@ -1948,7 +1987,7 @@ function saveData() {
                 zoomTree(delta, e.clientX, e.clientY);
             }, { passive: false });
 
-            // Cảm ứng (Touch Pan)
+            // Cảm ứng (Touch Pan & Pinch Zoom chuẩn tâm 2 ngón)
             let touchStartDist = null;
             viewport.addEventListener('touchstart', (e) => {
                 if (e.target.closest('button, a, input, select, textarea')) return;
@@ -1967,21 +2006,25 @@ function saveData() {
 
             viewport.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 1 && panState.isDragging) {
+                    e.preventDefault();
                     panState.x = e.touches[0].clientX - panState.startX;
                     panState.y = e.touches[0].clientY - panState.startY;
                     applyPanZoomTransform();
                 } else if (e.touches.length === 2 && touchStartDist) {
+                    e.preventDefault();
                     const newDist = Math.hypot(
                         e.touches[0].clientX - e.touches[1].clientX,
                         e.touches[0].clientY - e.touches[1].clientY
                     );
+                    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
                     const diff = newDist - touchStartDist;
-                    if (Math.abs(diff) > 12) {
-                        zoomTree(diff > 0 ? 0.05 : -0.05);
+                    if (Math.abs(diff) > 10) {
+                        zoomTree(diff > 0 ? 0.05 : -0.05, midX, midY);
                         touchStartDist = newDist;
                     }
                 }
-            }, { passive: true });
+            }, { passive: false });
 
             viewport.addEventListener('touchend', () => {
                 panState.isDragging = false;
@@ -2284,7 +2327,7 @@ function saveData() {
                         : (sp.isAlive ? 'Hiện tiền' : 'Chưa rõ');
                     return `
                         <div class="p-3 rounded-xl bg-imperial-parchment/70 border border-imperial-bronze/50 space-y-1 text-xs">
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-wrap items-center justify-between gap-1">
                                 <span class="font-bold text-crimson uppercase">${escapeHtml(sp.relation || 'Phối ngẫu')}: ${escapeHtml(sp.fullName)}</span>
                                 <span class="font-semibold text-ink-muted">${escapeHtml(sp.birthYear || '?')} — ${sp.isAlive ? 'Nay' : escapeHtml(sp.deathYear || '?')}</span>
                             </div>
@@ -2304,8 +2347,8 @@ function saveData() {
                     <span class="inline-block px-3 py-0.5 rounded-full bg-crimson text-imperial-pale text-xs font-bold mb-1">
                         ĐỜI THỨ ${toRoman(gen)} • ${escapeHtml(m.roleTitle || 'Thành viên')}
                     </span>
-                    <h2 class="font-serif font-black text-2xl text-crimson-deep uppercase tracking-wide mt-1">${escapeHtml(m.fullName)}</h2>
-                    ${m.courtesyName ? `<p class="font-serif italic text-sm text-ink-muted mt-0.5">${escapeHtml(m.courtesyName)}</p>` : ''}
+                    <h2 class="font-serif font-black text-xl sm:text-2xl text-crimson-deep uppercase tracking-wide mt-1">${escapeHtml(m.fullName)}</h2>
+                    ${m.courtesyName ? `<p class="font-serif italic text-xs sm:text-sm text-ink-muted mt-0.5">${escapeHtml(m.courtesyName)}</p>` : ''}
                     ${m.titleHonor ? `<p class="text-xs font-bold text-amber-900 mt-1">${escapeHtml(m.titleHonor)}</p>` : ''}
                 </div>
 
@@ -2351,14 +2394,14 @@ function saveData() {
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-2 pt-3 border-t border-imperial-gold/50">
-                    <button onclick="closeDetailModal(); openAddChildModal('${m.id}')" class="px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold flex items-center gap-1.5">
+                <div class="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-imperial-gold/50">
+                    <button onclick="closeDetailModal(); openAddChildModal('${m.id}')" class="px-3 sm:px-3.5 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold flex items-center gap-1.5">
                         <i class="fa-solid fa-user-plus"></i> Thêm Con
                     </button>
-                    <button onclick="closeDetailModal(); openAddSpouseQuickModal('${m.id}')" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5">
+                    <button onclick="closeDetailModal(); openAddSpouseQuickModal('${m.id}')" class="px-3 sm:px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5">
                         <i class="fa-solid fa-ring"></i> Thêm Vợ/Chồng
                     </button>
-                    <button onclick="closeDetailModal(); openEditMemberModal('${m.id}')" class="px-4 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border border-imperial-gold text-xs font-bold flex items-center gap-1.5">
+                    <button onclick="closeDetailModal(); openEditMemberModal('${m.id}')" class="px-3.5 sm:px-4 py-2 rounded-xl bg-crimson hover:bg-crimson-dark text-imperial-pale border border-imperial-gold text-xs font-bold flex items-center gap-1.5">
                         <i class="fa-solid fa-pen"></i> Sửa Thông Tin
                     </button>
                 </div>
@@ -2444,19 +2487,19 @@ function saveData() {
             }
 
             container.innerHTML = filtered.map(item => `
-                <div class="bg-white hover:bg-amber-50/70 transition rounded-xl p-3.5 border border-imperial-gold/70 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div class="flex items-start sm:items-center gap-3.5">
-                        <div class="w-16 h-16 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold flex flex-col items-center justify-center shrink-0 shadow">
-                            <span class="text-[10px] text-imperial-gold uppercase font-bold">${getLunarMonthName(item.month)}</span>
-                            <span class="font-serif font-black text-xl leading-none mt-0.5">${String(item.day).padStart(2, '0')}</span>
+                <div class="bg-white hover:bg-amber-50/70 transition rounded-xl p-3 sm:p-3.5 border border-imperial-gold/70 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+                    <div class="flex items-start sm:items-center gap-3 sm:gap-3.5">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-crimson text-imperial-pale border-2 border-imperial-gold flex flex-col items-center justify-center shrink-0 shadow">
+                            <span class="text-[9px] sm:text-[10px] text-imperial-gold uppercase font-bold">${getLunarMonthName(item.month)}</span>
+                            <span class="font-serif font-black text-lg sm:text-xl leading-none mt-0.5">${String(item.day).padStart(2, '0')}</span>
                             <span class="text-[9px] opacity-85 mt-0.5">Âm lịch</span>
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <div class="text-[11px] font-bold text-amber-900 uppercase">${escapeHtml(item.role)}</div>
-                            <h4 class="font-serif font-bold text-base text-crimson-deep">${escapeHtml(item.fullName)}</h4>
+                            <h4 class="font-serif font-bold text-sm sm:text-base text-crimson-deep">${escapeHtml(item.fullName)}</h4>
                             <div class="text-xs text-ink-muted mt-0.5 flex flex-wrap gap-x-4 gap-y-0.5">
                                 <span><strong>Năm mất:</strong> ${escapeHtml(item.deathYear)}</span>
-                                <span><i class="fa-solid fa-mountain-sun text-imperial-bronze mr-1"></i><strong>Mộ phần:</strong> ${escapeHtml(item.burialPlace)}</span>
+                                <span class="break-all"><i class="fa-solid fa-mountain-sun text-imperial-bronze mr-1"></i><strong>Mộ phần:</strong> ${escapeHtml(item.burialPlace)}</span>
                             </div>
                         </div>
                     </div>
