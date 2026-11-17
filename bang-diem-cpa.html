@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Tính Điểm CPA</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,39 +13,52 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
         }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             opacity: 1;
         }
+        /* Ngăn trình duyệt di động (đặc biệt iOS Safari) tự động zoom vào ô input khi font-size < 16px */
+        @media (max-width: 640px) {
+            input[type="text"],
+            input[type="number"] {
+                font-size: 16px !important;
+            }
+        }
+        /* Tối ưu thanh cuộn ngang cho bảng trên điện thoại */
+        .table-scroll-container {
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen py-6 px-4 sm:px-6">
+<body class="text-slate-800 min-h-screen py-3 sm:py-6 px-2.5 sm:px-6">
 
-    <div class="max-w-5xl mx-auto space-y-5">
+    <div class="max-w-5xl mx-auto space-y-3.5 sm:space-y-5">
 
-			<!-- Header & CPA Summary -->
-			<div class="sticky top-2 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-md p-4 sm:p-5 transition-all">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Bảng Tính Điểm CPA</h1>
+        <!-- Header & CPA Summary: Chỉ sticky trên màn hình lớn (md trở lên) để không chiếm hết màn hình điện thoại -->
+        <div class="md:sticky md:top-2 z-30 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-md p-3.5 sm:p-5 transition-all">
+            <div class="flex flex-row items-center justify-between gap-3 pb-3.5 sm:pb-5 border-b border-slate-100">
+                <div class="min-w-0">
+                    <h1 class="text-lg sm:text-2xl font-bold text-slate-900 truncate">Bảng Tính Điểm CPA</h1>
                     <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
                         Sửa trực tiếp dữ liệu trên bảng
                     </p>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="saveHtmlFile()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-arrow-down"></i>Lưu file HTML
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="saveHtmlFile()" class="px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs sm:text-sm font-semibold shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Lưu file HTML</span>
                     </button>
                 </div>
             </div>
 
             <!-- Kết quả CPA -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5">
-                <div class="bg-blue-600 text-white rounded-xl p-4 flex items-center justify-between shadow-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-3.5 sm:pt-5">
+                <div class="bg-blue-600 text-white rounded-xl p-3.5 sm:p-4 flex items-center justify-between shadow-sm">
                     <div>
-                        <span class="text-xs font-medium text-blue-100 uppercase tracking-wider">Điểm Tổng Kết CPA</span>
-                        <div class="text-3xl sm:text-4xl font-extrabold mt-1" id="cpaDisplay">3.82</div>
+                        <span class="text-[11px] sm:text-xs font-medium text-blue-100 uppercase tracking-wider">Điểm Tổng Kết CPA</span>
+                        <div class="text-3xl sm:text-4xl font-extrabold mt-0.5 sm:mt-1" id="cpaDisplay">3.82</div>
                         <div class="text-xs text-blue-100 mt-1 font-mono" id="cpaDetail">160.5 / 42 = 3.821</div>
                     </div>
                     <div class="text-right">
@@ -54,50 +67,52 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center">
-                    <span class="text-xs font-medium text-slate-500 uppercase">Tín chỉ đã nhập điểm</span>
-                    <div class="text-2xl font-bold text-slate-900 mt-1">
-                        <span id="gradedCreditsDisplay">42</span>
-                        <span class="text-sm font-normal text-slate-400">/ <span id="totalCreditsDisplay">71</span> tín chỉ</span>
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 sm:p-4 flex flex-row sm:flex-col items-center sm:items-start justify-between sm:justify-center">
+                    <div>
+                        <span class="text-[11px] sm:text-xs font-medium text-slate-500 uppercase">Tín chỉ đã nhập điểm</span>
+                        <div class="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5 sm:mt-1">
+                            <span id="gradedCreditsDisplay">42</span>
+                            <span class="text-xs sm:text-sm font-normal text-slate-400">/ <span id="totalCreditsDisplay">71</span> tín chỉ</span>
+                        </div>
                     </div>
-                    <span class="text-xs text-slate-500 mt-1">Đã nhập <strong id="gradedCountDisplay">17</strong> / <strong id="totalCountDisplay">27</strong> môn</span>
+                    <span class="text-xs text-slate-500 sm:mt-1 text-right sm:text-left">Đã nhập <strong id="gradedCountDisplay">17</strong> / <strong id="totalCountDisplay">27</strong> môn</span>
                 </div>
 
-                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-center text-[11px] text-slate-600 space-y-1.5">
+                <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 sm:p-4 flex flex-col justify-center text-[11px] text-slate-600 space-y-1.5">
                     <div class="font-semibold text-slate-800">Quy đổi điểm hệ 4:</div>
-                    <div class="flex flex-wrap gap-1.5">
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A+: <b>9.5 -&gt; 10</b></span>					
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A: <b>8.5 -&gt; 9.4</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B+: <b>8.0 -&gt; 8.4</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B: <b>7.0 -&gt; 7.9</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C+: <b>6.5 -&gt; 6.9</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C: <b>5.5 -&gt; 6.4</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D+: <b>5.0 -&gt; 5.4</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D: <b>4.0 -&gt; 4.9</b></span>
-                        <span class="px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">F: <b>0 -&gt; 3.9</b></span>
+                    <div class="flex flex-wrap gap-1 sm:gap-1.5">
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A+: <b>9.5 -&gt; 10</b></span>					
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">A: <b>8.5 -&gt; 9.4</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B+: <b>8.0 -&gt; 8.4</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">B: <b>7.0 -&gt; 7.9</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C+: <b>6.5 -&gt; 6.9</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">C: <b>5.5 -&gt; 6.4</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D+: <b>5.0 -&gt; 5.4</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">D: <b>4.0 -&gt; 4.9</b></span>
+                        <span class="px-1.5 sm:px-2 py-0.5 bg-white border border-slate-200 rounded font-medium">F: <b>0 -&gt; 3.9</b></span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Form Thêm Môn Nhanh -->
-        <form onsubmit="handleAddCourse(event)" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-4">
-            <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+        <form onsubmit="handleAddCourse(event)" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-3.5 sm:p-4">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5 sm:mb-3">
                 <i class="fa-solid fa-plus-circle text-blue-600 mr-1"></i>Thêm môn học mới
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-                <div class="sm:col-span-2">
+            <div class="grid grid-cols-2 sm:grid-cols-12 gap-2 sm:gap-2.5">
+                <div class="col-span-1 sm:col-span-2">
                     <input type="text" id="newCode" placeholder="Mã HP (VD: IT4080)" required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase" value="">
                 </div>
-                <div class="sm:col-span-5">
-                    <input type="text" id="newName" placeholder="Tên học phần..." required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
-                </div>
-                <div class="sm:col-span-2">
+                <div class="col-span-1 sm:col-span-2">
                     <input type="number" id="newCredits" placeholder="Số tín (Cột 3)" min="1" max="20" step="1" value="3" required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="sm:col-span-3 flex gap-2">
-                    <input type="number" id="newGrade" placeholder="Điểm hệ 4" min="0" max="4" step="0.1" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shrink-0 transition">
+                <div class="col-span-2 sm:col-span-5">
+                    <input type="text" id="newName" placeholder="Tên học phần..." required="" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
+                </div>
+                <div class="col-span-2 sm:col-span-3 flex gap-2">
+                    <input type="number" id="newGrade" inputmode="decimal" placeholder="Điểm hệ 4" min="0" max="4" step="0.1" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" value="">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold rounded-xl shrink-0 transition">
                         + Thêm
                     </button>
                 </div>
@@ -106,16 +121,22 @@
 
         <!-- Bảng Tổng Hợp Các Môn Học -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-            <div class="overflow-x-auto">
+            <!-- Gợi ý vuốt ngang trên di động -->
+            <div class="sm:hidden px-3 py-1.5 bg-slate-50 border-b border-slate-200/80 text-[11px] text-slate-500 flex items-center justify-between">
+                <span><i class="fa-solid fa-arrows-left-right text-blue-500 mr-1"></i>Vuốt ngang bảng để xem &amp; sửa đầy đủ</span>
+                <span class="font-medium text-slate-600">Chạm trực tiếp vào ô</span>
+            </div>
+
+            <div class="overflow-x-auto table-scroll-container">
                 <table class="w-full border-collapse text-left">
                     <thead>
-                        <tr class="bg-slate-100/80 border-b border-slate-200 text-slate-700 text-xs sm:text-sm font-bold">
-                            <th class="py-3 px-3 text-center w-12 border-r border-slate-200">STT</th>
-                            <th class="py-3 px-3 w-36 border-r border-slate-200">Mã HP</th>
-                            <th class="py-3 px-3 min-w-[220px] border-r border-slate-200">Tên Học Phần</th>
-                            <th class="py-3 px-3 w-32 text-center border-r border-slate-200">Hệ Số Tín</th>
-                            <th class="py-3 px-3 w-52 text-center border-r border-slate-200">Điểm Tổng Kết</th>
-                            <th class="py-3 px-3 w-16 text-center">Xóa</th>
+                        <tr class="bg-slate-100/80 border-b border-slate-200 text-slate-700 text-xs sm:text-sm font-bold whitespace-nowrap">
+                            <th class="py-2.5 sm:py-3 px-2 sm:px-3 text-center w-10 sm:w-12 border-r border-slate-200">STT</th>
+                            <th class="py-2.5 sm:py-3 px-2.5 sm:px-3 w-28 sm:w-36 border-r border-slate-200">Mã HP</th>
+                            <th class="py-2.5 sm:py-3 px-2.5 sm:px-3 min-w-[200px] sm:min-w-[220px] border-r border-slate-200">Tên Học Phần</th>
+                            <th class="py-2.5 sm:py-3 px-2 sm:px-3 w-24 sm:w-32 text-center border-r border-slate-200">Hệ Số Tín</th>
+                            <th class="py-2.5 sm:py-3 px-2.5 sm:px-3 w-36 sm:w-52 text-center border-r border-slate-200">Điểm Tổng Kết</th>
+                            <th class="py-2.5 sm:py-3 px-2 sm:px-3 w-14 sm:w-16 text-center">Xóa</th>
                         </tr>
                     </thead>
                     <tbody id="courseListBody" class="divide-y divide-slate-200 text-sm"></tbody>
@@ -135,16 +156,16 @@
             </datalist>
 
             <!-- Nút thêm dòng trống nhanh & Lưu HTML ở cuối bảng -->
-            <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <button onclick="addEmptyRow()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold transition">
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="addEmptyRow()" class="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 active:scale-95 text-slate-700 text-xs font-semibold transition">
                         <i class="fa-solid fa-plus text-blue-600"></i> Thêm dòng trống
                     </button>
-                    <button onclick="saveHtmlFile()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition">
+                    <button onclick="saveHtmlFile()" class="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 active:scale-95 text-emerald-700 text-xs font-semibold transition">
                         <i class="fa-solid fa-download"></i> Tải bản HTML đã lưu
                     </button>
                 </div>
-                <span id="statusNotice" class="text-xs text-slate-400">Nhấn F5 để khôi phục dữ liệu gốc</span>
+                <span id="statusNotice" class="text-[11px] sm:text-xs text-slate-400 text-center sm:text-right">Nhấn F5 (tải lại trang) để khôi phục dữ liệu gốc</span>
             </div>
         </div>
 
@@ -371,37 +392,36 @@
 
         let courses = [];
 
-function loadData() {
-    // Xóa sạch dữ liệu cũ còn sót lại trong localStorage (nếu trước đây từng chạy bản cũ)
-    localStorage.removeItem('simple_cpa_courses_v3');
+        function loadData() {
+            // Xóa sạch dữ liệu cũ còn sót lại trong localStorage (nếu trước đây từng chạy bản cũ)
+            localStorage.removeItem('simple_cpa_courses_v3');
 
-    if (EMBEDDED_STATE && Array.isArray(EMBEDDED_STATE.courses)) {
-        courses = JSON.parse(JSON.stringify(EMBEDDED_STATE.courses));
-        return;
-    }
+            if (EMBEDDED_STATE && Array.isArray(EMBEDDED_STATE.courses)) {
+                courses = JSON.parse(JSON.stringify(EMBEDDED_STATE.courses));
+                return;
+            }
 
-    courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
-}
+            courses = JSON.parse(JSON.stringify(ORIGINAL_DEFAULT_COURSES));
+        }
 
-function showStatus(msg, isHighlight = false) {
-    const notice = document.getElementById('statusNotice');
-    if (!notice) return;
-    notice.textContent = msg;
-    notice.className = isHighlight
-        ? 'text-xs font-semibold text-emerald-600'
-        : 'text-xs text-slate-400';
-    setTimeout(() => {
-        notice.textContent = 'Nhấn F5 để khôi phục dữ liệu gốc';
-        notice.className = 'text-xs text-slate-400';
-    }, 2500);
-}
+        function showStatus(msg, isHighlight = false) {
+            const notice = document.getElementById('statusNotice');
+            if (!notice) return;
+            notice.textContent = msg;
+            notice.className = isHighlight
+                ? 'text-[11px] sm:text-xs font-semibold text-emerald-600 text-center sm:text-right'
+                : 'text-[11px] sm:text-xs text-slate-400 text-center sm:text-right';
+            setTimeout(() => {
+                notice.textContent = 'Nhấn F5 (tải lại trang) để khôi phục dữ liệu gốc';
+                notice.className = 'text-[11px] sm:text-xs text-slate-400 text-center sm:text-right';
+            }, 2500);
+        }
 
-function saveData() {
-    // Không tự động lưu vào localStorage; dữ liệu chỉ lưu khi bấm "Lưu file HTML"
-}
+        function saveData() {
+            // Không tự động lưu vào localStorage; dữ liệu chỉ lưu khi bấm "Lưu file HTML"
+        }
 
-        // Lưu toàn bộ dữ liệu đã chỉnh sửa thành 1 file HTML độc lập
-// Lưu toàn bộ dữ liệu đã chỉnh sửa thành 1 file HTML độc lập (gọn nhẹ, không phình size)
+        // Lưu toàn bộ dữ liệu đã chỉnh sửa thành 1 file HTML độc lập (gọn nhẹ, không phình size)
         function saveHtmlFile() {
             // Tạo bản sao DOM để dọn dẹp mà không làm nháy giao diện hiện tại
             const clone = document.documentElement.cloneNode(true);
@@ -537,46 +557,46 @@ function saveData() {
 
                 tr.innerHTML = `
                     <!-- STT -->
-                    <td class="py-2.5 px-3 text-center text-slate-500 font-medium border-r border-slate-200">
+                    <td class="py-2 sm:py-2.5 px-2 sm:px-3 text-center text-slate-500 font-medium border-r border-slate-200">
                         ${index + 1}
                     </td>
 
                     <!-- Cột 1: Mã học phần (Sửa trực tiếp) -->
-                    <td class="py-2 px-2 border-r border-slate-200">
+                    <td class="py-1.5 sm:py-2 px-1.5 sm:px-2 border-r border-slate-200">
                         <input type="text" value="${escapeHtml(course.code)}" placeholder="Mã HP"
                             oninput="updateField('${course.id}', 'code', this.value)"
-                            class="w-full px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
+                            class="w-full min-w-[85px] px-2 py-1.5 rounded-lg font-semibold text-blue-600 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm uppercase">
                     </td>
 
                     <!-- Cột 2: Tên học phần (Sửa trực tiếp) -->
-                    <td class="py-2 px-2 border-r border-slate-200">
+                    <td class="py-1.5 sm:py-2 px-1.5 sm:px-2 border-r border-slate-200">
                         <input type="text" value="${escapeHtml(course.name)}" placeholder="Nhập tên môn học..."
                             oninput="updateField('${course.id}', 'name', this.value)"
-                            class="w-full px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                            class="w-full min-w-[180px] px-2 py-1.5 rounded-lg font-medium text-slate-800 bg-transparent hover:bg-slate-100 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
                     </td>
 
                     <!-- Cột 3: Hệ số tín (Sửa trực tiếp) -->
-                    <td class="py-2 px-2 text-center border-r border-slate-200">
-                        <input type="number" min="1" max="20" step="1" value="${course.credits}"
+                    <td class="py-1.5 sm:py-2 px-1.5 sm:px-2 text-center border-r border-slate-200">
+                        <input type="number" inputmode="numeric" min="1" max="20" step="1" value="${course.credits}"
                             oninput="updateField('${course.id}', 'credits', this.value)"
-                            class="w-20 text-center px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                            class="w-16 sm:w-20 text-center px-1.5 sm:px-2 py-1.5 rounded-lg font-bold text-slate-800 bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
                     </td>
 
                     <!-- Cột 4: Điểm tổng kết hệ 4 (Tự nhập hoặc chọn nhanh) -->
-                    <td class="py-2 px-3 border-r border-slate-200">
-                        <input type="number" min="0" max="4" step="0.1" list="grade4Options"
+                    <td class="py-1.5 sm:py-2 px-2 sm:px-3 border-r border-slate-200">
+                        <input type="number" inputmode="decimal" min="0" max="4" step="0.1" list="grade4Options"
                             data-grade-index="${index}"
                             value="${hasGrade ? course.grade4 : ''}"
-                            placeholder="Nhập 0 - 4.0"
+                            placeholder="0 - 4.0"
                             oninput="updateField('${course.id}', 'grade4', this.value, this)"
                             onkeydown="handleGradeKeydown(event, ${index})"
-                            class="w-full text-center px-3 py-1.5 rounded-lg border ${hasGrade ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
+                            class="w-full min-w-[95px] text-center px-2 sm:px-3 py-1.5 rounded-lg border ${hasGrade ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition">
                     </td>
 
                     <!-- Xóa môn -->
-                    <td class="py-2 px-2 text-center">
+                    <td class="py-1.5 sm:py-2 px-1.5 sm:px-2 text-center">
                         <button onclick="deleteCourse('${course.id}')"
-                            class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 inline-flex items-center justify-center transition"
+                            class="w-9 h-9 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-600 active:bg-rose-100 hover:bg-rose-50 inline-flex items-center justify-center transition"
                             title="Xóa môn này">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
@@ -612,7 +632,7 @@ function saveData() {
                 }
                 if (inputEl) {
                     const hasG = item.grade4 !== '' && item.grade4 !== null && !isNaN(parseFloat(item.grade4));
-                    inputEl.className = `w-full text-center px-3 py-1.5 rounded-lg border ${hasG ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition`;
+                    inputEl.className = `w-full min-w-[95px] text-center px-2 sm:px-3 py-1.5 rounded-lg border ${hasG ? 'border-blue-500 bg-blue-50/50 font-bold text-blue-900' : 'border-slate-300 bg-white text-slate-800'} focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm transition`;
                 }
             } else if (field === 'code') {
                 item.code = value.toUpperCase();
