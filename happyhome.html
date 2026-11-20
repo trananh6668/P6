@@ -1,0 +1,3348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Khu Phố Hạnh Phúc — Mái Ấm Mùa Đông</title>
+
+  <!-- Google Fonts hỗ trợ tiếng Việt mềm mại, ấm cúng -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Import Map cho Three.js ES Module & OrbitControls -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --glass-bg: rgba(18, 24, 42, 0.62);
+      --glass-border: rgba(255, 232, 198, 0.22);
+      --warm-gold: #ffbe6b;
+      --warm-amber: #ff944d;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0b1224;
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+      color: #fdf6ec;
+      user-select: none;
+    }
+
+    h1, h2, .font-display {
+      font-family: 'Quicksand', 'Be Vietnam Pro', sans-serif;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      cursor: grab;
+    }
+
+    #canvas-container:active {
+      cursor: grabbing;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    /* Phong cách kính mờ Glassmorphism ấm áp */
+    .glass-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 12px 36px rgba(5, 10, 24, 0.45), inset 0 1px 0 rgba(255, 245, 225, 0.12);
+    }
+
+    .btn-cozy {
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      border: 1px solid rgba(255, 232, 198, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn-cozy:hover {
+      background: rgba(255, 190, 107, 0.18);
+      border-color: rgba(255, 190, 107, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-cozy.active {
+      background: linear-gradient(135deg, rgba(255, 166, 77, 0.85), rgba(235, 114, 62, 0.85));
+      border-color: rgba(255, 226, 175, 0.75);
+      color: #fffaf2;
+      box-shadow: 0 4px 16px rgba(255, 148, 77, 0.38);
+    }
+
+    /* Toggle Switch mượt mà */
+    .toggle-track {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 232, 198, 0.22);
+      position: relative;
+      transition: background 0.25s ease, border-color 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle-track.on {
+      background: linear-gradient(135deg, #ffaa52, #e86f3a);
+      border-color: rgba(255, 232, 198, 0.6);
+    }
+
+    .toggle-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #fff9f0;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .toggle-track.on .toggle-thumb {
+      transform: translateX(20px);
+    }
+
+    /* Thanh cuộn tinh tế cho bảng điều khiển trên màn hình nhỏ */
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 210, 150, 0.28);
+      border-radius: 999px;
+    }
+
+    /* Hiệu ứng bong bóng lời nhắn */
+    #story-bubble {
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #story-bubble.hidden-bubble {
+      opacity: 0;
+      transform: translate(-50%, 18px) scale(0.95);
+      pointer-events: none;
+    }
+    #story-bubble.visible-bubble {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Sóng âm thanh nhỏ khi bật âm thanh ấm cúng */
+    .eq-bar {
+      width: 3px;
+      background: #ffd18c;
+      border-radius: 2px;
+      animation: eqPulse 0.9s infinite ease-in-out;
+    }
+    .eq-bar:nth-child(2) { animation-delay: 0.2s; }
+    .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes eqPulse {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+
+    /* Màn hình tải */
+    #loading-screen {
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Màn hình chờ khởi tạo khung cảnh 3D -->
+  <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0b1224] px-6 text-center">
+    <div class="w-16 h-16 mb-5 rounded-2xl bg-gradient-to-br from-amber-400/25 to-orange-500/20 border border-amber-300/35 flex items-center justify-center shadow-lg shadow-amber-500/15 animate-pulse">
+      <svg class="w-9 h-9 text-amber-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5.25 9.75V20.25h13.5V9.75M9.75 20.25v-6h4.5v6" />
+      </svg>
+    </div>
+    <h2 class="font-display text-2xl sm:text-3xl font-bold text-amber-100 tracking-wide">Khu Phố Hạnh Phúc</h2>
+    <p class="mt-2 text-sm text-amber-200/75">Đang nhóm bếp lò sưởi và thắp sáng mái ấm mùa đông...</p>
+  </div>
+
+  <!-- Khung chứa Canvas 3D -->
+  <div id="canvas-container" aria-label="Cảnh 3D Khu Phố Hạnh Phúc Mùa Đông"></div>
+
+  <!-- Tiêu đề nổi góc trên bên trái -->
+  <header class="fixed top-3 left-3 sm:top-5 sm:left-5 z-20 max-w-[calc(100vw-5.5rem)] sm:max-w-md pointer-events-none">
+    <div class="glass-panel rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 pointer-events-auto">
+      <div class="flex items-center gap-2.5">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400/30 to-orange-500/30 border border-amber-300/40 text-amber-200 shadow-inner">
+          <!-- Icon ngôi nhà ấm áp -->
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
+            <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <h1 class="font-display text-sm sm:text-base font-bold text-amber-50 leading-tight truncate">
+            Khu Phố Hạnh Phúc — Mái Ấm Mùa Đông
+          </h1>
+          <p class="text-[11px] sm:text-xs text-amber-200/75 mt-0.5 truncate">
+            Kéo xoay • Cuộn phóng to • Chạm vào gia đình &amp; đồ vật
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nút ẩn/hiện bảng điều khiển góc trên bên phải -->
+  <div class="fixed top-3 right-3 sm:top-5 sm:right-5 z-30 flex items-center gap-2">
+    <button id="btn-toggle-panel" type="button" class="glass-panel rounded-xl px-3 py-2.5 text-xs sm:text-sm font-medium text-amber-100 hover:bg-amber-400/20 transition flex items-center gap-2 cursor-pointer" title="Ẩn hoặc hiện bảng điều khiển">
+      <svg id="icon-panel-toggle" class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+      </svg>
+      <span id="label-panel-toggle" class="hidden sm:inline">Ẩn bảng</span>
+    </button>
+  </div>
+
+  <!-- Bảng điều khiển tương tác Glassmorphism -->
+  <aside id="control-panel" class="fixed top-16 right-3 sm:top-20 sm:right-5 z-20 w-[calc(100vw-1.5rem)] max-w-[310px] max-h-[calc(100vh-6rem)] overflow-y-auto custom-scroll glass-panel rounded-2xl p-3.5 sm:p-4 transition-all duration-300 origin-top-right">
+    <div class="space-y-4">
+
+      <!-- 1. Góc nhìn Camera -->
+      <section>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-amber-200/80">Góc nhìn Camera</span>
+          <span class="text-[10px] text-amber-200/55">Chuyển cảnh mượt</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" data-cam="neighborhood" class="cam-btn btn-cozy active rounded-xl px-2.5 py-2 text-left text-xs font-medium flex items-center gap-1.5 cursor-pointer">
+            <span class="text-sm">🏘️</span>
+            <span class="leading-tight">Toàn Cảnh Khu Phố</span>
+          </button>
+          <button type="button" data-cam="house" class="cam-btn btn-cozy rounded-xl px-2.5 py-2 text-left text-xs font-medium flex items-center gap-1.5 cursor-pointer">
+            <span class="text-sm">🏡</span>
+            <span class="leading-tight">Ngôi Nhà Ấm Áp</span>
+          </button>
+          <button type="button" data-cam="family" class="cam-btn btn-cozy rounded-xl px-2.5 py-2 text-left text-xs font-medium flex items-center gap-1.5 cursor-pointer">
+            <span class="text-sm">👨‍👩‍👧‍👦</span>
+            <span class="leading-tight">Gia Đình Quây Quần</span>
+          </button>
+          <button type="button" data-cam="fireplace" class="cam-btn btn-cozy rounded-xl px-2.5 py-2 text-left text-xs font-medium flex items-center gap-1.5 cursor-pointer">
+            <span class="text-sm">🔥</span>
+            <span class="leading-tight">Góc Lò Sưởi</span>
+          </button>
+        </div>
+      </section>
+
+      <hr class="border-amber-200/10" />
+
+      <!-- 2. Mở tường xem nội thất (Cutaway) -->
+      <section>
+        <button id="btn-cutaway" type="button" class="w-full flex items-center justify-between gap-3 rounded-xl p-2.5 bg-white/5 hover:bg-amber-400/10 border border-amber-200/15 transition cursor-pointer">
+          <div class="text-left">
+            <div class="text-xs font-semibold text-amber-50">Mở tường xem bên trong</div>
+            <div class="text-[11px] text-amber-200/65">Làm mờ mặt tiền lộ phòng khách</div>
+          </div>
+          <div id="toggle-cutaway" class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </button>
+      </section>
+
+      <!-- 3. Thời điểm trong ngày -->
+      <section>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-amber-200/80 mb-2">Thời điểm trong ngày</div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" data-time="night" class="time-btn btn-cozy active rounded-xl py-2 px-1 text-center text-[11px] font-medium cursor-pointer">
+            <div>🌙</div>
+            <div class="mt-0.5 leading-tight">Đêm Tuyết Rơi</div>
+          </button>
+          <button type="button" data-time="sunset" class="time-btn btn-cozy rounded-xl py-2 px-1 text-center text-[11px] font-medium cursor-pointer">
+            <div>🌅</div>
+            <div class="mt-0.5 leading-tight">Hoàng Hôn</div>
+          </button>
+          <button type="button" data-time="morning" class="time-btn btn-cozy rounded-xl py-2 px-1 text-center text-[11px] font-medium cursor-pointer">
+            <div>☀️</div>
+            <div class="mt-0.5 leading-tight">Sáng Mùa Đông</div>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. Lượng tuyết rơi -->
+      <section>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-amber-200/80 mb-2">Lượng tuyết rơi</div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" data-snow="light" class="snow-btn btn-cozy rounded-xl py-1.5 text-center text-xs font-medium cursor-pointer">Nhẹ</button>
+          <button type="button" data-snow="medium" class="snow-btn btn-cozy active rounded-xl py-1.5 text-center text-xs font-medium cursor-pointer">Vừa</button>
+          <button type="button" data-snow="heavy" class="snow-btn btn-cozy rounded-xl py-1.5 text-center text-xs font-medium cursor-pointer">Dày</button>
+        </div>
+      </section>
+
+      <hr class="border-amber-200/10" />
+
+      <!-- 5. Đèn lễ hội & Âm thanh ấm cúng -->
+      <section class="space-y-2">
+        <button id="btn-lights" type="button" class="w-full flex items-center justify-between rounded-xl px-2.5 py-2 bg-white/5 hover:bg-amber-400/10 border border-amber-200/10 transition cursor-pointer">
+          <span class="text-xs font-medium text-amber-50 flex items-center gap-2">
+            <span>✨</span> Đèn lễ hội &amp; trang trí
+          </span>
+          <div id="toggle-lights" class="toggle-track on">
+            <div class="toggle-thumb"></div>
+          </div>
+        </button>
+
+        <button id="btn-audio" type="button" class="w-full flex items-center justify-between rounded-xl px-2.5 py-2 bg-white/5 hover:bg-amber-400/10 border border-amber-200/10 transition cursor-pointer">
+          <span class="text-xs font-medium text-amber-50 flex items-center gap-2">
+            <span>🎵</span>
+            <span>Âm thanh ấm cúng</span>
+            <span id="audio-eq" class="hidden items-end gap-0.5 h-3.5 ml-1">
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+            </span>
+          </span>
+          <div id="toggle-audio" class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </button>
+      </section>
+
+    </div>
+  </aside>
+
+  <!-- Bong bóng lời nhắn ấm áp khi nhấn vào nhân vật hoặc đồ vật -->
+  <div id="story-bubble" class="hidden-bubble fixed bottom-5 left-1/2 z-30 w-[calc(100vw-2rem)] max-w-md glass-panel rounded-2xl px-4 py-3.5 shadow-2xl border-amber-300/35">
+    <div class="flex items-start gap-3">
+      <div id="story-icon" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400/30 to-orange-500/30 border border-amber-300/40 text-xl">
+        💛
+      </div>
+      <div class="flex-1 min-w-0">
+        <div id="story-title" class="font-display text-sm font-bold text-amber-200">Mái Ấm Gia Đình</div>
+        <p id="story-text" class="mt-0.5 text-xs sm:text-sm text-amber-50/95 leading-relaxed"></p>
+      </div>
+      <button id="btn-close-story" type="button" class="p-1 text-amber-200/65 hover:text-amber-100 rounded-lg transition cursor-pointer" aria-label="Đóng lời nhắn">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Khung thông báo lỗi nhẹ nhàng (không bao giờ dùng alert) -->
+  <div id="error-box" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4">
+    <div class="glass-panel max-w-md rounded-2xl p-5 text-center">
+      <h3 class="font-display text-lg font-bold text-amber-200">Không thể khởi tạo khung cảnh 3D</h3>
+      <p id="error-msg" class="mt-2 text-sm text-amber-50/80"></p>
+    </div>
+  </div>
+
+  <!-- Mã nguồn chính Three.js (ES Module) -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    /* =========================================================================
+       1. TRẠNG THÁI ỨNG DỤNG & CẤU HÌNH TOÀN CỤC
+    ========================================================================= */
+    const state = {
+      cutawayTarget: 0,       // 0 = đóng tường, 1 = mở tường lộ nội thất
+      cutawayCurrent: 0,
+      timeOfDay: 'night',     // 'night' | 'sunset' | 'morning'
+      snowLevel: 'medium',    // 'light' | 'medium' | 'heavy'
+      festiveLightsOn: true,
+      audioOn: false,
+      panelOpen: true,
+      cameraAnim: null,       // { startPos, endPos, startTarget, endTarget, t, duration }
+      storyTimeout: null,
+      hoveredObj: null
+    };
+
+    // Các góc nhìn Camera mượt mà đã được căn chỉnh chuẩn xác theo phối cảnh
+    const CAMERA_PRESETS = {
+      neighborhood: {
+        pos: new THREE.Vector3(16.5, 11.8, 22.5),
+        target: new THREE.Vector3(0.0, 2.0, 2.0),
+        autoCutaway: false
+      },
+      house: {
+        pos: new THREE.Vector3(4.8, 4.3, 12.6),
+        target: new THREE.Vector3(0.0, 2.5, 0.2),
+        autoCutaway: false
+      },
+      family: {
+        pos: new THREE.Vector3(0.25, 2.55, 8.2),
+        target: new THREE.Vector3(-0.1, 1.55, -0.6),
+        autoCutaway: true
+      },
+      fireplace: {
+        pos: new THREE.Vector3(1.15, 1.85, 3.8),
+        target: new THREE.Vector3(-1.75, 1.2, -0.75),
+        autoCutaway: true
+      }
+    };
+
+    // Bảng cấu hình ánh sáng & khí quyển cho 3 thời điểm trong ngày
+    const TIME_PRESETS = {
+      night: {
+        skyTop: new THREE.Color(0x070d1f),
+        skyMid: new THREE.Color(0x132042),
+        skyHorizon: new THREE.Color(0x23335c),
+        fogColor: new THREE.Color(0x14203d),
+        fogDensity: 0.0145,
+        hemiSky: new THREE.Color(0x4d6eb5),
+        hemiGround: new THREE.Color(0x2d2438),
+        hemiIntensity: 0.55,
+        dirColor: new THREE.Color(0x9ec0ff),
+        dirIntensity: 0.95,
+        dirPos: new THREE.Vector3(-18, 26, 16),
+        starsOpacity: 0.95,
+        moonOpacity: 1.0,
+        windowEmissive: 1.45,
+        exposure: 1.15
+      },
+      sunset: {
+        skyTop: new THREE.Color(0x2b2452),
+        skyMid: new THREE.Color(0x9e4c62),
+        skyHorizon: new THREE.Color(0xffa463),
+        fogColor: new THREE.Color(0x6b475c),
+        fogDensity: 0.0125,
+        hemiSky: new THREE.Color(0xffb58a),
+        hemiGround: new THREE.Color(0x4f394e),
+        hemiIntensity: 0.78,
+        dirColor: new THREE.Color(0xff9b5e),
+        dirIntensity: 1.65,
+        dirPos: new THREE.Vector3(-28, 12, 18),
+        starsOpacity: 0.25,
+        moonOpacity: 0.35,
+        windowEmissive: 1.15,
+        exposure: 1.1
+      },
+      morning: {
+        skyTop: new THREE.Color(0x4b8ed6),
+        skyMid: new THREE.Color(0x9acaf2),
+        skyHorizon: new THREE.Color(0xfff1dc),
+        fogColor: new THREE.Color(0xcde2f5),
+        fogDensity: 0.010,
+        hemiSky: new THREE.Color(0xdaf0ff),
+        hemiGround: new THREE.Color(0x9ab0c7),
+        hemiIntensity: 1.05,
+        dirColor: new THREE.Color(0xfff4df),
+        dirIntensity: 1.85,
+        dirPos: new THREE.Vector3(20, 26, 18),
+        starsOpacity: 0.0,
+        moonOpacity: 0.0,
+        windowEmissive: 0.55,
+        exposure: 1.05
+      }
+    };
+
+    /* =========================================================================
+       2. HÀM TẠO TEXTURE PROCEDURAL (KHÔNG DÙNG ẢNH NGOÀI)
+    ========================================================================= */
+    function createGlowTexture(innerColor = 'rgba(255,230,170,1)', outerColor = 'rgba(255,160,60,0)') {
+      const c = document.createElement('canvas');
+      c.width = 128; c.height = 128;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(64, 64, 2, 64, 64, 62);
+      g.addColorStop(0, innerColor);
+      g.addColorStop(0.35, innerColor.replace(',1)', ',0.55)'));
+      g.addColorStop(1, outerColor);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 128, 128);
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    function createSnowflakeTexture() {
+      const c = document.createElement('canvas');
+      c.width = 64; c.height = 64;
+      const ctx = c.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+      g.addColorStop(0, 'rgba(255,255,255,1)');
+      g.addColorStop(0.55, 'rgba(235,246,255,0.8)');
+      g.addColorStop(1, 'rgba(220,238,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      const tex = new THREE.CanvasTexture(c);
+      return tex;
+    }
+
+    function createWoodFloorTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#8b5a34';
+      ctx.fillRect(0, 0, 512, 512);
+      const rows = 10;
+      const rh = 512 / rows;
+      for (let i = 0; i < rows; i++) {
+        const shade = (i % 3 === 0) ? '#96633b' : (i % 3 === 1 ? '#82522e' : '#8e5c35');
+        ctx.fillStyle = shade;
+        ctx.fillRect(0, i * rh + 1, 512, rh - 2);
+        ctx.strokeStyle = 'rgba(55,30,12,0.45)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, i * rh, 512, rh);
+        // Đường vân gỗ mềm
+        ctx.strokeStyle = 'rgba(120,75,38,0.22)';
+        ctx.lineWidth = 1;
+        for (let k = 0; k < 4; k++) {
+          ctx.beginPath();
+          ctx.moveTo(0, i * rh + (k + 1) * (rh / 5));
+          ctx.bezierCurveTo(170, i * rh + k * 7, 340, i * rh + (k + 2) * 8, 512, i * rh + (k + 1) * (rh / 5));
+          ctx.stroke();
+        }
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(2, 2);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    function createCozyRugTexture() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 384;
+      const ctx = c.getContext('2d');
+      // Nền đỏ rượu vang ấm áp
+      ctx.fillStyle = '#8f2932';
+      ctx.fillRect(0, 0, 512, 384);
+      // Viền kem & vàng đồng
+      ctx.strokeStyle = '#f2d9b1';
+      ctx.lineWidth = 18;
+      ctx.strokeRect(20, 20, 472, 344);
+      ctx.strokeStyle = '#d49a45';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(42, 42, 428, 300);
+      // Họa tiết hình thoi ấm cúng giữa thảm
+      ctx.fillStyle = '#b03c3f';
+      ctx.fillRect(58, 58, 396, 268);
+      ctx.fillStyle = '#e8c48e';
+      for (let x = 96; x <= 416; x += 64) {
+        for (let y = 96; y <= 288; y += 64) {
+          ctx.beginPath();
+          ctx.moveTo(x, y - 16);
+          ctx.lineTo(x + 16, y);
+          ctx.lineTo(x, y + 16);
+          ctx.lineTo(x - 16, y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = '#335c4d';
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#e8c48e';
+        }
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    function createBrickTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#cbbba8'; // vữa ấm
+      ctx.fillRect(0, 0, 256, 256);
+      const rows = 8;
+      const cols = 4;
+      const bh = 256 / rows;
+      const bw = 256 / cols;
+      const tones = ['#9d4838', '#8c3d30', '#ad5542', '#954334'];
+      for (let r = 0; r < rows; r++) {
+        const offset = (r % 2) * (bw / 2);
+        for (let col = -1; col <= cols; col++) {
+          ctx.fillStyle = tones[(r * 3 + col + 8) % tones.length];
+          ctx.fillRect(col * bw + offset + 3, r * bh + 3, bw - 6, bh - 6);
+        }
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(2, 2.5);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    function createPaintingTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 192;
+      const ctx = c.getContext('2d');
+      const g = ctx.createLinearGradient(0, 0, 0, 192);
+      g.addColorStop(0, '#2a4575');
+      g.addColorStop(0.6, '#e69b75');
+      g.addColorStop(1, '#f7e5d0');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 256, 192);
+      // Núi tuyết xa
+      ctx.fillStyle = '#dce7f5';
+      ctx.beginPath();
+      ctx.moveTo(0, 145); ctx.lineTo(75, 72); ctx.lineTo(145, 130); ctx.lineTo(205, 80); ctx.lineTo(256, 145); ctx.lineTo(256, 192); ctx.lineTo(0, 192);
+      ctx.fill();
+      // Cây thông nhỏ trong tranh
+      ctx.fillStyle = '#254a3b';
+      for (let i = 0; i < 5; i++) {
+        const x = 35 + i * 48;
+        ctx.beginPath();
+        ctx.moveTo(x, 120); ctx.lineTo(x - 16, 175); ctx.lineTo(x + 16, 175);
+        ctx.fill();
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    function createCobbleTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#dde7f2'; // tuyết len giữa khe đá
+      ctx.fillRect(0, 0, 256, 256);
+      const stones = ['#7e8999', '#8e99a8', '#6f7b8c', '#98a4b3'];
+      for (let r = 0; r < 8; r++) {
+        for (let col = 0; col < 6; col++) {
+          const x = col * 42 + (r % 2) * 20;
+          const y = r * 32;
+          ctx.fillStyle = stones[(r * 5 + col) % stones.length];
+          ctx.beginPath();
+          ctx.roundRect(x + 3, y + 3, 35, 25, 7);
+          ctx.fill();
+        }
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(16, 2.2);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
+    /* =========================================================================
+       3. HỆ THỐNG ÂM THANH ẤM CÚNG (WEB AUDIO API - KHÔNG FILE NGOÀI)
+    ========================================================================= */
+    class CozySoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.isRunning = false;
+        this.crackleTimer = null;
+        this.melodyTimer = null;
+        this.melodyIndex = 0;
+        // Giai điệu hộp nhạc mùa đông êm dịu (tần số Hz, âm giai Trưởng ấm áp)
+        this.notes = [
+          523.25, 659.25, 783.99, 659.25,
+          587.33, 698.46, 880.00, 698.46,
+          523.25, 659.25, 783.99, 1046.50,
+          987.77, 783.99, 659.25, 587.33
+        ];
+      }
+
+      init() {
+        if (this.ctx) return;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
+
+        // 1. Tiếng lửa cháy ầm ĩ nhẹ & gió mùa đông vi vu từ buffer noise
+        const bufferSize = this.ctx.sampleRate * 3;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          data[i] = (lastOut + 0.03 * white) / 1.03;
+          lastOut = data[i];
+          data[i] *= 2.5;
+        }
+
+        // Lò sưởi nền ấm (low rumble)
+        const hearthSource = this.ctx.createBufferSource();
+        hearthSource.buffer = noiseBuffer;
+        hearthSource.loop = true;
+        const hearthFilter = this.ctx.createBiquadFilter();
+        hearthFilter.type = 'lowpass';
+        hearthFilter.frequency.value = 190;
+        const hearthGain = this.ctx.createGain();
+        hearthGain.gain.value = 0.22;
+        hearthSource.connect(hearthFilter).connect(hearthGain).connect(this.masterGain);
+        hearthSource.start();
+
+        // Gió mùa đông nhẹ ngoài hiên (bandpass có LFO dao động chậm)
+        const windSource = this.ctx.createBufferSource();
+        windSource.buffer = noiseBuffer;
+        windSource.loop = true;
+        const windFilter = this.ctx.createBiquadFilter();
+        windFilter.type = 'bandpass';
+        windFilter.frequency.value = 420;
+        windFilter.Q.value = 2.6;
+        const lfo = this.ctx.createOscillator();
+        lfo.frequency.value = 0.14;
+        const lfoGain = this.ctx.createGain();
+        lfoGain.gain.value = 170;
+        lfo.connect(lfoGain).connect(windFilter.frequency);
+        lfo.start();
+        const windGain = this.ctx.createGain();
+        windGain.gain.value = 0.075;
+        windSource.connect(windFilter).connect(windGain).connect(this.masterGain);
+        windSource.start();
+      }
+
+      spawnCrackle() {
+        if (!this.isRunning || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const len = Math.floor(this.ctx.sampleRate * (0.015 + Math.random() * 0.025));
+        const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+        const ch = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) {
+          const env = Math.pow(1 - i / len, 2.2);
+          ch[i] = (Math.random() * 2 - 1) * env;
+        }
+        const src = this.ctx.createBufferSource();
+        src.buffer = buf;
+
+        const bp = this.ctx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.value = 1400 + Math.random() * 2600;
+        bp.Q.value = 1.6;
+
+        const g = this.ctx.createGain();
+        g.gain.setValueAtTime(0.06 + Math.random() * 0.14, now);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+        src.connect(bp).connect(g).connect(this.masterGain);
+        src.start(now);
+
+        // Lên lịch tiếng củi nổ lách tách ngẫu nhiên tiếp theo
+        this.crackleTimer = setTimeout(() => this.spawnCrackle(), 120 + Math.random() * 520);
+      }
+
+      playMusicBoxNote() {
+        if (!this.isRunning || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const freq = this.notes[this.melodyIndex % this.notes.length];
+        this.melodyIndex++;
+
+        const osc = this.ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        // Hòa âm chuông nhẹ ở quãng 8 trên
+        const harmonic = this.ctx.createOscillator();
+        harmonic.type = 'triangle';
+        harmonic.frequency.setValueAtTime(freq * 2, now);
+
+        const g = this.ctx.createGain();
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.linearRampToValueAtTime(0.055, now + 0.025);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 1.85);
+
+        const hg = this.ctx.createGain();
+        hg.gain.setValueAtTime(0.012, now);
+        hg.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+
+        osc.connect(g).connect(this.masterGain);
+        harmonic.connect(hg).connect(this.masterGain);
+
+        osc.start(now);
+        harmonic.start(now);
+        osc.stop(now + 1.9);
+        harmonic.stop(now + 0.75);
+
+        const stepMs = (this.melodyIndex % 4 === 0) ? 1250 : 720;
+        this.melodyTimer = setTimeout(() => this.playMusicBoxNote(), stepMs);
+      }
+
+      setEnabled(enabled) {
+        if (enabled) {
+          this.init();
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          this.isRunning = true;
+          const now = this.ctx.currentTime;
+          this.masterGain.gain.cancelScheduledValues(now);
+          this.masterGain.gain.setValueAtTime(Math.max(0.0001, this.masterGain.gain.value), now);
+          this.masterGain.gain.linearRampToValueAtTime(0.85, now + 0.6);
+          clearTimeout(this.crackleTimer);
+          clearTimeout(this.melodyTimer);
+          this.spawnCrackle();
+          this.playMusicBoxNote();
+        } else {
+          this.isRunning = false;
+          clearTimeout(this.crackleTimer);
+          clearTimeout(this.melodyTimer);
+          if (this.ctx && this.masterGain) {
+            const now = this.ctx.currentTime;
+            this.masterGain.gain.cancelScheduledValues(now);
+            this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
+            this.masterGain.gain.linearRampToValueAtTime(0.0001, now + 0.4);
+          }
+        }
+      }
+    }
+
+    const soundEngine = new CozySoundEngine();
+
+    /* =========================================================================
+       4. BIẾN TOÀN CỤC CHO CẢNH 3D & HỆ THỐNG HOẠT ẢNH
+    ========================================================================= */
+    let scene, camera, renderer, controls, clock;
+    let hemiLight, dirLight, fireLight, roomWarmLight;
+    let skyUniforms, starMaterial, moonMesh, moonHalo;
+
+    const cutawayGroup = new THREE.Group();
+    const cutawayMaterials = [];       // Các vật liệu mặt tiền mờ dần khi bật Cutaway
+    const festiveLights = [];          // Các bóng đèn dây trang trí có thể bật/tắt & nhấp nháy
+    const windowMaterials = [];        // Các ô cửa sổ hàng xóm phát sáng ấm
+    const interactables = [];          // Các đối tượng có thể click hiển thị lời nhắn
+    const animatedCharacters = [];     // Các nhân vật gia đình & hàng xóm chuyển động tinh tế
+    const fireFlames = [];             // Ngọn lửa động trong lò sưởi
+    const smokeParticles = [];         // Khói ống khói các ngôi nhà
+    const steamParticles = [];         // Hơi nước nóng bốc lên từ tách cacao
+    const emberParticles = [];         // Tàn lửa bay nhẹ trong lò sưởi
+    let snowPoints, snowVelocities, snowCountMax = 2600;
+    let rockingChairGroup = null;
+    let puppyTail = null;
+    let puppyBody = null;
+    let glowTex, warmGlowTex, snowTex;
+
+    // Tiện ích gắn dữ liệu tương tác click lên cả một nhóm 3D
+    function registerInteractable(rootObj, storyData) {
+      rootObj.traverse((child) => {
+        if (child.isMesh) {
+          child.userData.story = storyData;
+          interactables.push(child);
+        }
+      });
+    }
+
+    // Tiện ích gắn material hỗ trợ Cutaway mượt mà
+    function registerCutawayObject(obj) {
+      cutawayGroup.add(obj);
+      obj.traverse((child) => {
+        if (child.isMesh && child.material) {
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          const cloned = mats.map((m) => {
+            const c = m.clone();
+            c.userData.baseOpacity = c.opacity !== undefined ? c.opacity : 1;
+            c.userData.baseTransparent = !!c.transparent;
+            cutawayMaterials.push(c);
+            return c;
+          });
+          child.material = Array.isArray(child.material) ? cloned : cloned[0];
+        }
+      });
+    }
+
+    /* =========================================================================
+       5. KHỞI TẠO CẢNH 3D, BẦU TRỜI, ÁNH SÁNG & ĐỊA HÌNH TUYẾT
+    ========================================================================= */
+    function initScene() {
+      const container = document.getElementById('canvas-container');
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(TIME_PRESETS.night.fogColor.getHex(), TIME_PRESETS.night.fogDensity);
+
+      camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.2, 160);
+      camera.position.copy(CAMERA_PRESETS.neighborhood.pos);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = TIME_PRESETS.night.exposure;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      container.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.target.copy(CAMERA_PRESETS.neighborhood.target);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.maxPolarAngle = Math.PI * 0.482; // Không bao giờ xuyên xuống dưới đất
+      controls.minPolarAngle = 0.12;
+      controls.minDistance = 3.2;
+      controls.maxDistance = 42;
+      controls.panSpeed = 0.7;
+
+      // Hủy chuyển cảnh tự động nếu người dùng tự kéo xoay
+      controls.addEventListener('start', () => {
+        state.cameraAnim = null;
+      });
+
+      clock = new THREE.Clock();
+
+      glowTex = createGlowTexture('rgba(255,235,190,1)', 'rgba(255,165,65,0)');
+      warmGlowTex = createGlowTexture('rgba(255,210,120,1)', 'rgba(255,120,30,0)');
+      snowTex = createSnowflakeTexture();
+
+      buildSkyAndMoon();
+      buildLights();
+      buildTerrainAndRoad();
+      buildHeroHouse();
+      buildNeighborhood();
+      buildSnowSystem();
+
+      setupRaycaster();
+      setupUI();
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function buildSkyAndMoon() {
+      // Vòm trời gradient shader mượt mà
+      skyUniforms = {
+        topColor: { value: TIME_PRESETS.night.skyTop.clone() },
+        midColor: { value: TIME_PRESETS.night.skyMid.clone() },
+        horizonColor: { value: TIME_PRESETS.night.skyHorizon.clone() }
+      };
+
+      const skyMat = new THREE.ShaderMaterial({
+        uniforms: skyUniforms,
+        side: THREE.BackSide,
+        depthWrite: false,
+        vertexShader: `
+          varying vec3 vWorldPos;
+          void main() {
+            vec4 wp = modelMatrix * vec4(position, 1.0);
+            vWorldPos = wp.xyz;
+            gl_Position = projectionMatrix * viewMatrix * wp;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 topColor;
+          uniform vec3 midColor;
+          uniform vec3 horizonColor;
+          varying vec3 vWorldPos;
+          void main() {
+            float h = normalize(vWorldPos).y;
+            vec3 col = mix(horizonColor, midColor, smoothstep(-0.05, 0.28, h));
+            col = mix(col, topColor, smoothstep(0.25, 0.78, h));
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `
+      });
+      scene.add(new THREE.Mesh(new THREE.SphereGeometry(95, 32, 20), skyMat));
+
+      // Bầu trời sao lấp lánh
+      const starCount = 520;
+      const starGeo = new THREE.BufferGeometry();
+      const starPos = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(0.18 + Math.random() * 0.82);
+        const r = 82 + Math.random() * 6;
+        starPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        starPos[i * 3 + 1] = r * Math.cos(phi);
+        starPos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      }
+      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+      starMaterial = new THREE.PointsMaterial({
+        size: 1.15,
+        map: snowTex,
+        transparent: true,
+        opacity: 0.95,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        color: 0xfff6e5
+      });
+      scene.add(new THREE.Points(starGeo, starMaterial));
+
+      // Vầng trăng dịu nhẹ có quầng sáng
+      const moonGroup = new THREE.Group();
+      moonGroup.position.set(-28, 34, -44);
+      const moonMat = new THREE.MeshBasicMaterial({ color: 0xfff5db, transparent: true, opacity: 1 });
+      moonMesh = new THREE.Mesh(new THREE.SphereGeometry(3.4, 24, 24), moonMat);
+      moonGroup.add(moonMesh);
+
+      const haloMat = new THREE.SpriteMaterial({
+        map: createGlowTexture('rgba(255,244,214,0.85)', 'rgba(180,208,255,0)'),
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      moonHalo = new THREE.Sprite(haloMat);
+      moonHalo.scale.set(22, 22, 1);
+      moonGroup.add(moonHalo);
+      scene.add(moonGroup);
+    }
+
+    function buildLights() {
+      hemiLight = new THREE.HemisphereLight(
+        TIME_PRESETS.night.hemiSky,
+        TIME_PRESETS.night.hemiGround,
+        TIME_PRESETS.night.hemiIntensity
+      );
+      scene.add(hemiLight);
+
+      dirLight = new THREE.DirectionalLight(TIME_PRESETS.night.dirColor, TIME_PRESETS.night.dirIntensity);
+      dirLight.position.copy(TIME_PRESETS.night.dirPos);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 2048;
+      dirLight.shadow.mapSize.height = 2048;
+      dirLight.shadow.camera.near = 2;
+      dirLight.shadow.camera.far = 75;
+      const d = 24;
+      dirLight.shadow.camera.left = -d;
+      dirLight.shadow.camera.right = d;
+      dirLight.shadow.camera.top = d;
+      dirLight.shadow.camera.bottom = -d;
+      dirLight.shadow.bias = -0.0005;
+      scene.add(dirLight);
+    }
+
+    function buildTerrainAndRoad() {
+      // Nền tuyết rộng với gò đồi mềm xung quanh rìa khu phố
+      const groundGeo = new THREE.PlaneGeometry(130, 130, 72, 72);
+      groundGeo.rotateX(-Math.PI / 2);
+      const pos = groundGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const z = pos.getZ(i);
+        const dist = Math.hypot(x, z - 4);
+        if (dist > 22) {
+          const t = Math.min(1, (dist - 22) / 28);
+          const hill = (Math.sin(x * 0.11) * Math.cos(z * 0.11) * 2.2 + 2.6) * t * t;
+          pos.setY(i, hill);
+        } else {
+          // Gợn tuyết cực nhẹ ở sân vườn, giữ trung tâm phẳng để đặt nhà
+          const micro = (dist > 8) ? (Math.sin(x * 0.35) * Math.cos(z * 0.35) * 0.04) : 0;
+          pos.setY(i, micro);
+        }
+      }
+      groundGeo.computeVertexNormals();
+      const snowGroundMat = new THREE.MeshStandardMaterial({
+        color: 0xeaf2fc,
+        roughness: 0.88,
+        metalness: 0.02
+      });
+      const ground = new THREE.Mesh(groundGeo, snowGroundMat);
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      // Con đường lát đá uốn lượn nhẹ phía trước khu phố (z ~ 9.5)
+      const roadCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-34, 0.03, 12.2),
+        new THREE.Vector3(-18, 0.03, 10.6),
+        new THREE.Vector3(-6, 0.03, 9.6),
+        new THREE.Vector3(6, 0.03, 9.5),
+        new THREE.Vector3(18, 0.03, 10.7),
+        new THREE.Vector3(34, 0.03, 12.6)
+      ]);
+
+      const roadShapePts = roadCurve.getSpacedPoints(70);
+      const roadPositions = [];
+      const roadUvs = [];
+      const roadIndices = [];
+      const roadHalfWidth = 2.05;
+
+      for (let i = 0; i < roadShapePts.length; i++) {
+        const p = roadShapePts[i];
+        const tan = roadCurve.getTangent(i / (roadShapePts.length - 1));
+        const normal = new THREE.Vector3(-tan.z, 0, tan.x).normalize();
+        const left = p.clone().addScaledVector(normal, roadHalfWidth);
+        const right = p.clone().addScaledVector(normal, -roadHalfWidth);
+        roadPositions.push(left.x, left.y, left.z, right.x, right.y, right.z);
+        const u = i / (roadShapePts.length - 1);
+        roadUvs.push(u, 0, u, 1);
+        if (i < roadShapePts.length - 1) {
+          const a = i * 2, b = i * 2 + 1, c = i * 2 + 2, d = i * 2 + 3;
+          roadIndices.push(a, b, c, b, d, c);
+        }
+      }
+
+      const roadGeo = new THREE.BufferGeometry();
+      roadGeo.setAttribute('position', new THREE.Float32BufferAttribute(roadPositions, 3));
+      roadGeo.setAttribute('uv', new THREE.Float32BufferAttribute(roadUvs, 2));
+      roadGeo.setIndex(roadIndices);
+      roadGeo.computeVertexNormals();
+
+      const roadMat = new THREE.MeshStandardMaterial({
+        map: createCobbleTexture(),
+        roughness: 0.9,
+        metalness: 0.05
+      });
+      const roadMesh = new THREE.Mesh(roadGeo, roadMat);
+      roadMesh.receiveShadow = true;
+      scene.add(roadMesh);
+
+      // Lối đi đá nhỏ phủ tuyết nối từ bậc thềm ngôi nhà chính ra con đường
+      const stoneMat = new THREE.MeshStandardMaterial({ color: 0xa4adb9, roughness: 0.85 });
+      for (let i = 0; i < 6; i++) {
+        const stepStone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.07, 10), stoneMat);
+        stepStone.position.set(Math.sin(i * 0.7) * 0.14, 0.035, 4.6 + i * 0.78);
+        stepStone.scale.set(1.25, 1, 0.78);
+        stepStone.receiveShadow = true;
+        scene.add(stepStone);
+      }
+
+      // Khoảng sân tròn nhỏ công viên khu phố phía đối diện ngôi nhà chính
+      const plaza = new THREE.Mesh(
+        new THREE.CylinderGeometry(4.6, 4.8, 0.06, 28),
+        new THREE.MeshStandardMaterial({ color: 0xd4dee9, roughness: 0.88 })
+      );
+      plaza.position.set(-4.2, 0.03, 16.5);
+      plaza.receiveShadow = true;
+      scene.add(plaza);
+    }
+
+    /* =========================================================================
+       6. NGÔI NHÀ TÂM ĐIỂM (HERO HOUSE) + NỘI THẤT PHÒNG KHÁCH + CẢ GIA ĐÌNH
+    ========================================================================= */
+    function buildHeroHouse() {
+      const house = new THREE.Group();
+      scene.add(house);
+      house.add(cutawayGroup);
+
+      // Vật liệu kiến trúc ấm cúng
+      const foundationMat = new THREE.MeshStandardMaterial({ color: 0x7a736e, roughness: 0.9 });
+      const exteriorWallMat = new THREE.MeshStandardMaterial({ color: 0xf0d2b0, roughness: 0.82 }); // kem mật ong ấm
+      const interiorWallMat = new THREE.MeshStandardMaterial({ color: 0xf7e6cf, roughness: 0.85 }); // kem ấm trong nhà
+      const wainscotMat = new THREE.MeshStandardMaterial({ color: 0x9c663b, roughness: 0.78 });
+      const darkWoodMat = new THREE.MeshStandardMaterial({ color: 0x5c371e, roughness: 0.8 });
+      const roofTileMat = new THREE.MeshStandardMaterial({ color: 0x823730, roughness: 0.82 }); // mái ngói đỏ trầm
+      const snowMat = new THREE.MeshStandardMaterial({ color: 0xf4f8ff, roughness: 0.75, metalness: 0.03 });
+      const brickTex = createBrickTexture();
+      const brickMat = new THREE.MeshStandardMaterial({ map: brickTex, roughness: 0.9 });
+
+      // 1. Nền móng đá & sàn gỗ phòng khách
+      const foundation = new THREE.Mesh(new THREE.BoxGeometry(8.8, 0.42, 6.8), foundationMat);
+      foundation.position.set(0, 0.21, 0);
+      foundation.castShadow = true;
+      foundation.receiveShadow = true;
+      house.add(foundation);
+
+      const floor = new THREE.Mesh(
+        new THREE.BoxGeometry(8.2, 0.08, 6.2),
+        new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.72 })
+      );
+      floor.position.set(0, 0.43, 0);
+      floor.receiveShadow = true;
+      house.add(floor);
+
+      // 2. Ba bức tường cố định (Sau, Trái, Phải) — luôn hiển thị khi mở mặt cắt
+      // Tường sau (z = -3.15)
+      const backWallOut = new THREE.Mesh(new THREE.BoxGeometry(8.6, 3.6, 0.26), exteriorWallMat);
+      backWallOut.position.set(0, 2.2, -3.22);
+      backWallOut.castShadow = true;
+      backWallOut.receiveShadow = true;
+      house.add(backWallOut);
+
+      const backWallIn = new THREE.Mesh(new THREE.BoxGeometry(8.2, 3.55, 0.06), interiorWallMat);
+      backWallIn.position.set(0, 2.2, -3.06);
+      backWallIn.receiveShadow = true;
+      house.add(backWallIn);
+
+      // Lam gỗ chân tường sau
+      const backWainscot = new THREE.Mesh(new THREE.BoxGeometry(8.2, 0.95, 0.08), wainscotMat);
+      backWainscot.position.set(0, 0.92, -3.04);
+      backWainscot.receiveShadow = true;
+      house.add(backWainscot);
+
+      // Tường trái (x = -4.2)
+      const leftWallOut = new THREE.Mesh(new THREE.BoxGeometry(0.26, 3.6, 6.6), exteriorWallMat);
+      leftWallOut.position.set(-4.22, 2.2, 0);
+      leftWallOut.castShadow = true;
+      leftWallOut.receiveShadow = true;
+      house.add(leftWallOut);
+
+      const leftWallIn = new THREE.Mesh(new THREE.BoxGeometry(0.06, 3.55, 6.2), interiorWallMat);
+      leftWallIn.position.set(-4.06, 2.2, 0);
+      leftWallIn.receiveShadow = true;
+      house.add(leftWallIn);
+
+      // Tường phải (x = +4.2) có một cửa sổ nhỏ nhìn ra khu phố
+      const rightWallOut = new THREE.Mesh(new THREE.BoxGeometry(0.26, 3.6, 6.6), exteriorWallMat);
+      rightWallOut.position.set(4.22, 2.2, 0);
+      rightWallOut.castShadow = true;
+      rightWallOut.receiveShadow = true;
+      house.add(rightWallOut);
+
+      const rightWallIn = new THREE.Mesh(new THREE.BoxGeometry(0.06, 3.55, 6.2), interiorWallMat);
+      rightWallIn.position.set(4.06, 2.2, 0);
+      rightWallIn.receiveShadow = true;
+      house.add(rightWallIn);
+
+      // Cửa sổ trang trí bên tường phải (phát sáng nhẹ vào trong & ngoài)
+      const sideWinGlowMat = new THREE.MeshStandardMaterial({
+        color: 0xffdf9e, emissive: 0xffa838, emissiveIntensity: 0.9, roughness: 0.2
+      });
+      const rightWin = new THREE.Mesh(new THREE.BoxGeometry(0.32, 1.3, 1.5), sideWinGlowMat);
+      rightWin.position.set(4.22, 2.25, 0.3);
+      house.add(rightWin);
+      const rightWinFrame = new THREE.Mesh(new THREE.BoxGeometry(0.36, 1.44, 0.1), darkWoodMat);
+      rightWinFrame.position.set(4.22, 2.25, 0.3);
+      house.add(rightWinFrame);
+
+      // Dầm gỗ trần phòng khách
+      const ceiling = new THREE.Mesh(new THREE.BoxGeometry(8.4, 0.14, 6.4), wainscotMat);
+      ceiling.position.set(0, 4.0, 0);
+      house.add(ceiling);
+      for (let bx = -3; bx <= 3; bx += 2) {
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.24, 6.1), darkWoodMat);
+        beam.position.set(bx, 3.85, 0);
+        house.add(beam);
+      }
+
+      // 3. Mái dốc 2 tầng / gác mái phủ tuyết dày & cửa sổ áp mái
+      const roofGroup = new THREE.Group();
+      roofGroup.position.set(0, 4.02, 0);
+      house.add(roofGroup);
+
+      // Hai đầu hồi tam giác (trái & phải)
+      const gableShape = new THREE.Shape();
+      gableShape.moveTo(-3.45, 0);
+      gableShape.lineTo(3.45, 0);
+      gableShape.lineTo(0, 3.15);
+      gableShape.closePath();
+      const gableGeo = new THREE.ExtrudeGeometry(gableShape, { depth: 8.6, bevelEnabled: false });
+      gableGeo.rotateY(Math.PI / 2);
+      gableGeo.translate(-4.3, 0, 0);
+      const gableMesh = new THREE.Mesh(gableGeo, exteriorWallMat);
+      gableMesh.castShadow = true;
+      gableMesh.receiveShadow = true;
+      roofGroup.add(gableMesh);
+
+      // Hai mái dốc trước & sau
+      const slopeLen = 5.05;
+      const slopeAngle = Math.atan2(3.15, 3.45); // ~42.4 độ
+      const roofWidth = 9.6;
+
+      function createRoofSlope(sideSign) {
+        const g = new THREE.Group();
+        const tile = new THREE.Mesh(new THREE.BoxGeometry(roofWidth, 0.22, slopeLen), roofTileMat);
+        tile.castShadow = true;
+        tile.receiveShadow = true;
+        g.add(tile);
+
+        // Lớp tuyết dày mềm phủ trên mái
+        const snowCap = new THREE.Mesh(new THREE.BoxGeometry(roofWidth + 0.14, 0.24, slopeLen + 0.12), snowMat);
+        snowCap.position.y = 0.2;
+        snowCap.receiveShadow = true;
+        g.add(snowCap);
+
+        // Viền tuyết bo tròn rủ xuống mép mái
+        const eaveSnow = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.18, roofWidth + 0.16, 10), snowMat);
+        eaveSnow.rotation.z = Math.PI / 2;
+        eaveSnow.position.set(0, 0.16, sideSign * (slopeLen / 2));
+        g.add(eaveSnow);
+
+        g.rotation.x = sideSign * slopeAngle;
+        g.position.set(0, 1.62, sideSign * 1.82);
+        return g;
+      }
+
+      roofGroup.add(createRoofSlope(1));  // Mái dốc phía trước
+      roofGroup.add(createRoofSlope(-1)); // Mái dốc phía sau
+
+      // Nóc tuyết bo tròn trên đỉnh mái
+      const ridgeSnow = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, roofWidth + 0.18, 12), snowMat);
+      ridgeSnow.rotation.z = Math.PI / 2;
+      ridgeSnow.position.set(0, 3.32, 0);
+      roofGroup.add(ridgeSnow);
+
+      // Cửa sổ gác mái (Dormer window) ấm áp phía trước mái
+      const dormer = new THREE.Group();
+      dormer.position.set(0, 1.35, 2.3);
+      const dormerBody = new THREE.Mesh(new THREE.BoxGeometry(1.75, 1.3, 1.4), exteriorWallMat);
+      dormerBody.castShadow = true;
+      dormer.add(dormerBody);
+      const dormerRoof = new THREE.Mesh(new THREE.ConeGeometry(1.48, 0.9, 4), snowMat);
+      dormerRoof.rotation.y = Math.PI / 4;
+      dormerRoof.position.set(0, 1.02, 0.05);
+      dormer.add(dormerRoof);
+      const dormerWinMat = new THREE.MeshStandardMaterial({
+        color: 0xffe4a8, emissive: 0xffaa3b, emissiveIntensity: 1.35, roughness: 0.2
+      });
+      windowMaterials.push(dormerWinMat);
+      const dormerWin = new THREE.Mesh(new THREE.BoxGeometry(1.12, 0.85, 0.12), dormerWinMat);
+      dormerWin.position.set(0, -0.02, 0.68);
+      dormer.add(dormerWin);
+      // Khung chữ thập cửa sổ áp mái
+      const dCrossV = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.16), darkWoodMat);
+      dCrossV.position.set(0, -0.02, 0.7);
+      dormer.add(dCrossV);
+      const dCrossH = new THREE.Mesh(new THREE.BoxGeometry(1.18, 0.08, 0.16), darkWoodMat);
+      dCrossH.position.set(0, -0.02, 0.7);
+      dormer.add(dCrossH);
+      roofGroup.add(dormer);
+
+      // 4. Ống khói gạch bên trái ngôi nhà (nối thẳng từ lò sưởi lên mái)
+      const chimney = new THREE.Mesh(new THREE.BoxGeometry(1.15, 4.1, 1.15), brickMat);
+      chimney.position.set(-3.65, 5.65, -0.35);
+      chimney.castShadow = true;
+      house.add(chimney);
+      const chimneyRim = new THREE.Mesh(new THREE.BoxGeometry(1.36, 0.22, 1.36), foundationMat);
+      chimneyRim.position.set(-3.65, 7.72, -0.35);
+      house.add(chimneyRim);
+      const chimneySnow = new THREE.Mesh(new THREE.BoxGeometry(1.38, 0.14, 1.38), snowMat);
+      chimneySnow.position.set(-3.65, 7.86, -0.35);
+      house.add(chimneySnow);
+      // Đăng ký nguồn khói cho ống khói chính
+      spawnSmokeSource(new THREE.Vector3(-3.65, 8.05, -0.35), 14, 1.15);
+
+      // 5. Dây đèn vàng trang trí rủ mềm dọc mái hiên
+      createFestiveStringLights(
+        new THREE.Vector3(-4.75, 4.02, 3.68),
+        new THREE.Vector3(4.75, 4.02, 3.68),
+        19,
+        0.24,
+        [0xffcc66, 0xff9e44, 0xffe49e, 0xff6b57, 0x77e0a8],
+        house
+      );
+
+      // 6. MẶT TIỀN CÓ CƠ CHẾ MỞ TƯỜNG (CUTAWAY GROUP)
+      buildHeroFrontFacade(exteriorWallMat, darkWoodMat, snowMat, roofTileMat);
+
+      // 7. BẬC THỀM PHỦ TUYẾT, HÀNG RÀO GỖ TRẮNG, HỘP THƯ & NGƯỜI TUYẾT
+      buildHeroFrontYard(darkWoodMat, snowMat);
+
+      // 8. NỘI THẤT PHÒNG KHÁCH ẤM ÁP BÊN TRONG
+      buildLivingRoomInterior(brickMat, darkWoodMat, snowMat);
+
+      // 9. ĐẦY ĐỦ CÁC THÀNH VIÊN GIA ĐÌNH QUÂY QUẦN & CHÚ CÚN CƯNG
+      buildFamilyMembers();
+    }
+
+    function buildHeroFrontFacade(exteriorWallMat, darkWoodMat, snowMat, roofTileMat) {
+      const facade = new THREE.Group();
+
+      // Bức tường mặt trước chia thành các mảng để tạo khung cửa sổ & cửa chính thật
+      // Phần trên cửa & cửa sổ
+      const topStrip = new THREE.Mesh(new THREE.BoxGeometry(8.6, 1.0, 0.26), exteriorWallMat);
+      topStrip.position.set(0, 3.5, 3.22);
+      topStrip.castShadow = true;
+      facade.add(topStrip);
+
+      // Các cột tường xen kẽ
+      const pillars = [
+        { x: -3.85, w: 0.9 },
+        { x: -1.35, w: 1.0 },
+        { x: 1.35, w: 1.0 },
+        { x: 3.85, w: 0.9 }
+      ];
+      pillars.forEach((p) => {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(p.w, 2.6, 0.26), exteriorWallMat);
+        m.position.set(p.x, 1.7, 3.22);
+        m.castShadow = true;
+        facade.add(m);
+      });
+
+      // Bệ dưới 2 ô cửa sổ trước
+      [-2.62, 2.62].forEach((wx) => {
+        const sillWall = new THREE.Mesh(new THREE.BoxGeometry(1.65, 1.05, 0.26), exteriorWallMat);
+        sillWall.position.set(wx, 0.92, 3.22);
+        facade.add(sillWall);
+
+        // Kính cửa sổ hơi trong suốt ấm vàng
+        const glassMat = new THREE.MeshStandardMaterial({
+          color: 0xffd78a,
+          emissive: 0xff9f2e,
+          emissiveIntensity: 0.65,
+          transparent: true,
+          opacity: 0.55,
+          roughness: 0.15
+        });
+        const glass = new THREE.Mesh(new THREE.BoxGeometry(1.52, 1.5, 0.06), glassMat);
+        glass.position.set(wx, 2.22, 3.22);
+        facade.add(glass);
+
+        // Khung gỗ cửa sổ + thanh chữ thập + bậu cửa phủ tuyết
+        const fTop = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.1, 0.32), darkWoodMat);
+        fTop.position.set(wx, 2.98, 3.24);
+        facade.add(fTop);
+        const fBot = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.12, 0.42), darkWoodMat);
+        fBot.position.set(wx, 1.44, 3.28);
+        facade.add(fBot);
+        const sillSnow = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.09, 0.28), snowMat);
+        sillSnow.position.set(wx, 1.53, 3.36);
+        facade.add(sillSnow);
+        const barV = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.54, 0.12), darkWoodMat);
+        barV.position.set(wx, 2.22, 3.24);
+        facade.add(barV);
+        const barH = new THREE.Mesh(new THREE.BoxGeometry(1.56, 0.08, 0.12), darkWoodMat);
+        barH.position.set(wx, 2.22, 3.24);
+        facade.add(barH);
+      });
+
+      // Cửa gỗ chính ở giữa + vòng nguyệt quế Giáng sinh
+      const doorMat = new THREE.MeshStandardMaterial({ color: 0x7c3424, roughness: 0.7 });
+      const door = new THREE.Mesh(new THREE.BoxGeometry(1.55, 2.55, 0.14), doorMat);
+      door.position.set(0, 1.72, 3.22);
+      facade.add(door);
+
+      const knob = new THREE.Mesh(
+        new THREE.SphereGeometry(0.075, 12, 12),
+        new THREE.MeshStandardMaterial({ color: 0xffcf67, metalness: 0.7, roughness: 0.25 })
+      );
+      knob.position.set(0.55, 1.68, 3.33);
+      facade.add(knob);
+
+      // Vòng nguyệt quế xanh & nơ đỏ trên cửa gỗ
+      const wreath = new THREE.Mesh(
+        new THREE.TorusGeometry(0.36, 0.11, 10, 22),
+        new THREE.MeshStandardMaterial({ color: 0x266337, roughness: 0.85 })
+      );
+      wreath.position.set(0, 2.28, 3.35);
+      facade.add(wreath);
+
+      const bowMat = new THREE.MeshStandardMaterial({ color: 0xd62839, roughness: 0.5 });
+      const bowCenter = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 10), bowMat);
+      bowCenter.position.set(0, 1.93, 3.43);
+      facade.add(bowCenter);
+      [-0.14, 0.14].forEach((bx) => {
+        const wing = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.22, 8), bowMat);
+        wing.position.set(bx, 1.93, 3.42);
+        wing.rotation.z = bx > 0 ? Math.PI / 2 : -Math.PI / 2;
+        facade.add(wing);
+      });
+
+      // Mái hiên nhỏ che cửa chính phủ tuyết + 2 cột hiên + đèn hiên vàng ấm
+      const porchRoof = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.18, 1.55), roofTileMat);
+      porchRoof.position.set(0, 3.28, 4.0);
+      porchRoof.rotation.x = 0.22;
+      facade.add(porchRoof);
+      const porchSnow = new THREE.Mesh(new THREE.BoxGeometry(3.26, 0.14, 1.6), snowMat);
+      porchSnow.position.set(0, 3.42, 4.02);
+      porchSnow.rotation.x = 0.22;
+      facade.add(porchSnow);
+
+      [-1.32, 1.32].forEach((px) => {
+        const post = new THREE.Mesh(new THREE.BoxGeometry(0.16, 2.75, 0.16), darkWoodMat);
+        post.position.set(px, 1.8, 4.55);
+        facade.add(post);
+      });
+
+      // Đèn lồng trước cửa
+      const lanternMat = new THREE.MeshStandardMaterial({
+        color: 0xffe49e, emissive: 0xffaa33, emissiveIntensity: 2.2
+      });
+      const lantern = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.3, 0.22), lanternMat);
+      lantern.position.set(1.05, 2.75, 3.48);
+      facade.add(lantern);
+
+      // Đăng ký toàn bộ mặt tiền vào nhóm Cutaway mượt mà
+      registerCutawayObject(facade);
+    }
+
+    function buildHeroFrontYard(darkWoodMat, snowMat) {
+      const yard = new THREE.Group();
+      scene.add(yard);
+
+      // Sàn hiên & bậc thềm phủ tuyết nhẹ
+      const porchDeck = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.38, 1.55), darkWoodMat);
+      porchDeck.position.set(0, 0.19, 4.02);
+      porchDeck.receiveShadow = true;
+      yard.add(porchDeck);
+
+      const step1 = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.18, 0.45), darkWoodMat);
+      step1.position.set(0, 0.09, 4.95);
+      step1.receiveShadow = true;
+      yard.add(step1);
+
+      // Mảng tuyết mềm hai bên bậc thềm
+      [-1.15, 1.15].forEach((sx) => {
+        const puff = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 10), snowMat);
+        puff.scale.set(1.4, 0.35, 1.0);
+        puff.position.set(sx, 0.42, 4.55);
+        yard.add(puff);
+      });
+
+      // Hàng rào gỗ trắng bao quanh sân trước (chừa lối đi ở giữa)
+      const fenceMat = new THREE.MeshStandardMaterial({ color: 0xf7f5f0, roughness: 0.78 });
+      function addFenceSegment(x1, z1, x2, z2) {
+        const dist = Math.hypot(x2 - x1, z2 - z1);
+        const angle = Math.atan2(x2 - x1, z2 - z1);
+        const seg = new THREE.Group();
+        seg.position.set((x1 + x2) / 2, 0, (z1 + z2) / 2);
+        seg.rotation.y = angle;
+
+        // 2 thanh ngang
+        [0.28, 0.68].forEach((ry) => {
+          const rail = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.09, dist), fenceMat);
+          rail.position.y = ry;
+          rail.castShadow = true;
+          seg.add(rail);
+        });
+
+        // Các cọc gỗ nhọn đầu
+        const count = Math.max(2, Math.floor(dist / 0.48));
+        for (let i = 0; i <= count; i++) {
+          const zOff = -dist / 2 + (i / count) * dist;
+          const picket = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.92, 0.13), fenceMat);
+          picket.position.set(0, 0.46, zOff);
+          picket.castShadow = true;
+          seg.add(picket);
+          const capSnow = new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 6), snowMat);
+          capSnow.scale.set(1, 0.55, 1.1);
+          capSnow.position.set(0, 0.94, zOff);
+          seg.add(capSnow);
+        }
+        yard.add(seg);
+      }
+
+      addFenceSegment(-5.4, 7.2, -1.35, 7.2);
+      addFenceSegment(1.35, 7.2, 5.4, 7.2);
+      addFenceSegment(-5.4, 7.2, -5.4, 1.5);
+      addFenceSegment(5.4, 7.2, 5.4, 1.5);
+
+      // Hộp thư đỏ dễ thương trước sân bên trái lối đi
+      const mailbox = new THREE.Group();
+      mailbox.position.set(-1.85, 0, 7.45);
+      const mbPost = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 1.15, 8), darkWoodMat);
+      mbPost.position.y = 0.57;
+      mbPost.castShadow = true;
+      mailbox.add(mbPost);
+      const mbBox = new THREE.Mesh(
+        new THREE.BoxGeometry(0.32, 0.28, 0.48),
+        new THREE.MeshStandardMaterial({ color: 0xc93838, roughness: 0.45 })
+      );
+      mbBox.position.set(0, 1.22, 0.05);
+      mbBox.castShadow = true;
+      mailbox.add(mbBox);
+      const mbSnow = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.07, 0.5), snowMat);
+      mbSnow.position.set(0, 1.38, 0.05);
+      mailbox.add(mbSnow);
+      yard.add(mailbox);
+
+      // Người tuyết siêu dễ thương trước sân bên phải (tương tác click!)
+      const snowman = buildSnowman();
+      snowman.position.set(3.05, 0, 5.55);
+      snowman.rotation.y = -0.35;
+      yard.add(snowman);
+      registerInteractable(snowman, {
+        icon: '⛄',
+        title: 'Chú Người Tuyết Trước Sân',
+        text: 'Hai anh em vừa đắp chú người tuyết đội mũ phớt và quàng khăn đỏ ấm áp để chào đón mọi người ghé thăm ngôi nhà.'
+      });
+
+      // Ánh sáng nhẹ trước hiên nhà chính
+      const porchGlow = new THREE.PointLight(0xffb454, 1.8, 9.5, 1.6);
+      porchGlow.position.set(0, 3.1, 4.4);
+      yard.add(porchGlow);
+    }
+
+    function buildSnowman(scale = 1.0) {
+      const sm = new THREE.Group();
+      const sMat = new THREE.MeshStandardMaterial({ color: 0xf7fbff, roughness: 0.72 });
+      const coalMat = new THREE.MeshStandardMaterial({ color: 0x1e2229, roughness: 0.6 });
+      const redMat = new THREE.MeshStandardMaterial({ color: 0xd9383a, roughness: 0.65 });
+      const carrotMat = new THREE.MeshStandardMaterial({ color: 0xff7b29, roughness: 0.6 });
+      const twigMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 0.9 });
+
+      const bottom = new THREE.Mesh(new THREE.SphereGeometry(0.56, 18, 16), sMat);
+      bottom.position.y = 0.48;
+      bottom.castShadow = true;
+      sm.add(bottom);
+
+      const mid = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 14), sMat);
+      mid.position.y = 1.18;
+      mid.castShadow = true;
+      sm.add(mid);
+
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.29, 16, 14), sMat);
+      head.position.y = 1.72;
+      head.castShadow = true;
+      sm.add(head);
+
+      // Mũi cà rốt
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.28, 10), carrotMat);
+      nose.rotation.x = Math.PI / 2;
+      nose.position.set(0, 1.72, 0.34);
+      sm.add(nose);
+
+      // Mắt & cúc áo than đá
+      [-0.1, 0.1].forEach((ex) => {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.036, 8, 8), coalMat);
+        eye.position.set(ex, 1.8, 0.25);
+        sm.add(eye);
+      });
+      [1.06, 1.24, 1.38].forEach((by) => {
+        const btn = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8), coalMat);
+        btn.position.set(0, by, 0.38);
+        sm.add(btn);
+      });
+
+      // Khăn quàng đỏ
+      const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.075, 10, 20), redMat);
+      scarf.rotation.x = Math.PI / 2;
+      scarf.position.y = 1.48;
+      sm.add(scarf);
+      const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.36, 0.05), redMat);
+      scarfTail.position.set(0.18, 1.32, 0.28);
+      scarfTail.rotation.z = -0.22;
+      sm.add(scarfTail);
+
+      // Mũ phớt đen xinh xắn
+      const hatBrim = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.05, 16), coalMat);
+      hatBrim.position.y = 1.98;
+      sm.add(hatBrim);
+      const hatTop = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.32, 16), coalMat);
+      hatTop.position.y = 2.15;
+      sm.add(hatTop);
+      const hatBand = new THREE.Mesh(new THREE.CylinderGeometry(0.225, 0.225, 0.06, 16), redMat);
+      hatBand.position.y = 2.04;
+      sm.add(hatBand);
+
+      // Cánh tay cành cây
+      [-1, 1].forEach((s) => {
+        const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.032, 0.65, 6), twigMat);
+        arm.position.set(s * 0.56, 1.28, 0.04);
+        arm.rotation.z = s * -1.05;
+        sm.add(arm);
+      });
+
+      sm.scale.setScalar(scale);
+      return sm;
+    }
+
+    function buildLivingRoomInterior(brickMat, darkWoodMat, snowMat) {
+      const room = new THREE.Group();
+      scene.add(room);
+
+      const floorY = 0.47;
+
+      // 1. Thảm trải sàn họa tiết ấm áp giữa phòng khách
+      const rug = new THREE.Mesh(
+        new THREE.BoxGeometry(4.6, 0.03, 3.3),
+        new THREE.MeshStandardMaterial({ map: createCozyRugTexture(), roughness: 0.95 })
+      );
+      rug.position.set(-0.25, floorY + 0.015, 0.15);
+      rug.receiveShadow = true;
+      room.add(rug);
+
+      // 2. LÒ SƯỞI BẰNG GẠCH ĐANG CHÁY RỰC (Tường trái x = -3.62, quay vào giữa phòng +X)
+      const fireplace = new THREE.Group();
+      fireplace.position.set(-3.58, floorY, -0.35);
+      room.add(fireplace);
+
+      // Bệ lò sưởi & thân gạch bao quanh hốc lửa
+      const hearth = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.16, 2.35), brickMat);
+      hearth.position.set(0.15, 0.08, 0);
+      hearth.receiveShadow = true;
+      fireplace.add(hearth);
+
+      // Hai trụ gạch hai bên hốc lửa
+      [-0.78, 0.78].forEach((pz) => {
+        const side = new THREE.Mesh(new THREE.BoxGeometry(0.95, 1.55, 0.52), brickMat);
+        side.position.set(0, 0.85, pz);
+        fireplace.add(side);
+      });
+
+      // Mảng gạch phía trên lò sưởi nối lên trần
+      const upperBrick = new THREE.Mesh(new THREE.BoxGeometry(0.95, 1.95, 2.08), brickMat);
+      upperBrick.position.set(0, 2.55, 0);
+      fireplace.add(upperBrick);
+
+      // Lòng hốc lò tối bên trong
+      const fireboxBack = new THREE.Mesh(
+        new THREE.BoxGeometry(0.18, 1.4, 1.15),
+        new THREE.MeshStandardMaterial({ color: 0x1d1412, roughness: 1 })
+      );
+      fireboxBack.position.set(-0.34, 0.82, 0);
+      fireplace.add(fireboxBack);
+
+      // Thanh gỗ bệ lò sưởi (Mantle)
+      const mantle = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.14, 2.3), darkWoodMat);
+      mantle.position.set(0.08, 1.68, 0);
+      fireplace.add(mantle);
+
+      // Những chiếc tất Giáng sinh treo xinh xắn trên bệ lò sưởi
+      const sockColors = [0xd63638, 0x2e7d47, 0xd63638, 0xe8a33a];
+      sockColors.forEach((col, i) => {
+        const sock = new THREE.Group();
+        sock.position.set(0.62, 1.48, -0.66 + i * 0.44);
+        const leg = new THREE.Mesh(
+          new THREE.BoxGeometry(0.09, 0.28, 0.14),
+          new THREE.MeshStandardMaterial({ color: col, roughness: 0.8 })
+        );
+        const cuff = new THREE.Mesh(
+          new THREE.BoxGeometry(0.11, 0.08, 0.16),
+          new THREE.MeshStandardMaterial({ color: 0xfff8ef, roughness: 0.9 })
+        );
+        cuff.position.y = 0.13;
+        sock.add(leg, cuff);
+        fireplace.add(sock);
+      });
+
+      // Củi gỗ cháy rực & ngọn lửa động (animated flames)
+      const logMat = new THREE.MeshStandardMaterial({ color: 0x3b2214, roughness: 0.95 });
+      const glowLogMat = new THREE.MeshStandardMaterial({
+        color: 0x5c2410, emissive: 0xff4500, emissiveIntensity: 1.4, roughness: 0.9
+      });
+      for (let i = 0; i < 3; i++) {
+        const log = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.72, 8), i === 1 ? glowLogMat : logMat);
+        log.position.set(-0.02 + (i - 1) * 0.08, 0.25 + (i === 1 ? 0.08 : 0), (i - 1) * 0.14);
+        log.rotation.x = Math.PI / 2 + (i - 1) * 0.28;
+        log.rotation.z = (i - 1) * 0.18;
+        fireplace.add(log);
+      }
+
+      // Các lớp ngọn lửa stylized mềm mại
+      const flameConfigs = [
+        { x: 0.02, z: 0.0, r: 0.22, h: 0.72, col: 0xff5a1f, speed: 7.2, phase: 0 },
+        { x: 0.08, z: -0.18, r: 0.16, h: 0.54, col: 0xff8c24, speed: 8.6, phase: 1.4 },
+        { x: 0.06, z: 0.18, r: 0.17, h: 0.56, col: 0xff771f, speed: 6.8, phase: 2.8 },
+        { x: 0.1, z: 0.02, r: 0.13, h: 0.44, col: 0xffe26a, speed: 10.5, phase: 0.8 }
+      ];
+      flameConfigs.forEach((fc) => {
+        const fMat = new THREE.MeshBasicMaterial({
+          color: fc.col,
+          transparent: true,
+          opacity: 0.92
+        });
+        const flame = new THREE.Mesh(new THREE.ConeGeometry(fc.r, fc.h, 8), fMat);
+        flame.position.set(fc.x, 0.36 + fc.h / 2, fc.z);
+        flame.userData = { baseH: 1, baseY: flame.position.y, speed: fc.speed, phase: fc.phase };
+        fireplace.add(flame);
+        fireFlames.push(flame);
+      });
+
+      // Nguồn sáng PointLight cam vàng nhấp nháy ấm áp lan tỏa khắp phòng khách
+      fireLight = new THREE.PointLight(0xff8a30, 5.2, 12.5, 1.5);
+      fireLight.position.set(-2.75, floorY + 0.85, -0.35);
+      room.add(fireLight);
+
+      // Đèn trần/đèn bàn tạo độ sáng dịu ấm cho khuôn mặt các thành viên
+      roomWarmLight = new THREE.PointLight(0xffd296, 2.4, 11.5, 1.5);
+      roomWarmLight.position.set(0.3, floorY + 2.85, -0.2);
+      room.add(roomWarmLight);
+
+      // Tàn lửa bay nhẹ trong lò sưởi
+      const emberMat = new THREE.MeshBasicMaterial({ color: 0xffc857 });
+      for (let i = 0; i < 12; i++) {
+        const ember = new THREE.Mesh(new THREE.SphereGeometry(0.022, 6, 6), emberMat);
+        ember.userData = {
+          baseX: -3.45 + (Math.random() - 0.5) * 0.25,
+          baseZ: -0.35 + (Math.random() - 0.5) * 0.65,
+          life: Math.random(),
+          speed: 0.45 + Math.random() * 0.45
+        };
+        room.add(ember);
+        emberParticles.push(ember);
+      }
+
+      registerInteractable(fireplace, {
+        icon: '🔥',
+        title: 'Lò Sưởi Mùa Đông',
+        text: 'Ngọn lửa hồng nhảy múa lách tách, tỏa hơi ấm ngọt ngào xua tan cái lạnh tuyết rơi ngoài hiên.'
+      });
+
+      // 3. CÂY THÔNG GIÁNG SINH TRANG TRÍ LUNG LINH (Góc sau-phải x = 2.9, z = -1.9)
+      const christmasTree = buildChristmasTree(1.0);
+      christmasTree.position.set(2.92, floorY, -1.85);
+      room.add(christmasTree);
+      registerInteractable(christmasTree, {
+        icon: '🎄',
+        title: 'Cây Thông Gia Đình',
+        text: 'Cây thông rực rỡ quả châu, dây đèn lấp lánh và ngôi sao vàng trên đỉnh — nơi cả nhà cùng gửi gắm điều ước bình an.'
+      });
+
+      // Các hộp quà nhiều màu sắc dưới gốc cây thông & rải gần khu vực bé chơi
+      const giftSpecs = [
+        { x: 2.22, z: -1.55, w: 0.45, h: 0.36, d: 0.42, c: 0xd9383a, r: 0xffd166, rot: 0.25 },
+        { x: 2.65, z: -1.05, w: 0.38, h: 0.42, d: 0.38, c: 0x2b7a78, r: 0xffe8c2, rot: -0.3 },
+        { x: 3.35, z: -1.15, w: 0.48, h: 0.32, d: 0.4, c: 0x456990, r: 0xffb703, rot: 0.4 },
+        { x: 2.1, z: -2.25, w: 0.36, h: 0.34, d: 0.36, c: 0xe76f51, r: 0xffffff, rot: 0.15 },
+        { x: 1.55, z: 0.92, w: 0.38, h: 0.28, d: 0.36, c: 0xe63946, r: 0xffd166, rot: 0.45 } // Hộp quà bé trai đang mở!
+      ];
+      giftSpecs.forEach((g) => {
+        const box = createGiftBox(g.w, g.h, g.d, g.c, g.r);
+        box.position.set(g.x, floorY + g.h / 2, g.z);
+        box.rotation.y = g.rot;
+        room.add(box);
+      });
+
+      // 4. GHẾ SOFA LỚN (Dọc tường sau z = -2.05)
+      const sofa = new THREE.Group();
+      sofa.position.set(-0.25, floorY, -2.05);
+      const sofaFabric = new THREE.MeshStandardMaterial({ color: 0xb85042, roughness: 0.9 }); // đỏ gạch ấm
+      const cushionMat = new THREE.MeshStandardMaterial({ color: 0xc96050, roughness: 0.88 });
+      const pillowCream = new THREE.MeshStandardMaterial({ color: 0xf4e4c9, roughness: 0.9 });
+
+      const sofaBase = new THREE.Mesh(new THREE.BoxGeometry(3.45, 0.46, 1.05), sofaFabric);
+      sofaBase.position.y = 0.28;
+      sofaBase.castShadow = true;
+      sofa.add(sofaBase);
+
+      const sofaBack = new THREE.Mesh(new THREE.BoxGeometry(3.45, 0.96, 0.28), sofaFabric);
+      sofaBack.position.set(0, 0.72, -0.4);
+      sofaBack.castShadow = true;
+      sofa.add(sofaBack);
+
+      // Tay vịn hai bên sofa
+      [-1.62, 1.62].forEach((ax) => {
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.68, 1.08), sofaFabric);
+        arm.position.set(ax, 0.44, 0);
+        sofa.add(arm);
+      });
+
+      // 3 đệm ngồi bo mềm
+      [-1.02, 0, 1.02].forEach((cx) => {
+        const cush = new THREE.Mesh(new THREE.BoxGeometry(0.98, 0.16, 0.84), cushionMat);
+        cush.position.set(cx, 0.56, 0.08);
+        sofa.add(cush);
+      });
+
+      // Gối tựa nhỏ trên sofa
+      const throwPillow = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.36, 0.16), pillowCream);
+      throwPillow.position.set(-1.35, 0.78, -0.15);
+      throwPillow.rotation.z = 0.18;
+      sofa.add(throwPillow);
+      room.add(sofa);
+
+      // 5. GHẾ BẬP BÊNH / GHẾ BÀNH ẤM ÁP CỦA ÔNG (x = 1.85, z = -0.7, xoay nhìn vào cả nhà)
+      rockingChairGroup = new THREE.Group();
+      rockingChairGroup.position.set(1.88, floorY, -0.78);
+      rockingChairGroup.rotation.y = -0.82;
+      const chairFabric = new THREE.MeshStandardMaterial({ color: 0x3b6959, roughness: 0.88 }); // xanh thông ấm áp
+
+      const rSeat = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.24, 0.9), chairFabric);
+      rSeat.position.y = 0.46;
+      rockingChairGroup.add(rSeat);
+      const rBack = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.88, 0.22), chairFabric);
+      rBack.position.set(0, 0.88, -0.36);
+      rBack.rotation.x = -0.12;
+      rockingChairGroup.add(rBack);
+      [-0.44, 0.44].forEach((rx) => {
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.32, 0.86), chairFabric);
+        arm.position.set(rx, 0.68, 0);
+        rockingChairGroup.add(arm);
+        // Hai chân cong bập bênh bằng gỗ
+        const runner = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.035, 8, 18, Math.PI * 0.55), darkWoodMat);
+        runner.rotation.y = Math.PI / 2;
+        runner.rotation.z = Math.PI * 1.22;
+        runner.position.set(rx, 0.74, 0);
+        rockingChairGroup.add(runner);
+        const legF = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.38, 6), darkWoodMat);
+        legF.position.set(rx, 0.26, 0.26);
+        rockingChairGroup.add(legF);
+        const legB = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.38, 6), darkWoodMat);
+        legB.position.set(rx, 0.26, -0.26);
+        rockingChairGroup.add(legB);
+      });
+      room.add(rockingChairGroup);
+
+      // 6. BÀN TRÀ GỖ + TÁCH CACAO NÓNG BỐC KHÓI + ĐĨA BÁNH QUY
+      const table = new THREE.Group();
+      table.position.set(-0.32, floorY, -0.45);
+      const tableTop = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.09, 0.88), darkWoodMat);
+      tableTop.position.y = 0.46;
+      tableTop.castShadow = true;
+      tableTop.receiveShadow = true;
+      table.add(tableTop);
+      [[-0.65, -0.34], [0.65, -0.34], [-0.65, 0.34], [0.65, 0.34]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.035, 0.45, 8), darkWoodMat);
+        leg.position.set(lx, 0.225, lz);
+        table.add(leg);
+      });
+
+      // Các tách cacao/trà nóng trên bàn trà
+      const mugColors = [0xf4f1ea, 0xd94848, 0x457b9d];
+      [[-0.45, -0.1], [-0.15, 0.16], [0.46, -0.08]].forEach(([mx, mz], idx) => {
+        const mug = createCocoaMug(mugColors[idx]);
+        mug.position.set(mx, 0.51, mz);
+        table.add(mug);
+        // Hơi nóng bốc nhẹ từ tách cacao
+        for (let s = 0; s < 3; s++) {
+          const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: snowTex, transparent: true, opacity: 0.3, depthWrite: false
+          }));
+          sp.scale.set(0.14, 0.14, 1);
+          sp.userData = {
+            basePos: new THREE.Vector3(-0.32 + mx, floorY + 0.66, -0.45 + mz),
+            phase: Math.random() * Math.PI * 2,
+            life: s / 3
+          };
+          room.add(sp);
+          steamParticles.push(sp);
+        }
+      });
+
+      // Đĩa bánh quy thơm lừng
+      const plate = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.24, 0.2, 0.04, 16),
+        new THREE.MeshStandardMaterial({ color: 0xfff8ee, roughness: 0.35 })
+      );
+      plate.position.set(0.12, 0.52, -0.05);
+      table.add(plate);
+      const cookieMat = new THREE.MeshStandardMaterial({ color: 0xc98b4b, roughness: 0.85 });
+      [[0.06, -0.08], [0.18, -0.02], [0.1, 0.03], [0.12, -0.04]].forEach(([cx, cz], idx) => {
+        const ck = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.068, 0.025, 10), cookieMat);
+        ck.position.set(cx, 0.55 + (idx === 3 ? 0.025 : 0), cz);
+        table.add(ck);
+      });
+      room.add(table);
+      registerInteractable(table, {
+        icon: '☕',
+        title: 'Bàn Trà Cacao & Bánh Quy',
+        text: 'Những tách cacao nóng nghi ngút khói cùng đĩa bánh quy bơ vừa ra lò thơm lừng cả gian phòng.'
+      });
+
+      // 7. KỆ SÁCH, ĐÈN BÀN & TRANH TREO TƯỜNG
+      const bookshelf = new THREE.Group();
+      bookshelf.position.set(-3.05, floorY, -2.75);
+      const shelfBody = new THREE.Mesh(new THREE.BoxGeometry(1.35, 2.25, 0.45), darkWoodMat);
+      shelfBody.position.y = 1.125;
+      bookshelf.add(shelfBody);
+      const bookCols = [0xc94c4c, 0x3b6978, 0xe0a96d, 0x5c8067, 0x8b5e83, 0xd48c46];
+      for (let row = 0; row < 4; row++) {
+        const shelfPlank = new THREE.Mesh(new THREE.BoxGeometry(1.24, 0.05, 0.48), darkWoodMat);
+        shelfPlank.position.set(0, 0.45 + row * 0.5, 0.02);
+        bookshelf.add(shelfPlank);
+        for (let b = 0; b < 6; b++) {
+          const bh = 0.26 + ((row + b) % 3) * 0.05;
+          const book = new THREE.Mesh(
+            new THREE.BoxGeometry(0.14, bh, 0.28),
+            new THREE.MeshStandardMaterial({ color: bookCols[(row * 5 + b) % bookCols.length], roughness: 0.7 })
+          );
+          book.position.set(-0.46 + b * 0.18, 0.48 + row * 0.5 + bh / 2, 0.06);
+          bookshelf.add(book);
+        }
+      }
+      room.add(bookshelf);
+
+      // Bàn nhỏ bên trái sofa & đèn ngủ vàng ấm
+      const sideTable = new THREE.Group();
+      sideTable.position.set(-2.22, floorY, -2.18);
+      const stTop = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.06, 14), darkWoodMat);
+      stTop.position.y = 0.62;
+      sideTable.add(stTop);
+      const stLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.14, 0.6, 10), darkWoodMat);
+      stLeg.position.y = 0.3;
+      sideTable.add(stLeg);
+      const lampBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.07, 0.11, 0.24, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd4a359, metalness: 0.5, roughness: 0.4 })
+      );
+      lampBase.position.y = 0.76;
+      sideTable.add(lampBase);
+      const lampShade = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.15, 0.24, 0.28, 14),
+        new THREE.MeshStandardMaterial({
+          color: 0xffe8bd, emissive: 0xffb347, emissiveIntensity: 1.35, roughness: 0.6
+        })
+      );
+      lampShade.position.y = 1.02;
+      sideTable.add(lampShade);
+      room.add(sideTable);
+
+      // Tranh phong cảnh mùa đông treo trên tường sau phía trên sofa
+      const paintingGroup = new THREE.Group();
+      paintingGroup.position.set(-0.25, floorY + 2.15, -2.99);
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(1.75, 1.25, 0.07), darkWoodMat);
+      const canvasMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.55, 1.06),
+        new THREE.MeshStandardMaterial({ map: createPaintingTexture(), roughness: 0.55 })
+      );
+      canvasMesh.position.z = 0.04;
+      paintingGroup.add(frame, canvasMesh);
+      room.add(paintingGroup);
+
+      // Dây đèn nhỏ lung linh trang trí trên tường sau trong phòng khách
+      createFestiveStringLights(
+        new THREE.Vector3(-2.1, floorY + 3.15, -2.95),
+        new THREE.Vector3(2.2, floorY + 3.15, -2.95),
+        12,
+        0.22,
+        [0xffd67a, 0xffaa4d, 0xfff0be],
+        room
+      );
+    }
+
+    function createCocoaMug(colorHex) {
+      const g = new THREE.Group();
+      const mugMat = new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.35 });
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.062, 0.13, 12), mugMat);
+      body.position.y = 0.065;
+      g.add(body);
+      const cocoa = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.06, 0.06, 0.02, 12),
+        new THREE.MeshStandardMaterial({ color: 0x4f2c1d, roughness: 0.25 })
+      );
+      cocoa.position.y = 0.122;
+      g.add(cocoa);
+      const handle = new THREE.Mesh(new THREE.TorusGeometry(0.036, 0.012, 6, 12, Math.PI), mugMat);
+      handle.position.set(0.068, 0.068, 0);
+      handle.rotation.z = -Math.PI / 2;
+      g.add(handle);
+      return g;
+    }
+
+    function createGiftBox(w, h, d, boxCol, ribbonCol) {
+      const g = new THREE.Group();
+      const bMat = new THREE.MeshStandardMaterial({ color: boxCol, roughness: 0.55 });
+      const rMat = new THREE.MeshStandardMaterial({ color: ribbonCol, roughness: 0.4, metalness: 0.15 });
+      const box = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), bMat);
+      box.castShadow = true;
+      g.add(box);
+      const r1 = new THREE.Mesh(new THREE.BoxGeometry(w + 0.02, h + 0.02, d * 0.18), rMat);
+      const r2 = new THREE.Mesh(new THREE.BoxGeometry(w * 0.18, h + 0.02, d + 0.02), rMat);
+      g.add(r1, r2);
+      const bow = new THREE.Mesh(new THREE.TorusKnotGeometry(Math.min(w, d) * 0.16, 0.022, 24, 6), rMat);
+      bow.position.y = h / 2 + 0.04;
+      bow.scale.set(1, 0.55, 1);
+      g.add(bow);
+      return g;
+    }
+
+    function buildChristmasTree(scale = 1.0, addSnow = false) {
+      const tree = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.14, 0.2, 0.65, 10),
+        new THREE.MeshStandardMaterial({ color: 0x5c371d, roughness: 0.9 })
+      );
+      trunk.position.y = 0.32;
+      tree.add(trunk);
+
+      const leafMat = new THREE.MeshStandardMaterial({ color: 0x1e5c38, roughness: 0.85 });
+      const snowMat = new THREE.MeshStandardMaterial({ color: 0xf4f8ff, roughness: 0.78 });
+      const layers = [
+        { y: 1.05, r: 1.02, h: 1.15 },
+        { y: 1.72, r: 0.82, h: 1.05 },
+        { y: 2.32, r: 0.6, h: 0.92 },
+        { y: 2.82, r: 0.36, h: 0.7 }
+      ];
+
+      layers.forEach((l, li) => {
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(l.r, l.h, 14), leafMat);
+        cone.position.y = l.y;
+        cone.castShadow = true;
+        tree.add(cone);
+
+        if (addSnow) {
+          const cap = new THREE.Mesh(new THREE.ConeGeometry(l.r * 0.84, l.h * 0.45, 14), snowMat);
+          cap.position.y = l.y + l.h * 0.28;
+          tree.add(cap);
+        }
+
+        // Quả châu & đèn nhỏ lấp lánh quanh mỗi tầng lá
+        const ornColors = [0xff4d5a, 0xffcc4d, 0x56cfe1, 0xff9f43, 0xfff3c4];
+        const count = 8 - li;
+        for (let i = 0; i < count; i++) {
+          const ang = (i / count) * Math.PI * 2 + li * 0.6;
+          const rad = l.r * 0.78;
+          const isLight = i % 2 === 0;
+          const col = ornColors[(i + li * 2) % ornColors.length];
+          const mat = isLight
+            ? new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 2.0 })
+            : new THREE.MeshStandardMaterial({ color: col, metalness: 0.6, roughness: 0.25 });
+          const orb = new THREE.Mesh(new THREE.SphereGeometry(isLight ? 0.048 : 0.068, 10, 10), mat);
+          orb.position.set(Math.cos(ang) * rad, l.y - l.h * 0.24, Math.sin(ang) * rad);
+          tree.add(orb);
+          if (isLight) {
+            festiveLights.push({
+              mat,
+              baseIntensity: 2.0,
+              phase: Math.random() * Math.PI * 2,
+              speed: 2.2 + Math.random() * 2.5
+            });
+          }
+        }
+      });
+
+      // Ngôi sao vàng phát sáng trên đỉnh cây thông
+      const starMat = new THREE.MeshStandardMaterial({
+        color: 0xffe478, emissive: 0xffbe3b, emissiveIntensity: 2.2, roughness: 0.2
+      });
+      const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.22, 0), starMat);
+      star.position.y = 3.3;
+      star.scale.set(1, 1.15, 0.45);
+      tree.add(star);
+      festiveLights.push({ mat: starMat, baseIntensity: 2.2, phase: 0, speed: 1.8 });
+
+      const starHalo = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: warmGlowTex, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      starHalo.scale.set(1.15, 1.15, 1);
+      starHalo.position.y = 3.3;
+      tree.add(starHalo);
+      festiveLights.push({ sprite: starHalo, baseOpacity: 0.85, phase: 0.5, speed: 1.8 });
+
+      tree.scale.setScalar(scale);
+      return tree;
+    }
+
+    /* =========================================================================
+       7. TẠO NHÂN VẬT GIA ĐÌNH STYLIZED ẤM ÁP & CHÚ CÚN CƯNG
+    ========================================================================= */
+    function createStylizedPerson(opts) {
+      const {
+        scale = 1.0,
+        sweaterColor = 0x3b6e5c,
+        stripeColor = 0xf4e4c9,
+        pantsColor = 0x3a4052,
+        skinColor = 0xf7cbb0,
+        hairColor = 0x3d281c,
+        hairStyle = 'short',    // 'short' | 'bob' | 'bun' | 'pigtails' | 'elder'
+        hasGlasses = false,
+        hasMustache = false,
+        pose = 'seated',        // 'seated' | 'floor' | 'standing'
+        holdMug = false,
+        holdTeddy = false
+      } = opts;
+
+      const root = new THREE.Group();
+      const bodyGroup = new THREE.Group();
+      root.add(bodyGroup);
+
+      const skinMat = new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.65 });
+      const sweaterMat = new THREE.MeshStandardMaterial({ color: sweaterColor, roughness: 0.85 });
+      const stripeMat = new THREE.MeshStandardMaterial({ color: stripeColor, roughness: 0.85 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: pantsColor, roughness: 0.88 });
+      const hairMat = new THREE.MeshStandardMaterial({ color: hairColor, roughness: 0.8 });
+      const cheekMat = new THREE.MeshStandardMaterial({ color: 0xf2938c, roughness: 0.7 });
+      const eyeMat = new THREE.MeshStandardMaterial({ color: 0x1a1718, roughness: 0.2 });
+
+      // Thân áo len mềm mại hình trụ bo tròn
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.24, 0.52, 14), sweaterMat);
+      torso.position.y = 0.42;
+      torso.castShadow = true;
+      bodyGroup.add(torso);
+
+      // Họa tiết kẻ ngang áo len mùa đông & cổ áo ấm
+      const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.205, 0.22, 0.11, 14), stripeMat);
+      stripe.position.y = 0.45;
+      bodyGroup.add(stripe);
+
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.048, 8, 16), stripeMat);
+      collar.rotation.x = Math.PI / 2;
+      collar.position.y = 0.67;
+      bodyGroup.add(collar);
+
+      // Chân theo tư thế ngồi sofa / ngồi thảm / đứng
+      [-0.1, 0.1].forEach((lx) => {
+        const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.072, 0.28, 6, 10), pantsMat);
+        if (pose === 'seated') {
+          leg.rotation.x = Math.PI / 2.2;
+          leg.position.set(lx, 0.17, 0.2);
+          const shin = new THREE.Mesh(new THREE.CapsuleGeometry(0.062, 0.24, 6, 10), pantsMat);
+          shin.position.set(lx, 0.0, 0.34);
+          bodyGroup.add(shin);
+        } else if (pose === 'floor') {
+          leg.rotation.x = Math.PI / 2;
+          leg.rotation.z = lx > 0 ? -0.45 : 0.45;
+          leg.position.set(lx * 1.35, 0.12, 0.22);
+        } else {
+          leg.position.set(lx, 0.02, 0);
+        }
+        bodyGroup.add(leg);
+      });
+
+      // Hai cánh tay
+      [-1, 1].forEach((side) => {
+        const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.058, 0.26, 6, 10), sweaterMat);
+        arm.position.set(side * 0.24, 0.46, holdMug && side === 1 ? 0.12 : 0.05);
+        arm.rotation.z = side * 0.28;
+        arm.rotation.x = (holdMug && side === 1) ? -0.9 : (pose === 'floor' ? -0.65 : -0.35);
+        bodyGroup.add(arm);
+
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.056, 10, 10), skinMat);
+        hand.position.set(
+          side * 0.25,
+          holdMug && side === 1 ? 0.42 : 0.31,
+          holdMug && side === 1 ? 0.28 : 0.16
+        );
+        bodyGroup.add(hand);
+      });
+
+      // Cầm tách cacao ấm
+      if (holdMug) {
+        const mug = createCocoaMug(0xfff4e0);
+        mug.scale.setScalar(0.85);
+        mug.position.set(0.24, 0.38, 0.32);
+        bodyGroup.add(mug);
+      }
+
+      // Ôm chú gấu bông nhỏ (dành cho bé gái)
+      if (holdTeddy) {
+        const teddy = new THREE.Group();
+        const bearMat = new THREE.MeshStandardMaterial({ color: 0xb57a4a, roughness: 0.92 });
+        const tb = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 10), bearMat);
+        const th = new THREE.Mesh(new THREE.SphereGeometry(0.085, 10, 10), bearMat);
+        th.position.y = 0.14;
+        const e1 = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), bearMat);
+        e1.position.set(-0.06, 0.21, 0);
+        const e2 = e1.clone(); e2.position.x = 0.06;
+        teddy.add(tb, th, e1, e2);
+        teddy.position.set(0.04, 0.34, 0.24);
+        bodyGroup.add(teddy);
+      }
+
+      // Đầu nhân vật (tách riêng để xoay nhẹ gật đầu trò chuyện)
+      const headGroup = new THREE.Group();
+      headGroup.position.set(0, 0.86, 0.02);
+      bodyGroup.add(headGroup);
+
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 18, 16), skinMat);
+      head.castShadow = true;
+      headGroup.add(head);
+
+      // Mắt long lanh + má hồng + nụ cười hiền hậu
+      [-0.075, 0.075].forEach((ex) => {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.026, 10, 10), eyeMat);
+        eye.position.set(ex, 0.025, 0.195);
+        headGroup.add(eye);
+        const glint = new THREE.Mesh(
+          new THREE.SphereGeometry(0.009, 6, 6),
+          new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        glint.position.set(ex + 0.009, 0.034, 0.217);
+        headGroup.add(glint);
+
+        const cheek = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), cheekMat);
+        cheek.scale.set(1.2, 0.7, 0.5);
+        cheek.position.set(ex * 1.45, -0.025, 0.185);
+        headGroup.add(cheek);
+      });
+
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.042, 0.009, 6, 12, Math.PI),
+        new THREE.MeshStandardMaterial({ color: 0xa84845, roughness: 0.6 })
+      );
+      smile.rotation.z = Math.PI;
+      smile.position.set(0, -0.04, 0.202);
+      headGroup.add(smile);
+
+      // Kiểu tóc đặc trưng từng thành viên
+      if (hairStyle === 'short' || hairStyle === 'elder') {
+        const cap = new THREE.Mesh(
+          new THREE.SphereGeometry(0.232, 16, 14, 0, Math.PI * 2, 0, Math.PI * 0.58),
+          hairMat
+        );
+        cap.position.y = 0.02;
+        headGroup.add(cap);
+      } else if (hairStyle === 'bob') {
+        const cap = new THREE.Mesh(new THREE.SphereGeometry(0.238, 16, 14), hairMat);
+        cap.position.set(0, 0.02, -0.03);
+        headGroup.add(cap);
+        [-0.18, 0.18].forEach((sx) => {
+          const sideHair = new THREE.Mesh(new THREE.CapsuleGeometry(0.075, 0.16, 6, 8), hairMat);
+          sideHair.position.set(sx, -0.06, -0.02);
+          headGroup.add(sideHair);
+        });
+      } else if (hairStyle === 'bun') {
+        const cap = new THREE.Mesh(
+          new THREE.SphereGeometry(0.235, 16, 14, 0, Math.PI * 2, 0, Math.PI * 0.62),
+          hairMat
+        );
+        cap.position.set(0, 0.02, -0.01);
+        headGroup.add(cap);
+        const bun = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), hairMat);
+        bun.position.set(0, 0.18, -0.16);
+        headGroup.add(bun);
+      } else if (hairStyle === 'pigtails') {
+        const cap = new THREE.Mesh(
+          new THREE.SphereGeometry(0.232, 16, 14, 0, Math.PI * 2, 0, Math.PI * 0.62),
+          hairMat
+        );
+        cap.position.y = 0.02;
+        headGroup.add(cap);
+        const ribbonMat = new THREE.MeshStandardMaterial({ color: 0xe63946, roughness: 0.5 });
+        [-0.22, 0.22].forEach((px) => {
+          const tail = new THREE.Mesh(new THREE.SphereGeometry(0.088, 10, 10), hairMat);
+          tail.position.set(px, 0.02, -0.04);
+          headGroup.add(tail);
+          const rib = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8), ribbonMat);
+          rib.position.set(px * 0.88, 0.09, -0.02);
+          headGroup.add(rib);
+        });
+      }
+
+      // Kính lão vàng ấm cho Ông & Bà
+      if (hasGlasses) {
+        const glassMat = new THREE.MeshStandardMaterial({ color: 0xd9b36c, metalness: 0.7, roughness: 0.3 });
+        [-0.075, 0.075].forEach((gx) => {
+          const rim = new THREE.Mesh(new THREE.TorusGeometry(0.052, 0.008, 6, 16), glassMat);
+          rim.position.set(gx, 0.025, 0.215);
+          headGroup.add(rim);
+        });
+        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.01, 0.01), glassMat);
+        bridge.position.set(0, 0.03, 0.218);
+        headGroup.add(bridge);
+      }
+
+      // Ria mép bạc hiền hậu cho Ông
+      if (hasMustache) {
+        const stache = new THREE.Mesh(new THREE.CapsuleGeometry(0.025, 0.09, 6, 8), hairMat);
+        stache.rotation.z = Math.PI / 2;
+        stache.position.set(0, -0.022, 0.212);
+        headGroup.add(stache);
+      }
+
+      root.scale.setScalar(scale);
+      root.userData.headGroup = headGroup;
+      root.userData.bodyGroup = bodyGroup;
+      return root;
+    }
+
+    function buildFamilyMembers() {
+      const familyGroup = new THREE.Group();
+      scene.add(familyGroup);
+      const floorY = 0.47;
+
+      // 1. BỐ (Ngồi bên trái ghế sofa chính, áo len xanh thông, cầm tách cacao ấm)
+      const father = createStylizedPerson({
+        scale: 1.04,
+        sweaterColor: 0x2a5c55,
+        stripeColor: 0xf4dec1,
+        hairColor: 0x2e211b,
+        hairStyle: 'short',
+        pose: 'seated',
+        holdMug: true
+      });
+      father.position.set(-1.1, floorY + 0.48, -1.92);
+      father.rotation.y = 0.22;
+      familyGroup.add(father);
+      animatedCharacters.push({
+        group: father, baseY: father.position.y, speed: 1.5, phase: 0.2,
+        headYawAmp: 0.16, headPitchAmp: 0.06, baseHeadYaw: 0.12
+      });
+      registerInteractable(father, {
+        icon: '👨‍👩‍👧‍👦',
+        title: 'Bố & Mẹ',
+        text: 'Bố mẹ ngồi sát bên nhau trên ghế sofa, tay nâng tách cacao nóng và mỉm cười hạnh phúc nhìn cả nhà quây quần.'
+      });
+
+      // 2. MẸ (Ngồi sát bên cạnh Bố trên ghế sofa, áo len đỏ rượu ấm áp, cầm tách trà nóng)
+      const mother = createStylizedPerson({
+        scale: 0.98,
+        sweaterColor: 0xa83846,
+        stripeColor: 0xfff0d9,
+        hairColor: 0x4a2c1d,
+        hairStyle: 'bob',
+        pose: 'seated',
+        holdMug: true
+      });
+      mother.position.set(-0.28, floorY + 0.48, -1.92);
+      mother.rotation.y = 0.06;
+      familyGroup.add(mother);
+      animatedCharacters.push({
+        group: mother, baseY: mother.position.y, speed: 1.65, phase: 1.1,
+        headYawAmp: 0.18, headPitchAmp: 0.07, baseHeadYaw: -0.05
+      });
+      registerInteractable(mother, {
+        icon: '💛',
+        title: 'Mẹ Hiền',
+        text: 'Mẹ khẽ tựa vai bên bố, ánh mắt tràn đầy yêu thương hướng về hai bé đang vui chơi trên tấm thảm ấm.'
+      });
+
+      // 3. BÀ (Ngồi ở đầu phải ghế sofa gần Ông, tóc búi bạc, kính lão, áo len tím oải hương ấm)
+      const grandma = createStylizedPerson({
+        scale: 0.95,
+        sweaterColor: 0x8a5a78,
+        stripeColor: 0xf7e7d4,
+        hairColor: 0xe6e8ed,
+        hairStyle: 'bun',
+        hasGlasses: true,
+        pose: 'seated'
+      });
+      grandma.position.set(0.68, floorY + 0.48, -1.9);
+      grandma.rotation.y = -0.22;
+      familyGroup.add(grandma);
+      animatedCharacters.push({
+        group: grandma, baseY: grandma.position.y, speed: 1.35, phase: 2.0,
+        headYawAmp: 0.15, headPitchAmp: 0.08, baseHeadYaw: 0.25
+      });
+      registerInteractable(grandma, {
+        icon: '👵',
+        title: 'Ông và Bà',
+        text: 'Ông bà đang kể chuyện mùa đông năm xưa bên tách trà nóng, giọng nói trầm ấm làm cả phòng khách thêm rộn ràng tiếng cười.'
+      });
+
+      // 4. ÔNG (Ngồi trên ghế bập bênh ngay cạnh Bà, áo len vàng mù tạt ấm, tóc bạc & ria mép hiền hậu)
+      const grandpa = createStylizedPerson({
+        scale: 0.98,
+        sweaterColor: 0xc28538,
+        stripeColor: 0xf7ecd8,
+        hairColor: 0xe3e6ec,
+        hairStyle: 'elder',
+        hasGlasses: true,
+        hasMustache: true,
+        pose: 'seated'
+      });
+      // Đặt Ông trực tiếp vào trong ghế bập bênh để cùng đung đưa nhịp nhàng!
+      grandpa.position.set(0, 0.44, 0.04);
+      rockingChairGroup.add(grandpa);
+      animatedCharacters.push({
+        group: grandpa, baseY: grandpa.position.y, speed: 1.3, phase: 0.6,
+        headYawAmp: 0.16, headPitchAmp: 0.08, baseHeadYaw: -0.15
+      });
+      registerInteractable(grandpa, {
+        icon: '👴',
+        title: 'Ông Nội Hiền Hậu',
+        text: 'Ông khẽ đung đưa trên chiếc ghế bập bênh quen thuộc, vừa trò chuyện cùng bà vừa nhìn các cháu nở nụ cười mãn nguyện.'
+      });
+
+      // 5. BÉ GÁI (Ngồi trên thảm gần bố mẹ & ông bà, tóc buộc hai chùm nơ đỏ, ôm gấu bông)
+      const daughter = createStylizedPerson({
+        scale: 0.72,
+        sweaterColor: 0xe56b6f,
+        stripeColor: 0xfff5e4,
+        hairColor: 0x2c1e18,
+        hairStyle: 'pigtails',
+        pose: 'floor',
+        holdTeddy: true
+      });
+      daughter.position.set(0.55, floorY + 0.02, 0.58);
+      daughter.rotation.y = -2.35; // Quay mặt nhìn ấm áp về phía gia đình & hơi nghiêng để camera thấy rõ mặt
+      familyGroup.add(daughter);
+      animatedCharacters.push({
+        group: daughter, baseY: daughter.position.y, speed: 2.1, phase: 0.9,
+        headYawAmp: 0.22, headPitchAmp: 0.09, baseHeadYaw: 0.35
+      });
+      registerInteractable(daughter, {
+        icon: '🧸',
+        title: 'Bé An (Con Gái)',
+        text: 'Bé An ôm chú gấu bông nhỏ ngồi tựa gần ông bà và bố mẹ, chăm chú lắng nghe những câu chuyện cổ tích đêm đông.'
+      });
+
+      // 6. BÉ TRAI (Ngồi trên thảm gần cây thông & hộp quà, áo len xanh da trời ấm, vui vẻ mở quà)
+      const son = createStylizedPerson({
+        scale: 0.75,
+        sweaterColor: 0x3d7ea6,
+        stripeColor: 0xffd166,
+        hairColor: 0x3b271c,
+        hairStyle: 'short',
+        pose: 'floor'
+      });
+      son.position.set(1.52, floorY + 0.02, 0.42);
+      son.rotation.y = 0.25;
+      familyGroup.add(son);
+      animatedCharacters.push({
+        group: son, baseY: son.position.y, speed: 2.6, phase: 1.7,
+        headYawAmp: 0.24, headPitchAmp: 0.11, baseHeadYaw: 0.0
+      });
+      registerInteractable(son, {
+        icon: '🎁',
+        title: 'Bé Minh (Con Trai)',
+        text: 'Bé Minh reo lên thích thú khi mở hộp quà rực rỡ đặt cạnh cây thông Giáng sinh lấp lánh!'
+      });
+
+      // 7. CHÚ CÚN CƯNG "BÔNG" (Cuộn tròn trên tấm thảm ngay trước lò sưởi ấm áp, vẫy đuôi nhẹ)
+      const puppy = new THREE.Group();
+      puppy.position.set(-2.15, floorY + 0.03, -0.18);
+      puppy.rotation.y = 0.65;
+
+      const furMat = new THREE.MeshStandardMaterial({ color: 0xe3b178, roughness: 0.92 });
+      const earMat = new THREE.MeshStandardMaterial({ color: 0xba824c, roughness: 0.9 });
+      const noseMat = new THREE.MeshStandardMaterial({ color: 0x261d19, roughness: 0.3 });
+
+      // Đệm tròn mềm cho cún
+      const petBed = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.42, 0.45, 0.07, 16),
+        new THREE.MeshStandardMaterial({ color: 0x5c3d46, roughness: 0.95 })
+      );
+      petBed.position.y = 0.035;
+      puppy.add(petBed);
+
+      // Thân cún cuộn tròn thở nhẹ
+      puppyBody = new THREE.Mesh(new THREE.SphereGeometry(0.24, 14, 12), furMat);
+      puppyBody.scale.set(1.25, 0.78, 0.95);
+      puppyBody.position.set(0, 0.18, 0);
+      puppy.add(puppyBody);
+
+      // Đầu cún tựa xuống bàn chân trước
+      const pHead = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 12), furMat);
+      pHead.position.set(0.24, 0.22, 0.08);
+      puppy.add(pHead);
+
+      const pSnout = new THREE.Mesh(new THREE.SphereGeometry(0.065, 10, 10), furMat);
+      pSnout.position.set(0.36, 0.19, 0.12);
+      puppy.add(pSnout);
+
+      const pNose = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 8), noseMat);
+      pNose.position.set(0.41, 0.205, 0.13);
+      puppy.add(pNose);
+
+      // Tai cụp đáng yêu
+      [-1, 1].forEach((s) => {
+        const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.045, 0.11, 6, 8), earMat);
+        ear.position.set(0.21, 0.21, 0.08 + s * 0.14);
+        ear.rotation.x = s * 0.35;
+        puppy.add(ear);
+      });
+
+      // Đuôi cún vẫy nhẹ nhàng
+      const tailPivot = new THREE.Group();
+      tailPivot.position.set(-0.26, 0.22, -0.04);
+      const tailMesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.032, 0.18, 6, 8), furMat);
+      tailMesh.rotation.z = 0.95;
+      tailMesh.position.set(-0.08, 0.06, 0);
+      tailPivot.add(tailMesh);
+      puppy.add(tailPivot);
+      puppyTail = tailPivot;
+
+      familyGroup.add(puppy);
+      registerInteractable(puppy, {
+        icon: '🐶',
+        title: 'Chú Cún Bông',
+        text: 'Chú cún Bông cuộn tròn êm ái ngay trước lò sưởi hồng, khẽ vẫy chiếc đuôi nhỏ tận hưởng hơi ấm đêm đông.'
+      });
+    }
+
+    /* =========================================================================
+       8. KHU PHỐ HẠNH PHÚC XUNG QUANH (NHÀ HÀNG XÓM, ĐÈN ĐƯỜNG, CÂY THÔNG, HÀNG XÓM)
+    ========================================================================= */
+    function buildNeighborhood() {
+      const nb = new THREE.Group();
+      scene.add(nb);
+
+      // 1. Sáu ngôi nhà hàng xóm màu pastel/ấm cúng xung quanh
+      const neighborSpecs = [
+        { x: -12.6, z: 1.6, rot: 0.18, wall: 0xf4d8a8, roof: 0x4b6584, scale: 0.92 },  // Vàng bơ dịu
+        { x: 12.8, z: 1.4, rot: -0.22, wall: 0xe6b5ab, roof: 0x6b4557, scale: 0.95 },  // Hồng đất ấm
+        { x: -16.8, z: -8.6, rot: 0.42, wall: 0xb9cfb8, roof: 0x7d443c, scale: 0.96 }, // Xanh xô thơm
+        { x: 15.2, z: -9.2, rot: -0.38, wall: 0xbcd1e6, roof: 0x4b5d78, scale: 0.94 }, // Xanh pastel tuyết
+        { x: -13.5, z: 19.2, rot: 2.75, wall: 0xf0c99d, roof: 0x874539, scale: 0.9 },  // Kem caramel bên kia phố
+        { x: 12.4, z: 19.6, rot: -2.65, wall: 0xd7c4de, roof: 0x52577a, scale: 0.92 }  // Tím pastel ấm áp
+      ];
+
+      neighborSpecs.forEach((spec) => {
+        const nh = buildNeighborHouse(spec.wall, spec.roof, spec.scale);
+        nh.position.set(spec.x, 0, spec.z);
+        nh.rotation.y = spec.rot;
+        nb.add(nh);
+
+        // Khói nhẹ bay lên từ ống khói nhà hàng xóm
+        const chimneyWorld = new THREE.Vector3(1.5 * spec.scale, 6.2 * spec.scale, -0.8 * spec.scale);
+        chimneyWorld.applyAxisAngle(new THREE.Vector3(0, 1, 0), spec.rot);
+        chimneyWorld.add(new THREE.Vector3(spec.x, 0, spec.z));
+        spawnSmokeSource(chimneyWorld, 7, 0.78);
+      });
+
+      // 2. Các cây đèn đường cổ điển dọc con đường & công viên
+      const lampPositions = [
+        { x: -6.4, z: 7.4 },
+        { x: 6.4, z: 7.4 },
+        { x: -14.8, z: 8.6 },
+        { x: 14.8, z: 8.6 },
+        { x: -0.8, z: 12.8 },
+        { x: -8.6, z: 14.2 },
+        { x: 7.6, z: 13.0 }
+      ];
+
+      lampPositions.forEach((lp, idx) => {
+        // Chỉ gắn PointLight thực ở 3 đèn gần trung tâm để tối ưu 60fps, các đèn còn lại dùng halo Sprite rực rỡ
+        const hasRealLight = idx < 3;
+        const lamp = buildStreetLamp(hasRealLight);
+        lamp.position.set(lp.x, 0, lp.z);
+        nb.add(lamp);
+      });
+
+      // 3. Dây đèn lễ hội giăng ngang qua con phố giữa các cột đèn
+      createFestiveStringLights(
+        new THREE.Vector3(-6.4, 3.85, 7.4),
+        new THREE.Vector3(6.4, 3.85, 7.4),
+        18,
+        0.55,
+        [0xffcc66, 0xff7b54, 0xffe89e, 0x7be0ad, 0xffa64d],
+        nb
+      );
+      createFestiveStringLights(
+        new THREE.Vector3(-14.8, 3.85, 8.6),
+        new THREE.Vector3(-6.4, 3.85, 7.4),
+        14,
+        0.45,
+        [0xffcc66, 0xff9e44, 0xffe49e],
+        nb
+      );
+      createFestiveStringLights(
+        new THREE.Vector3(6.4, 3.85, 7.4),
+        new THREE.Vector3(14.8, 3.85, 8.6),
+        14,
+        0.45,
+        [0xffcc66, 0xff9e44, 0xffe49e],
+        nb
+      );
+
+      // 4. Cây thông chung của khu phố tại quảng trường nhỏ
+      const communityTree = buildChristmasTree(1.48, true);
+      communityTree.position.set(-4.2, 0.05, 16.5);
+      nb.add(communityTree);
+      registerInteractable(communityTree, {
+        icon: '🌟',
+        title: 'Cây Thông Chung Của Khu Phố',
+        text: 'Mỗi mùa đông về, cả khu phố lại cùng nhau trang hoàng cây thông lớn ở khoảng sân chung để sẻ chia niềm vui.'
+      });
+
+      // 5. Ghế đá công viên phủ tuyết nhẹ
+      const bench1 = buildParkBench();
+      bench1.position.set(-1.1, 0.05, 15.6);
+      bench1.rotation.y = -0.85;
+      nb.add(bench1);
+
+      const bench2 = buildParkBench();
+      bench2.position.set(-7.1, 0.05, 17.6);
+      bench2.rotation.y = 1.15;
+      nb.add(bench2);
+
+      // 6. Rừng thông phủ tuyết bao quanh tạo chiều sâu ấm cúng cho khu phố
+      const pineCoords = [
+        [-8.2, -3.5, 1.15], [-6.8, -6.4, 0.9], [7.8, -4.0, 1.2], [9.5, -6.2, 0.95],
+        [-2.8, -8.5, 1.3], [2.4, -9.2, 1.1], [6.4, -10.8, 1.35], [-9.4, -10.5, 1.25],
+        [-20.5, 4.5, 1.35], [-19.5, -2.5, 1.15], [20.2, 3.8, 1.3], [21.0, -3.4, 1.2],
+        [-19.0, 15.5, 1.25], [19.4, 15.0, 1.35], [-1.5, 22.8, 1.2], [5.8, 22.0, 1.1],
+        [-11.8, -16.5, 1.5], [0.5, -17.0, 1.6], [11.0, -16.2, 1.45]
+      ];
+      pineCoords.forEach(([px, pz, ps]) => {
+        const pine = buildSnowyPine(ps);
+        pine.position.set(px, 0, pz);
+        nb.add(pine);
+      });
+
+      // 7. Vài nhân vật hàng xóm vui vẻ ở xa (cặp đôi đi dạo & hai bé chơi cạnh người tuyết ở sân chung)
+      const walker1 = createStylizedPerson({
+        scale: 0.96, sweaterColor: 0x456990, stripeColor: 0xf4e4c9, hairColor: 0x3b281e, pose: 'standing'
+      });
+      walker1.position.set(8.2, 0.24, 10.1);
+      walker1.rotation.y = -Math.PI / 2;
+      nb.add(walker1);
+      animatedCharacters.push({
+        group: walker1, baseY: 0.24, speed: 2.2, phase: 0,
+        headYawAmp: 0.14, headPitchAmp: 0.05, baseHeadYaw: 0.2,
+        walkTrack: { centerX: 7.5, range: 2.2, speed: 0.22, phase: 0 }
+      });
+
+      const walker2 = createStylizedPerson({
+        scale: 0.92, sweaterColor: 0xc94c5b, stripeColor: 0xfff0d9, hairColor: 0x5c3622, hairStyle: 'bob', pose: 'standing'
+      });
+      walker2.position.set(8.2, 0.24, 10.75);
+      walker2.rotation.y = -Math.PI / 2;
+      nb.add(walker2);
+      animatedCharacters.push({
+        group: walker2, baseY: 0.24, speed: 2.2, phase: 0.5,
+        headYawAmp: 0.14, headPitchAmp: 0.05, baseHeadYaw: -0.2,
+        walkTrack: { centerX: 7.5, range: 2.2, speed: 0.22, phase: 0 }
+      });
+
+      // Người tuyết & hai bé hàng xóm vui đùa ở sân chung
+      const parkSnowman = buildSnowman(0.85);
+      parkSnowman.position.set(-2.3, 0.05, 18.2);
+      parkSnowman.rotation.y = -2.4;
+      nb.add(parkSnowman);
+
+      const kidA = createStylizedPerson({
+        scale: 0.72, sweaterColor: 0xe76f51, stripeColor: 0xfff3d6, hairColor: 0x38251a, pose: 'standing'
+      });
+      kidA.position.set(-3.1, 0.2, 18.7);
+      kidA.rotation.y = 1.2;
+      nb.add(kidA);
+      animatedCharacters.push({
+        group: kidA, baseY: 0.2, speed: 3.6, phase: 0.2,
+        headYawAmp: 0.2, headPitchAmp: 0.1, baseHeadYaw: 0, bounceAmp: 0.06
+      });
+
+      const kidB = createStylizedPerson({
+        scale: 0.7, sweaterColor: 0x2a9d8f, stripeColor: 0xffd166, hairColor: 0x2c1e18, hairStyle: 'pigtails', pose: 'standing'
+      });
+      kidB.position.set(-1.35, 0.2, 18.4);
+      kidB.rotation.y = -1.4;
+      nb.add(kidB);
+      animatedCharacters.push({
+        group: kidB, baseY: 0.2, speed: 3.3, phase: 1.5,
+        headYawAmp: 0.22, headPitchAmp: 0.09, baseHeadYaw: 0, bounceAmp: 0.06
+      });
+    }
+
+    function buildNeighborHouse(wallCol, roofCol, scale = 1.0) {
+      const h = new THREE.Group();
+      const wallMat = new THREE.MeshStandardMaterial({ color: wallCol, roughness: 0.85 });
+      const roofMat = new THREE.MeshStandardMaterial({ color: roofCol, roughness: 0.82 });
+      const snowMat = new THREE.MeshStandardMaterial({ color: 0xf2f7ff, roughness: 0.78 });
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0x5c3921, roughness: 0.85 });
+
+      const body = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.2, 4.6), wallMat);
+      body.position.y = 1.6;
+      body.castShadow = true;
+      body.receiveShadow = true;
+      h.add(body);
+
+      // Mái hình lăng trụ tam giác phủ tuyết dày
+      const roofGeo = new THREE.ConeGeometry(4.4, 2.55, 4);
+      roofGeo.rotateY(Math.PI / 4);
+      const roof = new THREE.Mesh(roofGeo, roofMat);
+      roof.position.y = 4.45;
+      roof.scale.set(1.06, 1, 0.9);
+      roof.castShadow = true;
+      h.add(roof);
+
+      const roofSnow = new THREE.Mesh(roofGeo, snowMat);
+      roofSnow.position.y = 4.62;
+      roofSnow.scale.set(1.08, 0.98, 0.92);
+      h.add(roofSnow);
+
+      // Ống khói
+      const ch = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 1.9, 0.75),
+        new THREE.MeshStandardMaterial({ color: 0x8f483b, roughness: 0.9 })
+      );
+      ch.position.set(1.5, 5.1, -0.8);
+      h.add(ch);
+
+      // Cửa gỗ & cửa sổ phát sáng vàng ấm áp
+      const door = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.9, 0.14), woodMat);
+      door.position.set(0, 0.95, 2.31);
+      h.add(door);
+
+      const winMat = new THREE.MeshStandardMaterial({
+        color: 0xffe4a8, emissive: 0xffa638, emissiveIntensity: 1.45, roughness: 0.2
+      });
+      windowMaterials.push(winMat);
+
+      [[-1.65, 1.8, 2.31], [1.65, 1.8, 2.31], [-2.81, 1.8, 0], [2.81, 1.8, 0]].forEach(([wx, wy, wz], idx) => {
+        const isSide = idx >= 2;
+        const win = new THREE.Mesh(
+          new THREE.BoxGeometry(isSide ? 0.12 : 1.15, 1.15, isSide ? 1.15 : 0.12),
+          winMat
+        );
+        win.position.set(wx, wy, wz);
+        h.add(win);
+      });
+
+      // Dây đèn nhỏ trang trí mái hiên nhà hàng xóm
+      createFestiveStringLights(
+        new THREE.Vector3(-2.9, 3.22, 2.45),
+        new THREE.Vector3(2.9, 3.22, 2.45),
+        10,
+        0.18,
+        [0xffd275, 0xff9f45, 0xfff0c2],
+        h
+      );
+
+      h.scale.setScalar(scale);
+      return h;
+    }
+
+    function buildStreetLamp(withPointLight = false) {
+      const lamp = new THREE.Group();
+      const ironMat = new THREE.MeshStandardMaterial({ color: 0x262c38, metalness: 0.55, roughness: 0.45 });
+
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 0.45, 8), ironMat);
+      base.position.y = 0.225;
+      lamp.add(base);
+
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.1, 3.6, 8), ironMat);
+      pole.position.y = 2.1;
+      pole.castShadow = true;
+      lamp.add(pole);
+
+      const bulbMat = new THREE.MeshStandardMaterial({
+        color: 0xfff2c6, emissive: 0xffb347, emissiveIntensity: 2.2, roughness: 0.2
+      });
+      const lantern = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.14, 0.42, 6), bulbMat);
+      lantern.position.y = 4.05;
+      lamp.add(lantern);
+
+      const cap = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.24, 6), ironMat);
+      cap.position.y = 4.38;
+      lamp.add(cap);
+
+      const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: warmGlowTex, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      halo.scale.set(2.4, 2.4, 1);
+      halo.position.y = 4.05;
+      lamp.add(halo);
+
+      if (withPointLight) {
+        const pt = new THREE.PointLight(0xffb454, 2.5, 11.5, 1.6);
+        pt.position.set(0, 3.85, 0);
+        lamp.add(pt);
+      }
+      return lamp;
+    }
+
+    function buildParkBench() {
+      const b = new THREE.Group();
+      const wood = new THREE.MeshStandardMaterial({ color: 0x734829, roughness: 0.85 });
+      const iron = new THREE.MeshStandardMaterial({ color: 0x28303d, roughness: 0.5 });
+      const snow = new THREE.MeshStandardMaterial({ color: 0xf4f8ff, roughness: 0.78 });
+
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.09, 0.55), wood);
+      seat.position.y = 0.5;
+      seat.castShadow = true;
+      b.add(seat);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.48, 0.08), wood);
+      back.position.set(0, 0.82, -0.25);
+      back.rotation.x = -0.18;
+      b.add(back);
+      const seatSnow = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.05, 0.44), snow);
+      seatSnow.position.set(0, 0.56, 0.02);
+      b.add(seatSnow);
+
+      [-0.72, 0.72].forEach((lx) => {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.5, 0.5), iron);
+        leg.position.set(lx, 0.25, 0);
+        b.add(leg);
+      });
+      return b;
+    }
+
+    function buildSnowyPine(scale = 1.0) {
+      const p = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.16, 0.24, 1.0, 8),
+        new THREE.MeshStandardMaterial({ color: 0x4f321e, roughness: 0.9 })
+      );
+      trunk.position.y = 0.5;
+      p.add(trunk);
+
+      const leafMat = new THREE.MeshStandardMaterial({ color: 0x24543d, roughness: 0.88 });
+      const snowMat = new THREE.MeshStandardMaterial({ color: 0xf0f6ff, roughness: 0.8 });
+
+      [
+        { y: 1.55, r: 1.45, h: 1.85 },
+        { y: 2.65, r: 1.12, h: 1.6 },
+        { y: 3.6, r: 0.76, h: 1.25 }
+      ].forEach((t) => {
+        const c = new THREE.Mesh(new THREE.ConeGeometry(t.r, t.h, 9), leafMat);
+        c.position.y = t.y;
+        c.castShadow = true;
+        p.add(c);
+        const s = new THREE.Mesh(new THREE.ConeGeometry(t.r * 0.8, t.h * 0.48, 9), snowMat);
+        s.position.y = t.y + t.h * 0.27;
+        p.add(s);
+      });
+
+      p.scale.setScalar(scale);
+      return p;
+    }
+
+    function createFestiveStringLights(pStart, pEnd, count, sag, colors, parent) {
+      const pts = [];
+      for (let i = 0; i <= count; i++) {
+        const t = i / count;
+        const p = new THREE.Vector3().lerpVectors(pStart, pEnd, t);
+        p.y -= Math.sin(t * Math.PI) * sag;
+        pts.push(p);
+      }
+
+      // Sợi dây mảnh tối màu
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const wire = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, count * 2, 0.014, 5, false),
+        new THREE.MeshBasicMaterial({ color: 0x222630 })
+      );
+      parent.add(wire);
+
+      // Các bóng đèn nhỏ phát sáng ấm áp
+      const bulbGeo = new THREE.SphereGeometry(0.055, 8, 8);
+      for (let i = 1; i < count; i++) {
+        const col = colors[i % colors.length];
+        const mat = new THREE.MeshStandardMaterial({
+          color: col,
+          emissive: col,
+          emissiveIntensity: 2.0,
+          roughness: 0.25
+        });
+        const bulb = new THREE.Mesh(bulbGeo, mat);
+        bulb.position.copy(pts[i]);
+        bulb.position.y -= 0.045;
+        parent.add(bulb);
+
+        festiveLights.push({
+          mat,
+          baseIntensity: 2.0,
+          phase: i * 0.65 + Math.random(),
+          speed: 2.0 + Math.random() * 1.8
+        });
+      }
+    }
+
+    /* =========================================================================
+       9. HỆ THỐNG HẠT: TUYẾT RƠI 3D & KHÓI ỐNG KHÓI MỀM MẠI
+    ========================================================================= */
+    function spawnSmokeSource(originVec3, count, scaleMult = 1.0) {
+      for (let i = 0; i < count; i++) {
+        const mat = new THREE.SpriteMaterial({
+          map: snowTex,
+          color: 0xe6edf7,
+          transparent: true,
+          opacity: 0.32,
+          depthWrite: false
+        });
+        const sp = new THREE.Sprite(mat);
+        sp.userData = {
+          origin: originVec3.clone(),
+          life: i / count,
+          speed: 0.14 + Math.random() * 0.08,
+          driftX: 0.45 + Math.random() * 0.35,
+          driftZ: -0.25 + (Math.random() - 0.5) * 0.3,
+          scaleMult
+        };
+        scene.add(sp);
+        smokeParticles.push(sp);
+      }
+    }
+
+    function buildSnowSystem() {
+      const geo = new THREE.BufferGeometry();
+      const positions = new Float32Array(snowCountMax * 3);
+      snowVelocities = new Float32Array(snowCountMax * 3);
+
+      for (let i = 0; i < snowCountMax; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 62;
+        positions[i * 3 + 1] = Math.random() * 26;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 62 + 4;
+
+        snowVelocities[i * 3] = (Math.random() - 0.5) * 0.45;
+        snowVelocities[i * 3 + 1] = -(0.85 + Math.random() * 0.95);
+        snowVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.45;
+      }
+
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geo.setDrawRange(0, 1550); // Mặc định: Vừa
+
+      const mat = new THREE.PointsMaterial({
+        size: 0.24,
+        map: snowTex,
+        transparent: true,
+        opacity: 0.88,
+        depthWrite: false,
+        color: 0xffffff
+      });
+
+      snowPoints = new THREE.Points(geo, mat);
+      scene.add(snowPoints);
+    }
+
+    function updateSnowLevel(level) {
+      state.snowLevel = level;
+      if (!snowPoints) return;
+      if (level === 'light') {
+        snowPoints.geometry.setDrawRange(0, 620);
+        snowPoints.material.size = 0.2;
+      } else if (level === 'medium') {
+        snowPoints.geometry.setDrawRange(0, 1550);
+        snowPoints.material.size = 0.24;
+      } else {
+        snowPoints.geometry.setDrawRange(0, snowCountMax);
+        snowPoints.material.size = 0.28;
+      }
+    }
+
+    /* =========================================================================
+       10. TƯƠNG TÁC RAYCASTER & BONG BÓNG LỜI NHẮN TIẾNG VIỆT
+    ========================================================================= */
+    function setupRaycaster() {
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let downX = 0, downY = 0;
+
+      const dom = renderer.domElement;
+      dom.addEventListener('pointerdown', (e) => {
+        downX = e.clientX;
+        downY = e.clientY;
+      });
+
+      dom.addEventListener('pointerup', (e) => {
+        // Chỉ tính là click khi người dùng không kéo xoay camera
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return;
+
+        const rect = dom.getBoundingClientRect();
+        pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(interactables, false);
+        if (hits.length > 0) {
+          const hit = hits[0].object;
+          if (hit.userData && hit.userData.story) {
+            showStoryBubble(hit.userData.story);
+          }
+        }
+      });
+
+      // Thay đổi con trỏ chuột khi rà qua đối tượng có thể nhấn
+      dom.addEventListener('pointermove', (e) => {
+        if (e.buttons > 0) return;
+        const rect = dom.getBoundingClientRect();
+        pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(interactables, false);
+        dom.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
+      });
+    }
+
+    function showStoryBubble(story) {
+      const bubble = document.getElementById('story-bubble');
+      document.getElementById('story-icon').textContent = story.icon;
+      document.getElementById('story-title').textContent = story.title;
+      document.getElementById('story-text').textContent = story.text;
+
+      bubble.classList.remove('hidden-bubble');
+      bubble.classList.add('visible-bubble');
+
+      clearTimeout(state.storyTimeout);
+      state.storyTimeout = setTimeout(() => hideStoryBubble(), 6800);
+    }
+
+    function hideStoryBubble() {
+      const bubble = document.getElementById('story-bubble');
+      bubble.classList.remove('visible-bubble');
+      bubble.classList.add('hidden-bubble');
+    }
+
+    /* =========================================================================
+       11. CHUYỂN GÓC NHÌN CAMERA & ĐIỀU KHIỂN GIAO DIỆN NGƯỜI DÙNG
+    ========================================================================= */
+    function animateCameraTo(presetKey) {
+      const preset = CAMERA_PRESETS[presetKey];
+      if (!preset) return;
+
+      state.cameraAnim = {
+        startPos: camera.position.clone(),
+        endPos: preset.pos.clone(),
+        startTarget: controls.target.clone(),
+        endTarget: preset.target.clone(),
+        t: 0,
+        duration: 1.35
+      };
+
+      // Tự động mở tường khi chọn góc nhìn Gia đình hoặc Góc Lò Sưởi
+      if (preset.autoCutaway) {
+        setCutaway(true);
+      } else if (presetKey === 'neighborhood' || presetKey === 'house') {
+        setCutaway(false);
+      }
+
+      document.querySelectorAll('.cam-btn').forEach((b) => {
+        b.classList.toggle('active', b.dataset.cam === presetKey);
+      });
+    }
+
+    function setCutaway(enabled) {
+      state.cutawayTarget = enabled ? 1 : 0;
+      document.getElementById('toggle-cutaway').classList.toggle('on', enabled);
+    }
+
+    function setupUI() {
+      // Nút chuyển góc nhìn Camera
+      document.querySelectorAll('.cam-btn').forEach((btn) => {
+        btn.addEventListener('click', () => animateCameraTo(btn.dataset.cam));
+      });
+
+      // Nút bật/tắt Mở tường xem bên trong
+      document.getElementById('btn-cutaway').addEventListener('click', () => {
+        setCutaway(state.cutawayTarget < 0.5);
+      });
+
+      // Nút thời điểm trong ngày
+      document.querySelectorAll('.time-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.timeOfDay = btn.dataset.time;
+          document.querySelectorAll('.time-btn').forEach((b) => b.classList.toggle('active', b === btn));
+        });
+      });
+
+      // Nút lượng tuyết rơi
+      document.querySelectorAll('.snow-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          updateSnowLevel(btn.dataset.snow);
+          document.querySelectorAll('.snow-btn').forEach((b) => b.classList.toggle('active', b === btn));
+        });
+      });
+
+      // Nút bật/tắt đèn lễ hội
+      document.getElementById('btn-lights').addEventListener('click', () => {
+        state.festiveLightsOn = !state.festiveLightsOn;
+        document.getElementById('toggle-lights').classList.toggle('on', state.festiveLightsOn);
+      });
+
+      // Nút bật/tắt âm thanh ấm cúng
+      document.getElementById('btn-audio').addEventListener('click', () => {
+        state.audioOn = !state.audioOn;
+        document.getElementById('toggle-audio').classList.toggle('on', state.audioOn);
+        const eq = document.getElementById('audio-eq');
+        eq.classList.toggle('hidden', !state.audioOn);
+        eq.classList.toggle('flex', state.audioOn);
+        soundEngine.setEnabled(state.audioOn);
+      });
+
+      // Nút ẩn/hiện bảng điều khiển
+      const panel = document.getElementById('control-panel');
+      const labelToggle = document.getElementById('label-panel-toggle');
+      document.getElementById('btn-toggle-panel').addEventListener('click', () => {
+        state.panelOpen = !state.panelOpen;
+        if (state.panelOpen) {
+          panel.style.opacity = '1';
+          panel.style.transform = 'scale(1)';
+          panel.style.pointerEvents = 'auto';
+          labelToggle.textContent = 'Ẩn bảng';
+        } else {
+          panel.style.opacity = '0';
+          panel.style.transform = 'scale(0.92)';
+          panel.style.pointerEvents = 'none';
+          labelToggle.textContent = 'Điều khiển';
+        }
+      });
+
+      // Thu gọn bảng mặc định trên màn hình điện thoại nhỏ để nhìn trọn cảnh 3D
+      if (window.innerWidth < 640) {
+        state.panelOpen = false;
+        panel.style.opacity = '0';
+        panel.style.transform = 'scale(0.92)';
+        panel.style.pointerEvents = 'none';
+        labelToggle.textContent = 'Điều khiển';
+      }
+
+      // Đóng bong bóng lời nhắn
+      document.getElementById('btn-close-story').addEventListener('click', hideStoryBubble);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    /* =========================================================================
+       12. VÒNG LẶP HOẠT ẢNH 60FPS
+    ========================================================================= */
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.getElapsedTime();
+
+      // 1. Chuyển cảnh Camera mượt mà (Cubic ease-in-out)
+      if (state.cameraAnim) {
+        const a = state.cameraAnim;
+        a.t = Math.min(1, a.t + dt / a.duration);
+        const ease = a.t < 0.5 ? 4 * a.t * a.t * a.t : 1 - Math.pow(-2 * a.t + 2, 3) / 2;
+        camera.position.lerpVectors(a.startPos, a.endPos, ease);
+        controls.target.lerpVectors(a.startTarget, a.endTarget, ease);
+        if (a.t >= 1) state.cameraAnim = null;
+      }
+      controls.update();
+
+      // 2. Làm mờ / hiện mặt tiền ngôi nhà mượt mà (Cutaway)
+      const diffCut = state.cutawayTarget - state.cutawayCurrent;
+      if (Math.abs(diffCut) > 0.002) {
+        state.cutawayCurrent += diffCut * Math.min(1, dt * 5.2);
+        const alpha = 1 - state.cutawayCurrent;
+        cutawayGroup.visible = alpha > 0.04;
+        for (let i = 0; i < cutawayMaterials.length; i++) {
+          const m = cutawayMaterials[i];
+          const baseOp = m.userData.baseOpacity;
+          m.opacity = baseOp * alpha;
+          const needTrans = alpha < 0.99 || m.userData.baseTransparent;
+          if (m.transparent !== needTrans) {
+            m.transparent = needTrans;
+            m.needsUpdate = true;
+          }
+          m.depthWrite = alpha > 0.65;
+        }
+      }
+
+      // 3. Nội suy mượt ánh sáng & bầu trời theo thời điểm trong ngày
+      const tp = TIME_PRESETS[state.timeOfDay];
+      const lerpAmt = Math.min(1, dt * 2.4);
+      skyUniforms.topColor.value.lerp(tp.skyTop, lerpAmt);
+      skyUniforms.midColor.value.lerp(tp.skyMid, lerpAmt);
+      skyUniforms.horizonColor.value.lerp(tp.skyHorizon, lerpAmt);
+      scene.fog.color.lerp(tp.fogColor, lerpAmt);
+      scene.fog.density += (tp.fogDensity - scene.fog.density) * lerpAmt;
+
+      hemiLight.color.lerp(tp.hemiSky, lerpAmt);
+      hemiLight.groundColor.lerp(tp.hemiGround, lerpAmt);
+      hemiLight.intensity += (tp.hemiIntensity - hemiLight.intensity) * lerpAmt;
+
+      dirLight.color.lerp(tp.dirColor, lerpAmt);
+      dirLight.intensity += (tp.dirIntensity - dirLight.intensity) * lerpAmt;
+      dirLight.position.lerp(tp.dirPos, lerpAmt);
+
+      starMaterial.opacity += (tp.starsOpacity - starMaterial.opacity) * lerpAmt;
+      moonMesh.material.opacity += (tp.moonOpacity - moonMesh.material.opacity) * lerpAmt;
+      moonHalo.material.opacity += (tp.moonOpacity * 0.82 - moonHalo.material.opacity) * lerpAmt;
+      renderer.toneMappingExposure += (tp.exposure - renderer.toneMappingExposure) * lerpAmt;
+
+      for (let i = 0; i < windowMaterials.length; i++) {
+        windowMaterials[i].emissiveIntensity += (tp.windowEmissive - windowMaterials[i].emissiveIntensity) * lerpAmt;
+      }
+
+      // 4. Lò sưởi cháy bập bùng & ánh sáng cam vàng nhấp nháy
+      for (let i = 0; i < fireFlames.length; i++) {
+        const f = fireFlames[i];
+        const u = f.userData;
+        const flicker = Math.sin(elapsed * u.speed + u.phase) * 0.18 + Math.cos(elapsed * (u.speed * 1.4) + u.phase) * 0.1;
+        f.scale.set(1 + flicker * 0.45, 1 + flicker, 1 + flicker * 0.45);
+        f.rotation.z = Math.sin(elapsed * 5.2 + u.phase) * 0.12;
+      }
+      fireLight.intensity = 4.9 + Math.sin(elapsed * 9.5) * 0.55 + Math.cos(elapsed * 15.2) * 0.35;
+
+      // Tàn lửa bay nhẹ lên trong lòng lò sưởi
+      for (let i = 0; i < emberParticles.length; i++) {
+        const e = emberParticles[i];
+        const u = e.userData;
+        u.life += dt * u.speed;
+        if (u.life > 1) u.life = 0;
+        e.position.set(
+          u.baseX + Math.sin(elapsed * 4 + i) * 0.08,
+          0.75 + u.life * 1.05,
+          u.baseZ + Math.cos(elapsed * 3.5 + i) * 0.09
+        );
+        const s = Math.sin(u.life * Math.PI);
+        e.scale.setScalar(Math.max(0.01, s));
+      }
+
+      // 5. Đèn lễ hội lấp lánh
+      for (let i = 0; i < festiveLights.length; i++) {
+        const fl = festiveLights[i];
+        if (!state.festiveLightsOn) {
+          if (fl.mat) fl.mat.emissiveIntensity = 0.05;
+          if (fl.sprite) fl.sprite.material.opacity = 0;
+        } else {
+          const twinkle = 0.72 + 0.35 * Math.sin(elapsed * fl.speed + fl.phase);
+          if (fl.mat) fl.mat.emissiveIntensity = fl.baseIntensity * twinkle;
+          if (fl.sprite) fl.sprite.material.opacity = fl.baseOpacity * twinkle;
+        }
+      }
+
+      // 6. Chuyển động tinh tế của gia đình, ghế bập bênh, cún cưng & hàng xóm
+      if (rockingChairGroup) {
+        rockingChairGroup.rotation.x = Math.sin(elapsed * 1.15) * 0.065;
+      }
+      if (puppyTail) {
+        puppyTail.rotation.y = Math.sin(elapsed * 5.8) * 0.42;
+      }
+      if (puppyBody) {
+        puppyBody.scale.y = 0.78 + Math.sin(elapsed * 2.2) * 0.035;
+      }
+
+      for (let i = 0; i < animatedCharacters.length; i++) {
+        const c = animatedCharacters[i];
+        const breath = Math.sin(elapsed * c.speed + c.phase);
+        if (c.group.userData.bodyGroup) {
+          c.group.userData.bodyGroup.scale.y = 1 + breath * 0.016;
+        }
+        if (c.group.userData.headGroup) {
+          c.group.userData.headGroup.rotation.y = c.baseHeadYaw + Math.sin(elapsed * (c.speed * 0.55) + c.phase) * c.headYawAmp;
+          c.group.userData.headGroup.rotation.x = Math.sin(elapsed * c.speed + c.phase * 1.5) * c.headPitchAmp;
+        }
+        if (c.bounceAmp) {
+          c.group.position.y = c.baseY + Math.abs(Math.sin(elapsed * c.speed + c.phase)) * c.bounceAmp;
+        }
+        if (c.walkTrack) {
+          const wt = c.walkTrack;
+          const prevX = c.group.position.x;
+          const nextX = wt.centerX + Math.sin(elapsed * wt.speed + wt.phase) * wt.range;
+          c.group.position.x = nextX;
+          c.group.position.y = c.baseY + Math.abs(Math.sin(elapsed * 4.5 + c.phase)) * 0.035;
+          c.group.rotation.y = (nextX >= prevX) ? Math.PI / 2 : -Math.PI / 2;
+        }
+      }
+
+      // 7. Khói ống khói & hơi nước tách cacao nóng
+      for (let i = 0; i < smokeParticles.length; i++) {
+        const sp = smokeParticles[i];
+        const u = sp.userData;
+        u.life += dt * u.speed;
+        if (u.life >= 1) u.life = 0;
+        sp.position.set(
+          u.origin.x + u.life * u.driftX * 2.4 + Math.sin(elapsed * 1.2 + i) * 0.18,
+          u.origin.y + u.life * 3.8,
+          u.origin.z + u.life * u.driftZ * 2.0
+        );
+        const s = (0.45 + u.life * 1.65) * u.scaleMult;
+        sp.scale.set(s, s, 1);
+        sp.material.opacity = Math.sin(u.life * Math.PI) * 0.34;
+      }
+
+      for (let i = 0; i < steamParticles.length; i++) {
+        const sp = steamParticles[i];
+        const u = sp.userData;
+        u.life += dt * 0.42;
+        if (u.life >= 1) u.life = 0;
+        sp.position.set(
+          u.basePos.x + Math.sin(elapsed * 2.5 + u.phase) * 0.035,
+          u.basePos.y + u.life * 0.36,
+          u.basePos.z + Math.cos(elapsed * 2.2 + u.phase) * 0.035
+        );
+        const s = 0.09 + u.life * 0.14;
+        sp.scale.set(s, s, 1);
+        sp.material.opacity = Math.sin(u.life * Math.PI) * 0.28;
+      }
+
+      // 8. Tuyết rơi 3D nhẹ nhàng khắp khu phố
+      if (snowPoints) {
+        const posAttr = snowPoints.geometry.attributes.position;
+        const speedMult = state.snowLevel === 'heavy' ? 1.35 : (state.snowLevel === 'light' ? 0.78 : 1.0);
+        const activeCount = snowPoints.geometry.drawRange.count;
+        for (let i = 0; i < activeCount; i++) {
+          let x = posAttr.getX(i) + (snowVelocities[i * 3] + Math.sin(elapsed * 0.8 + i) * 0.22) * dt * speedMult;
+          let y = posAttr.getY(i) + snowVelocities[i * 3 + 1] * dt * speedMult;
+          let z = posAttr.getZ(i) + (snowVelocities[i * 3 + 2] + Math.cos(elapsed * 0.7 + i) * 0.18) * dt * speedMult;
+
+          if (y < 0.05) {
+            y = 24 + Math.random() * 4;
+            x = (Math.random() - 0.5) * 62;
+            z = (Math.random() - 0.5) * 62 + 4;
+          }
+          posAttr.setXYZ(i, x, y, z);
+        }
+        posAttr.needsUpdate = true;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    /* =========================================================================
+       13. KHỞI CHẠY SAU KHI TRANG TẢI HOÀN TẤT
+    ========================================================================= */
+    window.addEventListener('load', () => {
+      try {
+        initScene();
+        animate();
+
+        // Ẩn màn hình chờ mượt mà
+        setTimeout(() => {
+          const loader = document.getElementById('loading-screen');
+          if (loader) loader.classList.add('fade-out');
+        }, 420);
+      } catch (err) {
+        console.error('Lỗi khởi tạo cảnh 3D:', err);
+        const loader = document.getElementById('loading-screen');
+        if (loader) loader.classList.add('fade-out');
+        const errBox = document.getElementById('error-box');
+        const errMsg = document.getElementById('error-msg');
+        if (errBox && errMsg) {
+          errMsg.textContent = 'Trình duyệt của bạn có thể chưa hỗ trợ WebGL hoặc gặp sự cố tải thư viện 3D. Vui lòng thử tải lại trang.';
+          errBox.classList.remove('hidden');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
