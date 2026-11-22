@@ -1,0 +1,3098 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>12 Chiều Không Gian</title>
+    <!-- Tailwind CSS for responsive layout and crisp typography -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================================
+           DEEP SPACE / SCI-FI OBSERVATORY DESIGN SYSTEM (0D -> 12D)
+           ========================================================= */
+        :root {
+            --bg-void: #03050c;
+            --bg-panel: rgba(8, 13, 28, 0.80);
+            --bg-hud: rgba(5, 9, 20, 0.84);
+            --border-subtle: rgba(56, 189, 248, 0.18);
+            --neon-cyan: #38bdf8;
+            --neon-indigo: #818cf8;
+            --neon-amber: #f59e0b;
+            --neon-magenta: #ec4899;
+            --neon-emerald: #10b981;
+            --text-primary: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-void);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 12% 12%, rgba(99, 102, 241, 0.13) 0%, transparent 38%),
+                radial-gradient(circle at 86% 18%, rgba(56, 189, 248, 0.11) 0%, transparent 40%),
+                radial-gradient(circle at 78% 88%, rgba(236, 72, 153, 0.09) 0%, transparent 40%),
+                radial-gradient(circle at 20% 90%, rgba(245, 158, 11, 0.07) 0%, transparent 36%);
+        }
+
+        .font-mono-tech {
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+        }
+
+        .glass-panel {
+            background: var(--bg-panel);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 12px 38px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-hud {
+            background: var(--bg-hud);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+        }
+
+        .text-gradient-cosmic {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 38%, #ec4899 72%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Dimension Rail Buttons */
+        .dim-btn {
+            position: relative;
+            transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(15, 23, 42, 0.72);
+            color: #cbd5e1;
+            flex-shrink: 0;
+        }
+        .dim-btn:hover {
+            border-color: rgba(56, 189, 248, 0.65);
+            background: rgba(14, 30, 58, 0.92);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .dim-btn.active {
+            border-color: #38bdf8;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.30), rgba(99, 102, 241, 0.30));
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.2);
+            color: #ffffff;
+        }
+
+        /* Highlighted 11D & 12D Advanced Theoretical Physics Buttons */
+        .dim-btn-advanced {
+            border: 1px solid rgba(236, 72, 153, 0.52);
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.45), rgba(157, 23, 77, 0.35));
+            box-shadow: 0 0 14px rgba(236, 72, 153, 0.22);
+            color: #fdf2f8;
+        }
+        .dim-btn-advanced:hover {
+            border-color: #f472b6;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.42);
+        }
+        .dim-btn-advanced.active {
+            border-color: #f472b6;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.44), rgba(129, 140, 248, 0.38));
+            box-shadow: 0 0 22px rgba(236, 72, 153, 0.55), inset 0 0 10px rgba(244, 114, 182, 0.28);
+            color: #ffffff;
+        }
+
+        /* Sci-Fi Sliders */
+        input[type="range"].sci-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.35), rgba(129, 140, 248, 0.45), rgba(236, 72, 153, 0.45));
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"].sci-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #38bdf8 60%, #0284c7);
+            border: 2px solid #e0f2fe;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+            cursor: pointer;
+            transition: transform 0.14s ease;
+        }
+        input[type="range"].sci-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+        }
+        input[type="range"].sci-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #38bdf8 60%, #0284c7);
+            border: 2px solid #e0f2fe;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+            cursor: pointer;
+        }
+
+        /* Sci-Fi Action Buttons */
+        .sci-btn {
+            background: linear-gradient(135deg, rgba(14, 116, 144, 0.36), rgba(79, 70, 229, 0.36));
+            border: 1px solid rgba(56, 189, 248, 0.40);
+            color: #e0f2fe;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sci-btn:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.50), rgba(99, 102, 241, 0.50));
+            border-color: #7dd3fc;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.36);
+            transform: translateY(-1px);
+        }
+
+        .sci-btn-amber {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.36), rgba(245, 158, 11, 0.26));
+            border: 1px solid rgba(245, 158, 11, 0.55);
+            color: #fef3c7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sci-btn-amber:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.52), rgba(217, 119, 6, 0.46));
+            border-color: #fde68a;
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.40);
+            transform: translateY(-1px);
+        }
+
+        .sci-btn-magenta {
+            background: linear-gradient(135deg, rgba(190, 24, 93, 0.40), rgba(147, 51, 234, 0.34));
+            border: 1px solid rgba(236, 72, 153, 0.58);
+            color: #fce7f3;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sci-btn-magenta:hover {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.55), rgba(168, 85, 247, 0.50));
+            border-color: #f9a8d4;
+            box-shadow: 0 0 18px rgba(236, 72, 153, 0.48);
+            transform: translateY(-1px);
+        }
+
+        /* Custom Scrollbars */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.45);
+            border-radius: 99px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.35);
+            border-radius: 99px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(56, 189, 248, 0.65);
+        }
+
+        /* Canvas Container */
+        #canvasWrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 460px;
+            overflow: hidden;
+            touch-action: none;
+            cursor: grab;
+        }
+        #canvasWrapper:active {
+            cursor: grabbing;
+        }
+        #simCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.24); }
+        }
+        .pulse-dot {
+            animation: pulseGlow 1.4s infinite ease-in-out;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade {
+            animation: fadeUp 0.25s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-sky-500/30 selection:text-sky-100">
+
+    <!-- =========================================================
+         TOP BAR: TITLE, AUTO TOUR, THEORY MODAL, RESET VIEW
+         ========================================================= -->
+    <header class="glass-panel sticky top-0 z-40 border-b border-sky-500/20 px-3 sm:px-5 py-2.5">
+        <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-2.5">
+            <!-- Observatory Logo & Title -->
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500/30 via-indigo-500/30 to-pink-500/35 border border-sky-400/45 flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(56,189,248,0.32)]">
+                    <svg class="w-5 h-5 text-sky-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <polygon points="12 2 21 7 21 17 12 22 3 17 3 7 12 2"></polygon>
+                        <circle cx="12" cy="12" r="3.5"></circle>
+                        <line x1="12" y1="2" x2="12" y2="8.5"></line>
+                        <line x1="21" y1="7" x2="15" y2="10.2"></line>
+                        <line x1="21" y1="17" x2="15" y2="13.8"></line>
+                        <line x1="12" y1="22" x2="12" y2="15.5"></line>
+                        <line x1="3" y1="17" x2="9" y2="13.8"></line>
+                        <line x1="3" y1="7" x2="9" y2="10.2"></line>
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-sm sm:text-base md:text-lg font-extrabold tracking-wide text-gradient-cosmic truncate">
+                        12 CHIỀU KHÔNG GIAN
+                    </h1>
+                    <p class="text-[11px] text-slate-400 hidden sm:block truncate">
+                        13 Cấp độ Không-Thời gian: Từ Điểm Kỳ Dị (0D) → Siêu Dây (10D) → Thuyết M (11D) → Thuyết F & 2T (12D)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <!-- Auto Tour (Space) -->
+                <button id="btnAutoTour" class="sci-btn-amber px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5" title="Tự động trình chiếu 0D → 12D (Phím Space)">
+                    <span id="autoTourDot" class="w-2 h-2 rounded-full bg-amber-300"></span>
+                    <span id="autoTourLabel">Tự động trình chiếu</span>
+                </button>
+
+                <!-- Compare Theory Modal -->
+                <button id="btnOpenCompare" class="sci-btn-magenta px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5" title="So sánh Trực quan vs Siêu Dây 10D vs Thuyết M 11D vs Thuyết F 12D">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+                    <span>So sánh Lý thuyết</span>
+                </button>
+
+                <!-- Reset View -->
+                <button id="btnHeaderReset" class="sci-btn px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold" title="Đặt lại góc nhìn & thông số">
+                    Đặt lại góc nhìn
+                </button>
+
+                <!-- Prev / Next Arrows -->
+                <div class="flex items-center gap-1">
+                    <button id="btnPrevDim" class="sci-btn w-8 h-8 rounded-lg flex items-center justify-center" title="Chiều trước (←)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button id="btnNextDim" class="sci-btn w-8 h-8 rounded-lg flex items-center justify-center" title="Chiều tiếp theo (→)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Tour Progress Bar -->
+        <div id="tourProgressWrap" class="hidden max-w-[1720px] mx-auto mt-2 h-1 bg-slate-800/90 rounded-full overflow-hidden">
+            <div id="tourProgressBar" class="h-full bg-gradient-to-r from-sky-400 via-indigo-400 via-pink-400 to-amber-400 w-0 transition-all duration-100"></div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         DIMENSION RAIL / BAR (13 BUTTONS: 0D -> 12D)
+         ========================================================= -->
+    <nav class="border-b border-slate-800/80 bg-[#050814]/90 backdrop-blur-md px-3 sm:px-5 py-2">
+        <div id="dimensionRail" class="max-w-[1720px] mx-auto flex items-center gap-1.5 sm:gap-2 overflow-x-auto custom-scroll pb-1">
+            <!-- Dynamically populated with 0D..12D buttons -->
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         MAIN 2-COLUMN WORKSPACE (~65% CANVAS | ~35% RIGHT PANEL)
+         ========================================================= -->
+    <main class="flex-1 max-w-[1720px] w-full mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+
+        <!-- LEFT / CENTER INTERACTIVE CANVAS (~65% -> 8/12 on lg+) -->
+        <section class="lg:col-span-8 flex flex-col glass-panel rounded-2xl overflow-hidden relative min-h-[470px] lg:min-h-[660px]">
+            <div id="canvasWrapper" class="flex-1 relative">
+                <canvas id="simCanvas"></canvas>
+
+                <!-- TOP-LEFT HUD: Dimension Name, Spacetime Signature, Live Telemetry -->
+                <div class="pointer-events-none absolute top-3 left-3 max-w-[76%] sm:max-w-sm glass-hud rounded-xl px-3.5 py-2.5 text-xs space-y-1">
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <span id="hudDimCode" class="font-mono-tech font-bold text-sky-300 bg-sky-500/20 border border-sky-400/40 px-2 py-0.5 rounded-md">0D</span>
+                        <span id="hudSignature" class="font-mono-tech text-[10.5px] font-bold text-amber-200 bg-amber-500/15 border border-amber-400/35 px-1.5 py-0.5 rounded-md">0+0</span>
+                        <span id="hudDimName" class="font-bold text-slate-100 truncate">Điểm Kỳ Dị</span>
+                    </div>
+                    <div id="hudFormula" class="font-mono-tech text-[11px] text-sky-300/90 leading-snug"></div>
+                    <div id="hudTelemetry" class="font-mono-tech text-[10.5px] text-slate-300 leading-relaxed"></div>
+                </div>
+
+                <!-- TOP-RIGHT HUD: FPS, Interaction Status & Camera Zoom Buttons -->
+                <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                    <div class="hidden sm:flex items-center gap-2 glass-hud rounded-lg px-2.5 py-1.5 text-[11px] font-mono-tech text-slate-300 pointer-events-none">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span id="hudFps">60 FPS</span>
+                        <span class="text-slate-600">|</span>
+                        <span id="hudStatus" class="text-sky-300 font-sans font-medium">Sẵn sàng</span>
+                    </div>
+                    <button id="btnZoomIn" class="glass-hud hover:border-sky-400/75 w-8 h-8 rounded-lg flex items-center justify-center text-sky-200 font-bold transition cursor-pointer" title="Phóng to">+</button>
+                    <button id="btnZoomOut" class="glass-hud hover:border-sky-400/75 w-8 h-8 rounded-lg flex items-center justify-center text-sky-200 font-bold transition cursor-pointer" title="Thu nhỏ">−</button>
+                    <button id="btnCanvasReset" class="glass-hud hover:border-sky-400/75 px-2.5 h-8 rounded-lg text-xs font-medium text-sky-200 transition cursor-pointer" title="Đặt lại góc nhìn">↺</button>
+                </div>
+
+                <!-- BOTTOM-LEFT HINT BAR -->
+                <div class="pointer-events-none absolute bottom-3 left-3 right-3 sm:right-auto glass-hud rounded-xl px-3 py-1.5 text-[11px] text-slate-300 flex items-center gap-2 max-w-xl">
+                    <span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span>
+                    <span id="hudHint" class="truncate">Kéo chuột/chạm để xoay 3D • Cuộn/Pinch để phóng to thu nhỏ.</span>
+                </div>
+
+                <!-- FLOATING NOTIFICATION TOAST -->
+                <div id="canvasToast" class="pointer-events-none opacity-0 transition-opacity duration-300 absolute top-24 left-1/2 -translate-x-1/2 glass-hud border-amber-400/55 text-amber-200 text-xs font-semibold px-4 py-2 rounded-full shadow-2xl text-center max-w-[90%]">
+                    Thông báo
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL (~35% -> 4/12 on lg+): INTERACTIVE CONTROLS + 4 SCIENTIFIC CARDS -->
+        <aside class="lg:col-span-4 glass-panel rounded-2xl flex flex-col overflow-hidden max-h-[none] lg:max-h-[calc(100vh-160px)]">
+            <div class="flex-1 overflow-y-auto custom-scroll p-4 sm:p-5 space-y-4">
+                <!-- Dimension Header -->
+                <div id="panelHeader" class="border-b border-slate-700/60 pb-3"></div>
+
+                <!-- Real-Time Interactive Controls Box -->
+                <div id="interactiveControlsBox" class="bg-slate-950/65 rounded-xl p-3.5 border border-sky-500/30 space-y-3"></div>
+
+                <!-- 4 Detailed Scientific Information Cards -->
+                <div id="scientificCardsBox" class="space-y-3"></div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- =========================================================
+         SCIENTIFIC COMPARISON MODAL (4 THEORETICAL FRAMEWORKS)
+         ========================================================= -->
+    <div id="compareModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+        <div class="glass-panel rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-pink-400/40 shadow-[0_0_50px_rgba(236,72,153,0.22)] animate-fade">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-700/70 bg-slate-950/75">
+                <div>
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10.5px] font-bold bg-pink-500/20 text-pink-200 border border-pink-400/45 mb-1">
+                        ĐỐI CHIẾU KHOA HỌC TRUNG THỰC
+                    </span>
+                    <h2 class="text-base sm:text-xl font-extrabold text-gradient-cosmic">
+                        So Sánh 4 Mô Hình & Lý Thuyết Đa Chiều (0D → 12D)
+                    </h2>
+                </div>
+                <button id="btnCloseCompare" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-600/70 text-slate-200 flex items-center justify-center transition cursor-pointer" title="Đóng (Esc)">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="overflow-y-auto custom-scroll p-5 space-y-4 text-xs sm:text-[13px]">
+                <p class="text-slate-300 leading-relaxed">
+                    Khái niệm "chiều không-thời gian cao hơn" thường bị pha trộn giữa ẩn dụ tư duy đại chúng và vật lý toán học chính thống. Dưới đây là sự phân biệt rõ ràng giữa <strong>4 hệ quy chiếu</strong> đang được mô phỏng trong Đài Quan Sát này:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <!-- 1. Rob Bryanton -->
+                    <div class="bg-slate-900/80 rounded-xl p-4 border-l-4 border-l-sky-400 border border-slate-700/70 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-bold text-sky-300 text-sm">1. Mô hình Trực quan (Rob Bryanton)</h3>
+                            <span class="font-mono-tech text-[11px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-200">0D–10D</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Xây dựng theo quy nạp tư duy: Điểm → Đường → Mặt → Gấp không gian. Các chiều 5D–10D đại diện cho <strong>cây rẽ nhánh thời gian</strong>, nhảy pha khả năng và đa vũ trụ có hằng số khác nhau.
+                        </p>
+                        <p class="text-[11.5px] text-slate-400">
+                            <strong>Lưu ý khoa học:</strong> Công cụ trực quan hóa triết học xuất sắc giúp dễ hình dung, <em>không phải</em> lý thuyết vật lý toán chính thống.
+                        </p>
+                    </div>
+
+                    <!-- 2. Superstring Theory -->
+                    <div class="bg-slate-900/80 rounded-xl p-4 border-l-4 border-l-amber-400 border border-slate-700/70 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-bold text-amber-300 text-sm">2. Thuyết Siêu Dây (Superstring)</h3>
+                            <span class="font-mono-tech text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200">10D • 9+1</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Yêu cầu đúng <strong>3 chiều không gian vĩ mô + 1 chiều thời gian + 6 chiều không gian cuộn kín</strong> ở thang Planck ($10^{-35}$ m) mang hình học <strong>Đa tạp Calabi-Yau</strong>.
+                        </p>
+                        <p class="text-[11.5px] text-slate-400">
+                            <strong>Cơ chế:</strong> Dao động của các siêu dây 1 chiều trong hình học 6D quy định các hạt cơ bản (Photon, Electron, Quark, Graviton, Higgs).
+                        </p>
+                    </div>
+
+                    <!-- 3. M-Theory -->
+                    <div class="bg-slate-900/80 rounded-xl p-4 border-l-4 border-l-emerald-400 border border-emerald-500/35 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-bold text-emerald-300 text-sm">3. Thuyết M (Edward Witten, 1995)</h3>
+                            <span class="font-mono-tech text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200">11D • 10+1</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            Thống nhất cả 5 phiên bản Thuyết Siêu Dây 10D và Siêu hấp dẫn 11D. Khi tăng khớp nối, dây 1D giãn thành <strong>Siêu màng M2-Brane / M5-Brane</strong> trôi nổi trong không gian <strong>Bulk 11D</strong>.
+                        </p>
+                        <p class="text-[11.5px] text-emerald-200/85">
+                            <strong>Giải đáp bí ẩn:</strong> Lực hấp dẫn yếu vì Graviton vòng kín rò rỉ vào Bulk 11D; va chạm giữa hai Brane tạo ra Big Bang Ekpyrotic.
+                        </p>
+                    </div>
+
+                    <!-- 4. F-Theory & 2T-Physics -->
+                    <div class="bg-slate-900/80 rounded-xl p-4 border-l-4 border-l-pink-400 border border-pink-500/40 space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-bold text-pink-300 text-sm">4. Thuyết F & Vật lý 2T (12D)</h3>
+                            <span class="font-mono-tech text-[11px] px-2 py-0.5 rounded bg-pink-500/20 text-pink-200">12D • 10+2</span>
+                        </div>
+                        <p class="text-slate-300 leading-relaxed">
+                            <strong>• Thuyết F (Cumrun Vafa, 1996):</strong> Gắn phân thớ <strong>Xuyến Elliptic $T^2$</strong> (2 chiều phụ trợ) lên nền Loại IIB để hình học hóa trường Axio-Dilaton ($\tau$) và nguồn gốc D7-Brane.<br>
+                            <strong>• Vật lý 2T (Itzhak Bars):</strong> Bổ sung chiều thời gian thứ 2 ($t_1, t_2$) với đối xứng chuẩn $Sp(2,\mathbb{R})$; một quỹ đạo 12D chiếu thành nhiều "bóng toàn ảnh" 3+1D đối ngẫu nhau.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Summary Matrix Table -->
+                <div class="rounded-xl border border-slate-700/70 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-900/95 text-slate-300 border-b border-slate-700">
+                                    <th class="p-3 font-bold">Lý thuyết / Khung tư duy</th>
+                                    <th class="p-3 font-bold">Chữ ký</th>
+                                    <th class="p-3 font-bold">Đối tượng nền tảng</th>
+                                    <th class="p-3 font-bold">Hệ quả vật lý nổi bật</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 text-slate-300">
+                                <tr>
+                                    <td class="p-3 font-semibold text-sky-300">Trực quan (Bryanton)</td>
+                                    <td class="p-3 font-mono-tech">0D–10D</td>
+                                    <td class="p-3">Nhánh khả năng & Đa vũ trụ</td>
+                                    <td class="p-3">Minh họa dễ hiểu cách gấp không-thời gian</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-amber-300">Thuyết Siêu Dây</td>
+                                    <td class="p-3 font-mono-tech">9+1</td>
+                                    <td class="p-3">Dây 1D + Đa tạp Calabi-Yau 6D</td>
+                                    <td class="p-3">Dao động dây sinh ra mọi hạt cơ bản</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-emerald-300">Thuyết M (Witten)</td>
+                                    <td class="p-3 font-mono-tech">10+1</td>
+                                    <td class="p-3">Siêu màng M2/M5 + Bulk 11D</td>
+                                    <td class="p-3">Rò rỉ Graviton & Big Bang Ekpyrotic</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-pink-300">Thuyết F & 2T-Physics</td>
+                                    <td class="p-3 font-mono-tech">10+2</td>
+                                    <td class="p-3">Phân thớ $T^2$ (D7) & Mặt phẳng $(t_1,t_2)$</td>
+                                    <td class="p-3">Hình học hóa lực ghép $\tau$ & Đối ngẫu bóng toàn ảnh</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Jump Buttons from Modal -->
+                <div class="flex flex-wrap gap-2 pt-1">
+                    <button id="modalJump10D" class="sci-btn-amber px-3.5 py-2 rounded-xl text-xs font-bold">Trải nghiệm 10D Siêu Dây →</button>
+                    <button id="modalJump11D" class="sci-btn px-3.5 py-2 rounded-xl text-xs font-bold border-emerald-400/50 text-emerald-200">Trải nghiệm 11D Thuyết M →</button>
+                    <button id="modalJump12DF" class="sci-btn-magenta px-3.5 py-2 rounded-xl text-xs font-bold">Trải nghiệm 12D Thuyết F →</button>
+                    <button id="modalJump12D2T" class="sci-btn-magenta px-3.5 py-2 rounded-xl text-xs font-bold">Trải nghiệm 12D Vật lý 2T →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         PURE HTML5 CANVAS 3D/4D/12D ENGINE & INTERACTIVE LOGIC
+         ========================================================= -->
+    <script>
+    (function() {
+        'use strict';
+
+        /* =========================================================
+           1. SCIENTIFIC KNOWLEDGE BASE FOR ALL 13 DIMENSIONS (0D-12D)
+           ========================================================= */
+        const DIMENSIONS = [
+            {
+                id: 0, code: '0D', short: 'Điểm kỳ dị', signature: '0+0', advanced: false,
+                title: 'Chiều Thứ 0 — Điểm Kỳ Dị (Singularity)',
+                subtitle: 'Không kích thước • Không tọa độ • Bọt lượng tử ở Thang Planck',
+                tag: 'Hình học nền tảng', accent: '#38bdf8',
+                formula: 'dim(P) = 0  |  ℓ_P = 1.616 × 10⁻³⁵ m',
+                hint: 'Kéo thanh trượt "Độ phóng đại" xuống Thang Planck (10³⁵×) để quan sát bọt lượng tử quanh điểm 0D!',
+                howItWorks: 'Chiều 0D là một điểm toán học thuần túy không có chiều dài, chiều rộng, chiều cao hay thời gian. Nó có 0 bậc tự do — không tồn tại khái niệm phương hướng, khoảng cách hay chuyển động.',
+                impact: 'Mọi hình học nhiều chiều đều cấu thành từ tập hợp vô hạn điểm 0D. Trong thuyết tương đối rộng, tâm hố đen và trạng thái khởi thủy trước Big Bang được mô tả như điểm kỳ dị, cho đến khi hiệu ứng bọt lượng tử (quantum foam) xuất hiện ở Thang Planck (10⁻³⁵ m).',
+                analogy: 'Tưởng tượng một dấu chấm siêu nhỏ trên tờ giấy, dù bạn phóng đại bằng kính hiển vi lên hàng tỷ tỷ tỷ lần, kích thước thật của nó vẫn đúng bằng 0.',
+                experiment: 'Kéo thanh trượt "Độ phóng đại" từ 10⁰× lên 10³⁵× (Thang Planck): lưới không gian và bọt lượng tử nền sẽ rung động mạnh nhưng lõi điểm 0D vẫn không hề to ra. Nhấn nút "Phát xung lượng tử" để tạo sóng năng lượng.'
+            },
+            {
+                id: 1, code: '1D', short: 'Đường thẳng', signature: '1+0', advanced: false,
+                title: 'Chiều Thứ 1 — Đường Thẳng (Trục X)',
+                subtitle: '1 bậc tự do • Tầm nhìn 1D bị chắn kín tuyệt đối',
+                tag: 'Không gian 1D', accent: '#38bdf8',
+                formula: 'ds² = dx²  |  x ∈ (−∞, +∞)',
+                hint: 'Bật "Chế độ tầm nhìn 1D" và kéo vị trí người quan sát để cảm nhận sự giam cầm trên một đường thẳng!',
+                howItWorks: 'Nối hai điểm 0D hoặc kéo dài một điểm theo một phương duy nhất tạo thành chiều thứ 1 (trục X). Mọi thực thể và tia sáng chỉ có thể di chuyển tiến (+X) hoặc lùi (−X).',
+                impact: 'Sinh vật sống trong không gian 1D không thể đi vòng qua hay nhảy qua vật cản vì hoàn toàn thiếu trục Y và Z. Một vật cản duy nhất đứng trước mặt sẽ che kín 100% tầm nhìn của nó.',
+                analogy: 'Một hạt cườm trượt trên sợi dây thép thẳng căng: nếu có một nút thắt nằm giữa sợi dây, hạt cườm không bao giờ sang được phía bên kia.',
+                experiment: 'Kéo thanh trượt "Vị trí người quan sát" tiến sát vật cản, bật/tắt công tắc "Chế độ tầm nhìn 1D" để xem khung nhìn thực tế mà sinh vật 1D thấy (chỉ là một điểm sáng duy nhất phía trước và phía sau).'
+            },
+            {
+                id: 2, code: '2D', short: 'Mặt phẳng', signature: '2+0', advanced: false,
+                title: 'Chiều Thứ 2 — Mặt Phẳng Flatland',
+                subtitle: 'Hệ trục XY • Nâng góc nhìn 3D để nhìn xuyên phòng kín',
+                tag: 'Không gian 2D', accent: '#2dd4bf',
+                formula: 'ds² = dx² + dy²  |  P = (x, y)',
+                hint: 'Kéo thanh "Góc nâng camera 3D" từ 0° lên 75° để nhìn xuyên tường vào phòng kín Flatland!',
+                howItWorks: 'Kéo đường thẳng 1D theo phương vuông góc (trục Y) tạo nên mặt phẳng 2D có diện tích. Sinh vật 2D (Flatlander) có thể đi tiến-lùi và rẽ trái-phải để né vật cản trên mặt phẳng.',
+                impact: 'Với sinh vật 2D, một căn phòng hình vuông khép kín là két sắt bất khả xâm phạm. Nhưng với thực thể 3D nhìn từ trục Z bên trên, toàn bộ nội thất phòng kín phơi bày hoàn toàn — thậm chí có thể nhấc vật thể ra ngoài qua chiều thứ 3 mà không làm hỏng bức tường nào.',
+                analogy: 'Nhân vật trong một bản vẽ 2D trên bàn chỉ thấy những nét tường vây quanh mình, còn bạn cúi nhìn từ trên xuống thấy rõ mọi thứ bên trong căn phòng đó.',
+                experiment: 'Đặt "Góc nâng camera 3D" về thấp (góc nhìn 2D bẹt) rồi kéo dần lên cao để xuyên nhìn vào phòng kín, sau đó nhấn "Nhấc lõi năng lượng qua trục Z" để xem phép màu của chiều cao hơn.'
+            },
+            {
+                id: 3, code: '3D', short: 'Không gian 3D', signature: '3+0', advanced: false,
+                title: 'Chiều Thứ 3 — Không Gian Khối & Lỗ Sâu Đục',
+                subtitle: 'Hệ trục XYZ • Gấp lưới 2D trong chiều thứ 3 để dịch chuyển tức thời',
+                tag: 'Không gian Thực tại', accent: '#60a5fa',
+                formula: 'ds² = dx² + dy² + dz²  |  Wormhole(A ↔ B)',
+                hint: 'Kéo thanh "Độ gấp không gian 3D" lên 100% rồi cho con kiến 2D nhảy xuyên Lỗ Sâu Đục từ A sang B!',
+                howItWorks: 'Mở rộng mặt phẳng 2D vuông góc theo trục Z tạo ra không gian 3D có thể tích. Nhờ có chiều thứ 3, ta có thể uốn cong và gấp toàn bộ mặt phẳng không gian 2D lại với nhau.',
+                impact: 'Khi gấp lưới 2D trong chiều thứ 3 để hai điểm A và B ở rất xa chạm sát nhau, một cầu nối (Lỗ Sâu Đục / Cầu Einstein–Rosen) hình thành giúp rút ngắn khoảng cách về gần bằng 0. Trong vật lý tương đối rộng, khối lượng làm cong không-thời gian theo cơ chế tương tự ở bậc cao hơn.',
+                analogy: 'Gấp đôi một tờ giấy dài để hai mép A và B chạm nhau: thay vì bò hết chiều dài tờ giấy, con kiến chỉ bước một bước nhỏ qua nếp gấp là tới đích.',
+                experiment: 'Kéo slider "Độ gấp không gian 3D" lên 100% để kích hoạt đường hầm lỗ sâu đục phát sáng, rồi bấm "Cho kiến 2D di chuyển A → B" để so sánh tốc độ đi thường và đi tắt.'
+            },
+            {
+                id: 4, code: '4D', short: 'Tesseract & t', signature: '3+1 / 4+0', advanced: false,
+                title: 'Chiều Thứ 4 — Siêu Khối Tesseract & Thời Gian',
+                subtitle: 'Chiếu 4D Euclid (16 đỉnh, 32 cạnh) & Con rắn Thời gian (Worldline)',
+                tag: 'Tương đối & Hình học 4D', accent: '#818cf8',
+                formula: 'ds² = −c²dt² + dx² + dy² + dz²  |  V₄ = {±1}⁴',
+                hint: 'Chuyển đổi giữa "Siêu khối Tesseract 4D" và "Con rắn thời gian (Worldline)" trong bảng điều khiển!',
+                howItWorks: 'Ở góc độ hình học, kéo khối lập phương 3D dọc trục vuông góc thứ 4 (W) tạo thành Siêu khối Tesseract (16 đỉnh, 32 cạnh, 8 khối 3D). Ở góc độ vật lý tương đối, chiều thứ 4 là Thời gian (t), kéo dài vật thể 3D thành một ống liên tục gọi là đường thế giới (Worldline).',
+                impact: 'Thời gian thiết lập mũi tên Entropy và luật Nhân Quả — con người chỉ trải nghiệm từng lát cắt 3D ở "hiện tại". Sinh vật 4D quan sát trọn vẹn quá khứ–hiện tại–tương lai cùng một lúc giống như nhìn một con rắn dài nằm bất động.',
+                analogy: 'Toàn bộ cuộc đời một ngôi sao giống như một cuộn phim dài; khoảnh khắc "bây giờ" chỉ là một khung hình duy nhất đang chiếu sáng.',
+                experiment: 'Ở chế độ Tesseract, điều chỉnh "Tốc độ xoay W" và "Góc xoay XW" rồi kéo chuột xoay 3D. Sau đó chuyển sang chế độ "Con rắn Thời gian" và kéo slider thời gian t.'
+            },
+            {
+                id: 5, code: '5D', short: 'Rẽ nhánh 5D', signature: '3+1+ψ', advanced: false,
+                title: 'Chiều Thứ 5 — Rẽ Nhánh Khả Năng & Không Gian Pha',
+                subtitle: 'Cây phân nhánh lượng tử 3D từ cùng một điểm khởi đầu',
+                tag: 'Lượng tử Đa thế giới', accent: '#a855f7',
+                formula: '|Ψ⟩ = Σ cᵢ |Nhánh i⟩  |  Σ|cᵢ|² = 1',
+                hint: 'Click trực tiếp vào các nút nhánh trên Canvas để chọn, hoặc bấm "Tạo nhánh quyết định mới"!',
+                howItWorks: 'Nếu chiều 4D là một dòng thời gian đơn nhất, chiều 5D mở rộng thành mặt phẳng xác suất chứa vô số nhánh lịch sử song song phân tách từ cùng một khởi điểm Big Bang và tuân thủ cùng bộ định luật vật lý.',
+                impact: 'Gắn liền với Diễn giải Đa Thế Giới (Many-Worlds) của cơ học lượng tử: mỗi biến cố ngẫu nhiên hoặc quyết định làm hàm sóng vũ trụ tách nhánh, tạo nên hàng loạt kết cục song song cùng tồn tại.',
+                analogy: 'Một dòng sông lớn tách thành nhiều chi lưu tỏa ra đồng bằng: mọi nhánh đều xuất phát từ cùng một ngọn nguồn nhưng chảy tới những vùng đất khác nhau.',
+                experiment: 'Click vào từng nút phát sáng cuối nhánh trên Canvas để quan sát kịch bản tương lai riêng, bấm nút "+ Tạo nhánh quyết định mới" và kéo slider "Độ phân kỳ lượng tử".'
+            },
+            {
+                id: 6, code: '6D', short: 'Nhảy pha 6D', signature: '3+1+2ψ', advanced: false,
+                title: 'Chiều Thứ 6 — Mặt Phẳng Thời Gian & Nhảy Pha',
+                subtitle: 'Gấp không gian 5D để nhảy thẳng giữa hai nhánh lịch sử',
+                tag: 'Siêu không gian Pha', accent: '#c084fc',
+                formula: 'M₆ = Fold(M₅)  |  PhaseJump(A → B, Δt_lùi = 0)',
+                hint: 'Kéo slider "Độ gấp 6D (Phase Jump)" lên 100% để mở tia lượng tử nối thẳng hai nhánh tương lai!',
+                howItWorks: 'Giống cách chiều 3D gấp tờ giấy 2D, chiều thứ 6 uốn cong toàn bộ mặt phẳng các dòng thời gian 5D để hai tương lai song song nằm xa nhau chạm trực tiếp vào nhau.',
+                impact: 'Trong 5D, để chuyển từ nhánh lịch sử A sang nhánh B, ta phải quay ngược thời gian về điểm rẽ nhánh trong quá khứ rồi đi lại. Chiều 6D cho phép "Nhảy pha" (Phase Jump) trực tiếp sang thực tại song song ngay ở hiện tại.',
+                analogy: 'Thay vì đi lùi nhiều năm về ngã tư cũ để chọn lối rẽ khác, chiều 6D mở một cánh cửa bước thẳng sang con đường song song ngay bên cạnh.',
+                experiment: 'Kéo thanh trượt "Độ gấp 6D (Phase Jump)" lên trên 85% để tia lượng tử kích hoạt giữa Nhánh A và Nhánh B, sau đó bấm nút "Kích hoạt Nhảy Pha A → B".'
+            },
+            {
+                id: 7, code: '7D', short: 'Đa vũ trụ 7D', signature: 'Multiverse-1D', advanced: false,
+                title: 'Chiều Thứ 7 — Đa Vũ Trụ Khác Điều Kiện Ban Đầu',
+                subtitle: 'Nén toàn bộ 6D thành 1 điểm • Biến đổi Hằng số Hấp dẫn G & Ánh sáng c',
+                tag: 'Đa vũ trụ Hằng số', accent: '#e879f9',
+                formula: 'F = G·m₁m₂/r²  |  v_max = c  |  α = e²/4πε₀ℏc',
+                hint: 'Kéo 2 thanh trượt G và c/α để thấy hệ hành tinh vỡ tan hoặc sụp đổ thành Hố đen ngay lập tức!',
+                howItWorks: 'Thu gọn toàn bộ không gian 6D (mọi dòng thời gian có thể xảy ra từ Big Bang của vũ trụ ta) thành MỘT điểm duy nhất. Đường nối điểm này tới các vũ trụ có Big Bang và hằng số tự nhiên khác tạo thành chiều thứ 7.',
+                impact: 'Các hằng số cơ bản như Hằng số Hấp dẫn (G), tốc độ ánh sáng (c) và hằng số cấu trúc tinh tế (α) quyết định sự sống còn của vật chất. Chỉ cần G quá yếu, các hành tinh sẽ bay tán loạn; nếu G quá mạnh, mọi ngôi sao lập tức sụp đổ thành Hố đen.',
+                analogy: 'Nếu 6D là tất cả mọi ván cờ có thể đánh theo luật Cờ Vua chuẩn, thì chiều 7D đưa bạn sang các bàn cờ có luật chơi vật lý hoàn toàn khác.',
+                experiment: 'Kéo thanh trượt "Hằng số Hấp dẫn (G)" xuống dưới 0.35 (hệ sao tan rã), rồi kéo lên trên 2.0 (sụp đổ thành Hố đen), và thay đổi "Tốc độ Ánh sáng / Điện từ (c/α)".'
+            },
+            {
+                id: 8, code: '8D', short: 'Mạng Vũ trụ', signature: 'Multiverse-2D', advanced: false,
+                title: 'Chiều Thứ 8 — Mạng Lưới Đa Vũ Trụ Vô Hạn',
+                subtitle: 'Chùm bong bóng vũ trụ với bộ định luật vật lý riêng biệt',
+                tag: 'Mạng Siêu Đa vũ trụ', accent: '#f472b6',
+                formula: 'Ω₈ = { Uᵢ(Gᵢ, cᵢ, αᵢ, dᵢ) }',
+                hint: 'Click trực tiếp vào bất kỳ bong bóng vũ trụ nào trên Canvas để xem thông số định luật vật lý của nó!',
+                howItWorks: 'Mở rộng đường thẳng 7D theo phương vuông góc thành một mặt phẳng mạng lưới chứa vô hạn vũ trụ với mọi tổ hợp khả dĩ của số chiều không-thời gian, cường độ lực hạt nhân và điều kiện khởi thủy.',
+                impact: 'Giúp lý giải Nguyên lý Nhân sinh (Anthropic Principle): giữa biển đa vũ trụ phần lớn cằn cỗi (không tạo được Carbon, không có quỹ đạo ổn định hay toàn phản vật chất), sự sống chỉ xuất hiện ở những bong bóng có bộ hằng số tinh chỉnh phù hợp.',
+                analogy: 'Một đại dương bọt khí khổng lồ: mỗi bong bóng là một vũ trụ độc lập có bầu trời, nguyên tử và quy luật tự nhiên khác hẳn nhau.',
+                experiment: 'Click trực tiếp lên từng bong bóng vũ trụ phát sáng trên Canvas (hoặc dùng nút chọn trong bảng điều khiển) để kiểm tra số chiều, lực hạt nhân và khả năng tồn tại sự sống của từng vũ trụ.'
+            },
+            {
+                id: 9, code: '9D', short: 'Gấp Đa vũ trụ', signature: 'Multiverse-3D', advanced: false,
+                title: 'Chiều Thứ 9 — Gấp Siêu Không Gian Đa Vũ Trụ',
+                subtitle: 'Uốn cong mạng 8D tạo cầu nối tức thời giữa hai vũ trụ khác luật',
+                tag: 'Siêu cầu 9D', accent: '#fb923c',
+                formula: 'W₉ : U_α(Laws₁) ⇄ U_β(Laws₂)',
+                hint: 'Kéo thanh "Độ uốn cong Siêu không gian 9D" lên 100% để mở đường hầm kết nối hai vũ trụ cực xa nhau!',
+                howItWorks: 'Áp dụng phép gấp hình học ở quy mô đa vũ trụ: chiều thứ 9 uốn cong toàn bộ mạng lưới 8D thành cấu trúc vòm/cầu siêu không gian, kéo hai vũ trụ có nguồn gốc Big Bang khác biệt chạm sát vào nhau.',
+                impact: 'Cho phép hình dung cơ chế kết nối trực tiếp xuyên ranh giới giữa hai hệ định luật vật lý hoàn toàn khác biệt, nơi năng lượng phải chuyển đổi cấu trúc để thích ứng với bộ hằng số mới.',
+                analogy: 'Gấp tròn một tấm bản đồ khổng lồ vẽ mọi đại dương của các thế giới khác nhau để nối liền hai cực đối lập thành một cổng duy nhất.',
+                experiment: 'Kéo slider "Độ uốn cong Siêu không gian 9D" từ 0% đến 100% để xem hai vũ trụ xa cách tiến lại gần và hình thành xoáy cầu năng lượng nối liền chúng.'
+            },
+            {
+                id: 10, code: '10D', short: 'Siêu Dây 10D', signature: '9+1', advanced: false,
+                title: 'Chiều Thứ 10 — Thuyết Siêu Dây & Đa Tạp Calabi-Yau',
+                subtitle: '3D Vĩ mô + 1D Thời gian + 6D Cuộn kín Calabi-Yau • Siêu dây dao động',
+                tag: 'Thuyết Siêu Dây (9+1)', accent: '#f59e0b',
+                formula: 'M₁₀ = ℝ^{3,1} × CY₆  |  z₁⁵ + z₂⁵ = 1',
+                hint: 'Kéo slider "Tần số dao động dây" để xem siêu dây biến hóa giữa Graviton, Photon, Electron, Quark và Higgs!',
+                howItWorks: 'Trong Thuyết Siêu Dây chính thống (9+1D), 6 chiều không gian phụ không biến mất mà cuộn tròn ở thang Planck (~10⁻³⁵ m) tại mọi điểm thành Đa tạp Calabi-Yau. Ngoài ra, góc nhìn trực quan coi 10D là Điểm Tối Thượng chứa trọn mọi khả năng.',
+                impact: 'Hình học 6 chiều của Calabi-Yau hoạt động như hộp cộng hưởng xác định các họa âm của siêu dây 1 chiều. Cùng một sợi dây năng lượng, nhưng tần số rung khác nhau sẽ hiện hữu trong thế giới 3D thành các hạt hoàn toàn khác nhau: Graviton, Photon, Electron, Quark hay Boson Higgs.',
+                analogy: 'Một sợi dây đàn guitar đặt trong hộp cộng hưởng 6 chiều: mỗi nốt rung tạo ra một loại hạt cơ bản cấu thành nên ánh sáng và vật chất quanh ta.',
+                experiment: 'Ở chế độ Calabi-Yau, kéo "Tần số dao động dây" (Mode 1–5) để xem hình dạng sóng dây và hạt cơ bản thay đổi tức thời. Thử chuyển sang chế độ "Điểm Tối Thượng 10D" để so sánh.'
+            },
+            {
+                id: 11, code: '11D', short: 'Thuyết M', signature: '10+1', advanced: true,
+                title: 'Chiều Thứ 11 — Thuyết M: Siêu Màng M-Brane & Không Gian Bulk',
+                subtitle: 'Edward Witten (1995) • 10 Không gian + 1 Thời gian • Rò rỉ Graviton & Ekpyrotic',
+                tag: 'Thuyết M • 11D (10+1)', accent: '#10b981',
+                formula: 'M₁₁ : 5 Superstrings + 11D SUGRA → M2/M5-Branes ∈ Bulk₁₁',
+                hint: 'Kéo "Bán kính R₁₁" biến dây 1D thành màng M2, hoặc bấm "Kích hoạt Va chạm Brane (Ekpyrotic Big Bang)"!',
+                howItWorks: 'Năm 1995, Edward Witten chứng minh 5 thuyết siêu dây 10D và Siêu hấp dẫn 11D chỉ là các góc nhìn giới hạn của một lý thuyết thống nhất 11 chiều (10 không gian + 1 thời gian) gọi là Thuyết M. Khi tăng hằng số khớp nối (bán kính chiều 11 R₁₁), sợi dây 1D giãn nở thành một ống màng 2 chiều gọi là Siêu màng M2-Brane (cùng đối ngẫu M5-Brane).',
+                impact: 'Vũ trụ 3D của ta có thể là một 3-Brane trôi nổi trong siêu không gian Bulk 11D cạnh các màng song song. Các hạt vật chất & ánh sáng (Photon, Quark) là dây mở bị ghim chặt hai đầu vào màng, còn hạt Hấp dẫn (Graviton) là vòng khép kín có thể tách khỏi màng và rò rỉ vào Bulk 11D — giải thích tại sao Lực Hấp Dẫn yếu hơn lực điện từ tới 10³⁸ lần! Va chạm giữa 2 Brane tạo ra Big Bang tuần hoàn (Ekpyrotic).',
+                analogy: 'Hai lát bánh mì (2 màng vũ trụ) trôi song song trong không khí (Bulk 11D): các hạt mè (ánh sáng, nguyên tử) dính chặt trên bề mặt lát bánh, riêng hương thơm (lực hấp dẫn Graviton) tự do thoát ra không gian giữa hai lát.',
+                experiment: '1) Kéo "Bán kính chiều 11 (R₁₁)" để thấy dây 1D phồng thành ống trụ M2-Brane. 2) Chỉnh "Khoảng cách Bulk" xem mật độ rò rỉ Graviton. 3) Nhấn "Kích hoạt Va chạm Brane (Ekpyrotic Big Bang)"!'
+            },
+            {
+                id: 12, code: '12D', short: 'Thuyết F / 2T', signature: '10+2', advanced: true,
+                title: 'Chiều Thứ 12 — Thuyết F & Vật Lý Hai Chiều Thời Gian',
+                subtitle: 'Cumrun Vafa (Phân thớ Elliptic T², 1996) & Itzhak Bars (2T-Physics: 10+2)',
+                tag: 'Siêu Lý Thuyết • 12D (10+2)', accent: '#ec4899',
+                formula: 'F: τ = C₀ + i/g_s (T² / D7-Brane)  |  2T: SO(10,2) & Sp(2,ℝ)',
+                hint: 'Chuyển giữa "Thuyết F (Phân thớ T² & D7-Brane)" và "Vật lý 2T (2 màn hình Bóng toàn ảnh)"!',
+                howItWorks: 'Hai nhánh lý thuyết nổi bật vươn tới 12 chiều: (1) Thuyết F (Cumrun Vafa, 1996) mở rộng Siêu dây Loại IIB lên 12D bằng cách gắn một Xuyến Elliptic 2 chiều (T²) tại mọi điểm không gian để hình học hóa trường Axio-Dilaton (τ) và giải thích nguồn gốc các D7-Brane (tại điểm kỳ dị nơi xuyến bị thắt cổ chai). (2) Vật lý 2 Thời Gian (Itzhak Bars, 10+2) thêm 1 chiều không gian và 1 chiều thời gian thứ hai (t₁, t₂) được bảo vệ bởi đối xứng chuẩn Sp(2,ℝ) để tránh nghịch lý nhân quả.',
+                impact: 'Thuyết F cho phép mô tả chế độ khớp nối mạnh phi nhiễu loạn và xây dựng Lý thuyết Đại Thống Nhất (F-Theory GUT). Còn trong Vật lý 2T, một quỹ đạo duy nhất trong không-thời gian 12D sẽ đổ ra những "cái bóng toàn ảnh" (holographic shadows) hoàn toàn khác nhau trong thế giới 3+1D: cùng một chuyển động 12D nhìn từ góc thời gian này là hành tinh quay quanh sao, nhìn từ góc thời gian khác lại là nguyên tử Hydro hay dao động tử điều hòa!',
+                analogy: 'Chiếu đèn từ các góc khác nhau vào cùng một hình trụ 3D: một bức tường thấy bóng hình tròn, tường kia thấy bóng hình chữ nhật. Tương tự, Hành tinh và Nguyên tử Hydro là hai chiếc bóng đối ngẫu của cùng một thực thể 12D.',
+                experiment: 'Ở Chế độ 1 (Thuyết F), kéo "Tham số Khớp nối τ (Độ thắt D7-Brane)" để thấy xuyến trung tâm thắt cổ chai tỏa trường lực xoắn. Ở Chế độ 2 (Vật lý 2T), kéo "Góc xoay Mặt phẳng Thời gian θ(t₁,t₂)" để xem 2 màn hình 3+1D biến đổi đồng bộ!'
+            }
+        ];
+
+        /* =========================================================
+           2. APPLICATION & SIMULATION STATE
+           ========================================================= */
+        const state = {
+            currentDim: 0,
+            autoTour: false,
+            tourTimer: 0,
+            tourDuration: 9.0,
+            time: 0,
+            fps: 60,
+            fpsFrames: 0,
+            fpsLastCheck: performance.now(),
+            statusText: 'Sẵn sàng',
+
+            cam: {
+                yaw: 0.45,
+                pitch: 0.34,
+                zoom: 1.0,
+                targetYaw: 0.45,
+                targetPitch: 0.34,
+                targetZoom: 1.0
+            },
+
+            pointer: {
+                dragging: false,
+                lastX: 0, lastY: 0,
+                downX: 0, downY: 0,
+                pinchDist: 0
+            },
+
+            hitTargets: [],
+
+            params: {
+                d0: { zoomPower: 0, pulse: 0 },
+                d1: { observerX: -0.62, obstacleX: 0.30, vision1D: true, bump: 0, lightX: -1.8 },
+                d2: { camLift: 0.14, flatX: -0.78, flatY: 0.10, extracted: false, extractAnim: 0 },
+                d3: { fold: 0.0, antProgress: 0, antMoving: false },
+                d4: { mode: 'tesseract', rotSpeedW: 1.0, angleXW: 0.4, autoW: true, timeT: 0.5, playTime: true },
+                d5: { branches: [], selectedBranch: 0, divergence: 1.0 },
+                d6: { fold: 0.0, jumpAnim: -1 },
+                d7: { gravity: 1.0, emLight: 1.0, particles: [], presetIdx: 0 },
+                d8: { selectedUniverse: 0, universes: [] },
+                d9: { fold: 0.0, pulsePos: 0 },
+                d10: { mode: 'calabi', harmonic: 2, convergence: 0.65, calabiMesh: null },
+                d11: {
+                    r11: 0.25,       // Radius of 11th dim: 0 (1D string) -> 1 (2D M2-brane tube)
+                    bulkDist: 1.15,  // Separation between Our Brane & Parallel Brane
+                    collisionPhase: -1, // -1 idle, 0..1 Ekpyrotic Big Bang animation
+                    gravitons: [],
+                    shockwaves: []
+                },
+                d12: {
+                    mode: 'ftheory', // 'ftheory' | 'twotime'
+                    tauPinch: 0.45,  // Coupling tau / D7-brane pinch singularity intensity (0..1)
+                    complexPhase: 0.4, // Complex phase angle
+                    timeAngle: 0.55, // theta_(t1, t2) on 2D time plane
+                    autoRotate2T: true
+                }
+            }
+        };
+
+        /* =========================================================
+           3. PRECOMPUTE DATA STRUCTURES
+           ========================================================= */
+        const STARS = Array.from({ length: 195 }, () => {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const r = 6.2 + Math.random() * 5.2;
+            return {
+                x: r * Math.sin(phi) * Math.cos(theta),
+                y: r * Math.sin(phi) * Math.sin(theta),
+                z: r * Math.cos(phi),
+                size: 0.6 + Math.random() * 1.45,
+                twinkle: Math.random() * Math.PI * 2,
+                color: Math.random() < 0.22 ? '#38bdf8' : (Math.random() < 0.42 ? '#818cf8' : (Math.random() < 0.54 ? '#ec4899' : '#f8fafc'))
+            };
+        });
+
+        // 4D Tesseract (16 vertices, 32 edges)
+        const TESSERACT_VERTS = [];
+        for (let i = 0; i < 16; i++) {
+            TESSERACT_VERTS.push([
+                (i & 1) ? 1 : -1,
+                (i & 2) ? 1 : -1,
+                (i & 4) ? 1 : -1,
+                (i & 8) ? 1 : -1
+            ]);
+        }
+        const TESSERACT_EDGES = [];
+        for (let i = 0; i < 16; i++) {
+            for (let j = i + 1; j < 16; j++) {
+                const diff = i ^ j;
+                if (diff && (diff & (diff - 1)) === 0) TESSERACT_EDGES.push([i, j]);
+            }
+        }
+
+        // 5D Quantum Branch Outcomes
+        const D5_OUTCOMES = [
+            { name: 'Nhánh ψ₁: Sinh quyển xanh', desc: 'Quỹ đạo ổn định hình thành đại dương & sự sống', color: '#38bdf8' },
+            { name: 'Nhánh ψ₂: Siêu tân tinh', desc: 'Ngôi sao phát nổ gieo mầm nguyên tố nặng', color: '#ec4899' },
+            { name: 'Nhánh ψ₃: Hố đen quay Kerr', desc: 'Lõi sao sụp đổ tạo chân trời sự kiện', color: '#818cf8' },
+            { name: 'Nhánh ψ₄: Hệ sao đôi', desc: 'Hai mặt trời quay quanh tâm khối chung', color: '#f59e0b' },
+            { name: 'Nhánh ψ₅: Tinh vân hành tinh', desc: 'Đám mây khí ion hóa phát sáng rực rỡ', color: '#10b981' },
+            { name: 'Nhánh ψ₆: Sao xung Pulsar', desc: 'Phát chùm tia bức xạ đều đặn từng mili-giây', color: '#60a5fa' }
+        ];
+
+        function initD5Branches() {
+            state.params.d5.branches = [
+                { id: 0, splitT: 0.24, angleY: 0.52, angleZ: 0.22, outcome: D5_OUTCOMES[0] },
+                { id: 1, splitT: 0.24, angleY: -0.48, angleZ: -0.20, outcome: D5_OUTCOMES[1] },
+                { id: 2, splitT: 0.52, angleY: 0.92, angleZ: -0.34, outcome: D5_OUTCOMES[2] },
+                { id: 3, splitT: 0.58, angleY: -0.86, angleZ: 0.40, outcome: D5_OUTCOMES[3] }
+            ];
+            state.params.d5.selectedBranch = 0;
+        }
+
+        function addD5Branch(customY) {
+            const list = state.params.d5.branches;
+            if (list.length >= 12) {
+                showToast('Đã đạt tối đa 12 nhánh trực quan trên cây lượng tử!');
+                return;
+            }
+            const idx = list.length;
+            const sign = idx % 2 === 0 ? 1 : -1;
+            const angY = typeof customY === 'number' ? customY : sign * (0.35 + Math.random() * 0.9);
+            list.push({
+                id: idx,
+                splitT: 0.18 + Math.random() * 0.55,
+                angleY: angY,
+                angleZ: (Math.random() - 0.5) * 1.05,
+                outcome: D5_OUTCOMES[idx % D5_OUTCOMES.length]
+            });
+            state.params.d5.selectedBranch = idx;
+            buildInteractiveControls();
+            showToast(`Đã tạo nhánh mới: ${list[idx].outcome.name}`);
+        }
+
+        // 7D Orbital Particles
+        function initD7Particles() {
+            const pts = [];
+            for (let i = 0; i < 20; i++) {
+                const r = 0.34 + (i / 20) * 0.74;
+                const ang = (i / 20) * Math.PI * 2 + Math.random() * 0.35;
+                const speed = Math.sqrt(0.42 / r);
+                const tilt = (Math.random() - 0.5) * 0.32;
+                pts.push({
+                    x: Math.cos(ang) * r,
+                    y: Math.sin(ang) * r * Math.cos(tilt),
+                    z: Math.sin(ang) * r * Math.sin(tilt),
+                    vx: -Math.sin(ang) * speed,
+                    vy: Math.cos(ang) * speed * Math.cos(tilt),
+                    vz: Math.cos(ang) * speed * Math.sin(tilt),
+                    color: i % 3 === 0 ? '#38bdf8' : (i % 3 === 1 ? '#f59e0b' : '#c084fc'),
+                    size: 2.3 + (i % 3) * 0.8,
+                    trail: []
+                });
+            }
+            state.params.d7.particles = pts;
+        }
+
+        // 8D Bubble Universes Network
+        function initD8Universes() {
+            state.params.d8.universes = [
+                {
+                    id: 0, name: 'Vũ trụ Chuẩn (Của ta)', x: 0, y: 0, z: 0, color: '#38bdf8',
+                    dims: '3+1D', nuclear: 'Cân bằng (1.0×)', life: 'Rất cao (Có sự sống)',
+                    desc: 'Hằng số tinh chỉnh hoàn hảo: nguyên tử Carbon bền vững, sao cháy hàng tỷ năm.',
+                    type: 'standard'
+                },
+                {
+                    id: 1, name: 'Vũ trụ Hấp dẫn Yếu', x: -1.45, y: 0.74, z: -0.34, color: '#60a5fa',
+                    dims: '3+1D', nuclear: '0.8× Chuẩn', life: 'Không thể (0%)',
+                    desc: 'G ≈ 0: Vật chất không bao giờ tụ lại thành ngôi sao, chỉ là biển khí Hydro loãng tối tăm.',
+                    type: 'nogravity'
+                },
+                {
+                    id: 2, name: 'Vũ trụ 4D Không gian Vĩ mô', x: 1.46, y: 0.68, z: 0.36, color: '#10b981',
+                    dims: '4+1D Vĩ mô', nuclear: '1.0× Chuẩn', life: 'Không thể (Quỹ đạo vỡ)',
+                    desc: 'Lực hấp dẫn giảm theo 1/r³ khiến mọi quỹ đạo hành tinh và nguyên tử không thể khép kín bền vững.',
+                    type: 'macro4d'
+                },
+                {
+                    id: 3, name: 'Vũ trụ Phản Vật Chất', x: -1.10, y: -0.88, z: 0.50, color: '#ec4899',
+                    dims: '3+1D (Đảo điện tích)', nuclear: '1.0× (Phản hạt)', life: 'Khả dĩ (Sinh hóa đối xứng)',
+                    desc: 'Positron và Phản Proton thống trị; mọi nguyên tử phản vật chất hoạt động đối xứng với vũ trụ ta.',
+                    type: 'antimatter'
+                },
+                {
+                    id: 4, name: 'Vũ trụ Hạt nhân Siêu mạnh', x: 1.24, y: -0.84, z: -0.42, color: '#f59e0b',
+                    dims: '3+1D', nuclear: '1.4× (Quá mạnh)', life: 'Cực thấp (Không có Hydro)',
+                    desc: 'Proton kết hợp quá nhanh thành Heli nặng, không còn nước (H₂O) hay sao cháy bền lâu.',
+                    type: 'strongNuc'
+                },
+                {
+                    id: 5, name: 'Vũ trụ Điện từ Quá mạnh', x: 0.04, y: 1.32, z: -0.58, color: '#a855f7',
+                    dims: '3+1D', nuclear: 'α × 4.5 (Đẩy cực mạnh)', life: 'Không thể (0%)',
+                    desc: 'Lực đẩy tĩnh điện xé tan mọi hạt nhân nguyên tử nặng hơn Hydro — hóa học hữu cơ không thể tồn tại.',
+                    type: 'highEM'
+                }
+            ];
+        }
+
+        // 10D Calabi-Yau Quintic Parametric Surface (z1^5 + z2^5 = 1)
+        function initCalabiYauMesh() {
+            const n = 5, uSteps = 4, vSteps = 5;
+            const quads = [];
+            function evalCY(u, v, k1, k2) {
+                const cu = Math.cos(u), su = Math.sin(u);
+                const chv = Math.cosh(v), shv = Math.sinh(v);
+                const a1 = cu * chv, b1 = -su * shv;
+                const a2 = su * chv, b2 = cu * shv;
+                const r1 = Math.pow(Math.hypot(a1, b1), 2 / n);
+                const t1 = (Math.atan2(b1, a1) + 2 * Math.PI * k1) * (2 / n);
+                const r2 = Math.pow(Math.hypot(a2, b2), 2 / n);
+                const t2 = (Math.atan2(b2, a2) + 2 * Math.PI * k2) * (2 / n);
+                return {
+                    re1: r1 * Math.cos(t1), im1: r1 * Math.sin(t1),
+                    re2: r2 * Math.cos(t2), im2: r2 * Math.sin(t2)
+                };
+            }
+            for (let k1 = 0; k1 < n; k1++) {
+                for (let k2 = 0; k2 < n; k2++) {
+                    if ((k1 + k2) % 2 !== 0 && k1 !== k2) continue;
+                    const grid = [];
+                    for (let iu = 0; iu <= uSteps; iu++) {
+                        const u = (iu / uSteps) * (Math.PI / 2);
+                        const row = [];
+                        for (let iv = 0; iv <= vSteps; iv++) {
+                            const v = -0.86 + (iv / vSteps) * 1.72;
+                            row.push(evalCY(u, v, k1, k2));
+                        }
+                        grid.push(row);
+                    }
+                    const hue = (195 + k1 * 32 + k2 * 24) % 360;
+                    for (let iu = 0; iu < uSteps; iu++) {
+                        for (let iv = 0; iv < vSteps; iv++) {
+                            quads.push({
+                                p0: grid[iu][iv], p1: grid[iu + 1][iv],
+                                p2: grid[iu + 1][iv + 1], p3: grid[iu][iv + 1],
+                                hue
+                            });
+                        }
+                    }
+                }
+            }
+            state.params.d10.calabiMesh = quads;
+        }
+
+        // 11D Closed-Loop Gravitons drifting across the 11D Bulk
+        function initD11Gravitons() {
+            const list = [];
+            for (let i = 0; i < 16; i++) {
+                list.push({
+                    x: (Math.random() - 0.5) * 2.2,
+                    z: (Math.random() - 0.5) * 1.35,
+                    progress: Math.random(),
+                    speed: 0.14 + Math.random() * 0.17,
+                    dir: Math.random() < 0.78 ? 1 : -1,
+                    phase: Math.random() * Math.PI * 2,
+                    r: 0.075 + Math.random() * 0.04
+                });
+            }
+            state.params.d11.gravitons = list;
+        }
+
+        /* =========================================================
+           4. PURE 3D / 4D PROJECTION & CANVAS DRAWING HELPERS
+           ========================================================= */
+        function rotate3D(x, y, z, yaw, pitch) {
+            const cy = Math.cos(yaw), sy = Math.sin(yaw);
+            const x1 = x * cy - z * sy;
+            const z1 = x * sy + z * cy;
+            const cp = Math.cos(pitch), sp = Math.sin(pitch);
+            const y2 = y * cp - z1 * sp;
+            const z2 = y * sp + z1 * cp;
+            return { x: x1, y: y2, z: z2 };
+        }
+
+        function project3D(x, y, z, cx, cy, scale) {
+            const r = rotate3D(x, y, z, state.cam.yaw, state.cam.pitch);
+            const camDist = 5.45 / state.cam.zoom;
+            const denom = Math.max(0.35, camDist - r.z);
+            const f = (scale * 3.15) / denom;
+            return { x: cx + r.x * f, y: cy - r.y * f, z: r.z, scale: f };
+        }
+
+        function project4D(v4, angXW, angYW, angZW, cx, cy, scale) {
+            let [x, y, z, w] = v4;
+            let c = Math.cos(angXW), s = Math.sin(angXW);
+            [x, w] = [x * c - w * s, x * s + w * c];
+            c = Math.cos(angYW); s = Math.sin(angYW);
+            [y, w] = [y * c - w * s, y * s + w * c];
+            c = Math.cos(angZW); s = Math.sin(angZW);
+            [z, w] = [z * c - w * s, z * s + w * c];
+
+            const factor4 = 1.65 / (2.85 - w);
+            const p3 = project3D(x * factor4, y * factor4, z * factor4, cx, cy, scale);
+            return { ...p3, w };
+        }
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('canvasWrapper');
+        let cw = 840, ch = 580;
+
+        function resizeCanvas() {
+            const rect = wrapper.getBoundingClientRect();
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            cw = Math.max(300, rect.width);
+            ch = Math.max(380, rect.height);
+            canvas.width = Math.floor(cw * dpr);
+            canvas.height = Math.floor(ch * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function drawRoundRectPath(x, y, w, h, r) {
+            const rad = Math.min(r, w / 2, h / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + rad, y);
+            ctx.arcTo(x + w, y, x + w, y + h, rad);
+            ctx.arcTo(x + w, y + h, x, y + h, rad);
+            ctx.arcTo(x, y + h, x, y, rad);
+            ctx.arcTo(x, y, x + w, y, rad);
+            ctx.closePath();
+        }
+
+        function drawStarfield(t) {
+            const grad = ctx.createRadialGradient(cw * 0.5, ch * 0.45, 20, cw * 0.5, ch * 0.5, Math.max(cw, ch) * 0.8);
+            grad.addColorStop(0, '#091026');
+            grad.addColorStop(0.55, '#040815');
+            grad.addColorStop(1, '#02040a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, cw, ch);
+
+            const accent = DIMENSIONS[state.currentDim].accent;
+            ctx.save();
+            ctx.globalAlpha = 0.09;
+            const aura = ctx.createRadialGradient(cw * 0.52, ch * 0.48, 12, cw * 0.52, ch * 0.48, Math.min(cw, ch) * 0.52);
+            aura.addColorStop(0, accent);
+            aura.addColorStop(1, 'transparent');
+            ctx.fillStyle = aura;
+            ctx.fillRect(0, 0, cw, ch);
+            ctx.restore();
+
+            const cx = cw * 0.5, cy = ch * 0.48;
+            const sScale = Math.min(cw, ch) * 0.38;
+            for (let i = 0; i < STARS.length; i++) {
+                const st = STARS[i];
+                const r = rotate3D(st.x, st.y, st.z, state.cam.yaw * 0.30 + t * 0.012, state.cam.pitch * 0.30);
+                if (r.z > 4.6) continue;
+                const f = (sScale * 2.2) / Math.max(1.2, 8.5 - r.z);
+                const sx = cx + r.x * f, sy = cy - r.y * f;
+                if (sx < -4 || sx > cw + 4 || sy < -4 || sy > ch + 4) continue;
+                ctx.globalAlpha = 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(t * 1.4 + st.twinkle));
+                ctx.fillStyle = st.color;
+                ctx.beginPath();
+                ctx.arc(sx, sy, st.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        function drawGlowPoint(x, y, radius, color, core = '#ffffff') {
+            const g = ctx.createRadialGradient(x, y, 0, x, y, radius * 3.1);
+            g.addColorStop(0, core);
+            g.addColorStop(0.28, color);
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(x, y, radius * 3.1, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = core;
+            ctx.beginPath();
+            ctx.arc(x, y, Math.max(1.4, radius * 0.46), 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawLabel(text, x, y, color = '#e2e8f0', align = 'center', size = 11) {
+            ctx.save();
+            ctx.font = `600 ${size}px "Inter", sans-serif`;
+            ctx.textAlign = align;
+            ctx.textBaseline = 'middle';
+            const w = ctx.measureText(text).width + 12;
+            const bx = align === 'center' ? x - w / 2 : (align === 'left' ? x - 6 : x - w + 6);
+            ctx.fillStyle = 'rgba(3, 6, 15, 0.80)';
+            drawRoundRectPath(bx, y - size * 0.85, w, size * 1.7, 6);
+            ctx.fill();
+            ctx.fillStyle = color;
+            ctx.fillText(text, x, y);
+            ctx.restore();
+        }
+
+        /* =========================================================
+           5. RENDERERS FOR ALL 13 DIMENSIONS (0D -> 12D)
+           ========================================================= */
+
+        // --- 0D: SINGULARITY & QUANTUM FOAM AT PLANCK SCALE ---
+        function render0D(t, cx, cy, scale) {
+            const p = state.params.d0;
+            p.pulse = Math.max(0, p.pulse - 0.018);
+            const zoomFrac = p.zoomPower / 35;
+
+            // Animated Quantum Foam emerging as zoom approaches Planck Scale
+            if (zoomFrac > 0.06) {
+                const step = Math.max(22, 46 - (p.zoomPower % 7) * 3.2);
+                ctx.strokeStyle = `rgba(56, 189, 248, ${zoomFrac * 0.24})`;
+                ctx.lineWidth = 0.85;
+                for (let gx = cx % step; gx < cw; gx += step) {
+                    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, ch); ctx.stroke();
+                }
+                for (let gy = cy % step; gy < ch; gy += step) {
+                    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(cw, gy); ctx.stroke();
+                }
+
+                // Bubbling quantum foam virtual fluctuations
+                const foamCount = Math.floor(zoomFrac * 36);
+                for (let i = 0; i < foamCount; i++) {
+                    const ang = i * 2.39996 + t * 0.35;
+                    const rad = 44 + ((i * 31 + t * 22) % (Math.min(cw, ch) * 0.42));
+                    const fx = cx + Math.cos(ang) * rad;
+                    const fy = cy + Math.sin(ang) * rad;
+                    const rFoam = 3 + Math.abs(Math.sin(t * 3.5 + i)) * 9 * zoomFrac;
+                    ctx.strokeStyle = i % 2 === 0
+                        ? `rgba(129, 140, 248, ${zoomFrac * 0.45})`
+                        : `rgba(56, 189, 248, ${zoomFrac * 0.42})`;
+                    ctx.lineWidth = 1.1;
+                    ctx.beginPath(); ctx.arc(fx, fy, rFoam, 0, Math.PI * 2); ctx.stroke();
+                }
+            }
+
+            // Concentric expanding scale rings
+            for (let i = 0; i < 6; i++) {
+                const phase = (i / 6 + (p.zoomPower % 1) * 0.25 + t * 0.055) % 1;
+                const r = phase * scale * 1.48;
+                ctx.strokeStyle = `rgba(56, 189, 248, ${(1 - phase) * 0.28})`;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 6]);
+                ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            if (p.pulse > 0.01) {
+                const pr = (1 - p.pulse) * scale * 1.38;
+                ctx.strokeStyle = `rgba(245, 158, 11, ${p.pulse * 0.92})`;
+                ctx.lineWidth = 2.6;
+                ctx.beginPath(); ctx.arc(cx, cy, pr, 0, Math.PI * 2); ctx.stroke();
+            }
+
+            // Crosshair targeting zero-size point
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.20)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cx - 88, cy); ctx.lineTo(cx - 15, cy);
+            ctx.moveTo(cx + 15, cy); ctx.lineTo(cx + 88, cy);
+            ctx.moveTo(cx, cy - 88); ctx.lineTo(cx, cy - 15);
+            ctx.moveTo(cx, cy + 15); ctx.lineTo(cx, cy + 88);
+            ctx.stroke();
+
+            // Zero-dimensional singularity core (never grows with magnification!)
+            drawGlowPoint(cx, cy, 8.2 * (1 + 0.09 * Math.sin(t * 3.8)), '#38bdf8', '#ffffff');
+
+            const exp = Math.round(p.zoomPower);
+            drawLabel(`Độ phóng đại: 10^${exp}×  |  Đường kính thực của điểm 0D: 0 m`, cx, cy + 62, '#7dd3fc', 'center', 11.5);
+            if (exp >= 32) {
+                drawLabel('Đã tới Thang Planck (1.6 × 10⁻³⁵ m) — Bọt lượng tử (Quantum Foam) sôi động!', cx, cy + 88, '#fcd34d', 'center', 11);
+            }
+        }
+
+        // --- 1D: STRAIGHT LINE + OBSERVER POSITION + 1D VISION MODE ---
+        function render1D(t, cx, cy, scale) {
+            const p = state.params.d1;
+            if (p.bump > 0) p.bump = Math.max(0, p.bump - 0.04);
+            if (p.observerX > p.obstacleX - 0.14) p.observerX = p.obstacleX - 0.14;
+
+            p.lightX += 0.026;
+            if (p.lightX > 1.95) p.lightX = -1.95;
+
+            const leftEnd = project3D(-2.2, 0, 0, cx, cy, scale);
+            const rightEnd = project3D(2.2, 0, 0, cx, cy, scale);
+
+            const lineGrad = ctx.createLinearGradient(leftEnd.x, leftEnd.y, rightEnd.x, rightEnd.y);
+            lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.06)');
+            lineGrad.addColorStop(0.2, 'rgba(56, 189, 248, 0.92)');
+            lineGrad.addColorStop(0.8, 'rgba(129, 140, 248, 0.92)');
+            lineGrad.addColorStop(1, 'rgba(129, 140, 248, 0.06)');
+            ctx.strokeStyle = lineGrad;
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(leftEnd.x, leftEnd.y); ctx.lineTo(rightEnd.x, rightEnd.y); ctx.stroke();
+
+            // Tick marks on X axis
+            for (let tx = -1.6; tx <= 1.61; tx += 0.4) {
+                const t1 = project3D(tx, -0.06, 0, cx, cy, scale);
+                const t2 = project3D(tx, 0.06, 0, cx, cy, scale);
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(t1.x, t1.y); ctx.lineTo(t2.x, t2.y); ctx.stroke();
+            }
+
+            const backEntityPt = project3D(-1.42 + Math.sin(t * 1.1) * 0.12, 0, 0, cx, cy, scale);
+            const obsPt = project3D(p.obstacleX, 0, 0, cx, cy, scale);
+            const hiddenPt = project3D(1.22, 0, 0, cx, cy, scale);
+            const bumpOff = Math.sin(p.bump * Math.PI * 3) * 0.05;
+            const entPt = project3D(p.observerX - bumpOff, 0, 0, cx, cy, scale);
+            const pulsePt = project3D(p.lightX, 0, 0, cx, cy, scale);
+
+            // Blocked zone behind obstacle
+            ctx.strokeStyle = 'rgba(236, 72, 153, 0.34)';
+            ctx.lineWidth = 8;
+            ctx.beginPath(); ctx.moveTo(obsPt.x, obsPt.y); ctx.lineTo(rightEnd.x, rightEnd.y); ctx.stroke();
+
+            // Moving 1D photon pulse
+            drawGlowPoint(pulsePt.x, pulsePt.y, 4.8, '#f59e0b', '#ffffff');
+
+            drawGlowPoint(backEntityPt.x, backEntityPt.y, 6.5, '#10b981', '#ffffff');
+            drawLabel('Điểm sau (-X)', backEntityPt.x, backEntityPt.y + 24, '#6ee7b7', 'center', 10);
+
+            drawGlowPoint(entPt.x, entPt.y, 9.5, '#38bdf8', '#ffffff');
+            drawLabel('Người quan sát 1D', entPt.x, entPt.y - 26, '#7dd3fc', 'center', 11);
+
+            drawGlowPoint(obsPt.x, obsPt.y, 9, '#ec4899', '#fbcfe8');
+            drawLabel('Vật cản chắn đường', obsPt.x, obsPt.y - 26, '#f9a8d4', 'center', 11);
+
+            drawGlowPoint(hiddenPt.x, hiddenPt.y, 6.5, '#f59e0b', '#fef3c7');
+            drawLabel('Điểm bị che khuất', hiddenPt.x, hiddenPt.y + 24, '#fcd34d', 'center', 10);
+
+            // 1D Vision Mode Overlay Panel
+            if (p.vision1D) {
+                const boxW = Math.min(370, cw - 34), boxH = 66;
+                const bx = cx - boxW / 2, by = Math.min(ch - 108, cy + 88);
+                ctx.fillStyle = 'rgba(5, 9, 22, 0.90)';
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+                ctx.lineWidth = 1.4;
+                drawRoundRectPath(bx, by, boxW, boxH, 12);
+                ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#7dd3fc';
+                ctx.font = '700 10.5px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('CHẾ ĐỘ TẦM NHÌN CỦA SINH VẬT 1D (KHÔNG CÓ TRÁI/PHẢI/TRÊN/DƯỚI)', cx, by + 18);
+
+                const distFront = Math.max(0.12, p.obstacleX - p.observerX);
+                const brFront = Math.min(1, 0.35 + 0.65 / (distFront * 1.4));
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '500 10px Inter, sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText('Nhìn lùi (-X): 1 chấm xanh', bx + 42, by + 44);
+                drawGlowPoint(bx + 24, by + 43, 5.5, '#10b981', '#ffffff');
+
+                ctx.textAlign = 'right';
+                ctx.fillText('Nhìn tiến (+X): Bị chắn kín!', bx + boxW - 44, by + 44);
+                drawGlowPoint(bx + boxW - 24, by + 43, 4.5 + brFront * 4.5, '#ec4899', '#ffffff');
+            }
+        }
+
+        // --- 2D: FLATLAND SEALED ROOM + 3D CAMERA LIFT ---
+        function render2D(t, cx, cy, scale) {
+            const p = state.params.d2;
+            p.extractAnim += ((p.extracted ? 1 : 0) - p.extractAnim) * 0.08;
+
+            // XY Plane Grid
+            for (let g = -1.6; g <= 1.61; g += 0.4) {
+                const a1 = project3D(g, 0, -1.6, cx, cy, scale), a2 = project3D(g, 0, 1.6, cx, cy, scale);
+                ctx.strokeStyle = Math.abs(g) < 0.01 ? 'rgba(56, 189, 248, 0.48)' : 'rgba(56, 189, 248, 0.14)';
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(a1.x, a1.y); ctx.lineTo(a2.x, a2.y); ctx.stroke();
+
+                const b1 = project3D(-1.6, 0, g, cx, cy, scale), b2 = project3D(1.6, 0, g, cx, cy, scale);
+                ctx.strokeStyle = Math.abs(g) < 0.01 ? 'rgba(129, 140, 248, 0.48)' : 'rgba(56, 189, 248, 0.14)';
+                ctx.beginPath(); ctx.moveTo(b1.x, b1.y); ctx.lineTo(b2.x, b2.y); ctx.stroke();
+            }
+
+            // Sealed 2D Room Square
+            const room = [
+                [0.14, 0, -0.50], [1.10, 0, -0.50], [1.10, 0, 0.50], [0.14, 0, 0.50]
+            ].map(v => project3D(v[0], v[1], v[2], cx, cy, scale));
+            ctx.fillStyle = 'rgba(129, 140, 248, 0.16)';
+            ctx.strokeStyle = '#a78bfa';
+            ctx.lineWidth = 3.2;
+            ctx.beginPath();
+            ctx.moveTo(room[0].x, room[0].y);
+            room.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y));
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            // Golden Object inside sealed room
+            const ex = p.extractAnim;
+            const objX = 0.62 - ex * 1.18;
+            const objH = Math.sin(ex * Math.PI) * 1.05 + (ex > 0.9 ? 0.04 : 0);
+            const objZ = -ex * 0.65;
+            const objPt = project3D(objX, objH, objZ, cx, cy, scale);
+            const shadowPt = project3D(objX, 0, objZ, cx, cy, scale);
+
+            if (objH > 0.06) {
+                ctx.strokeStyle = 'rgba(245, 158, 11, 0.55)';
+                ctx.setLineDash([4, 4]);
+                ctx.lineWidth = 1.4;
+                ctx.beginPath(); ctx.moveTo(objPt.x, objPt.y); ctx.lineTo(shadowPt.x, shadowPt.y); ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            drawGlowPoint(objPt.x, objPt.y, 8 + Math.sin(t * 3.6) * 1.1, '#f59e0b', '#ffffff');
+
+            // Flatlander 2D Character
+            let fx = p.flatX, fy = p.flatY;
+            if (fx > 0.0 && fx < 1.16 && fy > -0.56 && fy < 0.56) fx = 0.0;
+            const flatPt = project3D(fx, 0, fy, cx, cy, scale);
+            drawGlowPoint(flatPt.x, flatPt.y, 8, '#38bdf8', '#ffffff');
+            drawLabel('Flatlander (2D)', flatPt.x, flatPt.y - 22, '#7dd3fc', 'center', 10.5);
+
+            if (state.cam.pitch > 0.30) {
+                const eye3D = project3D(0.62, 1.38, 0, cx, cy, scale);
+                ctx.strokeStyle = 'rgba(245, 158, 11, 0.55)';
+                ctx.setLineDash([5, 5]);
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(eye3D.x, eye3D.y); ctx.lineTo(objPt.x, objPt.y); ctx.stroke();
+                ctx.setLineDash([]);
+                drawGlowPoint(eye3D.x, eye3D.y, 6.5, '#f59e0b', '#ffffff');
+                drawLabel('Góc nhìn 3D: Nhìn xuyên vào phòng kín!', eye3D.x, eye3D.y - 20, '#fde68a', 'center', 10.5);
+                drawLabel(p.extracted ? 'Đã nhấc vật ra ngoài qua trục Z!' : 'Vật thể trong phòng kín', objPt.x, objPt.y + 24, '#fcd34d', 'center', 10);
+            } else {
+                drawLabel('Góc nhìn bẹt 2D: Bức tường che kín toàn bộ bên trong!', cx, cy - 36, '#e9d5ff', 'center', 11);
+            }
+        }
+
+        // --- 3D: FOLDING 2D GRID SHEET TO CREATE WORMHOLE ---
+        function render3D(t, cx, cy, scale) {
+            const p = state.params.d3;
+            const fold = p.fold;
+            const cols = 20, rows = 8, length = 2.65, width = 1.18;
+
+            function sheetPoint(u, v) {
+                const halfL = length * 0.5;
+                if (fold < 0.005) return { x: u * halfL, y: 0, z: v * width * 0.5 };
+                const bend = fold * Math.PI * 0.96;
+                const span = 0.55;
+                const rad = (span * halfL) / bend;
+                let x, y;
+                if (Math.abs(u) <= span) {
+                    const a = (u / span) * (bend * 0.5);
+                    x = rad * Math.sin(a);
+                    y = rad * (1 - Math.cos(a)) - rad * 0.45;
+                } else {
+                    const sgn = Math.sign(u);
+                    const ex = (Math.abs(u) - span) * halfL;
+                    const endA = bend * 0.5;
+                    x = sgn * rad * Math.sin(endA) + sgn * Math.cos(endA) * ex;
+                    y = rad * (1 - Math.cos(endA)) - rad * 0.45 + Math.sin(endA) * ex;
+                }
+                const rot = -Math.PI * 0.5 * fold;
+                return { x: x * Math.cos(rot) - y * Math.sin(rot), y: x * Math.sin(rot) + y * Math.cos(rot), z: v * width * 0.5 };
+            }
+
+            const grid = [];
+            for (let i = 0; i <= cols; i++) {
+                const u = -1 + (i / cols) * 2, colPts = [];
+                for (let j = 0; j <= rows; j++) {
+                    const sp = sheetPoint(u, -1 + (j / rows) * 2);
+                    colPts.push(project3D(sp.x, sp.y, sp.z, cx, cy, scale));
+                }
+                grid.push(colPts);
+            }
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    ctx.fillStyle = 'rgba(30, 64, 175, 0.16)';
+                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.30)';
+                    ctx.lineWidth = 0.9;
+                    ctx.beginPath();
+                    ctx.moveTo(grid[i][j].x, grid[i][j].y);
+                    ctx.lineTo(grid[i+1][j].x, grid[i+1][j].y);
+                    ctx.lineTo(grid[i+1][j+1].x, grid[i+1][j+1].y);
+                    ctx.lineTo(grid[i][j+1].x, grid[i][j+1].y);
+                    ctx.closePath(); ctx.fill(); ctx.stroke();
+                }
+            }
+
+            const spA = sheetPoint(-0.78, 0), spB = sheetPoint(0.78, 0);
+            const ptA = project3D(spA.x, spA.y, spA.z, cx, cy, scale);
+            const ptB = project3D(spB.x, spB.y, spB.z, cx, cy, scale);
+
+            // Wormhole Tunnel when A touches B
+            if (fold > 0.80) {
+                const alpha = (fold - 0.80) / 0.20;
+                ctx.save();
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = '#a855f7';
+                ctx.strokeStyle = `rgba(192, 132, 252, ${alpha})`;
+                ctx.lineWidth = 4.2 + Math.sin(t * 9) * 1.4;
+                ctx.beginPath(); ctx.moveTo(ptA.x, ptA.y); ctx.lineTo(ptB.x, ptB.y); ctx.stroke();
+                ctx.restore();
+                drawGlowPoint((ptA.x + ptB.x) * 0.5, (ptA.y + ptB.y) * 0.5, 11 * alpha, '#a855f7', '#ffffff');
+                drawLabel('Đường hầm Lỗ Sâu Đục 3D (Wormhole)!', (ptA.x + ptB.x) * 0.5 + 80, (ptA.y + ptB.y) * 0.5, '#e9d5ff', 'center', 11);
+            }
+
+            if (p.antMoving) {
+                p.antProgress += (fold > 0.84 ? 0.048 : 0.015);
+                if (p.antProgress >= 1) { p.antProgress = 1; p.antMoving = false; }
+            }
+            const ant3D = (fold > 0.84 && p.antMoving)
+                ? { x: spA.x + (spB.x - spA.x) * p.antProgress, y: spA.y + (spB.y - spA.y) * p.antProgress, z: spA.z + (spB.z - spA.z) * p.antProgress }
+                : sheetPoint(-0.78 + p.antProgress * 1.56, 0);
+            const ptAnt = project3D(ant3D.x, ant3D.y, ant3D.z, cx, cy, scale);
+
+            drawGlowPoint(ptA.x, ptA.y, 8.5, '#38bdf8', '#ffffff');
+            drawLabel('Điểm A', ptA.x - 28, ptA.y - 16, '#7dd3fc', 'center', 10.5);
+            drawGlowPoint(ptB.x, ptB.y, 8.5, '#f59e0b', '#ffffff');
+            drawLabel('Điểm B', ptB.x + 28, ptB.y + 18, '#fde68a', 'center', 10.5);
+            drawGlowPoint(ptAnt.x, ptAnt.y, 6.8, '#10b981', '#ffffff');
+            drawLabel('Kiến 2D', ptAnt.x, ptAnt.y - 18, '#6ee7b7', 'center', 10);
+        }
+
+        // --- 4D: MATHEMATICAL TESSERACT (16V/32E) & WORLDLINE TUBE ---
+        function render4D(t, cx, cy, scale) {
+            const p = state.params.d4;
+            if (p.mode === 'tesseract') {
+                if (p.autoW) p.angleXW = (p.angleXW + 0.014 * p.rotSpeedW) % (Math.PI * 2);
+                const angYW = p.angleXW * 0.65 + t * 0.25 * p.rotSpeedW;
+                const angZW = Math.sin(t * 0.45) * 0.45;
+                const projected = TESSERACT_VERTS.map(v => project4D(v, p.angleXW, angYW, angZW, cx, cy, scale * 0.94));
+                const sortedEdges = TESSERACT_EDGES.map(([i, j]) => ({
+                    i, j, z: (projected[i].z + projected[j].z) * 0.5, isW: (i ^ j) === 8
+                })).sort((a, b) => a.z - b.z);
+
+                sortedEdges.forEach(e => {
+                    const a = projected[e.i], b = projected[e.j];
+                    const alpha = Math.max(0.24, Math.min(0.95, 0.62 + (a.w + b.w) * 0.15));
+                    ctx.strokeStyle = e.isW ? `rgba(245, 158, 11, ${alpha * 0.92})` : (e.i < 8 ? `rgba(56, 189, 248, ${alpha})` : `rgba(129, 140, 248, ${alpha})`);
+                    ctx.lineWidth = e.isW ? 1.8 : 2.2;
+                    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                });
+                projected.forEach((pt, idx) => drawGlowPoint(pt.x, pt.y, Math.max(3, 5 + pt.w * 1.4), idx < 8 ? '#38bdf8' : '#818cf8', '#ffffff'));
+                drawLabel('Siêu khối Tesseract 4D • 16 Đỉnh • 32 Cạnh • Xoay mặt phẳng XW / YW / ZW', cx, ch - 56, '#cbd5e1', 'center', 11);
+                return;
+            }
+
+            // Worldline ("Con rắn Thời gian")
+            if (p.playTime) p.timeT = (p.timeT + 0.0036) % 1;
+            const segs = 34, ringPts = 12;
+            const wlCenter = (u) => ({
+                x: -1.7 + u * 3.4,
+                y: Math.sin(u * Math.PI * 2.1) * 0.42,
+                z: Math.cos(u * Math.PI * 1.6) * 0.35,
+                rad: 0.14 + Math.sin(u * Math.PI) * 0.25
+            });
+
+            const rings = [];
+            for (let i = 0; i <= segs; i++) {
+                const u = i / segs, c = wlCenter(u), ring = [];
+                for (let j = 0; j < ringPts; j++) {
+                    const a = (j / ringPts) * Math.PI * 2;
+                    ring.push(project3D(c.x, c.y + Math.cos(a) * c.rad, c.z + Math.sin(a) * c.rad, cx, cy, scale));
+                }
+                rings.push({ u, ring });
+            }
+            for (let i = 0; i < segs; i++) {
+                ctx.strokeStyle = rings[i].u <= p.timeT ? 'rgba(56, 189, 248, 0.38)' : 'rgba(129, 140, 248, 0.26)';
+                ctx.lineWidth = 1.05;
+                for (let j = 0; j < ringPts; j += 2) {
+                    ctx.beginPath(); ctx.moveTo(rings[i].ring[j].x, rings[i].ring[j].y); ctx.lineTo(rings[i+1].ring[j].x, rings[i+1].ring[j].y); ctx.stroke();
+                }
+            }
+            const cur = wlCenter(p.timeT);
+            const pl = [[cur.x,-0.92,-0.82],[cur.x,0.92,-0.82],[cur.x,0.92,0.82],[cur.x,-0.92,0.82]].map(v => project3D(v[0], v[1], v[2], cx, cy, scale));
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(pl[0].x, pl[0].y); pl.slice(1).forEach(pt => ctx.lineTo(pt.x, pt.y)); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+
+            const cProj = project3D(cur.x, cur.y, cur.z, cx, cy, scale);
+            drawGlowPoint(cProj.x, cProj.y, Math.max(10, cur.rad * cProj.scale * 0.45), '#38bdf8', '#ffffff');
+            drawLabel(`Lát cắt Hiện tại 3D trên Ống Thời Gian (t = ${(p.timeT * 100).toFixed(0)}%)`, cProj.x, pl[1].y - 16, '#fde68a', 'center', 11);
+        }
+
+        // --- 5D: 3D QUANTUM BRANCHING TREE ---
+        function render5D(t, cx, cy, scale) {
+            const p = state.params.d5;
+            state.hitTargets = [];
+            const origin = project3D(-1.75, 0, 0, cx, cy, scale);
+
+            p.branches.forEach((br, idx) => {
+                const isSel = idx === p.selectedBranch;
+                const splitX = -1.75 + br.splitT * 2.1;
+                const endX = 1.65;
+                const endY = Math.sin(br.angleY) * 1.15 * p.divergence;
+                const endZ = Math.sin(br.angleZ) * 0.9 * p.divergence;
+
+                ctx.beginPath();
+                for (let k = 0; k <= 24; k++) {
+                    const u = k / 24;
+                    let x, y, z;
+                    if (u <= br.splitT) {
+                        x = -1.75 + (u / br.splitT) * (splitX + 1.75); y = 0; z = 0;
+                    } else {
+                        const f = (u - br.splitT) / (1 - br.splitT), ease = 1 - Math.pow(1 - f, 2.2);
+                        x = splitX + f * (endX - splitX); y = endY * ease; z = endZ * ease;
+                    }
+                    const pt = project3D(x, y, z, cx, cy, scale);
+                    if (k === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y);
+                }
+                ctx.strokeStyle = isSel ? br.outcome.color : 'rgba(148, 163, 184, 0.34)';
+                ctx.lineWidth = isSel ? 3.4 : 1.5;
+                ctx.stroke();
+
+                const spNode = project3D(splitX, 0, 0, cx, cy, scale);
+                drawGlowPoint(spNode.x, spNode.y, isSel ? 5 : 3, '#f59e0b', '#ffffff');
+
+                const endPt = project3D(endX, endY, endZ, cx, cy, scale);
+                drawGlowPoint(endPt.x, endPt.y, isSel ? 10 : 6.2, br.outcome.color, '#ffffff');
+                state.hitTargets.push({ x: endPt.x, y: endPt.y, r: 26, type: 'd5branch', id: idx });
+
+                if (isSel) {
+                    const uP = (t * 0.36) % 1;
+                    let px, py, pz;
+                    if (uP <= br.splitT) { px = -1.75 + (uP / br.splitT) * (splitX + 1.75); py = 0; pz = 0; }
+                    else {
+                        const f = (uP - br.splitT) / (1 - br.splitT), ease = 1 - Math.pow(1 - f, 2.2);
+                        px = splitX + f * (endX - splitX); py = endY * ease; pz = endZ * ease;
+                    }
+                    const phot = project3D(px, py, pz, cx, cy, scale);
+                    drawGlowPoint(phot.x, phot.y, 7, '#ffffff', '#ffffff');
+                    drawLabel(br.outcome.name, endPt.x, endPt.y - 24, br.outcome.color, 'center', 11);
+                    drawLabel(br.outcome.desc, endPt.x, endPt.y + 22, '#e2e8f0', 'center', 10);
+                } else {
+                    drawLabel(`ψ${idx + 1}`, endPt.x + 15, endPt.y, '#94a3b8', 'left', 10);
+                }
+            });
+
+            drawGlowPoint(origin.x, origin.y, 12 + Math.sin(t * 4) * 1.4, '#f59e0b', '#ffffff');
+            drawLabel('Điểm Khởi đầu Hiện tại / Big Bang', origin.x + 15, origin.y + 28, '#fde68a', 'center', 10.5);
+        }
+
+        // --- 6D: FOLDING THE 5D PLANE (PHASE JUMP) ---
+        function render6D(t, cx, cy, scale) {
+            const p = state.params.d6;
+            const fold = p.fold, cols = 18, rows = 10;
+
+            function manifold6D(u, v) {
+                const halfU = 1.45, halfV = 1.05;
+                if (fold < 0.01) return { x: v * halfV, y: 0, z: u * halfU };
+                const bend = fold * Math.PI * 0.94, lim = 0.65, r = (halfU * lim) / bend;
+                let z, y;
+                if (Math.abs(u) <= lim) {
+                    const a = (u / lim) * (bend * 0.5);
+                    z = r * Math.sin(a); y = r * (1 - Math.cos(a)) - r * 0.5;
+                } else {
+                    const s = Math.sign(u), ex = (Math.abs(u) - lim) * halfU, endA = bend * 0.5;
+                    z = s * r * Math.sin(endA) + s * Math.cos(endA) * ex;
+                    y = r * (1 - Math.cos(endA)) - r * 0.5 + Math.sin(endA) * ex;
+                }
+                return { x: v * halfV, y, z };
+            }
+
+            const grid = [];
+            for (let i = 0; i <= cols; i++) {
+                const u = -1 + (i / cols) * 2, row = [];
+                for (let j = 0; j <= rows; j++) {
+                    const mp = manifold6D(u, -1 + (j / rows) * 2);
+                    row.push(project3D(mp.x, mp.y, mp.z, cx, cy, scale));
+                }
+                grid.push(row);
+            }
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    ctx.fillStyle = 'rgba(126, 34, 206, 0.14)';
+                    ctx.strokeStyle = 'rgba(192, 132, 252, 0.25)';
+                    ctx.lineWidth = 0.9;
+                    ctx.beginPath();
+                    ctx.moveTo(grid[i][j].x, grid[i][j].y); ctx.lineTo(grid[i+1][j].x, grid[i+1][j].y);
+                    ctx.lineTo(grid[i+1][j+1].x, grid[i+1][j+1].y); ctx.lineTo(grid[i][j+1].x, grid[i][j+1].y);
+                    ctx.closePath(); ctx.fill(); ctx.stroke();
+                }
+            }
+
+            [-0.82, -0.4, 0, 0.4, 0.82].forEach((tu, idx) => {
+                ctx.beginPath();
+                for (let s = 0; s <= 20; s++) {
+                    const f = s / 20, mp = manifold6D(tu * Math.pow(f, 0.75), -0.92 + f * 1.78);
+                    const pr = project3D(mp.x, mp.y, mp.z, cx, cy, scale);
+                    if (s === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                }
+                ctx.strokeStyle = idx === 0 ? '#38bdf8' : (idx === 4 ? '#f59e0b' : 'rgba(216, 180, 254, 0.45)');
+                ctx.lineWidth = (idx === 0 || idx === 4) ? 2.8 : 1.3;
+                ctx.stroke();
+            });
+
+            const mpA = manifold6D(-0.82, 0.86), mpB = manifold6D(0.82, 0.86);
+            const ptA = project3D(mpA.x, mpA.y, mpA.z, cx, cy, scale);
+            const ptB = project3D(mpB.x, mpB.y, mpB.z, cx, cy, scale);
+
+            if (fold > 0.76) {
+                const alpha = (fold - 0.76) / 0.24;
+                ctx.save();
+                ctx.shadowBlur = 16; ctx.shadowColor = '#f59e0b';
+                ctx.strokeStyle = `rgba(251, 191, 36, ${alpha})`;
+                ctx.lineWidth = 3.8 + Math.sin(t * 10) * 1.1;
+                ctx.beginPath(); ctx.moveTo(ptA.x, ptA.y); ctx.lineTo(ptB.x, ptB.y); ctx.stroke();
+                ctx.restore();
+                drawLabel('Tia Nhảy Pha 6D (Không cần quay ngược thời gian!)', (ptA.x + ptB.x) * 0.5, (ptA.y + ptB.y) * 0.5 - 24, '#fde68a', 'center', 10.5);
+            }
+
+            if (p.jumpAnim >= 0) {
+                p.jumpAnim += 0.032;
+                if (p.jumpAnim > 1) p.jumpAnim = -1;
+                else {
+                    const f = p.jumpAnim;
+                    const jp = project3D(mpA.x + (mpB.x - mpA.x) * f, mpA.y + (mpB.y - mpA.y) * f, mpA.z + (mpB.z - mpA.z) * f, cx, cy, scale);
+                    drawGlowPoint(jp.x, jp.y, 11, '#ffffff', '#fde68a');
+                }
+            }
+
+            drawGlowPoint(ptA.x, ptA.y, 9, '#38bdf8', '#ffffff');
+            drawLabel('Nhánh Lịch sử A', ptA.x - 16, ptA.y - 20, '#7dd3fc', 'center', 10.5);
+            drawGlowPoint(ptB.x, ptB.y, 9, '#f59e0b', '#ffffff');
+            drawLabel('Nhánh Lịch sử B', ptB.x + 16, ptB.y + 22, '#fde68a', 'center', 10.5);
+        }
+
+        // --- 7D: MULTIVERSE CONSTANTS SIMULATOR (G & c/alpha) ---
+        function render7D(t, cx, cy, scale) {
+            const p = state.params.d7;
+            const uLeft = project3D(-1.95, 0.70, -0.30, cx, cy, scale);
+            const uCenter = project3D(0, 0, 0, cx, cy, scale);
+            const uRight = project3D(1.95, -0.58, 0.35, cx, cy, scale);
+
+            ctx.strokeStyle = 'rgba(232, 121, 249, 0.55)';
+            ctx.lineWidth = 2.2;
+            ctx.setLineDash([6, 5]);
+            ctx.beginPath(); ctx.moveTo(uLeft.x, uLeft.y); ctx.lineTo(uCenter.x, uCenter.y); ctx.lineTo(uRight.x, uRight.y); ctx.stroke();
+            ctx.setLineDash([]);
+
+            drawGlowPoint(uLeft.x, uLeft.y, 8, '#38bdf8', '#ffffff');
+            drawLabel('Vũ trụ β (G, c khác)', uLeft.x, uLeft.y - 22, '#7dd3fc', 'center', 10);
+            drawGlowPoint(uRight.x, uRight.y, 8, '#f59e0b', '#ffffff');
+            drawLabel('Vũ trụ γ (Big Bang khác)', uRight.x, uRight.y + 22, '#fde68a', 'center', 10);
+
+            const bubbleR = Math.min(cw, ch) * 0.27 * state.cam.zoom;
+            const bg = ctx.createRadialGradient(uCenter.x, uCenter.y, bubbleR * 0.1, uCenter.x, uCenter.y, bubbleR);
+            bg.addColorStop(0, 'rgba(232, 121, 249, 0.10)');
+            bg.addColorStop(1, 'rgba(232, 121, 249, 0.30)');
+            ctx.fillStyle = bg;
+            ctx.beginPath(); ctx.arc(uCenter.x, uCenter.y, bubbleR, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(232, 121, 249, 0.55)';
+            ctx.lineWidth = 1.6; ctx.stroke();
+
+            const dt = 0.016 * p.emLight, G = p.gravity, maxV = 1.65 * p.emLight;
+            p.particles.forEach(pt => {
+                const distSq = pt.x * pt.x + pt.y * pt.y + pt.z * pt.z + 0.024;
+                const dist = Math.sqrt(distSq);
+                const acc = -(0.42 * G) / distSq;
+                pt.vx += (pt.x / dist) * acc * dt;
+                pt.vy += (pt.y / dist) * acc * dt;
+                pt.vz += (pt.z / dist) * acc * dt;
+                const spd = Math.hypot(pt.vx, pt.vy, pt.vz);
+                if (spd > maxV) { pt.vx = (pt.vx / spd) * maxV; pt.vy = (pt.vy / spd) * maxV; pt.vz = (pt.vz / spd) * maxV; }
+                pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.z += pt.vz * dt;
+
+                if (dist > 1.38 || dist < 0.09) {
+                    const ang = Math.random() * Math.PI * 2, r = 0.44 + Math.random() * 0.56, v0 = Math.sqrt(0.42 / r);
+                    pt.x = Math.cos(ang) * r; pt.y = Math.sin(ang) * r; pt.z = (Math.random() - 0.5) * 0.25;
+                    pt.vx = -Math.sin(ang) * v0; pt.vy = Math.cos(ang) * v0; pt.vz = 0; pt.trail = [];
+                } else {
+                    pt.trail.push({ x: pt.x, y: pt.y, z: pt.z });
+                    if (pt.trail.length > 14) pt.trail.shift();
+                }
+
+                if (pt.trail.length > 1) {
+                    ctx.beginPath();
+                    pt.trail.forEach((tr, idx) => {
+                        const pr = project3D(tr.x, tr.y, tr.z, cx, cy, scale * 0.85);
+                        if (idx === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                    });
+                    ctx.strokeStyle = 'rgba(216, 180, 254, 0.36)';
+                    ctx.lineWidth = 1.2; ctx.stroke();
+                }
+                const pr = project3D(pt.x, pt.y, pt.z, cx, cy, scale * 0.85);
+                drawGlowPoint(pr.x, pr.y, pt.size, pt.color, '#ffffff');
+            });
+
+            if (G > 1.95) {
+                ctx.fillStyle = '#02040a';
+                ctx.beginPath(); ctx.arc(uCenter.x, uCenter.y, 15, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2.8; ctx.stroke();
+                drawLabel('Sụp đổ thành Hố Đen! (Hấp dẫn G quá mạnh)', uCenter.x, uCenter.y + bubbleR + 20, '#fb923c', 'center', 11);
+            } else if (G < 0.38) {
+                drawGlowPoint(uCenter.x, uCenter.y, 7, '#64748b', '#cbd5e1');
+                drawLabel('Hệ hành tinh vỡ tan! (Hấp dẫn G quá yếu)', uCenter.x, uCenter.y + bubbleR + 20, '#94a3b8', 'center', 11);
+            } else {
+                drawGlowPoint(uCenter.x, uCenter.y, 12, '#f59e0b', '#ffffff');
+                drawLabel('Quỹ đạo ổn định • Toàn bộ 6D thu gọn thành 1 điểm Vũ trụ α', uCenter.x, uCenter.y + bubbleR + 20, '#f0abfc', 'center', 10.5);
+            }
+        }
+
+        // --- 8D: MULTIVERSE BUBBLE NETWORK ---
+        function render8D(t, cx, cy, scale) {
+            const p = state.params.d8;
+            state.hitTargets = [];
+            const projNodes = p.universes.map(u => ({ ...u, pr: project3D(u.x, u.y, u.z, cx, cy, scale * 0.92) }));
+
+            [[0,1],[0,2],[0,3],[0,4],[0,5],[1,5],[2,5],[1,3],[2,4]].forEach(([a, b]) => {
+                const nA = projNodes[a], nB = projNodes[b];
+                const active = (a === p.selectedUniverse || b === p.selectedUniverse);
+                ctx.strokeStyle = active ? 'rgba(236, 72, 153, 0.58)' : 'rgba(148, 163, 184, 0.22)';
+                ctx.lineWidth = active ? 2.2 : 1;
+                ctx.beginPath(); ctx.moveTo(nA.pr.x, nA.pr.y); ctx.lineTo(nB.pr.x, nB.pr.y); ctx.stroke();
+            });
+
+            [...projNodes].sort((a, b) => a.pr.z - b.pr.z).forEach(u => {
+                const isSel = u.id === p.selectedUniverse;
+                const rad = isSel ? 22 : 13;
+
+                // Translucent Bubble Shell
+                const bg = ctx.createRadialGradient(u.pr.x - rad * 0.3, u.pr.y - rad * 0.3, 2, u.pr.x, u.pr.y, rad * 1.45);
+                bg.addColorStop(0, 'rgba(255,255,255,0.22)');
+                bg.addColorStop(0.6, u.color + '33');
+                bg.addColorStop(1, u.color + '88');
+                ctx.fillStyle = bg;
+                ctx.beginPath(); ctx.arc(u.pr.x, u.pr.y, rad * 1.35, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = u.color;
+                ctx.lineWidth = isSel ? 2.2 : 1.1;
+                ctx.stroke();
+
+                if (isSel) {
+                    ctx.strokeStyle = u.color; ctx.lineWidth = 1.4; ctx.setLineDash([4, 4]);
+                    ctx.beginPath(); ctx.arc(u.pr.x, u.pr.y, rad * 1.85 + Math.sin(t * 3.2) * 3, 0, Math.PI * 2); ctx.stroke();
+                    ctx.setLineDash([]);
+                    for (let k = 0; k < 8; k++) {
+                        let ox, oy;
+                        if (u.type === 'nogravity') { const r = 16 + ((t * 16 + k * 7) % 34); ox = Math.cos(k * 0.8) * r; oy = Math.sin(k * 0.8) * r; }
+                        else { const r = 24 + (k % 2) * 10; ox = Math.cos(t * 2.0 + k * 0.78) * r; oy = Math.sin(t * 2.0 + k * 0.78) * r * 0.65; }
+                        ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(u.pr.x + ox, u.pr.y + oy, 2.0, 0, Math.PI * 2); ctx.fill();
+                    }
+                }
+                drawGlowPoint(u.pr.x, u.pr.y, rad * 0.45, u.color, '#ffffff');
+                drawLabel(u.name, u.pr.x, u.pr.y - (isSel ? 46 : 26), isSel ? '#ffffff' : '#cbd5e1', 'center', isSel ? 11.5 : 10);
+                state.hitTargets.push({ x: u.pr.x, y: u.pr.y, r: 30, type: 'd8uni', id: u.id });
+            });
+
+            const sel = p.universes[p.selectedUniverse];
+            if (sel) drawLabel(`${sel.dims} • Lực hạt nhân: ${sel.nuclear} • Sự sống: ${sel.life}`, cx, ch - 56, sel.color, 'center', 11);
+        }
+
+        // --- 9D: HYPERSPACE BRIDGE FOLDING 8D MULTIVERSE ---
+        function render9D(t, cx, cy, scale) {
+            const p = state.params.d9;
+            const fold = p.fold, cols = 18, rows = 10;
+
+            function manifold9D(u, v) {
+                const halfU = 1.55, halfV = 1.05;
+                const wave = Math.sin(u * 2.2 + t * 0.8) * Math.cos(v * 2.0) * 0.08 * (1 - fold * 0.6);
+                if (fold < 0.01) return { x: u * halfU, y: wave, z: v * halfV };
+                const bend = fold * Math.PI * 0.96, span = 0.62, r = (span * halfU) / bend;
+                let x, y;
+                if (Math.abs(u) <= span) {
+                    const a = (u / span) * (bend * 0.5);
+                    x = r * Math.sin(a); y = r * (1 - Math.cos(a)) - r * 0.5;
+                } else {
+                    const s = Math.sign(u), ex = (Math.abs(u) - span) * halfU, endA = bend * 0.5;
+                    x = s * r * Math.sin(endA) + s * Math.cos(endA) * ex;
+                    y = r * (1 - Math.cos(endA)) - r * 0.5 + Math.sin(endA) * ex;
+                }
+                return { x, y: y + wave, z: v * halfV };
+            }
+
+            const grid = [];
+            for (let i = 0; i <= cols; i++) {
+                const u = -1 + (i / cols) * 2, col = [];
+                for (let j = 0; j <= rows; j++) {
+                    const mp = manifold9D(u, -1 + (j / rows) * 2);
+                    col.push(project3D(mp.x, mp.y, mp.z, cx, cy, scale));
+                }
+                grid.push(col);
+            }
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const ratio = i / cols;
+                    ctx.fillStyle = ratio < 0.5 ? 'rgba(14, 116, 144, 0.14)' : 'rgba(190, 24, 93, 0.14)';
+                    ctx.strokeStyle = ratio < 0.5 ? 'rgba(56, 189, 248, 0.26)' : 'rgba(251, 146, 60, 0.26)';
+                    ctx.lineWidth = 0.9;
+                    ctx.beginPath();
+                    ctx.moveTo(grid[i][j].x, grid[i][j].y); ctx.lineTo(grid[i+1][j].x, grid[i+1][j].y);
+                    ctx.lineTo(grid[i+1][j+1].x, grid[i+1][j+1].y); ctx.lineTo(grid[i][j+1].x, grid[i][j+1].y);
+                    ctx.closePath(); ctx.fill(); ctx.stroke();
+                }
+            }
+
+            const mA = manifold9D(-0.82, 0), mB = manifold9D(0.82, 0);
+            const pA = project3D(mA.x, mA.y, mA.z, cx, cy, scale);
+            const pB = project3D(mB.x, mB.y, mB.z, cx, cy, scale);
+
+            if (fold > 0.76) {
+                const alpha = (fold - 0.76) / 0.24;
+                for (let s = 0; s < 3; s++) {
+                    ctx.beginPath();
+                    for (let k = 0; k <= 24; k++) {
+                        const f = k / 24, ang = f * Math.PI * 4 + t * 5 + s * 2.1, env = Math.sin(f * Math.PI) * 0.13 * alpha;
+                        const pr = project3D(
+                            mA.x + (mB.x - mA.x) * f + Math.cos(ang) * env,
+                            mA.y + (mB.y - mA.y) * f,
+                            mA.z + (mB.z - mA.z) * f + Math.sin(ang) * env,
+                            cx, cy, scale
+                        );
+                        if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                    }
+                    ctx.strokeStyle = s === 0 ? `rgba(245, 158, 11, ${alpha})` : `rgba(236, 72, 153, ${alpha * 0.85})`;
+                    ctx.lineWidth = 2.4; ctx.stroke();
+                }
+                p.pulsePos = (p.pulsePos + 0.026) % 1;
+                const pp = project3D(mA.x + (mB.x - mA.x) * p.pulsePos, mA.y + (mB.y - mA.y) * p.pulsePos, mA.z + (mB.z - mA.z) * p.pulsePos, cx, cy, scale);
+                drawGlowPoint(pp.x, pp.y, 9, '#f59e0b', '#ffffff');
+                drawLabel('Cầu Siêu Không Gian 9D — Nối liền 2 Vũ trụ Khác Luật!', (pA.x + pB.x) * 0.5, (pA.y + pB.y) * 0.5 - 32, '#fde68a', 'center', 11);
+            }
+            drawGlowPoint(pA.x, pA.y, 12, '#38bdf8', '#ffffff');
+            drawLabel('Vũ trụ Vật chất (α)', pA.x - 16, pA.y - 24, '#7dd3fc', 'center', 10.5);
+            drawGlowPoint(pB.x, pB.y, 12, '#fb923c', '#ffffff');
+            drawLabel('Vũ trụ Phản vật chất (β)', pB.x + 16, pB.y + 24, '#fdba74', 'center', 10.5);
+        }
+
+        // --- 10D: CALABI-YAU MANIFOLD (STRING THEORY) & 10D OMNIVERSE ---
+        const HARMONIC_PARTICLES = [
+            { mode: 1, name: 'Graviton (Hạt Hấp Dẫn)', spin: 'Spin 2 • Dây vòng kín', color: '#a855f7' },
+            { mode: 2, name: 'Photon (Ánh Sáng)', spin: 'Spin 1 • Lực Điện Từ', color: '#f59e0b' },
+            { mode: 3, name: 'Electron (Lepton)', spin: 'Spin 1/2 • Điện tích −1', color: '#38bdf8' },
+            { mode: 4, name: 'Quark (Up / Down)', spin: 'Spin 1/2 • Lực Hạt Nhân Mạnh', color: '#ec4899' },
+            { mode: 5, name: 'Boson Higgs', spin: 'Spin 0 • Tạo Khối Lượng', color: '#10b981' }
+        ];
+
+        function render10D(t, cx, cy, scale) {
+            const p = state.params.d10;
+            if (p.mode === 'omniverse') {
+                const conv = p.convergence, spread = 1.45 * (1 - conv * 0.92);
+                for (let rIdx = 0; rIdx < 7; rIdx++) {
+                    const rad = (0.35 + rIdx * 0.18) * (0.28 + (1 - conv) * 0.95);
+                    ctx.beginPath();
+                    for (let k = 0; k <= 48; k++) {
+                        const a = (k / 48) * Math.PI * 2;
+                        const pr = project3D(Math.cos(a) * rad, Math.sin(a) * rad * Math.cos(rIdx * 0.8 + t * 0.35), Math.sin(a) * rad * Math.sin(rIdx * 0.8 + t * 0.35), cx, cy, scale);
+                        if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                    }
+                    ctx.strokeStyle = rIdx % 2 === 0 ? 'rgba(245, 158, 11, 0.38)' : 'rgba(129, 140, 248, 0.38)';
+                    ctx.lineWidth = 1.3; ctx.stroke();
+                }
+                for (let i = 0; i < 44; i++) {
+                    const ang = i * 2.39996 + t * (0.35 + conv * 0.8), dist = 0.15 + (i / 44) * spread;
+                    const pr = project3D(Math.cos(ang) * dist, Math.sin(ang * 0.7) * dist * 0.8, Math.sin(ang) * dist, cx, cy, scale);
+                    drawGlowPoint(pr.x, pr.y, 2.3 + (1 - conv) * 1.8, i % 3 === 0 ? '#38bdf8' : (i % 3 === 1 ? '#f59e0b' : '#c084fc'), '#ffffff');
+                }
+                drawGlowPoint(cx, cy, 14 + conv * 14 + Math.sin(t * 4) * 2, '#f59e0b', '#ffffff');
+                drawLabel('ĐIỂM TỐI THƯỢNG 10D (Tổng hòa mọi khả năng)', cx, cy + 82, '#fde68a', 'center', 12);
+                return;
+            }
+
+            // Calabi-Yau 6D Manifold + Vibrating Superstring
+            const quads = p.calabiMesh;
+            const alphaPhase = Math.PI * 0.25 + Math.sin(t * 0.4) * 0.35;
+            const ca = Math.cos(alphaPhase), sa = Math.sin(alphaPhase);
+            const cyScale = scale * 0.84;
+
+            const renderList = quads.map(q => {
+                const mapPt = (pt) => project3D(pt.re1, pt.re2, ca * pt.im1 + sa * pt.im2, cx, cy, cyScale);
+                const s0 = mapPt(q.p0), s1 = mapPt(q.p1), s2 = mapPt(q.p2), s3 = mapPt(q.p3);
+                return { s0, s1, s2, s3, z: (s0.z + s1.z + s2.z + s3.z) * 0.25, hue: q.hue };
+            }).sort((a, b) => a.z - b.z);
+
+            renderList.forEach(f => {
+                const light = Math.max(25, Math.min(72, 46 + f.z * 16));
+                ctx.fillStyle = `hsla(${f.hue}, 82%, ${light}%, 0.16)`;
+                ctx.strokeStyle = `hsla(${f.hue}, 90%, ${light + 15}%, 0.44)`;
+                ctx.lineWidth = 0.85;
+                ctx.beginPath();
+                ctx.moveTo(f.s0.x, f.s0.y); ctx.lineTo(f.s1.x, f.s1.y); ctx.lineTo(f.s2.x, f.s2.y); ctx.lineTo(f.s3.x, f.s3.y);
+                ctx.closePath(); ctx.fill(); ctx.stroke();
+            });
+
+            // Central Superstring harmonic mode
+            const hMode = Math.round(p.harmonic);
+            const pInfo = HARMONIC_PARTICLES[hMode - 1] || HARMONIC_PARTICLES[1];
+            ctx.save();
+            ctx.beginPath();
+            for (let k = 0; k <= 72; k++) {
+                const ang = (k / 72) * Math.PI * 2;
+                const r = 0.56 + Math.sin(hMode * ang) * Math.cos(t * (4.4 + hMode * 1.3)) * 0.15;
+                const sz = Math.cos((hMode + 1) * ang) * Math.sin(t * (3.6 + hMode)) * 0.14;
+                const pr = project3D(Math.cos(ang) * r, Math.sin(ang) * r, sz, cx, cy, cyScale);
+                if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+            }
+            ctx.closePath();
+            ctx.shadowBlur = 20; ctx.shadowColor = pInfo.color;
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+            ctx.strokeStyle = pInfo.color; ctx.lineWidth = 6; ctx.globalAlpha = 0.45; ctx.stroke();
+            ctx.restore();
+
+            drawLabel(`Họa âm Siêu dây (n = ${hMode}) → ${pInfo.name} (${pInfo.spin})`, cx, ch - 56, pInfo.color, 'center', 11.5);
+        }
+
+        // --- 11D: M-THEORY (2 PARALLEL M-BRANES, OPEN STRINGS, CLOSED GRAVITONS, R11 TUBE & EKPYROTIC COLLISION) ---
+        function render11D(t, cx, cy, scale) {
+            const p = state.params.d11;
+
+            // Handle Ekpyrotic Brane Collision animation
+            let effectiveDist = p.bulkDist;
+            let collisionFlash = 0;
+            if (p.collisionPhase >= 0) {
+                p.collisionPhase += 0.014;
+                if (p.collisionPhase < 0.42) {
+                    const f = p.collisionPhase / 0.42;
+                    effectiveDist = p.bulkDist * (1 - f * f);
+                } else if (p.collisionPhase < 0.48) {
+                    effectiveDist = 0.02;
+                    collisionFlash = 1.0;
+                    if (p.shockwaves.length === 0) {
+                        p.shockwaves.push({ r: 0.06, alpha: 1.0, color: '#f59e0b' });
+                        p.shockwaves.push({ r: 0.03, alpha: 0.92, color: '#38bdf8' });
+                        p.shockwaves.push({ r: 0.01, alpha: 0.88, color: '#ec4899' });
+                    }
+                } else if (p.collisionPhase < 1.0) {
+                    const f = (p.collisionPhase - 0.48) / 0.52;
+                    effectiveDist = 0.02 + (p.bulkDist - 0.02) * (1 - Math.pow(1 - f, 3));
+                    collisionFlash = Math.max(0, 1 - f * 2.4);
+                } else {
+                    p.collisionPhase = -1;
+                }
+            }
+
+            const yTop = effectiveDist * 0.58;
+            const yBot = -effectiveDist * 0.58;
+
+            // Bulk 11D Field Lines
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.14)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 6]);
+            for (let bx = -1.2; bx <= 1.21; bx += 0.6) {
+                for (let bz = -0.6; bz <= 0.61; bz += 0.6) {
+                    const p1 = project3D(bx, yBot, bz, cx, cy, scale);
+                    const p2 = project3D(bx, yTop, bz, cx, cy, scale);
+                    ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                }
+            }
+            ctx.setLineDash([]);
+
+            function drawBrane(yBase, strokeCol, fillCol, waveSign) {
+                const cols = 14, rows = 9, wX = 1.50, wZ = 0.96;
+                const grid = [];
+                for (let i = 0; i <= cols; i++) {
+                    const u = -1 + (i / cols) * 2, col = [];
+                    for (let j = 0; j <= rows; j++) {
+                        const v = -1 + (j / rows) * 2;
+                        const ripple = Math.sin(u * 2.6 + t * 1.4 * waveSign) * Math.cos(v * 2.2 + t * 0.9) * 0.08;
+                        col.push(project3D(u * wX, yBase + ripple, v * wZ, cx, cy, scale));
+                    }
+                    grid.push(col);
+                }
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        ctx.fillStyle = fillCol;
+                        ctx.strokeStyle = strokeCol;
+                        ctx.lineWidth = 0.9;
+                        ctx.beginPath();
+                        ctx.moveTo(grid[i][j].x, grid[i][j].y);
+                        ctx.lineTo(grid[i+1][j].x, grid[i+1][j].y);
+                        ctx.lineTo(grid[i+1][j+1].x, grid[i+1][j+1].y);
+                        ctx.lineTo(grid[i][j+1].x, grid[i][j+1].y);
+                        ctx.closePath(); ctx.fill(); ctx.stroke();
+                    }
+                }
+            }
+
+            // 1. Our Universe 3-Brane (Bottom — Cyan)
+            drawBrane(yBot, 'rgba(56, 189, 248, 0.36)', 'rgba(14, 116, 144, 0.14)', 1);
+
+            // 2. Open Strings PINNED to Our Brane (Photon, Quark, Electron)
+            const pinned = [
+                { x: -0.96, z: -0.24, label: 'Photon (Dây mở bám màng)', color: '#f59e0b' },
+                { x: -0.24, z: 0.42,  label: 'Quark (Ghim chặt 2 đầu)', color: '#ec4899' },
+                { x: 0.78,  z: 0.22,  label: 'Electron (Dây mở)', color: '#38bdf8' }
+            ];
+            pinned.forEach((st, idx) => {
+                const ripple = Math.sin((st.x / 1.50) * 2.6 + t * 1.4) * Math.cos((st.z / 0.96) * 2.2 + t * 0.9) * 0.08;
+                const yAnchor = yBot + ripple;
+                const span = 0.22;
+                const pS = project3D(st.x - span, yAnchor, st.z, cx, cy, scale);
+                const pE = project3D(st.x + span, yAnchor, st.z, cx, cy, scale);
+
+                ctx.beginPath();
+                for (let k = 0; k <= 16; k++) {
+                    const f = k / 16;
+                    const sx = st.x - span + f * span * 2;
+                    const arch = Math.sin(f * Math.PI) * (0.17 + 0.04 * Math.sin(t * 7 + idx * 2));
+                    const vibZ = Math.sin(f * Math.PI * 3 + t * 9) * 0.03;
+                    const pr = project3D(sx, yAnchor + arch, st.z + vibZ, cx, cy, scale);
+                    if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                }
+                ctx.strokeStyle = st.color; ctx.lineWidth = 2.4; ctx.stroke();
+                drawGlowPoint(pS.x, pS.y, 3.2, st.color, '#ffffff');
+                drawGlowPoint(pE.x, pE.y, 3.2, st.color, '#ffffff');
+                drawLabel(st.label, (pS.x + pE.x) * 0.5, Math.min(pS.y, pE.y) - 24, st.color, 'center', 9.5);
+            });
+
+            // 3. R11 Morph: 1D Superstring expanding into 2D M2-Brane Cylinder Tube
+            const r11 = p.r11;
+            const tubeX = 0.14, tubeY = 0.0, tubeZ = -0.32;
+            const ringCount = 12, segCount = 14, tubeLen = 0.68;
+            const tubeRad = 0.012 + r11 * 0.20;
+
+            const tubeRings = [];
+            for (let i = 0; i <= ringCount; i++) {
+                const u = -0.5 + i / ringCount;
+                const xC = tubeX + u * tubeLen;
+                const yW = tubeY + Math.sin(u * 5 + t * 3.4) * 0.06;
+                const ring = [];
+                for (let j = 0; j <= segCount; j++) {
+                    const a = (j / segCount) * Math.PI * 2;
+                    ring.push(project3D(xC, yW + Math.cos(a) * tubeRad, tubeZ + Math.sin(a) * tubeRad, cx, cy, scale));
+                }
+                tubeRings.push(ring);
+            }
+            if (r11 < 0.08) {
+                ctx.beginPath();
+                tubeRings.forEach((r, idx) => idx === 0 ? ctx.moveTo(r[0].x, r[0].y) : ctx.lineTo(r[0].x, r[0].y));
+                ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3.2; ctx.stroke();
+            } else {
+                for (let i = 0; i < ringCount; i++) {
+                    for (let j = 0; j < segCount; j++) {
+                        ctx.fillStyle = `rgba(16, 185, 129, ${0.15 + r11 * 0.16})`;
+                        ctx.strokeStyle = `rgba(52, 211, 153, ${0.38 + r11 * 0.36})`;
+                        ctx.lineWidth = 0.85;
+                        ctx.beginPath();
+                        ctx.moveTo(tubeRings[i][j].x, tubeRings[i][j].y);
+                        ctx.lineTo(tubeRings[i+1][j].x, tubeRings[i+1][j].y);
+                        ctx.lineTo(tubeRings[i+1][j+1].x, tubeRings[i+1][j+1].y);
+                        ctx.lineTo(tubeRings[i][j+1].x, tubeRings[i][j+1].y);
+                        ctx.closePath(); ctx.fill(); ctx.stroke();
+                    }
+                }
+            }
+            const tLbl = project3D(tubeX, tubeY + tubeRad + 0.14, tubeZ, cx, cy, scale);
+            drawLabel(r11 < 0.15 ? 'Dây 1D (R₁₁ ≈ 0)' : `Ống Siêu màng M2-Brane (R₁₁ = ${r11.toFixed(2)})`, tLbl.x, tLbl.y - 10, '#6ee7b7', 'center', 10);
+
+            // 4. Closed-Loop GRAVITONS escaping into 11D Bulk!
+            const activeCount = Math.max(5, Math.min(p.gravitons.length, Math.round(18 - p.bulkDist * 5)));
+            for (let idx = 0; idx < activeCount; idx++) {
+                const g = p.gravitons[idx];
+                g.progress += g.speed * (0.016 / Math.max(0.55, effectiveDist * 0.85)) * g.dir;
+                if (g.progress > 1) { g.progress = 0; g.x = (Math.random() - 0.5) * 2.1; g.z = (Math.random() - 0.5) * 1.3; }
+                if (g.progress < 0) { g.progress = 1; g.x = (Math.random() - 0.5) * 2.1; g.z = (Math.random() - 0.5) * 1.3; }
+
+                const gy = yBot + (yTop - yBot) * g.progress;
+                const gx = g.x + Math.sin(t * 2 + g.phase) * 0.08;
+                const gz = g.z + Math.cos(t * 1.8 + g.phase) * 0.08;
+
+                ctx.beginPath();
+                for (let k = 0; k <= 16; k++) {
+                    const a = (k / 16) * Math.PI * 2;
+                    const pr = project3D(
+                        gx + Math.cos(a) * g.r,
+                        gy + Math.sin(a) * g.r * Math.cos(t * 3 + g.phase),
+                        gz + Math.sin(a) * g.r * Math.sin(t * 3 + g.phase),
+                        cx, cy, scale
+                    );
+                    if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.0; ctx.stroke();
+                const ctr = project3D(gx, gy, gz, cx, cy, scale);
+                drawGlowPoint(ctr.x, ctr.y, 2.5, '#10b981', '#ffffff');
+            }
+
+            // 5. Parallel Universe Brane (Top — Magenta/Indigo)
+            drawBrane(yTop, 'rgba(236, 72, 153, 0.38)', 'rgba(134, 25, 143, 0.14)', -1);
+
+            const topLbl = project3D(-1.35, yTop + 0.16, 0, cx, cy, scale);
+            const botLbl = project3D(-1.35, yBot - 0.18, 0, cx, cy, scale);
+            const bulkLbl = project3D(1.42, 0, 0, cx, cy, scale);
+            drawLabel('Màng Song Song (Shadow Brane)', topLbl.x + 62, topLbl.y - 12, '#f9a8d4', 'center', 10.5);
+            drawLabel('Màng Vũ Trụ 3D Của Ta (3-Brane)', botLbl.x + 68, botLbl.y + 14, '#7dd3fc', 'center', 10.5);
+            drawLabel('Không gian Bulk 11D', bulkLbl.x, bulkLbl.y, '#6ee7b7', 'center', 10);
+
+            // 6. Ekpyrotic Big Bang Shockwaves & Flash
+            for (let i = p.shockwaves.length - 1; i >= 0; i--) {
+                const sw = p.shockwaves[i];
+                sw.r += 0.048; sw.alpha -= 0.017;
+                if (sw.alpha <= 0) { p.shockwaves.splice(i, 1); continue; }
+                ctx.beginPath();
+                for (let k = 0; k <= 42; k++) {
+                    const a = (k / 42) * Math.PI * 2;
+                    const pr = project3D(Math.cos(a) * sw.r * 2.5, 0, Math.sin(a) * sw.r * 2.5, cx, cy, scale);
+                    if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = sw.color; ctx.globalAlpha = Math.max(0, sw.alpha); ctx.lineWidth = 4.5 * sw.alpha; ctx.stroke();
+                ctx.globalAlpha = 1;
+            }
+            if (collisionFlash > 0.02) {
+                const fg = ctx.createRadialGradient(cx, cy, 4, cx, cy, Math.max(cw, ch) * 0.56);
+                fg.addColorStop(0, `rgba(255, 255, 255, ${collisionFlash * 0.92})`);
+                fg.addColorStop(0.35, `rgba(245, 158, 11, ${collisionFlash * 0.55})`);
+                fg.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = fg; ctx.fillRect(0, 0, cw, ch);
+                drawLabel('VA CHẠM BRANE — EKPYROTIC BIG BANG!', cx, cy - 36, '#fef08a', 'center', 13);
+            }
+
+            drawLabel(`Graviton vòng kín rò rỉ xuyên Bulk 11D (${activeCount} luồng) • Giải thích lực hấp dẫn cực yếu`, cx, ch - 56, '#6ee7b7', 'center', 10.5);
+        }
+
+        // --- 12D: MODE 1 F-THEORY (ELLIPTIC TORUS T² & D7-BRANE PINCH) | MODE 2 2T-PHYSICS (10+2 HOLOGRAPHIC DUALITY) ---
+        function render12D(t, cx, cy, scale) {
+            const p = state.params.d12;
+
+            if (p.mode === 'ftheory') {
+                // =================================================
+                // MODE 1: F-THEORY (Cumrun Vafa, 1996)
+                // Curved base grid with Elliptic Tori T² at grid nodes
+                // + Central D7-Brane Pinch Singularity radiating twisted field
+                // =================================================
+                const pinch = p.tauPinch;        // 0..1 pinch singularity strength
+                const phase = p.complexPhase;    // Complex phase Re(tau)
+                const gs = (0.35 + pinch * 2.15);
+
+                // 1. Curved Base Spatial Grid (10D Type IIB Base)
+                const bCols = 10, bRows = 8, halfW = 1.65, halfD = 1.15;
+                function basePos(u, v) {
+                    const x = u * halfW, z = v * halfD;
+                    const r = Math.hypot(x, z);
+                    const dip = -0.35 * Math.exp(-r * r * 1.1) * (0.4 + pinch * 0.9);
+                    const wave = Math.sin(u * 2.4 + t * 0.7) * Math.cos(v * 2.2) * 0.06;
+                    return { x, y: -0.38 + dip + wave, z };
+                }
+
+                const bGrid = [];
+                for (let i = 0; i <= bCols; i++) {
+                    const u = -1 + (i / bCols) * 2, col = [];
+                    for (let j = 0; j <= bRows; j++) {
+                        const bp = basePos(u, -1 + (j / bRows) * 2);
+                        col.push(project3D(bp.x, bp.y, bp.z, cx, cy, scale));
+                    }
+                    bGrid.push(col);
+                }
+                for (let i = 0; i < bCols; i++) {
+                    for (let j = 0; j < bRows; j++) {
+                        ctx.fillStyle = 'rgba(88, 28, 135, 0.12)';
+                        ctx.strokeStyle = 'rgba(129, 140, 248, 0.24)';
+                        ctx.lineWidth = 0.85;
+                        ctx.beginPath();
+                        ctx.moveTo(bGrid[i][j].x, bGrid[i][j].y);
+                        ctx.lineTo(bGrid[i+1][j].x, bGrid[i+1][j].y);
+                        ctx.lineTo(bGrid[i+1][j+1].x, bGrid[i+1][j+1].y);
+                        ctx.lineTo(bGrid[i][j+1].x, bGrid[i][j+1].y);
+                        ctx.closePath(); ctx.fill(); ctx.stroke();
+                    }
+                }
+
+                // Helper to draw an Elliptic Torus T² fiber (with pinch singularity for center D7-brane)
+                function drawFiberTorus(ox, oy, oz, R, rTube, uSegs, vSegs, pinchAmt, isHero) {
+                    const spin = t * (isHero ? 0.55 : 0.85) + phase;
+                    const rings = [];
+                    for (let i = 0; i <= uSegs; i++) {
+                        const u = (i / uSegs) * Math.PI * 2;
+                        // At u ≈ 0 (D7-Brane singularity), tube radius pinches toward 0!
+                        const pinchFactor = 1 - pinchAmt * 0.92 * Math.pow(0.5 + 0.5 * Math.cos(u), 4);
+                        const localRTube = Math.max(0.008, rTube * pinchFactor);
+                        const ring = [];
+                        for (let j = 0; j <= vSegs; j++) {
+                            const v = (j / vSegs) * Math.PI * 2 + u * phase * 0.4;
+                            const lx = (R + localRTube * Math.cos(v)) * Math.cos(u + spin);
+                            const lz = (R + localRTube * Math.cos(v)) * Math.sin(u + spin);
+                            const ly = localRTube * Math.sin(v) * (1 + 0.25 * Math.sin(phase));
+                            ring.push(project3D(ox + lx, oy + ly, oz + lz, cx, cy, scale));
+                        }
+                        rings.push(ring);
+                    }
+                    for (let i = 0; i < uSegs; i++) {
+                        for (let j = 0; j < vSegs; j++) {
+                            const q0 = rings[i][j], q1 = rings[i+1][j], q2 = rings[i+1][j+1], q3 = rings[i][j+1];
+                            ctx.fillStyle = isHero
+                                ? `rgba(236, 72, 153, ${0.12 + pinchAmt * 0.14})`
+                                : 'rgba(56, 189, 248, 0.09)';
+                            ctx.strokeStyle = isHero
+                                ? (i % 2 === 0 ? 'rgba(244, 114, 182, 0.72)' : 'rgba(56, 189, 248, 0.58)')
+                                : 'rgba(245, 158, 11, 0.42)';
+                            ctx.lineWidth = isHero ? 0.95 : 0.72;
+                            ctx.beginPath();
+                            ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); ctx.lineTo(q2.x, q2.y); ctx.lineTo(q3.x, q3.y);
+                            ctx.closePath(); ctx.fill(); ctx.stroke();
+                        }
+                    }
+
+                    // Pinch singularity glowing vortex point on Hero Torus
+                    if (isHero && pinchAmt > 0.15) {
+                        const px = ox + R * Math.cos(spin);
+                        const pz = oz + R * Math.sin(spin);
+                        const pp = project3D(px, oy, pz, cx, cy, scale);
+                        drawGlowPoint(pp.x, pp.y, 7 + pinchAmt * 8, '#f59e0b', '#ffffff');
+                        drawLabel('Điểm thắt cổ chai D7-Brane!', pp.x, pp.y - 24, '#fde68a', 'center', 10.5);
+                    }
+                }
+
+                // 2. Surrounding Elliptic Tori T² sitting on Base Grid Nodes
+                const nodeCoords = [[-1.15, -0.72], [1.15, -0.72], [-1.15, 0.72], [1.15, 0.72], [0, -0.82], [0, 0.82]];
+                nodeCoords.forEach(([nx, nz]) => {
+                    const bp = basePos(nx / halfW, nz / halfD);
+                    drawFiberTorus(bp.x, bp.y + 0.24, bp.z, 0.18, 0.07, 8, 6, pinch * 0.25, false);
+                });
+
+                // 3. Twisted Gauge Force Field radiating from Central D7-Brane Singularity
+                const centerBp = basePos(0, 0);
+                const heroY = centerBp.y + 0.52;
+                for (let arm = 0; arm < 5; arm++) {
+                    ctx.beginPath();
+                    for (let k = 0; k <= 26; k++) {
+                        const f = k / 26;
+                        const ang = arm * (Math.PI * 2 / 5) + f * (2.2 + pinch * 3.5) + t * 1.4 + phase;
+                        const rad = 0.08 + f * 1.35;
+                        const fy = centerBp.y + 0.08 + Math.sin(f * Math.PI) * 0.28 * pinch;
+                        const pr = project3D(Math.cos(ang) * rad, fy, Math.sin(ang) * rad, cx, cy, scale);
+                        if (k === 0) ctx.moveTo(pr.x, pr.y); else ctx.lineTo(pr.x, pr.y);
+                    }
+                    ctx.strokeStyle = `rgba(236, 72, 153, ${0.22 + pinch * 0.55})`;
+                    ctx.lineWidth = 1.4 + pinch * 1.2;
+                    ctx.stroke();
+                }
+
+                // 4. Hero Magnified Elliptic Torus T² (Dimensions 11 & 12) at D7-Brane
+                drawFiberTorus(0, heroY, 0, 0.54, 0.23, 18, 12, pinch, true);
+
+                // Vertical fiber stem linking Base to Hero Torus
+                const bCtr = project3D(0, centerBp.y, 0, cx, cy, scale);
+                const hCtr = project3D(0, heroY, 0, cx, cy, scale);
+                ctx.strokeStyle = 'rgba(245, 158, 11, 0.55)';
+                ctx.setLineDash([4, 4]); ctx.lineWidth = 1.6;
+                ctx.beginPath(); ctx.moveTo(bCtr.x, bCtr.y); ctx.lineTo(hCtr.x, hCtr.y); ctx.stroke();
+                ctx.setLineDash([]);
+                drawGlowPoint(bCtr.x, bCtr.y, 7, '#ec4899', '#ffffff');
+
+                drawLabel(`Thuyết F (12D): Phân thớ Xuyến Elliptic T² • Độ thắt D7-Brane: ${Math.round(pinch*100)}% • g_s ≈ ${gs.toFixed(2)}`, cx, ch - 56, '#f9a8d4', 'center', 11);
+                return;
+            }
+
+            // =================================================
+            // MODE 2: 2T-PHYSICS (Itzhak Bars | 10 Space + 2 Time)
+            // Glowing 2D Time Plane (t1, t2) + 12D Master Object casting
+            // 2 Holographic Light Beams onto 2 side-by-side 3+1D Reality Screens!
+            // =================================================
+            if (p.autoRotate2T) {
+                p.timeAngle = (p.timeAngle + 0.011) % (Math.PI * 2);
+            }
+            const theta = p.timeAngle;
+
+            const topY = Math.max(122, ch * 0.29);
+            const screenY = Math.min(ch - 128, ch * 0.69);
+            const screenW = Math.min(240, (cw - 56) / 2.25);
+            const screenH = Math.min(138, ch * 0.26);
+            const offsetX = Math.min(210, cw * 0.26);
+            const screenLeftX = cx - offsetX;
+            const screenRightX = cx + offsetX;
+
+            // 1. Glowing 2D Time Plane (t1, t2) Orbital Disk
+            const diskRx = Math.min(172, cw * 0.27);
+            const diskRy = diskRx * 0.34;
+            const dg = ctx.createRadialGradient(cx, topY, 8, cx, topY, diskRx);
+            dg.addColorStop(0, 'rgba(236, 72, 153, 0.28)');
+            dg.addColorStop(0.6, 'rgba(129, 140, 248, 0.14)');
+            dg.addColorStop(1, 'rgba(56, 189, 248, 0.02)');
+            ctx.fillStyle = dg;
+            ctx.beginPath(); ctx.ellipse(cx, topY, diskRx, diskRy, 0, 0, Math.PI * 2); ctx.fill();
+
+            for (let r = 0.35; r <= 1.01; r += 0.32) {
+                ctx.strokeStyle = 'rgba(236, 72, 153, 0.30)';
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.ellipse(cx, topY, diskRx * r, diskRy * r, 0, 0, Math.PI * 2); ctx.stroke();
+            }
+
+            // Orthogonal Time Axes t1 and t2
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.72)'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.moveTo(cx - diskRx * 1.08, topY); ctx.lineTo(cx + diskRx * 1.08, topY); ctx.stroke();
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.72)';
+            ctx.beginPath(); ctx.moveTo(cx, topY - diskRy * 1.18); ctx.lineTo(cx, topY + diskRy * 1.18); ctx.stroke();
+
+            // Active Time Projection Vector
+            const vx = cx + Math.cos(theta) * diskRx * 0.92;
+            const vy = topY + Math.sin(theta) * diskRy * 0.92;
+            ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2.6;
+            ctx.beginPath(); ctx.moveTo(cx, topY); ctx.lineTo(vx, vy); ctx.stroke();
+            drawGlowPoint(vx, vy, 6, '#f59e0b', '#ffffff');
+
+            drawLabel('Thời gian t₁', cx + diskRx + 4, topY, '#7dd3fc', 'left', 10);
+            drawLabel('Thời gian t₂', cx, topY - diskRy - 15, '#fde68a', 'center', 10);
+
+            // 2. Two Holographic Projection Beams onto Screen A & Screen B
+            const beams = [
+                { sx: screenLeftX, col: '#38bdf8', rgba: 'rgba(56, 189, 248, 0.14)' },
+                { sx: screenRightX, col: '#10b981', rgba: 'rgba(16, 185, 129, 0.14)' }
+            ];
+            beams.forEach(b => {
+                const cg = ctx.createLinearGradient(cx, topY, b.sx, screenY - screenH * 0.5);
+                cg.addColorStop(0, 'rgba(236, 72, 153, 0.30)');
+                cg.addColorStop(1, b.rgba);
+                ctx.fillStyle = cg;
+                ctx.beginPath();
+                ctx.moveTo(cx, topY + 6);
+                ctx.lineTo(b.sx - screenW * 0.46, screenY - screenH * 0.5);
+                ctx.lineTo(b.sx + screenW * 0.46, screenY - screenH * 0.5);
+                ctx.closePath(); ctx.fill();
+
+                ctx.strokeStyle = b.col; ctx.globalAlpha = 0.52; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.3;
+                ctx.beginPath(); ctx.moveTo(cx, topY + 6); ctx.lineTo(b.sx, screenY - screenH * 0.5); ctx.stroke();
+                ctx.setLineDash([]); ctx.globalAlpha = 1;
+            });
+
+            // 3. Central 12D Master Object moving smoothly in (t1, t2)
+            const masterR = Math.min(48, ch * 0.088);
+            const mPts = [];
+            for (let i = 0; i < 12; i++) {
+                const a = (i / 12) * Math.PI * 2 + theta + t * 0.45;
+                const b = Math.sin(i * 1.4 + theta * 2) * 0.65;
+                mPts.push({
+                    x: cx + Math.cos(a) * masterR * (0.78 + 0.22 * Math.cos(b)),
+                    y: topY + Math.sin(a) * masterR * 0.72 + Math.sin(b) * 14
+                });
+            }
+            for (let i = 0; i < 12; i++) {
+                const a = mPts[i], b = mPts[(i + 1) % 12], c = mPts[(i + 5) % 12];
+                ctx.strokeStyle = 'rgba(244, 114, 182, 0.80)'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.36)';
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(c.x, c.y); ctx.stroke();
+            }
+            drawGlowPoint(cx, topY, 10, '#ec4899', '#ffffff');
+            drawLabel('Vật thể 12D (10+2) duy nhất', cx, topY - masterR - 14, '#fbcfe8', 'center', 10.5);
+
+            // 4. SCREEN A (Left): 3+1D Kepler Planetary / Gravitational System
+            {
+                const left = screenLeftX - screenW * 0.5, top = screenY - screenH * 0.5;
+                ctx.fillStyle = 'rgba(6, 11, 26, 0.90)';
+                ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.8;
+                drawRoundRectPath(left, top, screenW, screenH, 12); ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#7dd3fc'; ctx.font = '700 10.5px Inter, sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText('MÀN HÌNH A (3+1D): QUỸ ĐẠO HÀNH TINH / HẤP DẪN', screenLeftX, top + 17);
+
+                const icx = screenLeftX, icy = top + screenH * 0.58;
+                const rx = screenW * 0.37;
+                const ry = screenH * (0.16 + 0.14 * Math.abs(Math.cos(theta)));
+                const eccShift = rx * 0.36 * Math.sin(theta);
+
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.58)'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.ellipse(icx, icy, rx, ry, Math.sin(theta) * 0.22, 0, Math.PI * 2); ctx.stroke();
+
+                // Star at ellipse focus
+                drawGlowPoint(icx - eccShift, icy, 6.2, '#f59e0b', '#ffffff');
+                // Orbiting planet synchronized with theta
+                const orbAng = t * 2.2 + theta;
+                const px = icx + Math.cos(orbAng) * rx;
+                const py = icy + Math.sin(orbAng) * ry;
+                drawGlowPoint(px, py, 4.5, '#38bdf8', '#ffffff');
+            }
+
+            // 5. SCREEN B (Right): 3+1D Harmonic Oscillator / Hydrogen Atom Wave
+            {
+                const left = screenRightX - screenW * 0.5, top = screenY - screenH * 0.5;
+                ctx.fillStyle = 'rgba(6, 11, 26, 0.90)';
+                ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.8;
+                drawRoundRectPath(left, top, screenW, screenH, 12); ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = '#6ee7b7'; ctx.font = '700 10.5px Inter, sans-serif'; ctx.textAlign = 'center';
+                ctx.fillText('MÀN HÌNH B (3+1D): SÓNG DAO ĐỘNG TỬ / NGUYÊN TỬ', screenRightX, top + 17);
+
+                const icx = screenRightX, icy = top + screenH * 0.58;
+                const rAtom = Math.min(screenW, screenH) * 0.27;
+
+                // Quantum standing wave across screen modulated by theta
+                ctx.beginPath();
+                const freq = 2 + Math.abs(Math.sin(theta)) * 3;
+                for (let s = -40; s <= 40; s++) {
+                    const wx = icx + (s / 40) * (screenW * 0.42);
+                    const env = Math.cos((s / 40) * Math.PI * 0.5);
+                    const wy = icy + Math.sin(s * 0.14 * freq + t * 3.4 + theta * 2) * 24 * env;
+                    if (s === -40) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
+                }
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.65)'; ctx.lineWidth = 2.0; ctx.stroke();
+
+                // Hydrogen Atom orbitals synchronized with theta
+                for (let k = 0; k < 3; k++) {
+                    ctx.strokeStyle = 'rgba(168, 85, 247, 0.52)'; ctx.lineWidth = 1.2;
+                    ctx.beginPath(); ctx.ellipse(icx, icy, rAtom, rAtom * 0.42, theta + k * (Math.PI / 3), 0, Math.PI * 2); ctx.stroke();
+                }
+                drawGlowPoint(icx, icy, 4.5, '#ec4899', '#ffffff');
+                const eAng = t * 3.5 + theta * 2;
+                const ex = Math.cos(eAng) * rAtom, ey = Math.sin(eAng) * rAtom * 0.42;
+                drawGlowPoint(
+                    icx + ex * Math.cos(theta) - ey * Math.sin(theta),
+                    icy + ex * Math.sin(theta) + ey * Math.cos(theta),
+                    3.8, '#34d399', '#ffffff'
+                );
+            }
+
+            drawLabel(
+                `Đối ngẫu 2T (10+2D) • Góc xoay θ(t₁,t₂) = ${Math.round((theta * 180) / Math.PI)}° • Hành tinh & Nguyên tử chỉ là 2 "Chiếc bóng" của cùng 1 Vật thể 12D!`,
+                cx, ch - 52, '#fde68a', 'center', 10.5
+            );
+        }
+
+        /* =========================================================
+           6. UI BUILDERS: DIMENSION RAIL, RIGHT PANEL & HUD
+           ========================================================= */
+        function buildDimensionRail() {
+            const rail = document.getElementById('dimensionRail');
+            rail.innerHTML = '';
+
+            DIMENSIONS.forEach(d => {
+                const btn = document.createElement('button');
+                btn.id = `dimBtn_${d.id}`;
+                btn.className = `dim-btn ${d.advanced ? 'dim-btn-advanced' : ''} px-2.5 sm:px-3 py-1.5 rounded-xl flex flex-col items-center min-w-[58px] sm:min-w-[74px] cursor-pointer`;
+                btn.innerHTML = `
+                    <div class="flex items-center gap-1">
+                        <span class="font-mono-tech text-xs sm:text-[13px] font-bold leading-tight">${d.code}</span>
+                        ${d.advanced ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_6px_#ec4899]"></span>' : ''}
+                    </div>
+                    <span class="text-[9.5px] opacity-85 truncate max-w-[72px] mt-0.5">${d.short}</span>
+                `;
+                btn.addEventListener('click', () => selectDimension(d.id, true));
+                rail.appendChild(btn);
+            });
+        }
+
+        function updateRailActive() {
+            DIMENSIONS.forEach(d => {
+                const btn = document.getElementById(`dimBtn_${d.id}`);
+                if (!btn) return;
+                if (d.id === state.currentDim) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function sliderHTML(id, label, min, max, step, val, display) {
+            return `
+                <div class="bg-slate-900/75 rounded-lg p-2.5 border border-slate-700/60 space-y-1.5">
+                    <div class="flex justify-between items-center text-xs gap-2">
+                        <span class="text-slate-200 font-medium">${label}</span>
+                        <span id="val_${id}" class="font-mono-tech text-sky-300 font-bold shrink-0">${display}</span>
+                    </div>
+                    <input type="range" id="slider_${id}" class="sci-slider" min="${min}" max="${max}" step="${step}" value="${val}">
+                </div>
+            `;
+        }
+
+        function buildRightPanel() {
+            const d = DIMENSIONS[state.currentDim];
+            // Header
+            document.getElementById('panelHeader').innerHTML = `
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono-tech font-bold border"
+                          style="color:${d.accent}; border-color:${d.accent}66; background:${d.accent}1f;">
+                        ${d.code} • ${d.tag}
+                    </span>
+                    <span class="text-[11px] font-mono-tech text-slate-400">Chữ ký: <strong class="text-amber-300">${d.signature}</strong> • ${d.id + 1}/13</span>
+                </div>
+                <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">${d.title}</h2>
+                <p class="text-xs text-sky-200/85 mt-1 font-medium">${d.subtitle}</p>
+            `;
+
+            buildInteractiveControls();
+
+            // 4 Scientific Cards
+            document.getElementById('scientificCardsBox').innerHTML = `
+                <div class="bg-slate-900/65 rounded-xl p-3.5 border border-slate-700/60 space-y-1.5 animate-fade">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-sky-300 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                        1. Cách thức hoạt động
+                    </h3>
+                    <p class="text-xs sm:text-[13px] text-slate-200 leading-relaxed">${d.howItWorks}</p>
+                </div>
+
+                <div class="bg-slate-900/65 rounded-xl p-3.5 border border-indigo-500/35 space-y-1.5 animate-fade">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                        2. Ảnh hưởng & Tác động vật lý
+                    </h3>
+                    <p class="text-xs sm:text-[13px] text-slate-200 leading-relaxed">${d.impact}</p>
+                </div>
+
+                <div class="bg-slate-900/65 rounded-xl p-3.5 border border-amber-500/35 space-y-1.5 animate-fade">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        3. Ví dụ tương tự dễ hiểu
+                    </h3>
+                    <p class="text-xs sm:text-[13px] text-slate-200 leading-relaxed italic">"${d.analogy}"</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-emerald-950/55 to-sky-950/55 rounded-xl p-3.5 border border-emerald-400/35 space-y-1.5 animate-fade">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        4. Thử nghiệm tương tác
+                    </h3>
+                    <p class="text-xs sm:text-[13px] text-emerald-50/90 leading-relaxed">${d.experiment}</p>
+                </div>
+            `;
+        }
+
+        function buildInteractiveControls() {
+            const dim = state.currentDim;
+            const d = DIMENSIONS[dim];
+            const box = document.getElementById('interactiveControlsBox');
+            let html = `
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style="color:${d.accent}">
+                        <span class="w-2 h-2 rounded-full" style="background:${d.accent}"></span>
+                        Điều khiển Thời gian thực (${d.code})
+                    </span>
+                    <span class="font-mono-tech text-[10px] text-slate-400">Live Canvas</span>
+                </div>
+            `;
+
+            if (dim === 0) {
+                const p = state.params.d0;
+                html += sliderHTML('d0_zoom', 'Độ phóng đại xuống Thang Planck', 0, 35, 1, p.zoomPower, `10^${p.zoomPower}×`);
+                html += `<button id="act_d0_pulse" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">Phát xung năng lượng lượng tử</button>`;
+            } else if (dim === 1) {
+                const p = state.params.d1;
+                html += sliderHTML('d1_pos', 'Vị trí người quan sát (Trục X)', -1.55, 0.14, 0.02, p.observerX, `X = ${p.observerX.toFixed(2)}`);
+                html += `<div class="grid grid-cols-2 gap-2">
+                    <button id="act_d1_vis" class="${p.vision1D ? 'sci-btn-amber' : 'sci-btn'} py-2 rounded-xl text-xs font-bold">Tầm nhìn 1D: ${p.vision1D ? 'BẬT' : 'TẮT'}</button>
+                    <button id="act_d1_bump" class="sci-btn-magenta py-2 rounded-xl text-xs font-bold">Thử vượt vật cản</button>
+                </div>`;
+            } else if (dim === 2) {
+                const p = state.params.d2;
+                html += sliderHTML('d2_lift', 'Góc nâng camera 3D (2D → 3D)', 0.04, 1.15, 0.02, state.cam.targetPitch, `${Math.round(state.cam.targetPitch * 57.3)}°`);
+                html += sliderHTML('d2_fx', 'Tọa độ X Flatlander', -1.35, -0.02, 0.02, p.flatX, `X = ${p.flatX.toFixed(2)}`);
+                html += `<button id="act_d2_extract" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">
+                    ${p.extracted ? 'Đặt lại vật vào phòng kín 2D' : 'Nhấc vật ra khỏi phòng kín (qua trục Z!)'}
+                </button>`;
+            } else if (dim === 3) {
+                const p = state.params.d3;
+                html += sliderHTML('d3_fold', 'Độ gấp không gian 3D (Tạo Lỗ Sâu Đục)', 0, 1, 0.01, p.fold, `${Math.round(p.fold * 100)}%`);
+                html += `<button id="act_d3_ant" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">Cho kiến 2D di chuyển A → B</button>`;
+            } else if (dim === 4) {
+                const p = state.params.d4;
+                html += `<div class="grid grid-cols-2 gap-2">
+                    <button id="act_d4_tess" class="${p.mode === 'tesseract' ? 'sci-btn-amber' : 'sci-btn'} py-2 rounded-xl text-xs font-bold">Siêu khối Tesseract</button>
+                    <button id="act_d4_wl" class="${p.mode === 'worldline' ? 'sci-btn-amber' : 'sci-btn'} py-2 rounded-xl text-xs font-bold">Con rắn Thời gian</button>
+                </div>`;
+                if (p.mode === 'tesseract') {
+                    html += sliderHTML('d4_speedW', 'Tốc độ xoay W', 0, 2.5, 0.1, p.rotSpeedW, `${p.rotSpeedW.toFixed(1)}×`);
+                    html += sliderHTML('d4_angXW', 'Góc xoay XW', 0, 6.28, 0.03, p.angleXW, `${Math.round((p.angleXW * 180) / Math.PI)}°`);
+                } else {
+                    html += sliderHTML('d4_timeT', 'Trượt dòng thời gian t', 0, 1, 0.01, p.timeT, `t = ${Math.round(p.timeT * 100)}%`);
+                    html += `<button id="act_d4_play" class="sci-btn w-full py-2 rounded-xl text-xs font-bold">${p.playTime ? 'Tạm dừng dòng thời gian' : 'Chạy tiếp dòng thời gian'}</button>`;
+                }
+            } else if (dim === 5) {
+                const p = state.params.d5;
+                html += sliderHTML('d5_div', 'Độ phân kỳ lượng tử', 0.4, 1.5, 0.05, p.divergence, `${Math.round(p.divergence * 100)}%`);
+                html += sliderHTML('d5_sel', 'Nhánh đang chọn', 0, Math.max(0, p.branches.length - 1), 1, p.selectedBranch, `Nhánh ψ${p.selectedBranch + 1}`);
+                html += `<button id="act_d5_add" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">+ Tạo nhánh quyết định mới</button>`;
+            } else if (dim === 6) {
+                const p = state.params.d6;
+                html += sliderHTML('d6_fold', 'Độ gấp 6D (Phase Jump)', 0, 1, 0.01, p.fold, `${Math.round(p.fold * 100)}%`);
+                html += `<button id="act_d6_jump" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">Kích hoạt Nhảy Pha A → B</button>`;
+            } else if (dim === 7) {
+                const p = state.params.d7;
+                html += sliderHTML('d7_grav', 'Hằng số Hấp dẫn (G)', 0.1, 2.6, 0.05, p.gravity, `${p.gravity.toFixed(2)} G₀`);
+                html += sliderHTML('d7_em', 'Tốc độ Ánh sáng / Lực Điện từ (c / α)', 0.35, 2.2, 0.05, p.emLight, `${p.emLight.toFixed(2)} c₀`);
+                html += `<button id="act_d7_preset" class="sci-btn w-full py-2 rounded-xl text-xs font-bold">Chuyển nhanh Vũ trụ mẫu (Ổn định / Tan rã / Hố đen)</button>`;
+            } else if (dim === 8) {
+                const p = state.params.d8;
+                const sel = p.universes[p.selectedUniverse];
+                html += `<div class="bg-slate-900/80 rounded-lg p-3 border border-pink-500/35 space-y-1 text-xs">
+                    <div class="font-bold" style="color:${sel.color}">${sel.name}</div>
+                    <div class="font-mono-tech text-[11px] text-amber-200">Số chiều: ${sel.dims} • Hạt nhân: ${sel.nuclear}</div>
+                    <div class="text-[11px] text-emerald-300 font-semibold">Khả năng sự sống: ${sel.life}</div>
+                    <p class="text-[11.5px] text-slate-300 leading-relaxed pt-0.5">${sel.desc}</p>
+                </div>`;
+                html += `<button id="act_d8_next" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">Chuyển bong bóng vũ trụ kế tiếp →</button>`;
+            } else if (dim === 9) {
+                const p = state.params.d9;
+                html += sliderHTML('d9_fold', 'Độ uốn cong Siêu không gian 9D', 0, 1, 0.01, p.fold, `${Math.round(p.fold * 100)}%`);
+                html += `<button id="act_d9_bridge" class="sci-btn-amber w-full py-2 rounded-xl text-xs font-bold">
+                    ${p.fold > 0.85 ? 'Trải phẳng mạng 8D' : 'Mở Cầu Siêu Không Gian 9D'}
+                </button>`;
+            } else if (dim === 10) {
+                const p = state.params.d10;
+                html += `<div class="grid grid-cols-2 gap-2">
+                    <button id="act_d10_cy" class="${p.mode === 'calabi' ? 'sci-btn-amber' : 'sci-btn'} py-2 rounded-xl text-xs font-bold">Đa tạp Calabi-Yau</button>
+                    <button id="act_d10_om" class="${p.mode === 'omniverse' ? 'sci-btn-amber' : 'sci-btn'} py-2 rounded-xl text-xs font-bold">Điểm Tối Thượng</button>
+                </div>`;
+                if (p.mode === 'calabi') {
+                    const info = HARMONIC_PARTICLES[Math.round(p.harmonic) - 1];
+                    html += sliderHTML('d10_harm', 'Tần số dao động dây (Họa âm)', 1, 5, 1, p.harmonic, `n = ${p.harmonic} • ${info.name.split(' ')[0]}`);
+                    html += `<div class="bg-slate-900/80 rounded-lg p-2.5 border border-amber-400/35 text-xs flex items-center justify-between">
+                        <div>
+                            <div class="text-[10.5px] text-slate-400">Hạt cơ bản tương ứng:</div>
+                            <div class="font-bold text-sm" style="color:${info.color}">${info.name}</div>
+                        </div>
+                        <span class="font-mono-tech text-[10.5px] text-slate-300 bg-slate-800 px-2 py-1 rounded">${info.spin}</span>
+                    </div>`;
+                } else {
+                    html += sliderHTML('d10_conv', 'Độ hội tụ Điểm Tối Thượng 10D', 0, 1, 0.02, p.convergence, `${Math.round(p.convergence * 100)}%`);
+                }
+            } else if (dim === 11) {
+                const p = state.params.d11;
+                html += sliderHTML('d11_r11', 'Bán kính chiều 11 (R₁₁: Dây 1D → Màng M2)', 0, 1, 0.02, p.r11, `R₁₁ = ${p.r11.toFixed(2)}`);
+                html += sliderHTML('d11_bulk', 'Khoảng cách Bulk giữa 2 Màng', 0.55, 1.85, 0.05, p.bulkDist, `${p.bulkDist.toFixed(2)} ℓ_B`);
+                html += `<button id="act_d11_ekp" class="sci-btn-magenta w-full py-2.5 rounded-xl text-xs font-bold shadow-[0_0_16px_rgba(236,72,153,0.35)]">
+                    ⚡ Kích hoạt Va chạm Brane (Ekpyrotic Big Bang)
+                </button>`;
+            } else if (dim === 12) {
+                const p = state.params.d12;
+                html += `<div class="grid grid-cols-2 gap-2">
+                    <button id="act_d12_f" class="${p.mode === 'ftheory' ? 'sci-btn-magenta' : 'sci-btn'} py-2 px-2 rounded-xl text-xs font-bold">1: Thuyết F (Xuyến T²)</button>
+                    <button id="act_d12_2t" class="${p.mode === 'twotime' ? 'sci-btn-magenta' : 'sci-btn'} py-2 px-2 rounded-xl text-xs font-bold">2: Vật lý 2T (10+2D)</button>
+                </div>`;
+                if (p.mode === 'ftheory') {
+                    html += sliderHTML('d12_pinch', 'Tham số Khớp nối τ (Độ thắt xuyến D7-Brane)', 0, 1, 0.02, p.tauPinch, `${Math.round(p.tauPinch * 100)}%`);
+                    html += sliderHTML('d12_phase', 'Góc pha phức Axio-Dilaton', 0, 6.28, 0.05, p.complexPhase, `${Math.round((p.complexPhase * 180) / Math.PI)}°`);
+                } else {
+                    html += sliderHTML('d12_theta', 'Góc xoay Mặt phẳng Thời gian θ(t₁, t₂)', 0, 6.28, 0.03, p.timeAngle, `${Math.round((p.timeAngle * 180) / Math.PI)}°`);
+                    html += `<button id="act_d12_rot" class="sci-btn w-full py-2 rounded-xl text-xs font-bold">
+                        ${p.autoRotate2T ? 'Tạm dừng xoay Mặt phẳng Thời gian' : 'Bật xoay tự động Mặt phẳng Thời gian'}
+                    </button>`;
+                }
+            }
+
+            box.innerHTML = html;
+            bindControlEvents();
+        }
+
+        function bindControlEvents() {
+            const onSlider = (id, fn) => {
+                const el = document.getElementById(`slider_${id}`);
+                if (el) el.addEventListener('input', e => {
+                    state.statusText = 'Đang điều chỉnh';
+                    fn(parseFloat(e.target.value), document.getElementById(`val_${id}`));
+                });
+            };
+            const onClick = (id, fn) => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('click', fn);
+            };
+
+            // 0D
+            onSlider('d0_zoom', (v, l) => { state.params.d0.zoomPower = v; l.textContent = `10^${v}×`; });
+            onClick('act_d0_pulse', () => { state.params.d0.pulse = 1; showToast('Phát xung năng lượng lượng tử từ điểm 0D!'); });
+
+            // 1D
+            onSlider('d1_pos', (v, l) => { state.params.d1.observerX = v; l.textContent = `X = ${v.toFixed(2)}`; });
+            onClick('act_d1_vis', () => { state.params.d1.vision1D = !state.params.d1.vision1D; buildInteractiveControls(); });
+            onClick('act_d1_bump', () => { state.params.d1.observerX = 0.14; state.params.d1.bump = 1; showToast('Không thể đi vòng qua! Thiếu chiều thứ 2 và thứ 3.'); });
+
+            // 2D
+            onSlider('d2_lift', (v, l) => { state.cam.targetPitch = v; l.textContent = `${Math.round(v * 57.3)}°`; });
+            onSlider('d2_fx', (v, l) => { state.params.d2.flatX = v; l.textContent = `X = ${v.toFixed(2)}`; });
+            onClick('act_d2_extract', () => {
+                state.params.d2.extracted = !state.params.d2.extracted;
+                if (state.cam.targetPitch < 0.55) state.cam.targetPitch = 0.78;
+                buildInteractiveControls();
+                showToast(state.params.d2.extracted ? 'Đã nhấc vật ra ngoài qua trục Z mà không phá tường 2D!' : 'Đã đặt vật trở lại bên trong phòng kín.');
+            });
+
+            // 3D
+            onSlider('d3_fold', (v, l) => { state.params.d3.fold = v; l.textContent = `${Math.round(v * 100)}%`; });
+            onClick('act_d3_ant', () => {
+                state.params.d3.antProgress = 0; state.params.d3.antMoving = true;
+                showToast(state.params.d3.fold > 0.84 ? 'Kiến 2D dịch chuyển tức thời xuyên Lỗ Sâu Đục 3D!' : 'Lưới chưa gấp sát — Kiến phải bò đường dài dọc mặt phẳng 2D.');
+            });
+
+            // 4D
+            onClick('act_d4_tess', () => { state.params.d4.mode = 'tesseract'; buildInteractiveControls(); });
+            onClick('act_d4_wl', () => { state.params.d4.mode = 'worldline'; buildInteractiveControls(); });
+            onSlider('d4_speedW', (v, l) => { state.params.d4.autoW = v > 0; state.params.d4.rotSpeedW = v; l.textContent = `${v.toFixed(1)}×`; });
+            onSlider('d4_angXW', (v, l) => { state.params.d4.autoW = false; state.params.d4.angleXW = v; l.textContent = `${Math.round((v * 180) / Math.PI)}°`; });
+            onSlider('d4_timeT', (v, l) => { state.params.d4.playTime = false; state.params.d4.timeT = v; l.textContent = `t = ${Math.round(v * 100)}%`; });
+            onClick('act_d4_play', () => { state.params.d4.playTime = !state.params.d4.playTime; buildInteractiveControls(); });
+
+            // 5D
+            onSlider('d5_div', (v, l) => { state.params.d5.divergence = v; l.textContent = `${Math.round(v * 100)}%`; });
+            onSlider('d5_sel', (v, l) => { state.params.d5.selectedBranch = Math.round(v); l.textContent = `Nhánh ψ${Math.round(v) + 1}`; });
+            onClick('act_d5_add', () => addD5Branch());
+
+            // 6D
+            onSlider('d6_fold', (v, l) => { state.params.d6.fold = v; l.textContent = `${Math.round(v * 100)}%`; });
+            onClick('act_d6_jump', () => {
+                if (state.params.d6.fold < 0.85) { state.params.d6.fold = 1; buildInteractiveControls(); }
+                state.params.d6.jumpAnim = 0;
+                showToast('Thực hiện Nhảy Pha 6D từ Nhánh A sang Nhánh B!');
+            });
+
+            // 7D
+            onSlider('d7_grav', (v, l) => { state.params.d7.gravity = v; l.textContent = `${v.toFixed(2)} G₀`; });
+            onSlider('d7_em', (v, l) => { state.params.d7.emLight = v; l.textContent = `${v.toFixed(2)} c₀`; });
+            onClick('act_d7_preset', () => {
+                const list = [
+                    { n: 'Vũ trụ Chuẩn (Quỹ đạo ổn định)', g: 1.0, c: 1.0 },
+                    { n: 'Hấp dẫn yếu (Hành tinh văng tán loạn)', g: 0.16, c: 0.90 },
+                    { n: 'Hấp dẫn cực mạnh (Sụp đổ thành Hố Đen)', g: 2.35, c: 1.45 }
+                ];
+                state.params.d7.presetIdx = (state.params.d7.presetIdx + 1) % list.length;
+                const it = list[state.params.d7.presetIdx];
+                state.params.d7.gravity = it.g; state.params.d7.emLight = it.c;
+                buildInteractiveControls(); showToast(it.n);
+            });
+
+            // 8D
+            onClick('act_d8_next', () => {
+                state.params.d8.selectedUniverse = (state.params.d8.selectedUniverse + 1) % state.params.d8.universes.length;
+                buildInteractiveControls();
+            });
+
+            // 9D
+            onSlider('d9_fold', (v, l) => { state.params.d9.fold = v; l.textContent = `${Math.round(v * 100)}%`; });
+            onClick('act_d9_bridge', () => {
+                state.params.d9.fold = state.params.d9.fold > 0.85 ? 0 : 1;
+                buildInteractiveControls();
+                showToast(state.params.d9.fold > 0.85 ? 'Đã mở Cầu Siêu Không Gian 9D!' : 'Đã trải phẳng mạng Đa vũ trụ 8D.');
+            });
+
+            // 10D
+            onClick('act_d10_cy', () => { state.params.d10.mode = 'calabi'; buildInteractiveControls(); });
+            onClick('act_d10_om', () => { state.params.d10.mode = 'omniverse'; buildInteractiveControls(); });
+            onSlider('d10_harm', (v) => { state.params.d10.harmonic = Math.round(v); buildInteractiveControls(); });
+            onSlider('d10_conv', (v, l) => { state.params.d10.convergence = v; l.textContent = `${Math.round(v * 100)}%`; });
+
+            // 11D (M-Theory)
+            onSlider('d11_r11', (v, l) => { state.params.d11.r11 = v; l.textContent = `R₁₁ = ${v.toFixed(2)}`; });
+            onSlider('d11_bulk', (v, l) => { state.params.d11.bulkDist = v; l.textContent = `${v.toFixed(2)} ℓ_B`; });
+            onClick('act_d11_ekp', () => {
+                state.params.d11.collisionPhase = 0;
+                state.params.d11.shockwaves = [];
+                showToast('⚡ Hai Siêu Màng đang lao vào nhau — Ekpyrotic Big Bang!');
+            });
+
+            // 12D (F-Theory & 2T-Physics)
+            onClick('act_d12_f', () => { state.params.d12.mode = 'ftheory'; buildInteractiveControls(); updateHUD(); });
+            onClick('act_d12_2t', () => { state.params.d12.mode = 'twotime'; buildInteractiveControls(); updateHUD(); });
+            onSlider('d12_pinch', (v, l) => { state.params.d12.tauPinch = v; l.textContent = `${Math.round(v * 100)}%`; });
+            onSlider('d12_phase', (v, l) => { state.params.d12.complexPhase = v; l.textContent = `${Math.round((v * 180) / Math.PI)}°`; });
+            onSlider('d12_theta', (v, l) => { state.params.d12.autoRotate2T = false; state.params.d12.timeAngle = v; l.textContent = `${Math.round((v * 180) / Math.PI)}°`; });
+            onClick('act_d12_rot', () => { state.params.d12.autoRotate2T = !state.params.d12.autoRotate2T; buildInteractiveControls(); });
+        }
+
+        function updateHUD() {
+            const d = DIMENSIONS[state.currentDim];
+            document.getElementById('hudDimCode').textContent = d.code;
+            document.getElementById('hudDimName').textContent = d.short;
+            document.getElementById('hudFormula').textContent = d.formula;
+            document.getElementById('hudHint').textContent = d.hint;
+            document.getElementById('hudSignature').textContent = d.signature;
+            document.getElementById('hudStatus').textContent = state.autoTour ? 'Auto Tour' : state.statusText;
+
+            const p = state.params;
+            const tele = {
+                0: `Phóng đại: 10^${p.d0.zoomPower}× • Đường kính: 0 m`,
+                1: `Người quan sát: X=${p.d1.observerX.toFixed(2)} • Tầm nhìn 1D: ${p.d1.vision1D ? 'BẬT' : 'TẮT'}`,
+                2: `Góc nâng 3D: ${Math.round(state.cam.pitch * 57.3)}° • Flatlander X=${p.d2.flatX.toFixed(2)}`,
+                3: `Độ gấp 3D: ${Math.round(p.d3.fold * 100)}% • Lỗ sâu đục: ${p.d3.fold > 0.80 ? 'MỞ' : 'ĐÓNG'}`,
+                4: p.d4.mode === 'tesseract' ? `Tesseract XW=${Math.round((p.d4.angleXW*180)/Math.PI)}° • 16 Đỉnh / 32 Cạnh` : `Worldline t=${Math.round(p.d4.timeT*100)}%`,
+                5: `Nhánh ψ${p.d5.selectedBranch + 1}/${p.d5.branches.length} • Phân kỳ: ${Math.round(p.d5.divergence * 100)}%`,
+                6: `Độ gấp 6D (Phase Jump): ${Math.round(p.d6.fold * 100)}%`,
+                7: `G = ${p.d7.gravity.toFixed(2)} G₀ • c/α = ${p.d7.emLight.toFixed(2)} c₀`,
+                8: `Đang xem: ${p.d8.universes[p.d8.selectedUniverse].name}`,
+                9: `Độ uốn cong Siêu không gian 9D: ${Math.round(p.d9.fold * 100)}%`,
+                10: p.d10.mode === 'calabi' ? `Calabi-Yau 6D • Dây Mode n=${p.d10.harmonic}` : `Điểm Tối Thượng 10D (${Math.round(p.d10.convergence*100)}%)`,
+                11: `Thuyết M • R₁₁=${p.d11.r11.toFixed(2)} • Bulk=${p.d11.bulkDist.toFixed(2)} ℓ_B`,
+                12: p.d12.mode === 'ftheory'
+                    ? `Thuyết F • Độ thắt D7-Brane: ${Math.round(p.d12.tauPinch*100)}%`
+                    : `Vật lý 2T (10+2) • θ(t₁,t₂) = ${Math.round((p.d12.timeAngle*180)/Math.PI)}°`
+            };
+            document.getElementById('hudTelemetry').textContent = tele[state.currentDim];
+        }
+
+        function setCameraPreset(dim) {
+            const presets = {
+                0:  { yaw: 0,    pitch: 0,    zoom: 1.0 },
+                1:  { yaw: 0.10, pitch: 0.16, zoom: 1.0 },
+                2:  { yaw: 0.34, pitch: 0.68, zoom: 1.04 },
+                3:  { yaw: 0.52, pitch: 0.44, zoom: 1.04 },
+                4:  { yaw: 0.48, pitch: 0.32, zoom: 1.05 },
+                5:  { yaw: 0.28, pitch: 0.24, zoom: 1.0 },
+                6:  { yaw: 0.64, pitch: 0.48, zoom: 1.0 },
+                7:  { yaw: 0.28, pitch: 0.24, zoom: 1.0 },
+                8:  { yaw: 0.36, pitch: 0.30, zoom: 1.0 },
+                9:  { yaw: 0.52, pitch: 0.44, zoom: 1.0 },
+                10: { yaw: 0.45, pitch: 0.34, zoom: 1.08 },
+                11: { yaw: 0.40, pitch: 0.36, zoom: 1.04 },
+                12: { yaw: 0.38, pitch: 0.36, zoom: 1.04 }
+            };
+            const pr = presets[dim] || { yaw: 0.4, pitch: 0.3, zoom: 1 };
+            state.cam.targetYaw = pr.yaw;
+            state.cam.targetPitch = pr.pitch;
+            state.cam.targetZoom = pr.zoom;
+        }
+
+        function selectDimension(dimId, manual = false) {
+            state.currentDim = Math.max(0, Math.min(12, dimId));
+            if (manual && state.autoTour) state.tourTimer = 0;
+            state.statusText = 'Sẵn sàng';
+            setCameraPreset(state.currentDim);
+            updateRailActive();
+            buildRightPanel();
+            updateHUD();
+        }
+
+        function resetCurrentView() {
+            setCameraPreset(state.currentDim);
+            const p = state.params;
+            if (state.currentDim === 2) { p.d2.extracted = false; }
+            if (state.currentDim === 3) { p.d3.fold = 0; p.d3.antProgress = 0; p.d3.antMoving = false; }
+            if (state.currentDim === 6) { p.d6.fold = 0; }
+            if (state.currentDim === 7) { p.d7.gravity = 1; p.d7.emLight = 1; initD7Particles(); }
+            if (state.currentDim === 9) { p.d9.fold = 0; }
+            if (state.currentDim === 11) { p.d11.r11 = 0.25; p.d11.bulkDist = 1.15; p.d11.collisionPhase = -1; }
+            if (state.currentDim === 12) { p.d12.tauPinch = 0.45; p.d12.complexPhase = 0.4; p.d12.timeAngle = 0.55; }
+            buildInteractiveControls();
+            showToast('Đã đặt lại góc nhìn & thông số mặc định.');
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const el = document.getElementById('canvasToast');
+            el.textContent = msg;
+            el.style.opacity = '1';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 2800);
+        }
+
+        function toggleAutoTour(force) {
+            state.autoTour = typeof force === 'boolean' ? force : !state.autoTour;
+            state.tourTimer = 0;
+            const wrap = document.getElementById('tourProgressWrap');
+            const dot = document.getElementById('autoTourDot');
+            const lbl = document.getElementById('autoTourLabel');
+            if (state.autoTour) {
+                wrap.classList.remove('hidden');
+                dot.classList.add('pulse-dot', 'bg-emerald-400');
+                dot.classList.remove('bg-amber-300');
+                lbl.textContent = 'Đang trình chiếu (0D→12D)...';
+                showToast('Bắt đầu Tự động trình chiếu toàn hành trình 0D → 12D!');
+            } else {
+                wrap.classList.add('hidden');
+                dot.classList.remove('pulse-dot', 'bg-emerald-400');
+                dot.classList.add('bg-amber-300');
+                lbl.textContent = 'Tự động trình chiếu';
+            }
+        }
+
+        function toggleCompareModal(open) {
+            const modal = document.getElementById('compareModal');
+            modal.classList.toggle('hidden', !open);
+        }
+
+        /* =========================================================
+           7. POINTER, TOUCH, WHEEL & KEYBOARD INTERACTIONS
+           ========================================================= */
+        function handleCanvasTap(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const x = clientX - rect.left, y = clientY - rect.top;
+
+            for (let i = 0; i < state.hitTargets.length; i++) {
+                const ht = state.hitTargets[i];
+                if (Math.hypot(x - ht.x, y - ht.y) <= ht.r) {
+                    if (ht.type === 'd5branch') {
+                        state.params.d5.selectedBranch = ht.id;
+                        buildInteractiveControls();
+                        showToast(`Đã chọn ${state.params.d5.branches[ht.id].outcome.name}`);
+                        return;
+                    } else if (ht.type === 'd8uni') {
+                        state.params.d8.selectedUniverse = ht.id;
+                        buildInteractiveControls();
+                        showToast(`Đang xem: ${state.params.d8.universes[ht.id].name}`);
+                        return;
+                    }
+                }
+            }
+
+            if (state.currentDim === 5) {
+                const relY = -((y - ch * 0.46) / (ch * 0.4));
+                addD5Branch(Math.max(-1.2, Math.min(1.2, relY)));
+            }
+        }
+
+        function initInteractions() {
+            // Mouse Drag / Click
+            wrapper.addEventListener('mousedown', e => {
+                if (e.target !== canvas) return;
+                state.pointer.dragging = true;
+                state.pointer.lastX = state.pointer.downX = e.clientX;
+                state.pointer.lastY = state.pointer.downY = e.clientY;
+                state.statusText = 'Đang xoay 3D';
+            });
+            window.addEventListener('mousemove', e => {
+                if (!state.pointer.dragging) return;
+                const dx = e.clientX - state.pointer.lastX, dy = e.clientY - state.pointer.lastY;
+                state.pointer.lastX = e.clientX; state.pointer.lastY = e.clientY;
+                state.cam.targetYaw += dx * 0.008;
+                state.cam.targetPitch = Math.max(-1.35, Math.min(1.35, state.cam.targetPitch + dy * 0.008));
+            });
+            window.addEventListener('mouseup', e => {
+                if (!state.pointer.dragging) return;
+                state.pointer.dragging = false;
+                state.statusText = 'Sẵn sàng';
+                if (Math.hypot(e.clientX - state.pointer.downX, e.clientY - state.pointer.downY) < 6) {
+                    handleCanvasTap(e.clientX, e.clientY);
+                }
+            });
+
+            // Wheel Zoom
+            wrapper.addEventListener('wheel', e => {
+                e.preventDefault();
+                state.cam.targetZoom = Math.max(0.55, Math.min(2.4, state.cam.targetZoom * (e.deltaY > 0 ? 0.92 : 1.08)));
+            }, { passive: false });
+
+            // Touch Drag & Pinch Zoom
+            wrapper.addEventListener('touchstart', e => {
+                if (e.target !== canvas) return;
+                if (e.touches.length === 1) {
+                    state.pointer.dragging = true;
+                    state.pointer.lastX = state.pointer.downX = e.touches[0].clientX;
+                    state.pointer.lastY = state.pointer.downY = e.touches[0].clientY;
+                    state.statusText = 'Đang xoay 3D';
+                } else if (e.touches.length === 2) {
+                    state.pointer.dragging = false;
+                    state.pointer.pinchDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            }, { passive: true });
+
+            wrapper.addEventListener('touchmove', e => {
+                if (e.target !== canvas) return;
+                e.preventDefault();
+                if (e.touches.length === 1 && state.pointer.dragging) {
+                    const dx = e.touches[0].clientX - state.pointer.lastX;
+                    const dy = e.touches[0].clientY - state.pointer.lastY;
+                    state.pointer.lastX = e.touches[0].clientX;
+                    state.pointer.lastY = e.touches[0].clientY;
+                    state.cam.targetYaw += dx * 0.009;
+                    state.cam.targetPitch = Math.max(-1.35, Math.min(1.35, state.cam.targetPitch + dy * 0.009));
+                } else if (e.touches.length === 2) {
+                    const d = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    if (state.pointer.pinchDist > 0) {
+                        state.cam.targetZoom = Math.max(0.55, Math.min(2.4, state.cam.targetZoom * (d / state.pointer.pinchDist)));
+                    }
+                    state.pointer.pinchDist = d;
+                }
+            }, { passive: false });
+
+            wrapper.addEventListener('touchend', e => {
+                if (e.changedTouches.length === 1 && state.pointer.dragging) {
+                    const tEnd = e.changedTouches[0];
+                    if (Math.hypot(tEnd.clientX - state.pointer.downX, tEnd.clientY - state.pointer.downY) < 10) {
+                        handleCanvasTap(tEnd.clientX, tEnd.clientY);
+                    }
+                }
+                state.pointer.dragging = false;
+                state.pointer.pinchDist = 0;
+                state.statusText = 'Sẵn sàng';
+            });
+
+            // Header & Canvas Buttons
+            document.getElementById('btnAutoTour').addEventListener('click', () => toggleAutoTour());
+            document.getElementById('btnHeaderReset').addEventListener('click', resetCurrentView);
+            document.getElementById('btnCanvasReset').addEventListener('click', resetCurrentView);
+            document.getElementById('btnPrevDim').addEventListener('click', () => selectDimension((state.currentDim + 12) % 13, true));
+            document.getElementById('btnNextDim').addEventListener('click', () => selectDimension((state.currentDim + 1) % 13, true));
+            document.getElementById('btnZoomIn').addEventListener('click', () => { state.cam.targetZoom = Math.min(2.4, state.cam.targetZoom * 1.15); });
+            document.getElementById('btnZoomOut').addEventListener('click', () => { state.cam.targetZoom = Math.max(0.55, state.cam.targetZoom * 0.86); });
+
+            // Compare Modal Events
+            document.getElementById('btnOpenCompare').addEventListener('click', () => toggleCompareModal(true));
+            document.getElementById('btnCloseCompare').addEventListener('click', () => toggleCompareModal(false));
+            document.getElementById('compareModal').addEventListener('click', e => {
+                if (e.target.id === 'compareModal') toggleCompareModal(false);
+            });
+            document.getElementById('modalJump10D').addEventListener('click', () => { toggleCompareModal(false); selectDimension(10, true); });
+            document.getElementById('modalJump11D').addEventListener('click', () => { toggleCompareModal(false); selectDimension(11, true); });
+            document.getElementById('modalJump12DF').addEventListener('click', () => { toggleCompareModal(false); state.params.d12.mode = 'ftheory'; selectDimension(12, true); });
+            document.getElementById('modalJump12D2T').addEventListener('click', () => { toggleCompareModal(false); state.params.d12.mode = 'twotime'; selectDimension(12, true); });
+
+            // Keyboard Shortcuts (Arrows, Space, Escape)
+            window.addEventListener('keydown', e => {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                if (e.key === 'Escape') { toggleCompareModal(false); return; }
+                if (e.key === 'ArrowRight') { e.preventDefault(); selectDimension((state.currentDim + 1) % 13, true); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); selectDimension((state.currentDim + 12) % 13, true); }
+                else if (e.code === 'Space') { e.preventDefault(); toggleAutoTour(); }
+            });
+
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        /* =========================================================
+           8. MAIN 60FPS ANIMATION LOOP & AUTO TOUR CHOREOGRAPHY
+           ========================================================= */
+        let lastFrameTime = performance.now();
+
+        function animate(now) {
+            try {
+                const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
+                lastFrameTime = now;
+                state.time += dt;
+
+                // Live FPS counter
+                state.fpsFrames++;
+                if (now - state.fpsLastCheck >= 500) {
+                    state.fps = Math.round((state.fpsFrames * 1000) / (now - state.fpsLastCheck));
+                    document.getElementById('hudFps').textContent = `${state.fps} FPS`;
+                    state.fpsFrames = 0;
+                    state.fpsLastCheck = now;
+                }
+
+                // Smooth camera damping
+                state.cam.yaw += (state.cam.targetYaw - state.cam.yaw) * 0.10;
+                state.cam.pitch += (state.cam.targetPitch - state.cam.pitch) * 0.10;
+                state.cam.zoom += (state.cam.targetZoom - state.cam.zoom) * 0.12;
+
+                // Subtle idle orbit when not dragging (except 0D, 1D, and 12D 2T-Physics)
+                if (!state.pointer.dragging && state.currentDim >= 2 && !(state.currentDim === 12 && state.params.d12.mode === 'twotime')) {
+                    state.cam.targetYaw += dt * 0.11;
+                }
+
+                // Auto Tour Choreography (0D -> 12D)
+                if (state.autoTour) {
+                    state.tourTimer += dt;
+                    const prog = Math.min(1, state.tourTimer / state.tourDuration);
+                    document.getElementById('tourProgressBar').style.width = `${prog * 100}%`;
+
+                    if (state.currentDim === 0) state.params.d0.zoomPower = Math.round(prog * 35);
+                    if (state.currentDim === 3) state.params.d3.fold = 0.5 - 0.5 * Math.cos(prog * Math.PI * 2);
+                    if (state.currentDim === 6) state.params.d6.fold = 0.5 - 0.5 * Math.cos(prog * Math.PI * 2);
+                    if (state.currentDim === 9) state.params.d9.fold = 0.5 - 0.5 * Math.cos(prog * Math.PI * 2);
+                    if (state.currentDim === 10) state.params.d10.harmonic = 1 + Math.floor(prog * 4.99);
+                    if (state.currentDim === 11) {
+                        state.params.d11.r11 = 0.1 + 0.85 * Math.sin(prog * Math.PI);
+                        if (prog > 0.55 && prog < 0.58 && state.params.d11.collisionPhase < 0) {
+                            state.params.d11.collisionPhase = 0;
+                            state.params.d11.shockwaves = [];
+                        }
+                    }
+                    if (state.currentDim === 12) {
+                        const desired = prog < 0.5 ? 'ftheory' : 'twotime';
+                        if (state.params.d12.mode !== desired) {
+                            state.params.d12.mode = desired;
+                            buildInteractiveControls();
+                        }
+                        if (desired === 'ftheory') state.params.d12.tauPinch = 0.15 + 0.82 * Math.sin(prog * Math.PI * 2);
+                    }
+
+                    if (state.tourTimer >= state.tourDuration) {
+                        state.tourTimer = 0;
+                        selectDimension((state.currentDim + 1) % 13, false);
+                    }
+                }
+
+                // Render Scene
+                drawStarfield(state.time);
+                const cx = cw * 0.5;
+                const cy = ch * 0.49;
+                const scale = Math.min(cw, ch) * 0.36;
+
+                switch (state.currentDim) {
+                    case 0:  render0D(state.time, cx, cy, scale); break;
+                    case 1:  render1D(state.time, cx, cy, scale); break;
+                    case 2:  render2D(state.time, cx, cy, scale); break;
+                    case 3:  render3D(state.time, cx, cy, scale); break;
+                    case 4:  render4D(state.time, cx, cy, scale); break;
+                    case 5:  render5D(state.time, cx, cy, scale); break;
+                    case 6:  render6D(state.time, cx, cy, scale); break;
+                    case 7:  render7D(state.time, cx, cy, scale); break;
+                    case 8:  render8D(state.time, cx, cy, scale); break;
+                    case 9:  render9D(state.time, cx, cy, scale); break;
+                    case 10: render10D(state.time, cx, cy, scale); break;
+                    case 11: render11D(state.time, cx, cy, scale); break;
+                    case 12: render12D(state.time, cx, cy, scale); break;
+                }
+
+                updateHUD();
+            } catch (err) {
+                console.error('Lỗi vòng lặp mô phỏng:', err);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        /* =========================================================
+           9. INITIALIZATION ON WINDOW LOAD
+           ========================================================= */
+        window.addEventListener('load', () => {
+            initD5Branches();
+            initD7Particles();
+            initD8Universes();
+            initCalabiYauMesh();
+            initD11Gravitons();
+
+            buildDimensionRail();
+            initInteractions();
+            resizeCanvas();
+            selectDimension(0, false);
+
+            lastFrameTime = performance.now();
+            requestAnimationFrame(animate);
+        });
+    })();
+    </script>
+</body>
+</html>
